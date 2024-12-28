@@ -243,7 +243,7 @@
   "item.kuayue.cola_fluid_bucket": "跨可乐桶",
   "fluid_type.kuayue.cola_fluid": "跨可乐流体",
   "item.kuayue.blue_bull_fluid_bucket": "蓝牛运动饮料桶",
-  "blue_bull_fluid": "蓝牛运动饮料流体",
+  "fluid_type.kuayue.blue_bull_fluid": "蓝牛运动饮料流体",
   "item.kuayue.monosodium_glutamate": "味精",
   "item.kuayue.salt": "盐",
 

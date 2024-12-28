@@ -13,8 +13,7 @@ import willow.train.kuayue.initial.AllElements;
 
 public class AllFluids {
 
-/*
-    public static final FluidReg<ColaFluid> COLA_FLUID = new FluidReg<ColaFluid>("cola_fluid")
+/*    public static final FluidReg<ColaFluid> COLA_FLUID = new FluidReg<ColaFluid>("cola_fluid")
             .still(ColaFluid::new, "fluid/water_still")
             .flow(ColaFluid.Flowing::new, "fluid/water_flow")
             .numericProperties(1, 8, 3, 10)
@@ -29,10 +28,9 @@ public class AllFluids {
             .noLootAndOcclusion()
             .setRenderType(RenderType.translucent())
             .tab(AllElements.neoKuayueDietTab)
-            .submit(AllElements.testRegistry);
-*/
+            .submit(AllElements.testRegistry);*/
 
-    public static final FluidReg<BlueBullFluid> BLUE_BULL_FLUID = new FluidReg<BlueBullFluid>("blue_bull_fluid")
+/*    public static final FluidReg<BlueBullFluid> BLUE_BULL_FLUID = new FluidReg<BlueBullFluid>("blue_bull_fluid")
             .still(BlueBullFluid::new, "fluid/water_still")
             .flow(BlueBullFluid.Flowing::new, "fluid/water_flow")
             .numericProperties(2, 2, 3, 10)
@@ -48,7 +46,7 @@ public class AllFluids {
             .noLootAndOcclusion()
             .setTranslucentRenderType()
             .tab(AllElements.neoKuayueDietTab)
-            .submit(AllElements.testRegistry);
+            .submit(AllElements.testRegistry);*/
 
     public static void invoke() {}
 }

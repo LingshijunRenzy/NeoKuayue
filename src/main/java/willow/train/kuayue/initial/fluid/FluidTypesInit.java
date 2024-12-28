@@ -23,34 +23,40 @@ import java.util.function.Consumer;
 
 public class FluidTypesInit {
 
-    public static final ResourceLocation COLA_STILL_RL = new ResourceLocation("block/water_still");
-    public static final ResourceLocation COLA_FLOWING_RL = new ResourceLocation("block/water_flow");
+    public static final ResourceLocation WATER_STILL_RL = new ResourceLocation("block/water_still");
+    public static final ResourceLocation WATER_FLOWING_RL = new ResourceLocation("block/water_flow");
     public static final ResourceLocation COLA_OVERLAY_RL =
             new ResourceLocation(Kuayue.MODID, "fluid/cola_fluid");
+
+    public static final FluidType.Properties DRINK_PROPERTIES = FluidType.Properties.create()
+            .canExtinguish(true)
+            .supportsBoating(true)
+            .lightLevel(5)
+            .density(15)
+            .viscosity(5)
+            .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+            .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH);
 
     public static final DeferredRegister<FluidType> FLUID_TYPES =
             DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, Kuayue.MODID);
 
-    public static final RegistryObject<FluidType> COLA_FLUID_TYPE = register("cola_fluid",
-            FluidType.Properties.create()
-                    .canExtinguish(true)
-                    .supportsBoating(true)
-                    .lightLevel(5)
-                    .density(15)
-                    .viscosity(5)
-                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
-                    .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH));
+    public static final RegistryObject<FluidType> COLA_FLUID_TYPE = FLUID_TYPES.register("cola_fluid",
+            () -> new BaseFluidType(DRINK_PROPERTIES,
+                    WATER_STILL_RL,
+                    WATER_FLOWING_RL,
+                    COLA_OVERLAY_RL,
+                    0xFF5E1C10,
+                    new Vector3f(210f / 255f, 105f / 255f, 30f / 255f)));
+    // tintColor参数每个8位分别表示alpha、红色、绿色和蓝色通道。
 
-    private static RegistryObject<FluidType> register(String name, FluidType.Properties properties){
-
-        return FLUID_TYPES.register(name,
-                () -> new BaseFluidType(properties, COLA_STILL_RL, COLA_FLOWING_RL,
-                        COLA_OVERLAY_RL,
-                        0xFF5E1C10,
-                        new Vector3f(210f / 255f, 105f / 255f, 30f / 255f)));
-        // tintColor参数每个8位分别表示alpha、红色、绿色和蓝色通道。
-    }
+    public static final RegistryObject<FluidType> BLUE_BULL_FLUID_TYPE = FLUID_TYPES.register("blue_bull_fluid",
+            () -> new BaseFluidType(DRINK_PROPERTIES,
+                    WATER_STILL_RL,
+                    WATER_FLOWING_RL,
+                    COLA_OVERLAY_RL,
+                    0xFFEEDD82,
+                    new Vector3f(238f / 255f, 221f / 255f, 130f / 255f)));
 
     public static void register(IEventBus eventBus){
         FLUID_TYPES.register(eventBus);
