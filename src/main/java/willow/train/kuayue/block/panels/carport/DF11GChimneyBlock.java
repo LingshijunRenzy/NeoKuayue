@@ -46,7 +46,7 @@ public class DF11GChimneyBlock extends HingeSlabBlock implements IBE<DF11GChimne
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         if(!level.isClientSide()) {
-            level.setBlock(pos,state.cycle(LIT),3);
+            level.setBlock(pos, state.cycle(LIT),3);
         }
         return InteractionResult.SUCCESS;
     }
@@ -56,7 +56,7 @@ public class DF11GChimneyBlock extends HingeSlabBlock implements IBE<DF11GChimne
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         if(!level.isClientSide()) {
-            level.setBlock(pos,state.cycle(BlockStateProperties.DOOR_HINGE),3);
+            level.setBlock(pos, state.cycle(BlockStateProperties.DOOR_HINGE),3);
         }
         return InteractionResult.SUCCESS;
     }
