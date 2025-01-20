@@ -13,9 +13,9 @@ import willow.train.kuayue.initial.AllElements;
 
 public class AllFluids {
 
-/*    public static final FluidReg<ColaFluid> COLA_FLUID = new FluidReg<ColaFluid>("cola_fluid")
-            .still(ColaFluid::new, "fluid/water_still")
-            .flow(ColaFluid.Flowing::new, "fluid/water_flow")
+    public static final FluidReg<ColaFluid> COLA_FLUID = new FluidReg<ColaFluid>("cola_fluid")
+            .still(ColaFluid::new, "cola_still_fluid", "fluid/water_still")
+            .flow(ColaFluid.Flowing::new, "cola_flowing_fluid", "fluid/water_flow")
             .numericProperties(1, 8, 3, 10)
             .overlayTexPath("fluid/cola_fluid")
             .bucketItem(BucketItem::new)
@@ -26,11 +26,11 @@ public class AllFluids {
             .blockType((fluid, properties) ->
                     new ColaBlock(fluid, BlockBehaviour.Properties.copy(Blocks.WATER)))
             .noLootAndOcclusion()
-            .setRenderType(RenderType.translucent())
+            .setTranslucentRenderType()
             .tab(AllElements.neoKuayueDietTab)
-            .submit(AllElements.testRegistry);*/
+            .submit(AllElements.testRegistry);
 
-/*    public static final FluidReg<BlueBullFluid> BLUE_BULL_FLUID = new FluidReg<BlueBullFluid>("blue_bull_fluid")
+    public static final FluidReg<BlueBullFluid> BLUE_BULL_FLUID = new FluidReg<BlueBullFluid>("blue_bull_fluid")
             .still(BlueBullFluid::new, "fluid/water_still")
             .flow(BlueBullFluid.Flowing::new, "fluid/water_flow")
             .numericProperties(2, 2, 3, 10)
@@ -46,7 +46,7 @@ public class AllFluids {
             .noLootAndOcclusion()
             .setTranslucentRenderType()
             .tab(AllElements.neoKuayueDietTab)
-            .submit(AllElements.testRegistry);*/
+            .submit(AllElements.testRegistry);
 
     public static void invoke() {}
 }

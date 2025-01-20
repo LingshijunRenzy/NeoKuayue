@@ -69,8 +69,8 @@ public class AllElements {
         AllRecipes.invoke();
         AllEntities.invoke();
         AllOres.invoke();
-        FluidsInit.register(testRegistry.eventBus);
-        FluidTypesInit.register(testRegistry.eventBus);
+//        FluidsInit.register(testRegistry.eventBus);
+//        FluidTypesInit.register(testRegistry.eventBus);
         FeaturesInit.register(testRegistry.eventBus);
         AllFluids.invoke();
         if (Envs.isClient()) {

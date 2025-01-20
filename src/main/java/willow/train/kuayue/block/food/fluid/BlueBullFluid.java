@@ -31,10 +31,5 @@ public class BlueBullFluid extends ForgeFlowingFluid {
         public Flowing(Properties properties) {
             super(properties);
         }
-
-        @Override
-        public boolean isSource(FluidState fluidState) {
-            return super.isSource(fluidState);
-        }
     }
 }

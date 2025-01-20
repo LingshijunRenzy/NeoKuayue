@@ -18,7 +18,8 @@ public class ColaFluid extends ForgeFlowingFluid {
 
     @Override
     public boolean isSource(FluidState pState) {
-        return true;
+        return (pState.getType() instanceof ColaFluid) &&
+                !(pState.getType() instanceof Flowing);
     }
 
     @Override
@@ -30,11 +31,6 @@ public class ColaFluid extends ForgeFlowingFluid {
 
         public Flowing(Properties properties) {
             super(properties);
-        }
-
-        @Override
-        public boolean isSource(FluidState fluidState) {
-            return false;
         }
     }
 }
