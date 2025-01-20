@@ -1,7 +1,7 @@
 package willow.train.kuayue.systems.device.driver.combustion;
 
 import com.simibubi.create.content.trains.entity.Train;
-import kasuga.lib.core.javascript.engine.HostAccess;
+import kasuga.lib.core.javascript.engine.annotations.HostAccess;
 
 public class TrainDataHandler {
 

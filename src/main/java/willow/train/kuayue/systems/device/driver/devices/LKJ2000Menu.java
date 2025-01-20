@@ -12,6 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.driver.combustion.TrainDataHandler;
+import willow.train.kuayue.systems.device.driver.path.SpeedCurveGenerator;
 
 import java.util.UUID;
 import java.util.function.Consumer;
