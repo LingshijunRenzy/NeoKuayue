@@ -1,6 +1,8 @@
 package willow.train.kuayue.initial.ore;
 
 import kasuga.lib.registrations.common.BlockReg;
+import kasuga.lib.registrations.common.OreReg;
+import kasuga.lib.registrations.common.PlacedFeatureReg;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
@@ -47,6 +49,16 @@ public class AllOres {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
+
+    public static final OreReg<DropExperienceBlock> exampleOreConfig = new OreReg<DropExperienceBlock>("salt_ore")
+            .setOreBlock(SALT_ORE::getBlock)
+            .addOreReplaceTarget()
+            .addDeepSlateReplaceTarget()
+            .setOreCountPerChunk(20)
+            .setOreQuantityPerGroup(64)
+            .setOreDistributionType(PlacedFeatureReg.DistributionType.TRIANGLE)
+            .setOreAnchorAbsolute(80, -80)
+            .submit(AllElements.testRegistry);
 
     public static void invoke() {}
 }
