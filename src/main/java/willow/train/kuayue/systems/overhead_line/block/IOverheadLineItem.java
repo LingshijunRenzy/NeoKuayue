@@ -1,4 +1,4 @@
-package willow.train.kuayue.systems.overhead_line.block_interface;
+package willow.train.kuayue.systems.overhead_line.block;
 
 import net.minecraft.resources.ResourceLocation;
 
