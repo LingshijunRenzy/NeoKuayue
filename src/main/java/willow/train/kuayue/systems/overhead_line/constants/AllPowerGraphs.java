@@ -1,7 +1,7 @@
-package willow.train.kuayue.systems.catenary.constants;
+package willow.train.kuayue.systems.overhead_line.constants;
 
 import net.minecraft.resources.ResourceLocation;
-import willow.train.kuayue.systems.catenary.power_network.PowerGraph;
+import willow.train.kuayue.systems.overhead_line.power_network.PowerGraph;
 
 import java.util.HashMap;
 import java.util.HashSet;

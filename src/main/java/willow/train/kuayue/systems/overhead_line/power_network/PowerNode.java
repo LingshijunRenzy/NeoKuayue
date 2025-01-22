@@ -1,14 +1,14 @@
-package willow.train.kuayue.systems.catenary.power_network;
+package willow.train.kuayue.systems.overhead_line.power_network;
 
 import kasuga.lib.core.base.NbtSerializable;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import willow.train.kuayue.systems.catenary.constants.AllPowerNodeTypes;
-import willow.train.kuayue.systems.catenary.constants.Utils;
-import willow.train.kuayue.systems.catenary.types.CatenaryLineType;
-import willow.train.kuayue.systems.catenary.types.PowerNodeType;
+import willow.train.kuayue.systems.overhead_line.constants.AllPowerNodeTypes;
+import willow.train.kuayue.systems.overhead_line.constants.Utils;
+import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
+import willow.train.kuayue.systems.overhead_line.types.PowerNodeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,7 @@ public class PowerNode implements NbtSerializable {
         return result;
     }
 
-    public void connect(PowerNode node, CatenaryLineType type) {
+    public void connect(PowerNode node, OverheadLineType type) {
         PowerEdge edge = new PowerEdge(type, this, node);
         connection.add(edge);
         node.connection.add(edge);

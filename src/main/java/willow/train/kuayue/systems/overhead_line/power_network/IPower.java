@@ -1,4 +1,4 @@
-package willow.train.kuayue.systems.catenary.power_network;
+package willow.train.kuayue.systems.overhead_line.power_network;
 
 public interface IPower {
 

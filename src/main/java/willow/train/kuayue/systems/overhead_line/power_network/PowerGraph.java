@@ -1,11 +1,11 @@
-package willow.train.kuayue.systems.catenary.power_network;
+package willow.train.kuayue.systems.overhead_line.power_network;
 
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import willow.train.kuayue.systems.catenary.constants.AllPowerGraphs;
-import willow.train.kuayue.systems.catenary.tree.GraphTree;
-import willow.train.kuayue.systems.catenary.types.CatenaryLineType;
+import willow.train.kuayue.systems.overhead_line.constants.AllPowerGraphs;
+import willow.train.kuayue.systems.overhead_line.tree.GraphTree;
+import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,21 +59,21 @@ public class PowerGraph {
         return nodes.containsKey(pos);
     }
 
-    public boolean connect(BlockPos prevPos, Integer prevIndex, BlockPos selfPos, Integer selfIndex, CatenaryLineType type) {
+    public boolean connect(BlockPos prevPos, Integer prevIndex, BlockPos selfPos, Integer selfIndex, OverheadLineType type) {
         return connect(Pair.of(prevPos, prevIndex), Pair.of(selfPos, selfIndex), type);
     }
 
-    public boolean connect(BlockPos prevPos, Integer prevIndex, PowerNode node, CatenaryLineType type) {
+    public boolean connect(BlockPos prevPos, Integer prevIndex, PowerNode node, OverheadLineType type) {
         return connect(Pair.of(prevPos, prevIndex), node, type);
     }
 
     public boolean connect(Pair<BlockPos, Integer> posPair, Pair<BlockPos, Integer> selfPair,
-                           CatenaryLineType type) {
+                           OverheadLineType type) {
         if (!nodes.containsKey(selfPair)) return false;
         return connect(posPair, nodes.get(selfPair), type);
     }
 
-    public boolean connect(Pair<BlockPos, Integer> posPair, PowerNode node, CatenaryLineType type) {
+    public boolean connect(Pair<BlockPos, Integer> posPair, PowerNode node, OverheadLineType type) {
         if (!nodes.containsKey(posPair)) {
             if (this.head == null) {
                 this.head = node;

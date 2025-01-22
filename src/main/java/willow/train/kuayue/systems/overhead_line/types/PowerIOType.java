@@ -1,4 +1,4 @@
-package willow.train.kuayue.systems.catenary.types;
+package willow.train.kuayue.systems.overhead_line.types;
 
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;

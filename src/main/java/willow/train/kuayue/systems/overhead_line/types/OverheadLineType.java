@@ -1,12 +1,12 @@
-package willow.train.kuayue.systems.catenary.types;
+package willow.train.kuayue.systems.overhead_line.types;
 
 import net.minecraft.resources.ResourceLocation;
 
-public class CatenaryLineType {
+public class OverheadLineType {
     private final ResourceLocation name;
     private final float maxVoltage, maxCurrent, maxLength;
 
-    public CatenaryLineType(ResourceLocation name, float maxVoltage, float maxCurrent, float maxLength) {
+    public OverheadLineType(ResourceLocation name, float maxVoltage, float maxCurrent, float maxLength) {
         this.name = name;
         this.maxVoltage = maxVoltage;
         this.maxCurrent = maxCurrent;

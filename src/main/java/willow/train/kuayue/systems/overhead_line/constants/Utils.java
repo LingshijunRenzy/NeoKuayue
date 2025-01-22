@@ -1,4 +1,4 @@
-package willow.train.kuayue.systems.catenary.constants;
+package willow.train.kuayue.systems.overhead_line.constants;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

@@ -1,6 +1,5 @@
-package willow.train.kuayue.systems.catenary.block_interface;
+package willow.train.kuayue.systems.overhead_line.block_interface;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 

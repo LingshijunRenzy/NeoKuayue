@@ -1,17 +1,17 @@
-package willow.train.kuayue.systems.catenary.power_network;
+package willow.train.kuayue.systems.overhead_line.power_network;
 
 import kasuga.lib.core.base.NbtSerializable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import willow.train.kuayue.systems.catenary.constants.AllCatenaryLineTypes;
-import willow.train.kuayue.systems.catenary.constants.Utils;
-import willow.train.kuayue.systems.catenary.types.CatenaryLineType;
+import willow.train.kuayue.systems.overhead_line.constants.AllOverheadLineTypes;
+import willow.train.kuayue.systems.overhead_line.constants.Utils;
+import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 
 public class PowerEdge implements IPower, NbtSerializable {
-    private final CatenaryLineType type;
+    private final OverheadLineType type;
     private PowerNode left, right;
 
-    public PowerEdge(CatenaryLineType type, PowerNode left, PowerNode right) {
+    public PowerEdge(OverheadLineType type, PowerNode left, PowerNode right) {
         this.left = left;
         this.right = right;
         this.type = type;
@@ -20,7 +20,7 @@ public class PowerEdge implements IPower, NbtSerializable {
     public PowerEdge(ResourceLocation type, PowerNode left, PowerNode right) {
         this.left = left;
         this.right = right;
-        this.type = AllCatenaryLineTypes.getType(type);
+        this.type = AllOverheadLineTypes.getType(type);
     }
 
     public boolean hasNode(PowerNode node) {
@@ -40,7 +40,7 @@ public class PowerEdge implements IPower, NbtSerializable {
         return right;
     }
 
-    public CatenaryLineType getType() {
+    public OverheadLineType getType() {
         return type;
     }
 
