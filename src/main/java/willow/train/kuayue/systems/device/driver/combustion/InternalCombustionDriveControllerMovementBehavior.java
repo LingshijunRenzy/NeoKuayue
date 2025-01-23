@@ -18,8 +18,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.AllDevicesMenus;
 import willow.train.kuayue.systems.device.IEntityTrackingMovementBehavior;
 import willow.train.kuayue.systems.device.driver.seat.InteractiveBehaviour;
@@ -103,7 +105,13 @@ public class InternalCombustionDriveControllerMovementBehavior
     @Override
     public List<MenuEntry> getMenusOf(MovementContext context) {
         return List.of(
-                new MenuEntry(Component.literal("LKJ2000"), ()->MENUS.containsKey(context), ()->MENUS.get(context).getMenu(0).orElseThrow())
+                new MenuEntry(
+                        Component.literal("LKJ2000"),
+                        AllElements.testRegistry.asResource("lkj2000"),
+                        ()->MENUS.containsKey(context),
+                        ()->MENUS.get(context).getMenu(0).orElseThrow(),
+                        new Vec2(256,252)
+                )
         );
     }
 }
