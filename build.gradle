@@ -171,7 +171,16 @@ repositories {
     }
 
     mavenLocal()
-    flatDir {dir 'libs'}
+
+    if(project.findProperty("nightly")){
+        flatDir {dir 'libs'}
+    } else {
+        maven {
+            // GradleCI maven
+            name = "GradleCIMaven"
+            url = uri("https://git.gradle.ci/api/packages/KuaYueTeam/maven")
+        }
+    }
 }
 
 dependencies {
@@ -199,7 +208,11 @@ dependencies {
     testAnnotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     // implementation files('libs/Mixed-Arithmetic-Logic-Interpreter-1.0.0.jar')
-    implementation fg.deobf("libs:kasuga_lib:${kasuga_lib_version}")
+    if(project.findProperty("nightly")){
+        implementation fg.deobf("libs:kasuga_lib:${kasuga_lib_version}")
+    } else {
+        implementation fg.deobf("kasuga.lib:kasuga_lib:${kasuga_lib_version}-normal")
+    }
     implementation "org.projectlombok:lombok:1.18.34"
     annotationProcessor "org.projectlombok:lombok:1.18.34"
     // testImplementation "edu.carole:Mixed-Arithmetic-Logic-Interpreter:1.0.0"
