@@ -283,6 +283,22 @@ publishing {
             url "file://${project.projectDir}/mcmodsrepo"
         }
     }
+
+    repositories {
+        maven {
+            name = "GradleCIMaven"
+            url = uri("https://git.gradle.ci/api/packages/KuaYueTeam/maven")
+
+            credentials(HttpHeaderCredentials) {
+                name = "Authorization"
+                value = "Bearer ${project.findProperty("kuaYueTeamGradleCiToken")}"
+            }
+
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
