@@ -892,6 +892,10 @@
 
  "block.kuayue.salt_ore": "Salt Ore",
  "block.kuayue.deepslate_salt_ore": "Deepslate Salt Ore",
- "block.kuayue.salt_block": "Salt Block"
+ "block.kuayue.salt_block": "Salt Block",
+ "block.kuayue.hxd3d_cowcatcher": "HXD3D Cowcatcher",
+ "block.kuayue.hxd3d_panel_bottom": "HXD3D Bottom Panel",
+ "block.kuayue.hxd3d_carport": "HXD3D Side Carport",
+ "block.kuayue.hxd3d_carport_centre": "HXD3D Center Carport"
 }
 

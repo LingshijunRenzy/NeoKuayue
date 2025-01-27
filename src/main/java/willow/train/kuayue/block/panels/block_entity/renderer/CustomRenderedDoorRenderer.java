@@ -29,7 +29,7 @@ public class CustomRenderedDoorRenderer implements BlockEntityRenderer<CustomRen
             int light,
             int overlay) {
 
-        light *= 0.8;
+        light *= 1;
         BlockState state = entity.getBlockState();
 
         Couple<PartialModel> models = entity.getModels(state);

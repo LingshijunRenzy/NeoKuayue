@@ -86,6 +86,40 @@ public class I3DPanel {
                     .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
+    public static final BlockReg<FullShapeDirectionalBlock> HXD3D_COWCATCHER =
+            new BlockReg<FullShapeDirectionalBlock>("hxd3d_cowcatcher")
+                    .blockType(FullShapeDirectionalBlock::new)
+                    .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
+                    .addProperty(properties -> properties.strength(1.5f, 3f))
+                    .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .defaultBlockItem()
+                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+                    .tabTo(AllElements.neoKuayueLocoTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> HXD3D_CARPORT =
+            new SlabRegistration<TrainSlabBlock>("hxd3d_carport")
+                    .block(p -> new TrainSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> HXD3D_CARPORT_CENTRE =
+            new SlabRegistration<TrainSlabBlock>("hxd3d_carport_centre")
+                    .block(p -> new TrainSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> HXD3D_PANEL_BOTTOM =
+            new PanelRegistration<TrainPanelBlock>("hxd3d_panel_bottom")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
 
     public static void invoke(){}
 }
