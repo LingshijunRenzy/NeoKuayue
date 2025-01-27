@@ -5,6 +5,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import willow.train.kuayue.block.recipe.BlueprintBlock;
+import willow.train.kuayue.block.recipe.BlueprintBlockEntity;
+import willow.train.kuayue.block.recipe.BlueprintMenu;
+import willow.train.kuayue.block.recipe.BlueprintScreen;
 import willow.train.kuayue.initial.AllElements;
 
 public class AllRecipeBlock {
@@ -19,6 +22,8 @@ public class AllRecipeBlock {
                     .addProperty(properties -> properties.strength(1.0f, 1.5f))
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueMainTab)
+                    .withBlockEntity("blueprint_table_be", BlueprintBlockEntity::new)
+                    .withMenu("blueprint_table_menu", BlueprintMenu::new, () -> BlueprintScreen::new)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
