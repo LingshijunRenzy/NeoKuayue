@@ -19,6 +19,7 @@ public class ImageButton extends Button {
     private int showTooltip = 0;
     private OnClick<ImageButton> clk;
     private boolean isMouseDown;
+    private boolean renderMask;
     public static final ImageButton.ImageAction baseAction = (img, btn) -> img.rectangle(new Vector3f(btn.getX(), btn.getY(), 0),
             ImageMask.Axis.X, ImageMask.Axis.Y, true, true, btn.getWidth(), btn.getHeight());
 
@@ -35,6 +36,7 @@ public class ImageButton extends Button {
         controlImage(baseAction);
         controlBg(baseAction);
         this.clk = (a, b, c) -> {};
+        renderMask = true;
     }
 
     public ImageButton(LazyRecomputable<ImageMask> mask, int x, int y, int width, int height, Component tooltip, OnPress press) {
@@ -47,6 +49,15 @@ public class ImageButton extends Button {
         this.y = y;
         this.tooltip = new TooltipLabel(new Vec2f(this.x, this.y + this.height + 2), tooltip);
         controlImage(baseAction);
+        renderMask = true;
+    }
+
+    public boolean isRenderMask() {
+        return renderMask;
+    }
+
+    public void setRenderMask(boolean renderMask) {
+        this.renderMask = renderMask;
     }
 
     public void setX(int x) {
@@ -131,7 +142,8 @@ public class ImageButton extends Button {
             if (showTooltip > 40) tooltip.render(pPoseStack, mouseX, mouseY, partialTicks);
             else showTooltip ++;
         } else if (showTooltip > 0) showTooltip --;
-        this.mask.get().renderToGui();
+        if (!renderMask)
+            this.mask.get().renderToGui();
     }
 
     public void renderOnlyOnClicked(PoseStack poseStack, int mouseX, int mouseY, float partial) {
