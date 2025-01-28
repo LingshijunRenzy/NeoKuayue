@@ -5,6 +5,7 @@ import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import kasuga.lib.core.util.data_type.Vec2i;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
@@ -39,6 +40,7 @@ public class TechTreeLabel extends ImageButton {
                     .rectangleUV(25f / 128f, 25f / 128f, 32f / 128f, 32f / 128f)
     );
 
+    @Setter
     private boolean finished;
 
     protected TechTreeLabel(LazyRecomputable<ImageMask> foreground, LazyRecomputable<ImageMask> bg, ClientTechTreeNode node,
@@ -57,14 +59,6 @@ public class TechTreeLabel extends ImageButton {
     public static TechTreeLabel largeLabel(ClientTechTreeNode node, int x, int y, Component tooltip) {
         return new TechTreeLabel(LazyRecomputable.of(() -> largeBgMask.get().copyWithOp(o -> o)),
                 null, node, x, y, 24, 24, tooltip);
-    }
-
-    public void setFinished(boolean finished) {
-        this.finished = finished;
-    }
-
-    public boolean isFinished() {
-        return finished;
     }
 
     public Vec2i getCenterPos() {
