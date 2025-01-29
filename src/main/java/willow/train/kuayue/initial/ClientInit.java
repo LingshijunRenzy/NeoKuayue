@@ -59,6 +59,15 @@ public class ClientInit {
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/editable/offset_editor_bg.png"));
     public static final StaticImageHolder noSignTexture =
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/editable/carriage_no_sign_texture.png"));
+
+    public static final StaticImageHolder blueprintTableBg =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_table.png"));
+
+    public static final StaticImageHolder blueprintTableNoSub =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_table_no_sub.png"));
+
+    public static final StaticImageHolder blueprintButtons =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_buttons.png"));
     public static final ModelReg testModel =
             new ModelReg("test_model", AllElements.testRegistry.asResource("block/test_block"))
                     .submit(AllElements.testRegistry);

@@ -24,11 +24,11 @@ public class I3DPanel {
             new PanelRegistration<CustomRenderedDoorBlock>("door_cabin_hxd3d")
                     .block(p -> new CustomRenderedDoorBlock(p,
                             Couple.create(
-                                    AllElements.testRegistry.asResource("hxd3d/door/door_bottom_hxd3d_right"),
-                                    AllElements.testRegistry.asResource("hxd3d/door/door_upper_hxd3d_right")
+                                    AllElements.testRegistry.asResource("hxd3d/door/door_bottom_hxd3d_left"),
+                                    AllElements.testRegistry.asResource("hxd3d/door/door_upper_hxd3d_left")
                             ), Couple.create(
-                            AllElements.testRegistry.asResource("hxd3d/door/door_bottom_hxd3d_left"),
-                            AllElements.testRegistry.asResource("hxd3d/door/door_upper_hxd3d_left")
+                            AllElements.testRegistry.asResource("hxd3d/door/door_bottom_hxd3d_right"),
+                            AllElements.testRegistry.asResource("hxd3d/door/door_upper_hxd3d_right")
                     ), new Vec3(-.3125, .25, 0), RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)

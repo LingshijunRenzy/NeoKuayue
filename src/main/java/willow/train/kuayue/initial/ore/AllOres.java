@@ -54,8 +54,8 @@ public class AllOres {
             .setOreBlock(SALT_ORE::getBlock)
             .addOreReplaceTarget()
             .addDeepSlateReplaceTarget()
-            .setOreCountPerChunk(20)
-            .setOreQuantityPerGroup(64)
+            .setOreCountPerChunk(90)
+            .setOreQuantityPerGroup(9)
             .setOreDistributionType(PlacedFeatureReg.DistributionType.TRIANGLE)
             .setOreAnchorAbsolute(80, -80)
             .submit(AllElements.testRegistry);
