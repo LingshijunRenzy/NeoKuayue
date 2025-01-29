@@ -898,5 +898,9 @@
 
   "block.kuayue.salt_ore": "盐矿石",
   "block.kuayue.deepslate_salt_ore": "深层盐矿石",
-  "block.kuayue.salt_block": "盐块"
+  "block.kuayue.salt_block": "盐块",
+  "block.kuayue.hxd3d_cowcatcher": "HXD3D排障器",
+  "block.kuayue.hxd3d_panel_bottom": "HXD3D下箱板",
+  "block.kuayue.hxd3d_carport": "HXD3D侧车顶",
+  "block.kuayue.hxd3d_carport_centre": "HXD3D中央车顶"
 }
