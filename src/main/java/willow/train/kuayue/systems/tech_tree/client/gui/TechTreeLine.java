@@ -65,8 +65,8 @@ public class TechTreeLine extends AbstractWidget {
 
     private final boolean[] tail;
 
-    public TechTreeLine(int x, int y, int width, int height, Component pMessage) {
-        super(x, y, width, height, pMessage);
+    public TechTreeLine(int x, int y, int width, int height) {
+        super(x, y, width, height, Component.empty());
         this.masks = new ImageMask[4];
         this.arrows = new ImageMask[4];
         this.shouldRender = new boolean[]

@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTree;
@@ -26,7 +27,8 @@ import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
-    private boolean showSub;
+
+    private boolean showSub, hasJei;
     private final HashMap<String, ClientTechTree> trees;
     LazyRecomputable<ImageMask> bgMask = LazyRecomputable.of(() -> new ImageMask(ClientInit.blueprintTableBg.getImageSafe().get()));
     LazyRecomputable<ImageMask> bgNoSubMask = LazyRecomputable.of(() -> new ImageMask(ClientInit.blueprintTableNoSub.getImageSafe().get()));
@@ -51,17 +53,28 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         this.showSub = false;
         trees = ClientTechTreeManager.MANAGER.trees();
         groupButtons = new ArrayList<>();
+        this.hasJei = ModList.get().isLoaded("jei");
     }
 
     @Override
     protected void init() {
+        onRefresh();
         super.init();
+    }
+
+    public void onRefresh() {
+        groupButtons.forEach(this::removeWidget);
+        groupButtons.clear();
         for (ClientTechTree tree : trees.values()) {
             tree.getGroups().forEach((name, group) -> groupButtons
                     .add(new TechTreeItemButton(group.getIcon(), 20, 20, (a, b, c) -> {
 
                     })));
         }
+        groupButtons.forEach(btn -> {
+            addRenderableWidget(btn);
+            btn.setVisible(false);
+        });
     }
 
     @Override
@@ -69,20 +82,27 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                             int mouseX, int mouseY) {
         renderBackground(poseStack);
         Minecraft mc = Minecraft.getInstance();
-        if (mc.screen == null) return;
-        int windowWidth = mc.screen.width;
-        int windowHeight = mc.screen.height;
-        ImageMask mask = showSub ? bgMask.get() : bgNoSubMask.get();
-        int w = (int) (windowWidth * .9f);
-        scale = ((float) w / (float) mask.getImage().width());
-        int h = map(mask.getImage().height(), scale);
-        bgX = (float) (windowWidth - w) / 2;
-        bgY = (float) (windowHeight - h) / 2;
-        mask.rectangle(new Vector3f(bgX, bgY, 0),
-                ImageMask.Axis.X, ImageMask.Axis.Y, true, true, w, h);
+        ImageMask mask = setParams(mc);
+        if (mask == null) return;
         poseStack.pushPose();
         mask.renderToGui(poseStack.last());
         poseStack.popPose();
+    }
+
+    private ImageMask setParams(Minecraft mc) {
+        if (mc.screen == null) return null;
+        int windowWidth = mc.screen.width;
+        int windowHeight = mc.screen.height;
+        ImageMask mask = showSub ? bgMask.get() : bgNoSubMask.get();
+        int w = (int) (windowWidth * (hasJei ? .7f : .9f));
+        scale = ((float) w / (float) mask.getImage().width());
+        int h = map(mask.getImage().height(), scale);
+        bgX = (windowWidth * (hasJei ? .725f : 1f) - w) / 2;
+        bgY = (float) (windowHeight - h) / 2;
+        mask.rectangle(new Vector3f(bgX, bgY, 0),
+                ImageMask.Axis.X, ImageMask.Axis.Y,
+                true, true, w, h);
+        return mask;
     }
 
     private int map(int xOry, float scale) {
@@ -114,6 +134,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                         true, true, 16, 8);
                 upArrowMask.renderToGui();
             }
+
             if (windowTop + windowCapacity < groupButtons.size()) {
                 downArrowMask.rectangle(new Vector3f(btnX, bgY + rightDownY - 8, 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y,
@@ -121,12 +142,15 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 downArrowMask.renderToGui();
             }
         }
+
         int grpBtnY = Math.round(bgY) + leftTopY + (guideHeight - btnHeight) / 2;
         int grpBtnX = Math.round(bgX) + leftTopX + (guideWidth - 20) / 2;
-        for (int i = windowTop; i < Math.min(windowTop + windowCapacity, groupButtons.size()); i++) {
+        for (int i = 0; i < groupButtons.size(); i++) {
+            boolean flag = i >= windowTop &&
+                    i < Math.min(windowTop + windowCapacity, groupButtons.size());
             TechTreeItemButton button = groupButtons.get(i);
-            button.setPosition(grpBtnX, grpBtnY + (i - windowTop) * 20);
-            button.render(poseStack, mouseX, mouseY, partial);
+            if (flag) button.setPosition(grpBtnX, grpBtnY + (i - windowTop) * 20);
+            button.setVisible(flag);
         }
     }
 

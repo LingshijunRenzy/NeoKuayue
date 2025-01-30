@@ -61,4 +61,12 @@ public class TechTreeItemButton extends AbstractButton {
         int iY = this.y + (this.height - 16) / 2;
         renderer.renderGuiItem(stack, iX, iY);
     }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
 }
