@@ -129,5 +129,13 @@ public class I3DPanel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<TrainPanelBlock> HXD3D_PANEL_TRANSIT =
+            new PanelRegistration<TrainPanelBlock>("hxd3d_panel_transit")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 2)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
     public static void invoke(){}
 }
