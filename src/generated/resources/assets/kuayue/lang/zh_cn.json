@@ -903,5 +903,6 @@
   "block.kuayue.hxd3d_cowcatcher": "HXD3D排障器",
   "block.kuayue.hxd3d_panel_bottom": "HXD3D下箱板",
   "block.kuayue.hxd3d_carport": "HXD3D侧车顶",
-  "block.kuayue.hxd3d_carport_centre": "HXD3D中央车顶"
+  "block.kuayue.hxd3d_carport_center": "HXD3D中央车顶",
+  "block.kuayue.hxd3d_panel_transit": "HXD3D过渡厢板1"
 }
