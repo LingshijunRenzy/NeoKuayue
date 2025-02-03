@@ -106,7 +106,7 @@ public class I3DPanel {
                     .submit(AllElements.testRegistry);
 
     public static final SlabRegistration<TrainSlabBlock> HXD3D_CARPORT_CENTRE =
-            new SlabRegistration<TrainSlabBlock>("hxd3d_carport_centre")
+            new SlabRegistration<TrainSlabBlock>("hxd3d_carport_center")
                     .block(p -> new TrainSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
                     .tab(AllElements.neoKuayueLocoTab)
