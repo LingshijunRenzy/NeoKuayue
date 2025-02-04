@@ -73,6 +73,10 @@ public class Vec2iE extends Vec2i {
         return Math.abs(x - vec.x) + Math.abs(y - vec.y);
     }
 
+    public boolean nextTo(Vec2i vec) {
+        return manhattanDistance(vec) == 1;
+    }
+
     public int distanceSqr(Vec2i vec) {
         int dx = Math.abs(x - vec.x);
         int dy = Math.abs(y - vec.y);
