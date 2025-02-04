@@ -889,6 +889,7 @@
  "block.kuayue.df11g_panel_bottom_eh_blind": "DF11G Equipmen Room Bottom Blind",
  "block.kuayue.df11g_panel_upper_ph_blind": "DF11G Power Room Upper Blind",
  "block.kuayue.df11g_chimney": "DF11G Chimney",
+ "block.kuayue.panel_logo_num_hxd3d": "HXD3D Logo 'hxd3d'",
 
  "block.kuayue.salt_ore": "Salt Ore",
  "block.kuayue.deepslate_salt_ore": "Deepslate Salt Ore",
@@ -896,6 +897,7 @@
  "block.kuayue.hxd3d_cowcatcher": "HXD3D Cowcatcher",
  "block.kuayue.hxd3d_panel_bottom": "HXD3D Bottom Panel",
  "block.kuayue.hxd3d_carport": "HXD3D Side Carport",
- "block.kuayue.hxd3d_carport_centre": "HXD3D Center Carport"
+ "block.kuayue.hxd3d_carport_center": "HXD3D Center Carport",
+ "block.kuayue.hxd3d_panel_transit": "HXD3D Transit Panel"
 }
 
