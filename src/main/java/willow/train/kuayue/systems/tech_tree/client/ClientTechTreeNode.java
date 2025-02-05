@@ -2,6 +2,7 @@ package willow.train.kuayue.systems.tech_tree.client;
 
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.NodeType;
@@ -23,8 +24,11 @@ public class ClientTechTreeNode {
     private final ItemStack logo;
 
     private final Set<NodeLocation> next;
+    private final Set<NodeLocation> prev;
 
     private final Set<ClientTechTreeNode> nextNode;
+    private final Set<ClientTechTreeNode> prevNode;
+    private final Set<ResourceLocation> nextGroups;
 
     public ClientTechTreeNode(FriendlyByteBuf buf) {
         location = NodeLocation.readFromByteBuf(buf);
@@ -35,6 +39,8 @@ public class ClientTechTreeNode {
 
         itemConsume = new HashSet<>();
         next = new HashSet<>();
+        prev = new HashSet<>();
+        nextGroups = new HashSet<>();
 
         int consumeCount = buf.readInt();
         for (int i = 0; i < consumeCount; i++) {
@@ -46,6 +52,17 @@ public class ClientTechTreeNode {
             next.add(NodeLocation.readFromByteBuf(buf));
         }
 
+        int nextGroupCount = buf.readInt();
+        for (int i = 0; i < nextGroupCount; i++) {
+            nextGroups.add(new ResourceLocation(buf.readUtf()));
+        }
+
+        int prevCount = buf.readInt();
+        for (int i = 0; i < prevCount; i++) {
+            prev.add(NodeLocation.readFromByteBuf(buf));
+        }
+
         nextNode = new HashSet<>();
+        prevNode = new HashSet<>();
     }
 }

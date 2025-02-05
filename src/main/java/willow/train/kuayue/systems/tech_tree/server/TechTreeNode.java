@@ -14,6 +14,7 @@ import willow.train.kuayue.systems.tech_tree.json.TechTreeNodeData;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -108,6 +109,25 @@ public class TechTreeNode {
         return new NodeLocation(group.getNamespace(), group.getIdentifier(), location).equals(data.getLocation());
     }
 
+    public int getDegree() {
+        return next.size() + prev.size();
+    }
+
+    public int getInDegree() {
+        return prev.size();
+    }
+
+    public int getOutDegree() {
+        return next.size();
+    }
+
+    public Set<TechTreeNode> getNearBys() {
+        HashSet<TechTreeNode> near = new HashSet<>();
+        near.addAll(next);
+        near.addAll(prev);
+        return near;
+    }
+
     public void toNetwork(FriendlyByteBuf buf) {
         // meta data
         getLocation().writeToByteBuf(buf);
@@ -128,5 +148,9 @@ public class TechTreeNode {
         // next groups
         buf.writeInt(nextGroups.size());
         nextGroups.forEach(grp -> buf.writeResourceLocation(grp.getId()));
+
+        // prev nodes
+        buf.writeInt(prev.size());
+        prev.forEach(node -> node.getLocation().writeToByteBuf(buf));
     }
 }

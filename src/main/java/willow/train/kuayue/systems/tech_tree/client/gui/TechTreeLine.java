@@ -2,6 +2,7 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import kasuga.lib.core.client.render.SimpleColor;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import kasuga.lib.core.util.data_type.Vec2i;
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import willow.train.kuayue.initial.ClientInit;
 
 import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 public class TechTreeLine extends AbstractWidget {
@@ -65,23 +67,45 @@ public class TechTreeLine extends AbstractWidget {
 
     private final boolean[] tail;
 
+    @Getter
+    private SimpleColor color;
+
     public TechTreeLine(int x, int y, int width, int height) {
         super(x, y, width, height, Component.empty());
         this.masks = new ImageMask[4];
         this.arrows = new ImageMask[4];
         this.shouldRender = new boolean[]
-                {true, true, true, true};
+                {false, false, false, false};
         this.shouldRenderArrow = new boolean[]
                 {false, false, false, false};
         this.tail = new boolean[]
                 {false, false, false, false};
         updateMasks();
         updateArrows();
+        color = SimpleColor.fromRGBInt(0xffffff);
     }
 
     public Vec2i getCenter() {
         return new Vec2i(this.x + this.width / 2,
                 this.y + this.height / 2);
+    }
+
+    public void setColor(SimpleColor color) {
+        this.color = color;
+        updateColor();
+    }
+
+    public void updateColor() {
+        ImageMask m;
+        for (int i = 0; i < 4; i++) {
+            m = masks[i];
+            if (m != null) {
+                m.setColor(color);
+            }
+            m = arrows[i];
+            if (m != null)
+                m.setColor(color);
+        }
     }
 
     public void setX(int x) {
@@ -278,8 +302,9 @@ public class TechTreeLine extends AbstractWidget {
         masks[3] = pixelMask.get().copyWithOp(
                 o -> o.rectangle(new Vector3f(center.x, center.y - 1, 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
-                        (float) this.width / 2 - (tail[1] ? 2 : 0), 2)
+                        (float) this.width / 2 - (tail[3] ? 2 : 0), 2)
         );
+        updateColor();
     }
 
     public void updateArrows() {
@@ -304,6 +329,7 @@ public class TechTreeLine extends AbstractWidget {
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                         4, 8)
         );
+        updateColor();
     }
 
     public void render(ImageMask[] m, boolean[] b, Consumer<Object> updateFunc) {
@@ -321,8 +347,14 @@ public class TechTreeLine extends AbstractWidget {
     @Override
     public void renderButton(@NonNull PoseStack poseStack, int mouseX,
                              int mouseY, float partialTick) {
-        render(masks, shouldRender, (obj) -> updateMasks());
-        render(arrows, shouldRenderArrow, (obj) -> updateArrows());
+        render(masks, shouldRender, (obj) -> {
+            updateMasks();
+            updateColor();
+        });
+        render(arrows, shouldRenderArrow, (obj) -> {
+            updateArrows();
+            updateColor();
+        });
     }
 
     @Override
@@ -339,6 +371,24 @@ public class TechTreeLine extends AbstractWidget {
         private final int index;
         private Side(int index){
             this.index = index;
+        }
+
+        public Vec2iE getNearBy(Vec2iE position) {
+            return switch (this) {
+                case DOWN -> position.copy().add(0, 1);
+                case UP -> position.copy().add(0, -1);
+                case LEFT -> position.copy().add(-1, 0);
+                case RIGHT -> position.copy().add(1, 0);
+            };
+        }
+
+        public static HashMap<Side, Vec2iE> getNearBys(Vec2iE position) {
+            HashMap<Side, Vec2iE> result = new HashMap<>();
+            result.put(UP, UP.getNearBy(position));
+            result.put(DOWN, DOWN.getNearBy(position));
+            result.put(LEFT, LEFT.getNearBy(position));
+            result.put(RIGHT, RIGHT.getNearBy(position));
+            return result;
         }
     }
 }

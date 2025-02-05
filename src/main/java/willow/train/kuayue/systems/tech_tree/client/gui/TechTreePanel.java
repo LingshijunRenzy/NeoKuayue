@@ -1,198 +1,223 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import kasuga.lib.core.util.data_type.Pair;
-import kasuga.lib.core.util.data_type.Vec2i;
+import kasuga.lib.core.client.render.SimpleColor;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
-import willow.train.kuayue.systems.tech_tree.client.ClientTechTree;
+import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
+import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
 
 import java.util.*;
 
 @Getter
 public class TechTreePanel extends AbstractWidget {
 
+    private LabelLayer labels;
+
+    private final ArrayList<LineLayer> lines;
+
     private final int row, column;
-    private final ClientTechTree tree;
-    private final AbstractWidget[][] table;
-    private final AbstractWidget[][] links;
-    private Vec2i windowLT, windowRD, leftTopCube;
-    private static final int widgetHeight = 20, widgetWidth = 20;
 
+    @Setter
+    private boolean lockDragging;
 
-    public TechTreePanel(ClientTechTree tree, int row,
-                         int column, int width, int height,
-                         Component message) {
-        super(0, 0, width, height, message);
+    private final SimpleColor[] colors = new SimpleColor[] {
+            SimpleColor.fromHSV(0, .85f, .95f),
+            SimpleColor.fromHSV(60, .9f, 1),
+            SimpleColor.fromHSV(75, .7f, .8f),
+            SimpleColor.fromHSV(330, .75f, .9f),
+            SimpleColor.fromHSV(40, .5f, .85f)
+    };
+
+    public TechTreePanel(int x, int y, int width, int height, int row, int column) {
+        super(x, y, width, height, Component.empty());
         this.row = row;
         this.column = column;
-        this.tree = tree;
-        this.table = new AbstractWidget[row][column];
-        this.links = new AbstractWidget[row][column];
-        updateWindow(new Vec2i());
+        labels = null;
+        lines = new ArrayList<>();
     }
 
-    public void setX(int x) {
-        this.x = x;
+    private void setWindowForLayer(Layer layer) {
+        layer.setWindow(x + 10, y + 10,
+                x + width - 10, y + height - 10);
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    private void updateWindow(Vec2i leftTopCube) {
-        Vec2i globalLT = new Vec2i(x, y);
-        Vec2i globalRD = new Vec2i(x + width, y + height);
-        Vec2i size = new Vec2i(width / widgetWidth, height / widgetHeight);
-        Vec2i boardSize = new Vec2i(size.x * widgetWidth, size.y * widgetHeight);
-        Vec2i offset = new Vec2i((width - boardSize.x) / 2, (height - boardSize.y) / 2);
-        windowLT = new Vec2i(globalLT.x + offset.x, globalLT.y + offset.y);
-        windowRD = new Vec2i(globalRD.x + width - offset.x, globalRD.y + height - offset.y);
-        this.leftTopCube = leftTopCube;
-    }
-
-    public @Nullable AbstractWidget get(int x, int y) {
-        return table[y][x];
-    }
-
-    public @Nullable AbstractWidget getLink(int x, int y) {
-        return links[y][x];
-    }
-
-    public void set(int x, int y, AbstractWidget widget) {
-        table[y][x] = widget;
-    }
-
-    public void setLink(int x, int y, AbstractWidget widget) {
-        links[y][x] = widget;
-    }
-
-    public @Nullable AbstractWidget remove(int x, int y) {
-        AbstractWidget widget = table[y][x];
-        table[y][x] = null;
-        return widget;
-    }
-
-    public @Nullable AbstractWidget removeLink(int x, int y) {
-        AbstractWidget widget = links[y][x];
-        links[y][x] = null;
-        return widget;
-    }
-
-    public boolean has(int x, int y) {
-        if (x < 0 || x >= this.column) return true;
-        if (y < 0 || y >= this.row) return true;
-        return table[y][x] != null;
-    }
-
-    public boolean hasLink(int x, int y) {
-        if (x < 0 || x >= this.column) return false;
-        if (y < 0 || y >= this.row) return false;
-        return links[y][x] != null;
-    }
-
-    public void setPos(int x, int y) {
-        setX(x);
-        setY(y);
-    }
-
-    public Vec2i getCubePos(int row, int column) {
-        Vec2i offset = new Vec2i(row - leftTopCube.x, column - leftTopCube.y);
-        int w = windowRD.x - windowLT.x;
-        int h = windowRD.y - windowLT.y;
-        return new Vec2i(this.leftTopCube.x + w / widgetWidth * offset.x,
-                this.leftTopCube.y + h / widgetHeight * offset.y);
-    }
-
-    public void getLine(HashMap<Vec2i, TechTreeLine> line,
-                        Connection connection) {
-
-    }
-
-    public void aStar(int[][] board, Vec2iE target) {
-        for (int[] ints : board) {
-            Arrays.fill(ints, -1);
-        }
-        if (board.length < 1) return;
-        int column = board[0].length;
-        if (column < 1) return;
-        int row = board.length;
-        HashSet<Vec2iE> boarders = new HashSet<>();
-        HashSet<Vec2iE> scanned = new HashSet<>();
-        HashSet<Vec2iE> cache = new HashSet<>();
-        boarders.add(target);
-        while (!boarders.isEmpty()) {
-            for (Vec2iE boarder : boarders) {
-                aStarInner(board, boarder, cache, true);
-                aStarInner(board, boarder, cache, false);
-            }
-        }
-    }
-
-    private void aStarInner(int[][] board, Vec2iE boarder,
-                            HashSet<Vec2iE> cache, boolean xOry) {
-        int boarderValue = board[boarder.y][boarder.x];
-        for (int i = -1; i < 2; i += 2) {
-            int px = boarder.x + (xOry ? i : 0);
-            int py = boarder.y + (!xOry ? i : 0);
-            if (px < 0 || px >= column ||
-                    py < 0 || py >= row)
-                continue;
-            if (board[py][px] < -1)
-                continue;
-            if (has(px, py) || hasLink(px, py)) {
-                board[py][px] = -2;
-                continue;
-            }
-            cache.add(new Vec2iE(py, px));
-            if (board[py][px] == -1) {
-                board[py][px] = boarderValue + 1;
-                continue;
-            }
-            board[py][px] = Math.min(board[py][px], boarderValue + 1);
-        }
-    }
-
-
-    private int switchSide(int input) {
-        return Integer.compare(input, 0);
+    public void updateWindows() {
+        setWindowForLayer(labels);
+        lines.forEach(this::setWindowForLayer);
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX,
-                             int mouseY, float partialTick) {
+    public void setWidth(int width) {
+        super.setWidth(width);
+        updateWindows();
+    }
 
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        updateWindows();
+    }
+
+    public void setSize(int width, int height) {
+        super.setHeight(height);
+        super.setWidth(width);
+        updateWindows();
+    }
+
+    @Override
+    protected void onDrag(double pMouseX, double pMouseY, double pDragX, double pDragY) {
+        if (lockDragging) return;
+        int dx = (int) Math.round(pDragX);
+        int dy = (int) Math.round(pDragY);
+        lines.forEach(l -> l.onDrag(dx, dy));
+        if (labels == null) return;
+        labels.onDrag(dx, dy);
+    }
+
+    public void adjustSize(int maxWidth, int maxHeight) {
+        if (labels == null) {
+            this.setWidth(maxWidth);
+            this.setHeight(maxHeight);
+             return;
+        }
+        int w = labels.getWidth();
+        int h = labels.getHeight();
+        this.setWidth(Math.min(w, maxWidth));
+        this.setHeight(Math.min(h, maxHeight));
+    }
+
+    public void moveToWindowCentral(float scale) {
+        boolean widthFlag = labels.getWidth() <= this.getWidth();
+        boolean heightFlag = labels.getHeight() <= this.getHeight();
+        int dy = (this.getHeight() - labels.getHeight()) / 2;
+        if (widthFlag) {
+            int dx = (this.getWidth() - labels.getWidth()) / 2;
+            labels.onDrag(dx, dy);
+            lines.forEach(l -> l.onDrag(dx, dy));
+            if (heightFlag) lockDragging = true;
+        } else {
+            labels.onDrag(0, dy);
+            lines.forEach(l -> l.onDrag(0, dy));
+        }
+    }
+
+    public void compileGroup(ClientTechTreeGroup group) {
+        ClientTechTreeNode rootNode = group.getRootNode();
+
+        // get logical distribution for each column
+        ArrayList<Set<ClientTechTreeNode>> stages = new ArrayList<>();
+        HashSet<ClientTechTreeNode> rootSet = new HashSet<>();
+        rootSet.add(rootNode);
+        stages.add(rootSet);
+        int counter = 0;
+        while (true) {
+            counter ++;
+            HashSet<ClientTechTreeNode> cache = new HashSet<>();
+            stages.get(stages.size() - 1).forEach(node -> {
+                node.getNextNode().forEach(next -> {
+                    if (group.getNodes().containsValue(next))
+                        cache.add(next);
+                });
+            });
+            if (cache.isEmpty() || counter > 999) break;
+            stages.forEach(set -> set.removeAll(cache));
+            stages.add(cache);
+        }
+
+        // get width and height for the board.
+        int boardHeight = 0;
+        for (Set<ClientTechTreeNode> set : stages)
+            boardHeight = Math.max(set.size(), boardHeight);
+        if (boardHeight == 0) return;
+        int boardWidth = stages.size() * 2 - 1;
+        boardHeight = boardHeight * 2 - 1;
+
+        // put all labels into the board
+        labels = new LabelLayer(0 ,0, boardHeight, boardWidth, 20);
+        HashMap<ClientTechTreeNode, Vec2iE> positionMap = new HashMap<>();
+        for (int i = 0; i < stages.size(); i++) {
+            int px = i * 2;
+            Set<ClientTechTreeNode> column = stages.get(i);
+            int py = (boardHeight - column.size()) / 2;
+            int c = 0;
+            for (ClientTechTreeNode n : column) {
+                addLabel(px, py + c, n);
+                positionMap.put(n, new Vec2iE(px, py + c));
+                c += 2;
+            }
+        }
+
+        // get all lines
+        RandomSource random = Minecraft.getInstance().font.random;;
+        positionMap.forEach((node, pos) -> {
+            Set<ClientTechTreeNode> prev = node.getPrevNode();
+            ArrayList<Vec2iE> prevPos = new ArrayList<>(prev.size());
+            prev.forEach(p -> {
+                if (positionMap.containsKey(p))
+                    prevPos.add(positionMap.get(p));
+            });
+            getPathBetween(prevPos, pos, colors[random.nextInt(0, 5)]);
+
+        });
+    }
+
+    private void addLabel(int x, int y, ClientTechTreeNode node) {
+        TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
+        labels.setWidget(x, y, label);
+    }
+
+    private void getPathBetween(List<Vec2iE> from, Vec2iE to, @Nullable SimpleColor color) {
+        if (from.isEmpty()) return;
+        LineLayer layer = LineLayer.getLine(from, to, new Vec2iE(this.x, this.y),
+                20, color, v -> !labels.hasWidget(v.x, v.y));
+        lines.add(layer);
+        setWindowForLayer(layer);
+    }
+
+    public void setX(int x) {
+        int offsetX = x - this.x;
+        this.x = x;
+        labels.setX(x);
+        lines.forEach(l -> l.setX(l.x + offsetX));
+        updateWindows();
+    }
+
+    public void setY(int y) {
+        int offsetY = y - this.y;
+        this.y = y;
+        labels.setY(y);
+        lines.forEach(l -> l.setY(l.y + offsetY));
+        updateWindows();
+    }
+
+    public void setPosition(int x, int y) {
+        int offsetX = x - this.x;
+        int offsetY = y - this.y;
+        this.x = x;
+        this.y = y;
+        labels.setPos(x, y);
+        lines.forEach(l -> l.setPos(l.x + offsetX, l.y + offsetY));
+        updateWindows();
+    }
+
+    @Override
+    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+        for (LineLayer layer : lines) {
+            layer.render(poseStack, mouseX, mouseY, partial);
+        }
+        if (labels == null) return;
+        labels.render(poseStack, mouseX, mouseY, partial);
     }
 
     @Override
     public void updateNarration(NarrationElementOutput output) {
 
-    }
-
-    @Getter
-    public static class Connection {
-
-        private final Vec2i from, to;
-        private boolean stepOnFrom, stepOnTo;
-
-        public Connection(Vec2i from, Vec2i to) {
-            this.from = from;
-            this.to = to;
-        }
-
-        public Connection stepOnFrom(boolean stepOnFrom) {
-            this.stepOnFrom = stepOnFrom;
-            return this;
-        }
-
-        public Connection stepOnTo(boolean stepOnTo) {
-            this.stepOnTo = stepOnTo;
-            return this;
-        }
     }
 }

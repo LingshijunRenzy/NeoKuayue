@@ -51,6 +51,8 @@ public class AllOres {
                     .submit(AllElements.testRegistry);
 
     public static final OreReg<DropExperienceBlock> exampleOreConfig = new OreReg<DropExperienceBlock>("salt_ore")
+//            .addOreReplaceTarget(SALT_ORE)
+//            .addDeepSlateReplaceTarget(DEEPSLATE_SALT_ORE)
             .setOreBlock(SALT_ORE::getBlock)
             .addOreReplaceTarget()
             .addDeepSlateReplaceTarget()

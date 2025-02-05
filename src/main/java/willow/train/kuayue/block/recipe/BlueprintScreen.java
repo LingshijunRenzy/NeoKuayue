@@ -20,6 +20,7 @@ import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeManager;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
 import willow.train.kuayue.systems.tech_tree.client.gui.TechTreeItemButton;
 import willow.train.kuayue.systems.tech_tree.client.gui.TechTreeLabel;
+import willow.train.kuayue.systems.tech_tree.client.gui.TechTreePanel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +48,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private int windowCapacity = 0, windowTop = 0;
     private ArrayList<TechTreeItemButton> groupButtons;
     private float bgX = 0, bgY = 0, scale = 1.0f;
+    private ClientTechTreeGroup chosenGroup;
+    private final HashMap<ClientTechTreeGroup, TechTreePanel> panels;
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -54,12 +57,31 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         trees = ClientTechTreeManager.MANAGER.trees();
         groupButtons = new ArrayList<>();
         this.hasJei = ModList.get().isLoaded("jei");
+        panels = new HashMap<>();
+        for (Map.Entry<String, ClientTechTree> tree : trees.entrySet()) {
+            for (Map.Entry<String, ClientTechTreeGroup> group :
+                    tree.getValue().getGroups().entrySet()) {
+                chosenGroup = group.getValue();
+                break;
+            }
+            break;
+        }
     }
 
     @Override
     protected void init() {
-        onRefresh();
         super.init();
+        onRefresh();
+        for (Map.Entry<String, ClientTechTree> tree : trees.entrySet()) {
+            for (Map.Entry<String, ClientTechTreeGroup> group :
+                    tree.getValue().getGroups().entrySet()) {
+                TechTreePanel panel = new TechTreePanel(0, 0, 300, 200, 100, 100);
+                panel.compileGroup(group.getValue());
+                panels.put(group.getValue(), panel);
+                addRenderableWidget(panel);
+                panel.visible = group.getValue() == chosenGroup;
+            }
+        }
     }
 
     public void onRefresh() {
@@ -68,7 +90,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         for (ClientTechTree tree : trees.values()) {
             tree.getGroups().forEach((name, group) -> groupButtons
                     .add(new TechTreeItemButton(group.getIcon(), 20, 20, (a, b, c) -> {
-
+                        chosenGroup = group;
+                        panels.forEach((g, p) -> p.visible = g == chosenGroup);
                     })));
         }
         groupButtons.forEach(btn -> {
@@ -89,16 +112,44 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         poseStack.popPose();
     }
 
+    private void onPositionChanged(float neoBgx, float neoBgy) {
+        if (neoBgx == bgX && neoBgy == bgY) return;
+        bgX = neoBgx;
+        bgY = neoBgy;
+        setPanelsPosition();
+        panels.forEach((g, p) -> {
+            p.setSize(map(247, scale), map(117 ,scale));
+            // p.adjustSize(map(247, scale), map(117, scale));
+            p.moveToWindowCentral(scale);
+        });
+    }
+
+    private void onScaleChanged(float neoScale) {
+        if (neoScale == scale) return;
+        scale = neoScale;
+        setPanelsSize();
+    }
+
+    private void setPanelsPosition() {
+        panels.forEach((g, p) -> p.setPosition(
+                Math.round(bgX + map(33, scale)),
+                Math.round(bgY + map(15, scale))
+        ));
+    }
+
+    private void setPanelsSize() {
+        panels.forEach((g, p) -> p.setSize(map(252, scale), map(122, scale)));
+    }
+
     private ImageMask setParams(Minecraft mc) {
         if (mc.screen == null) return null;
         int windowWidth = mc.screen.width;
         int windowHeight = mc.screen.height;
         ImageMask mask = showSub ? bgMask.get() : bgNoSubMask.get();
         int w = (int) (windowWidth * (hasJei ? .7f : .9f));
-        scale = ((float) w / (float) mask.getImage().width());
+        onScaleChanged(((float) w / (float) mask.getImage().width()));
         int h = map(mask.getImage().height(), scale);
-        bgX = (windowWidth * (hasJei ? .725f : 1f) - w) / 2;
-        bgY = (float) (windowHeight - h) / 2;
+        onPositionChanged((windowWidth * (hasJei ? .725f : 1f) - w) / 2, (float) (windowHeight - h) / 2);
         mask.rectangle(new Vector3f(bgX, bgY, 0),
                 ImageMask.Axis.X, ImageMask.Axis.Y,
                 true, true, w, h);
@@ -154,24 +205,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         }
     }
 
-    private void testLabel(PoseStack poseStack, float partial, int mouseX, int mouseY) {
-        if (trees.isEmpty()) return;
-        ClientTechTree tree = null;
-        for (ClientTechTree t : trees.values()) {
-            tree = t;
-            break;
-        }
-        ClientTechTreeGroup group = null;
-        for (ClientTechTreeGroup g : tree.getGroups().values()) {
-            group = g;
-            break;
-        }
-        if (group == null) return;
-        ClientTechTreeNode node = group.getRootNode();
-        TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
-        label.render(poseStack, mouseX, mouseY, partial);
-    }
-
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         super.render(poseStack, mouseX, mouseY, partialTick);
@@ -182,4 +215,14 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
         // super.renderLabels(pPoseStack, pMouseX, pMouseY);
     }
+
+    @Override
+    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        boolean flag = super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+        for (Map.Entry<ClientTechTreeGroup, TechTreePanel> entry : panels.entrySet()) {
+            flag |= entry.getValue().mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+        }
+        return flag;
+    }
+
 }
