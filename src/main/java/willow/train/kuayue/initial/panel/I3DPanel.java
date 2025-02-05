@@ -44,17 +44,9 @@ public class I3DPanel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
-//    public static final SlabRegistration<HeightSlabBlock> FLOOR_HXD3D =
-//            new SlabRegistration<HeightSlabBlock>("floor_hxd3d")
-//                    .block(p -> new HeightSlabBlock(p, false))
-//                    .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
-//                    .tab(AllElements.neoKuayueLocoTab)
-//                    .noOcclusion().strengthAndTool(1.5f, 3f)
-//                    .submit(AllElements.testRegistry);
-
-    public static final BlockReg<SlabBlock> SLAB_HXD3D =
-            new BlockReg<SlabBlock>("floor_hxd3d")
-                    .blockType(SlabBlock::new)
+    public static final BlockReg<HeightSlabBlock> FLOOR_HXD3D =
+            new BlockReg<HeightSlabBlock>("floor_hxd3d")
+                    .blockType(HeightSlabBlock::new)
                     .material(Material.METAL)
                     .materialColor(MaterialColor.COLOR_RED)
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
@@ -62,6 +54,17 @@ public class I3DPanel {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
+
+//    public static final BlockReg<SlabBlock> SLAB_HXD3D =
+//            new BlockReg<SlabBlock>("floor_hxd3d")
+//                    .blockType(SlabBlock::new)
+//                    .material(Material.METAL)
+//                    .materialColor(MaterialColor.COLOR_RED)
+//                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+//                    .addProperty(properties -> properties.strength(1.5f, 3f))
+//                    .defaultBlockItem()
+//                    .tabTo(AllElements.neoKuayueLocoTab)
+//                    .submit(AllElements.testRegistry);
     public static final PanelRegistration<TrainPanelBlock> PANEL_HEXIE_HXD3D =
             new PanelRegistration<TrainPanelBlock>("panel_hexie_hxd3d")
                     .block(p -> new TrainPanelBlock(p, new Vec2(-1, 0), new Vec2(2, 2)))
@@ -132,6 +135,14 @@ public class I3DPanel {
     public static final PanelRegistration<TrainPanelBlock> HXD3D_PANEL_TRANSIT =
             new PanelRegistration<TrainPanelBlock>("hxd3d_panel_transit")
                     .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 2)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> HXD3D_PANEL_TRANSIT_2 =
+            new PanelRegistration<TrainPanelBlock>("hxd3d_panel_transit_2")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
