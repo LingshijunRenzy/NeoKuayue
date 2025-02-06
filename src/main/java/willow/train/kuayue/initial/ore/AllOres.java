@@ -50,12 +50,9 @@ public class AllOres {
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
 
-    public static final OreReg<DropExperienceBlock> exampleOreConfig = new OreReg<DropExperienceBlock>("salt_ore")
-//            .addOreReplaceTarget(SALT_ORE)
-//            .addDeepSlateReplaceTarget(DEEPSLATE_SALT_ORE)
-            .setOreBlock(SALT_ORE::getBlock)
-            .addOreReplaceTarget()
-            .addDeepSlateReplaceTarget()
+    public static final OreReg<DropExperienceBlock> SALT_ORE_REG = new OreReg<DropExperienceBlock>("salt_ore")
+            .addOreReplaceTarget(SALT_ORE)
+            .addDeepSlateReplaceTarget(DEEPSLATE_SALT_ORE)
             .setOreCountPerChunk(90)
             .setOreQuantityPerGroup(9)
             .setOreDistributionType(PlacedFeatureReg.DistributionType.TRIANGLE)
