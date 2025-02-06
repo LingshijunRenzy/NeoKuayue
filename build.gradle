@@ -211,7 +211,7 @@ dependencies {
     if(project.findProperty("nightly")){
         implementation fg.deobf("libs:kasuga_lib:${kasuga_lib_version}")
     } else {
-        implementation fg.deobf("kasuga.lib:kasuga_lib:${kasuga_lib_version}-normal")
+        implementation fg.deobf("kasuga.lib:kasuga_lib:${kasuga_lib_version}")
     }
     implementation "org.projectlombok:lombok:1.18.34"
     annotationProcessor "org.projectlombok:lombok:1.18.34"
