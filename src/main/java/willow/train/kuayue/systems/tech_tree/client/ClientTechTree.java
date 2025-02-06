@@ -34,16 +34,28 @@ public class ClientTechTree {
     public void update() {
         HashSet<ClientTechTreeNode> needToAdd = new HashSet<>();
         nodes.forEach((loc, node) -> {
-            if (node.getNextNode().size() == node.getNext().size()) return;
-            node.getNext().forEach(n -> {
-                for (ClientTechTreeNode node1 : node.getNextNode()) {
+            if (node.getNextNode().size() < node.getNext().size()) {
+                node.getNext().forEach(n -> {
+                    for (ClientTechTreeNode node1 : node.getNextNode()) {
+                        if (node1.location.equals(n)) return;
+                    }
+                    ClientTechTreeNode neoNext = ClientTechTreeManager.getInstance().getNode(n);
+                    if (neoNext == null) return;
+                    needToAdd.add(neoNext);
+                });
+                node.getNextNode().addAll(needToAdd);
+                needToAdd.clear();
+            }
+            if (node.getPrevNode().size() >= node.getPrev().size()) return;
+            node.getPrev().forEach(n -> {
+                for (ClientTechTreeNode node1 : node.getPrevNode()) {
                     if (node1.location.equals(n)) return;
                 }
-                ClientTechTreeNode neoNext = ClientTechTreeManager.getInstance().getNode(n);
-                if (neoNext == null) return;
-                needToAdd.add(neoNext);
+                ClientTechTreeNode neoPrev = ClientTechTreeManager.getInstance().getNode(n);
+                if (neoPrev == null) return;
+                needToAdd.add(neoPrev);
             });
-            node.getNextNode().addAll(needToAdd);
+            node.getPrevNode().addAll(needToAdd);
             needToAdd.clear();
         });
     }

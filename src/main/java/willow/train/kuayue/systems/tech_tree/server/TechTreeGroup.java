@@ -7,8 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.json.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 @Getter
 public class TechTreeGroup {
@@ -88,5 +87,26 @@ public class TechTreeGroup {
 
         buf.writeInt(nodes.size());
         nodes.forEach((location, node) -> location.writeToByteBuf(buf));
+    }
+
+    public boolean hasRing() {
+        Queue<TechTreeNode> queue = new LinkedList<>();
+        HashMap<TechTreeNode, Integer> degrees = new HashMap<>();
+        for (TechTreeNode n : nodes.values()) {
+            degrees.put(n, n.getInDegree());
+            if (n.getInDegree() == 0) queue.add(n);
+        }
+        int counter = 0;
+        while (!queue.isEmpty()) {
+            TechTreeNode node = queue.poll();
+            counter++;
+            for (TechTreeNode nextNode : node.getNext()) {
+                int deg = degrees.get(nextNode);
+                deg -= 1;
+                if (deg == 0) queue.add(nextNode);
+                degrees.put(nextNode, deg);
+            }
+        }
+        return counter != nodes.size();
     }
 }

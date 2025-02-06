@@ -1,0 +1,5 @@
+{
+  "loader": "forge:obj",
+  "model": "kuayue:models/block/hxd3d/hxd3d_carport.obj",
+  "flip_v": true
+}

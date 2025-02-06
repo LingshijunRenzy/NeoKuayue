@@ -895,8 +895,15 @@
   "block.kuayue.df11g_panel_bottom_eh_blind": "DF11G设备间下格栅",
   "block.kuayue.df11g_panel_upper_ph_blind": "DF11G动力间上格栅",
   "block.kuayue.df11g_chimney": "DF11G烟囱",
+  "block.kuayue.panel_logo_num_hxd3d": "hxd3d车厢板'HXD3D'",
 
   "block.kuayue.salt_ore": "盐矿石",
   "block.kuayue.deepslate_salt_ore": "深层盐矿石",
-  "block.kuayue.salt_block": "盐块"
+  "block.kuayue.salt_block": "盐块",
+  "block.kuayue.hxd3d_cowcatcher": "HXD3D排障器",
+  "block.kuayue.hxd3d_panel_bottom": "HXD3D下厢板",
+  "block.kuayue.hxd3d_carport": "HXD3D侧车顶",
+  "block.kuayue.hxd3d_carport_center": "HXD3D中央车顶",
+  "block.kuayue.hxd3d_panel_transit": "HXD3D过渡厢板1",
+  "block.kuayue.hxd3d_panel_transit_2": "HXD3D过渡厢板2"
 }
