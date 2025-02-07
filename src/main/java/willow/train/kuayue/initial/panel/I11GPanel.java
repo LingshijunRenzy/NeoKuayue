@@ -358,7 +358,7 @@ public class I11GPanel {
 
 
     public static final SlabRegistration<TrainSlabBlock> DF11G_CARPORT_CENTRE =
-            new SlabRegistration<TrainSlabBlock>("df11g_carport_centre")
+            new SlabRegistration<TrainSlabBlock>("df11g_carport_center")
                     .block(p -> new TrainSlabBlock(p, false))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
@@ -366,7 +366,7 @@ public class I11GPanel {
                     .submit(AllElements.testRegistry);
 
     public static final SlabRegistration<HingeSlabBlock> DF11G_CARPORT_CENTRE_COOLING_BLIND =
-            new SlabRegistration<HingeSlabBlock>("df11g_carport_centre_cooling_blind")
+            new SlabRegistration<HingeSlabBlock>("df11g_carport_center_cooling_blind")
                     .block(p -> new HingeSlabBlock(p, false))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
@@ -374,7 +374,7 @@ public class I11GPanel {
                     .submit(AllElements.testRegistry);
 
     public static final SlabRegistration<TrainSlabBlock> DF11G_CARPORT_CENTRE_FAN_BLIND =
-            new SlabRegistration<TrainSlabBlock>("df11g_carport_centre_fan_blind")
+            new SlabRegistration<TrainSlabBlock>("df11g_carport_center_fan_blind")
                     .block(p -> new TrainSlabBlock(p, false))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)

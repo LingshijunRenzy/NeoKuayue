@@ -84,9 +84,14 @@ public class ClientNetworkCache {
         cachedNodes.forEach((loc, node) -> {
             cachedTree.getNodes().put(loc, node);
             node.getNext().forEach(location -> {
-                        if (cachedNodes.containsKey(location))
-                            node.getNextNode().add(cachedNodes.get(location));
-                    });
+                if (cachedNodes.containsKey(location))
+                    node.getNextNode().add(cachedNodes.get(location));
+            });
+            node.getPrev().forEach(location -> {
+                if (cachedNodes.containsKey(location)) {
+                    node.getPrevNode().add(cachedNodes.get(location));
+                }
+            });
         });
         return cachedTree;
     }

@@ -858,9 +858,9 @@
  "block.kuayue.df11g_carport_yue": "DF11G Carport with YUE Roof” ",
  "block.kuayue.df11g_carport_ph": "DF11G Power Room Carport ",
  "block.kuayue.df11g_carport": "DF11G Carport",
- "block.kuayue.df11g_carport_centre":"DF11G Center Carport",
- "block.kuayue.df11g_carport_centre_cooling_blind": "DF11G Center Cooling Blind Carport",
- "block.kuayue.df11g_carport_centre_fan_blind": "DF11G Center Fan Blind",
+ "block.kuayue.df11g_carport_center":"DF11G Center Carport",
+ "block.kuayue.df11g_carport_center_cooling_blind": "DF11G Center Cooling Blind Carport",
+ "block.kuayue.df11g_carport_center_fan_blind": "DF11G Center Fan Blind",
  "block.kuayue.df11g_carport_eh": "DF11G Equipment Room Carport (Type 1)",
  "block.kuayue.df11g_carport_eh_ad": "DF11G Equipment Room Carport (Type 2)",
  "block.kuayue.df11g_carport_eh_blind": "DF11G Equipment Room Blind Carport",
@@ -889,9 +889,16 @@
  "block.kuayue.df11g_panel_bottom_eh_blind": "DF11G Equipmen Room Bottom Blind",
  "block.kuayue.df11g_panel_upper_ph_blind": "DF11G Power Room Upper Blind",
  "block.kuayue.df11g_chimney": "DF11G Chimney",
+ "block.kuayue.panel_logo_num_hxd3d": "HXD3D Logo 'hxd3d'",
 
  "block.kuayue.salt_ore": "Salt Ore",
  "block.kuayue.deepslate_salt_ore": "Deepslate Salt Ore",
- "block.kuayue.salt_block": "Salt Block"
+ "block.kuayue.salt_block": "Salt Block",
+ "block.kuayue.hxd3d_cowcatcher": "HXD3D Cowcatcher",
+ "block.kuayue.hxd3d_panel_bottom": "HXD3D Bottom Panel",
+ "block.kuayue.hxd3d_carport": "HXD3D Side Carport",
+ "block.kuayue.hxd3d_carport_center": "HXD3D Center Carport",
+ "block.kuayue.hxd3d_panel_transit": "HXD3D Transit Panel",
+ "block.kuayue.hxd3d_panel_transit_2": "HXD3D Transit Panel 2"
 }
 
