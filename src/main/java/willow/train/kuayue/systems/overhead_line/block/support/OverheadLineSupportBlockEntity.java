@@ -12,7 +12,6 @@ import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 import java.util.List;
 
 public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
-    private OptionalBehaviour<TrackTargetingBehaviour<OverheadLineEdgePoint>> edgePoint;
     public OverheadLineSupportBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -23,13 +22,6 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> list) {
-        list
-                .add(
-                        edgePoint =
-                                OptionalBehaviour.createTrackTargetingBehaviour(
-                                        this,
-                                        OverheadLineSystem.OVERHEAD_LINE_EDGE_POINT
-                                )
-                );
+
     }
 }

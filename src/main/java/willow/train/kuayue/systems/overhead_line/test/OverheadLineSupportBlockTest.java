@@ -11,7 +11,7 @@ public class OverheadLineSupportBlockTest {
             new OverheadLineSupportBlockReg<>("overhead_line_support_block")
                     .blockType(OverheadLineSupportBlock::new)
                     .withBlockEntity(OverheadLineSystem.OVERHEAD_LINE_SUPPORT_BLOCK_ENTITY)
-                    .withTrackTargetingItem(null)
+                    .defaultBlockItem()
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
