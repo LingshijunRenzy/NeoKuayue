@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "groups": {
     "ready_group": {
-      "name": "ready.group.name",
+      "name": "tech_tree.kuayue.group.ready",
       "description": "ready.group",
       "icon":"create:brass_ingot",
       "on_unlock": {
@@ -70,7 +70,7 @@
       }
     },
     "test_group": {
-      "name": "ready.group.name",
+      "name": "tech_tree.kuayue.group.test",
       "description": "ready.group",
       "icon":"create:brass_ingot",
       "on_unlock": {

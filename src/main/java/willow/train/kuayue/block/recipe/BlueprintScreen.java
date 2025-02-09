@@ -21,6 +21,7 @@ import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
 import willow.train.kuayue.systems.tech_tree.client.gui.TechTreeItemButton;
 import willow.train.kuayue.systems.tech_tree.client.gui.TechTreeLabel;
 import willow.train.kuayue.systems.tech_tree.client.gui.TechTreePanel;
+import willow.train.kuayue.systems.tech_tree.client.gui.TechTreeTitleLabel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private float bgX = 0, bgY = 0, scale = 1.0f;
     private ClientTechTreeGroup chosenGroup;
     private final HashMap<ClientTechTreeGroup, TechTreePanel> panels;
+    private final TechTreeTitleLabel titleLabel;
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -66,6 +68,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             }
             break;
         }
+        titleLabel = new TechTreeTitleLabel(Component.translatable(chosenGroup.getTitleKey()));
     }
 
     @Override
@@ -92,6 +95,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                     .add(new TechTreeItemButton(group.getIcon(), 20, 20, (a, b, c) -> {
                         chosenGroup = group;
                         panels.forEach((g, p) -> p.visible = g == chosenGroup);
+                        titleLabel.setTitle(Component.translatable(chosenGroup.getTitleKey()));
                     })));
         }
         groupButtons.forEach(btn -> {
@@ -173,6 +177,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         int guideHeight = rightDownY - leftTopY;
         int btnHeight = guideHeight - 20;
         windowCapacity = btnHeight / 20;
+
+        titleLabel.setPosition(Math.round(bgX) + map(35, scale), Math.round(bgY) + map(12, scale));
+        titleLabel.render(poseStack, mouseX, mouseY, partial);
 
         if (windowCapacity <= groupButtons.size()) {
             ImageMask upArrowMask = upArrow.get();
