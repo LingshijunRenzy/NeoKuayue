@@ -379,6 +379,11 @@
  "container.kuayue.inventory.button.m1": "M1",
  "container.kuayue.inventory.button.freight": "Freight",
 
+ "container.kuayue.inventory.loco.button.all": "All",
+ "container.kuayue.inventory.loco.button.df11g": "DF11G",
+ "container.kuayue.inventory.loco.button.hxd3d": "HXD3D",
+ "container.kuayue.inventory.loco.button.df21": "DF21",
+
  "container.kuayue.train_speed_sign_edit_menu.x_offset": "X offset",
  "container.kuayue.train_speed_sign_edit_menu.y_offset": "Y offset",
  "container.kuayue.train_speed_sign_edit_menu.x_revert": "Revert X offset",

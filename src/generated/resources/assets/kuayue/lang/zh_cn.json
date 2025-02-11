@@ -472,6 +472,11 @@
   "container.kuayue.inventory.button.m1": "M1",
   "container.kuayue.inventory.button.freight": "货车",
 
+  "container.kuayue.inventory.loco.button.all": "所有",
+  "container.kuayue.inventory.loco.button.df11g": "DF11G",
+  "container.kuayue.inventory.loco.button.hxd3d": "HXD3D",
+  "container.kuayue.inventory.loco.button.df21": "DF21",
+
   "container.kuayue.train_speed_sign_edit_menu.x_offset": "X 轴偏移",
   "container.kuayue.train_speed_sign_edit_menu.y_offset": "Y 轴偏移",
   "container.kuayue.train_speed_sign_edit_menu.x_revert": "X 轴反转",
