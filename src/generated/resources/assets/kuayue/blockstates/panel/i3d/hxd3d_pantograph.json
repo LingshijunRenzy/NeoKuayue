@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "enabled=true,facing=east": {},
+    "enabled=true,facing=north": {},
+    "enabled=true,facing=south": {},
+    "enabled=true,facing=west": {},
+    "enabled=false,facing=east": {},
+    "enabled=false,facing=north": {},
+    "enabled=false,facing=south": {},
+    "enabled=false,facing=west": {}
+  }
+}

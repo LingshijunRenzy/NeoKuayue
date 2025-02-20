@@ -3,7 +3,6 @@ package willow.train.kuayue.initial.panel;
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.registrations.common.BlockReg;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
@@ -13,6 +12,8 @@ import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
+import willow.train.kuayue.block.panels.pantograph.PantographProps;
+import willow.train.kuayue.block.panels.pantograph.SingleArmPantographBlock;
 import willow.train.kuayue.block.panels.slab.HeightSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
 import willow.train.kuayue.initial.AllElements;
@@ -156,6 +157,22 @@ public class I3DPanel {
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final BlockReg<SingleArmPantographBlock> HXD3D_PANTOGRAPH =
+            new BlockReg<SingleArmPantographBlock>("hxd3d_pantograph")
+                    .blockType(props -> new SingleArmPantographBlock(props,
+                            new PantographProps(
+                                    8.8, 25.44,
+                                    19.52, 3.130,
+                                    161.0, 25.28
+                            )))
+                    .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
+                    .addProperty(properties -> properties.strength(1.5f, 3f))
+                    .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .defaultBlockItem()
+                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+                    .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
