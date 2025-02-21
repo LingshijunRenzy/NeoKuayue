@@ -103,6 +103,14 @@ public class Layer extends AbstractWidget {
         );
     }
 
+    public ArrayList<AbstractWidget> getWidgets() {
+        return widgets;
+    }
+
+    public ArrayList<AbstractWidget> getRenderableWidgets() {
+        return renderableWidgets;
+    }
+
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         boolean flag = false;

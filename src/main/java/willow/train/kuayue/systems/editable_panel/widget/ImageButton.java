@@ -112,10 +112,10 @@ public class ImageButton extends Button {
     }
     public void setBgColor(SimpleColor color) {this.mask.get().setColor(color);}
     public void controlImage(ImageAction action) {
-        action.act(this.mask.get(), this);
+        if (mask != null && mask.get() != null) action.act(this.mask.get(), this);
     }
     public void controlBg(ImageAction action) {
-        action.act(this.bg.get(), this);
+        if (bg != null && bg.get() != null) action.act(this.bg.get(), this);
     }
 
     public void setTooltipLabelWidth(int width) {

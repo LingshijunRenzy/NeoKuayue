@@ -13,8 +13,8 @@
         "node_plastic": {
           "next_nodes": ["node_steel"],
           "next_groups": [],
-          "name": "node.plastic.name",
-          "description": "node.plastic.description",
+          "name": "tech_tree.kuayue.group.ready.node.plastic",
+          "description": "tech_tree.kuayue.group.ready.node.plastic.desc",
           "type": "plain",
           "logo": "kuayue:plastic_ingot",
           "exp": 0,
@@ -34,8 +34,8 @@
         "node_steel": {
           "next_nodes": ["node_fully"],
           "next_groups": [],
-          "name": "node.steel.name",
-          "description": "node.steel.description",
+          "name": "tech_tree.kuayue.group.ready.node.steel",
+          "description": "tech_tree.kuayue.group.ready.node.steel.desc",
           "type": "plain",
           "logo": "kuayue:weathering_resistant_steel_ingot",
           "exp": 0,
@@ -52,8 +52,8 @@
         "node_fully": {
           "next_nodes": [],
           "next_groups": ["ordinary_groups"],
-          "name": "node.fully.name",
-          "description": "node.fully.description",
+          "name": "tech_tree.kuayue.group.ready.node.fully",
+          "description": "tech_tree.kuayue.group.ready.node.fully.desc",
           "type": "plain",
           "logo": "minecraft:clock",
           "exp": 0,

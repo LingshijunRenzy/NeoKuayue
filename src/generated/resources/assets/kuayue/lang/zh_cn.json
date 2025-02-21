@@ -915,5 +915,11 @@
 
   "tips.tech_tree": "--------------------------------以下是科技树部件-------------------------------------------",
   "tech_tree.kuayue.group.ready": "前置科技",
-  "tech_tree.kuayue.group.test": "测试组"
+  "tech_tree.kuayue.group.test": "测试组",
+  "tech_tree.kuayue.group.ready.node.plastic": "高分子技术",
+  "tech_tree.kuayue.group.ready.node.fully": "准备完毕!",
+  "tech_tree.kuayue.group.ready.node.steel": "钢铁技术",
+  "tech_tree.kuayue.group.ready.node.plastic.desc": "高分子技术代表你能够制造列车必须之合成材料。",
+  "tech_tree.kuayue.group.ready.node.fully.desc": "你已经准备好真正开发一列列车了",
+  "tech_tree.kuayue.group.ready.node.steel.desc": "大炼钢铁，多快好省"
 }

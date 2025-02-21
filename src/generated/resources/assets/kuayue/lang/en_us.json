@@ -909,6 +909,12 @@
 
  "tips.tech_tree": "--------------------------------all tech tree items below here-------------------------------------------",
  "tech_tree.kuayue.group.ready": "Ready Group",
- "tech_tree.kuayue.group.test": "Test Group"
+ "tech_tree.kuayue.group.test": "Test Group",
+ "tech_tree.kuayue.group.ready.node.plastic": "Polymer Technology",
+ "tech_tree.kuayue.group.ready.node.fully": "Fully Prepared",
+ "tech_tree.kuayue.group.ready.node.steel": "Steel Technology",
+ "tech_tree.kuayue.group.ready.node.plastic.desc": "Polymer technology means that the player is able to create the synthetic materials necessary for the train.",
+ "tech_tree.kuayue.group.ready.node.fully.desc": "You're ready to really develop a train.",
+ "tech_tree.kuayue.group.ready.node.steel.desc": "smashing steel, quicker and cheaper"
 }
 
