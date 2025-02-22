@@ -57,8 +57,8 @@ public class TechTreeLabel extends ImageButton {
     }
 
     public static TechTreeLabel largeLabel(ClientTechTreeNode node, int x, int y, Component tooltip) {
-        return new TechTreeLabel(LazyRecomputable.of(() -> largeBgMask.get().copyWithOp(o -> o)),
-                null, node, x, y, 24, 24, tooltip);
+        return new TechTreeLabel(null, LazyRecomputable.of(() -> largeBgMask.get().copyWithOp(o -> o)),
+                node, x, y, 24, 24, tooltip);
     }
 
     public Vec2i getCenterPos() {
@@ -74,8 +74,8 @@ public class TechTreeLabel extends ImageButton {
         Minecraft mc = Minecraft.getInstance();
         ItemRenderer renderer = mc.getItemRenderer();
         renderer.blitOffset = 100.0F;
-        renderer.renderAndDecorateItem(logo, x + 2, y + 2);
-        renderer.renderGuiItemDecorations(mc.font, logo, x + 2, y + 2);
+        renderer.renderAndDecorateItem(logo, x + (this.width - 16) / 2, y + (this.height - 16) / 2);
+        renderer.renderGuiItemDecorations(mc.font, logo, x + (this.width - 16) / 2, y + (this.height - 16) / 2);
         renderer.blitOffset = 0.0F;
     }
 }
