@@ -1,12 +1,12 @@
 {
   "variants": {
-    "enabled=true,facing=east": {},
-    "enabled=true,facing=north": {},
-    "enabled=true,facing=south": {},
-    "enabled=true,facing=west": {},
-    "enabled=false,facing=east": {},
-    "enabled=false,facing=north": {},
-    "enabled=false,facing=south": {},
-    "enabled=false,facing=west": {}
+    "open=true,facing=east": {},
+    "open=true,facing=north": {},
+    "open=true,facing=south": {},
+    "open=true,facing=west": {},
+    "open=false,facing=east": {},
+    "open=false,facing=north": {},
+    "open=false,facing=south": {},
+    "open=false,facing=west": {}
   }
 }

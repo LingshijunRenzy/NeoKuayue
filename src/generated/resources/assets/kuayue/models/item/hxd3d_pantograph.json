@@ -1,3 +1,6 @@
 {
-  "parent": "kuayue:block/hxd3d/hxd3d_panel_middle"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kuayue:block/hxd3d/hxd3d_pantograph_item"
+  }
 }

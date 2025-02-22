@@ -4,6 +4,12 @@ import java.util.HashMap;
 
 public interface IPantographModel {
 
+    public static final String BASE_MODEL = "baseModel";
+    public static final String LARGE_ARM_MODEL = "largeArmModel";
+    public static final String PULL_ROD_MODEL = "pullRodModel";
+    public static final String SMALL_ARM_MODEL = "smallArmModel";
+    public static final String BOW_HEAD_MODEL = "bowHeadModel";
+
     public static final String LARGE_ARM_ANGLE = "largeArmAngle";
     public static final String SMALL_ARM_POS_X = "smallArmPosX";
     public static final String SMALL_ARM_POS_Y = "smallArmPosY";
