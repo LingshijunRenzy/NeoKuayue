@@ -23,7 +23,9 @@ import java.util.Map;
 public class SingleArmPantographRenderer implements
         BlockEntityRenderer<SingleArmPantographBlockEntity>, IPantographModel {
 
-    public static float STEP = 0.25f;
+    public static float STEP_FAST = 0.35f;
+    public static float STEP_SLOW = 0.15f;
+    public static float RISEN_ANGLE = 120.0f;
 
     public SingleArmPantographRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -37,7 +39,6 @@ public class SingleArmPantographRenderer implements
         boolean risen = pBlockEntity.isRisen();
         // 获取玩家朝向
         Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
-        float f = -facing.toYRot() - 90;
         // 各部件固定参数
         PantographProps pantographProps = pBlockEntity.getPantographType();
 
@@ -63,17 +64,29 @@ public class SingleArmPantographRenderer implements
                 bowHeadModel == null ? null : CachedBufferer.partial(bowHeadModel, blockState).light(light);
 
         pose.pushPose();
-        pose.mulPose(Vector3f.YP.rotationDegrees(f + 90f));
+        pose.translate(0, -0.5, 0);
+
+        if (facing == Direction.NORTH)
+            pose.translate(1f, 0, 0);
+        if (facing == Direction.SOUTH)
+            pose.translate(0, 0, 1f);
+        if (facing == Direction.WEST)
+            pose.translate(1f, 0, 1f);
+        pose.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot() + 90f));
 
         // 升降弓拉杆角度变化
-        if(risen && pBlockEntity.pullRodAngle > 110) {
-            pBlockEntity.pullRodAngle -= STEP;
-        } else if (!risen && pBlockEntity.pullRodAngle < 160) {
-            pBlockEntity.pullRodAngle += STEP;
+        if(risen && pBlockEntity.pullRodAngle > 135) {
+            pBlockEntity.pullRodAngle -= STEP_FAST;
+        } else if (risen && pBlockEntity.pullRodAngle <= 135 && pBlockEntity.pullRodAngle > RISEN_ANGLE) {
+            pBlockEntity.pullRodAngle -= STEP_SLOW;
+        } else if (!risen && pBlockEntity.pullRodAngle < 135) {
+            pBlockEntity.pullRodAngle += STEP_SLOW;
+        } else if (!risen && pBlockEntity.pullRodAngle >= 135 && pBlockEntity.pullRodAngle < 170) {
+            pBlockEntity.pullRodAngle += STEP_FAST;
         } else if (risen) {
-            pBlockEntity.pullRodAngle = 110.0f;
+            pBlockEntity.pullRodAngle = RISEN_ANGLE;
         } else {
-            pBlockEntity.pullRodAngle = 160.0f;
+            pBlockEntity.pullRodAngle = 170.0f;
         }
         // 随动角度与坐标
         HashMap<String, Double> pantoModelMap = getPantoModelMapByType(pantographProps, pBlockEntity.pullRodAngle);
@@ -87,14 +100,17 @@ public class SingleArmPantographRenderer implements
         // 渲染
         if (baseBuffer != null)
             baseBuffer.renderInto(pose, buffer.getBuffer(RenderType.cutout()));
+
+        pose.translate(0, 0.25f, 0.28125f);
+
         if (largeArmBuffer != null)
-            largeArmBuffer.translateY(4.25 / 16.0).translateZ(-4.75 / 16.0).rotateX(largeArmAngle)
+            largeArmBuffer.translateZ(8.8 / 16.0).rotateX(-largeArmAngle)
                     .renderInto(pose, buffer.getBuffer(RenderType.cutout()));
         if (pullRodBuffer != null)
-            pullRodBuffer.translateY( 4.0 / 16.0).translateZ(4.5 / 16.0).rotateX(pBlockEntity.pullRodAngle)
+            pullRodBuffer.rotateX(-pBlockEntity.pullRodAngle)
                     .renderInto(pose, buffer.getBuffer(RenderType.cutout()));
         if (smallArmBuffer != null)
-            smallArmBuffer.translateY(smallArmPosY / 16.0).translateZ(smallArmPosX / 16.0).rotateX(smallArmAngle)
+            smallArmBuffer.translateY(smallArmPosY / 16.0).translateZ(smallArmPosX / 16.0).rotateX(-smallArmAngle)
                     .renderInto(pose, buffer.getBuffer(RenderType.cutout()));
         if (bowHeadBuffer != null)
             bowHeadBuffer.translateY(bowHeadPosY / 16.0).translateZ(bowHeadPosX / 16.0)

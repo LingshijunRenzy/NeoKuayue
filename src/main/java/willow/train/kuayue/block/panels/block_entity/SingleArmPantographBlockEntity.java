@@ -23,7 +23,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
 
     private boolean isRisen = false;
     private PantographProps pantographType;
-    public double pullRodAngle = 160.0;
+    public double pullRodAngle = 170.0;
 
     public SingleArmPantographBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
