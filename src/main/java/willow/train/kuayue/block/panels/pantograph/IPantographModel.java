@@ -17,7 +17,7 @@ public interface IPantographModel {
     public static final String BOW_HEAD_POS_X = "bowHeadPosX";
     public static final String BOW_HEAD_POS_Y = "bowHeadPosY";
 
-    public default HashMap<String, Double> singleArmPantographModel(
+    default HashMap<String, Double> singleArmPantographModel(
             double baselineLength, double largeArmLength,
             double pullRodLength, double connectingRodLength,
             double smallArmAngle, double smallArmLength,
@@ -62,5 +62,21 @@ public interface IPantographModel {
         singlePantoModel.put(BOW_HEAD_POS_X, E_X);
         singlePantoModel.put(BOW_HEAD_POS_Y, E_Y);
         return singlePantoModel;
+    }
+
+    default HashMap<String, Double> getPantoModelMapByType (PantographProps pantographProps, double pullRodAngle) {
+
+        HashMap<String, Double> pantoModelMap = new HashMap<>();
+
+        pantoModelMap = singleArmPantographModel(
+                pantographProps.getBaselineLength(),
+                pantographProps.getLargeArmLength(),
+                pantographProps.getPullRodLength(),
+                pantographProps.getConnectingRodLength(),
+                pantographProps.getSmallArmAngle(),
+                pantographProps.getSmallArmLength(),
+                pullRodAngle
+        );
+        return pantoModelMap;
     }
 }

@@ -118,20 +118,4 @@ public class SingleArmPantographRenderer implements
 
         pose.popPose();
     }
-
-    protected HashMap<String, Double> getPantoModelMapByType (PantographProps pantographProps, double pullRodAngle) {
-
-        HashMap<String, Double> pantoModelMap = new HashMap<>();
-
-        pantoModelMap = singleArmPantographModel(
-                pantographProps.getBaselineLength(),
-                pantographProps.getLargeArmLength(),
-                pantographProps.getPullRodLength(),
-                pantographProps.getConnectingRodLength(),
-                pantographProps.getSmallArmAngle(),
-                pantographProps.getSmallArmLength(),
-                pullRodAngle
-        );
-        return pantoModelMap;
-    }
 }

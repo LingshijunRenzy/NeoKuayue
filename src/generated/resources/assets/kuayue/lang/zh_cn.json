@@ -912,6 +912,7 @@
   "block.kuayue.hxd3d_panel_transit": "HXD3D过渡厢板1",
   "block.kuayue.hxd3d_panel_transit_2": "HXD3D过渡厢板2",
   "block.kuayue.hxd3d_panel_middle": "HXD3D上厢板",
+  "block.kuayue.hxd3d_pantograph": "HXD3D受电弓",
 
   "tips.tech_tree": "--------------------------------以下是科技树部件-------------------------------------------",
   "tech_tree.kuayue.group.ready": "前置科技",
