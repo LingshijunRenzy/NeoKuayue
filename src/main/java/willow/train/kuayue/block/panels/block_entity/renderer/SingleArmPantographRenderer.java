@@ -37,6 +37,7 @@ public class SingleArmPantographRenderer implements
 
         BlockState blockState = pBlockEntity.getBlockState();
         boolean risen = pBlockEntity.isRisen();
+        double transPosY = pBlockEntity.getTransPosY();
         // 获取玩家朝向
         Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
         // 各部件固定参数
@@ -64,7 +65,7 @@ public class SingleArmPantographRenderer implements
                 bowHeadModel == null ? null : CachedBufferer.partial(bowHeadModel, blockState).light(light);
 
         pose.pushPose();
-        pose.translate(0, -0.5, 0);
+        pose.translate(0, transPosY, 0);
 
         if (facing == Direction.NORTH)
             pose.translate(1f, 0, 0);
