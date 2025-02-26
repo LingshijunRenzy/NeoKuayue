@@ -265,7 +265,7 @@ public class CR200JPanel {
                     .withBlockEntity("cr200j_front_block_entity", CR200jFrontBlockEntity::new)
                     .withBlockEntityRenderer(() -> CR200jFrontRenderer::new)
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
-                    .tabTo(AllElements.neoKuayueLocoTab)
+                    .tabTo(AllElements.neoKuayueCarriageTab)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
