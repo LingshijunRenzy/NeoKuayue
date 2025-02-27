@@ -9,11 +9,11 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
 import willow.train.kuayue.systems.editable_panel.widget.OnClick;
@@ -53,12 +53,13 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private ClientTechTreeGroup chosenGroup;
     private final HashMap<ClientTechTreeGroup, TechTreePanel> panels;
     private final TechTreeTitleLabel titleLabel;
-    private NodeTooltip tooltip = null;
+    private Tooltip tooltip = null;
 
     // for node chosen
     private TechTreeLabel chosenLabel = null;
     private final HashSet<TechTreeLabel> prevLabels, nextLabels;
     private ArrayList<LabelGrid> prevGrids, nextGrids;
+    private int prevGridIndex = -1, nextGridIndex = -1;
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -89,27 +90,67 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     public void updateGrids() {
-        this.prevGrids.clear();
-        this.nextGrids.clear();
+        clearAllGrids();
         ArrayList<TechTreeLabel> prevLabels = new ArrayList<>(this.prevLabels);
         ArrayList<TechTreeLabel> nextLabels = new ArrayList<>(this.nextLabels);
+        OnClick<TechTreeLabel> click = (label, mx, my) -> {
+            setChosenLabel(label);
+        };
         for (int i = 0; ;i += 9) {
             if (i >= prevLabels.size() && i >= nextLabels.size())
                 break;
-            if (i < prevLabels.size()) {
-                LabelGrid grid = new LabelGrid(0, 0, prevLabels.subList(i, prevLabels.size()));
-                prevGrids.add(grid);
-            }
-            if (i < nextLabels.size()) {
-                LabelGrid grid = new LabelGrid(0, 0, nextLabels.subList(i, nextLabels.size()));
-                nextGrids.add(grid);
-            }
+            genGrid(prevLabels, click, i, prevGrids);
+            genGrid(nextLabels, click, i, nextGrids);
         }
+        if (!prevGrids.isEmpty()) {
+            prevGridIndex = 0;
+            prevGrids.get(prevGridIndex).visible = true;
+        }
+        if (!nextGrids.isEmpty()) {
+            nextGridIndex = 0;
+            nextGrids.get(nextGridIndex).visible = true;
+        }
+        updateGridsPosition(scale);
+    }
+
+    private void genGrid(ArrayList<TechTreeLabel> nextLabels, OnClick<TechTreeLabel> click, int i, ArrayList<LabelGrid> nextGrids) {
+        if (i < nextLabels.size()) {
+            LabelGrid grid = new LabelGrid(0, 0, nextLabels.subList(i, nextLabels.size()));
+            grid.visible = false;
+            grid.setOnClick(click);
+            nextGrids.add(grid);
+            addRenderableWidget(grid);
+        }
+    }
+
+    private void updateGridsPosition(float scale) {
+        prevGrids.forEach(grid -> {
+            grid.setPos(map(getBgX() + Math.round(314f / 4f) - Math.round(grid.getWidth() / 2f), scale),
+                    map(getBgY() + 55 - grid.getHeight() / 2, scale));
+        });
+        nextGrids.forEach(grid -> {
+            grid.setPos(map(getBgX() + Math.round(942f / 4f) - Math.round(grid.getWidth() / 2f), scale),
+                    map(getBgY() + 55 - grid.getHeight() / 2, scale));
+        });
+    }
+
+    private void clearAllGrids() {
+        prevGrids.forEach(this::removeWidget);
+        nextGrids.forEach(this::removeWidget);
+        prevGrids.clear();
+        nextGrids.clear();
+        clearGridIndex();
+    }
+
+    private void clearGridIndex() {
+        prevGridIndex = -1;
+        nextGridIndex = -1;
     }
 
     @Override
     protected void init() {
         super.init();
+        addRenderableWidget(titleLabel);
         onRefresh();
         for (Map.Entry<String, ClientTechTree> tree : trees.entrySet()) {
             for (Map.Entry<String, ClientTechTreeGroup> group :
@@ -120,8 +161,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 panel.setOnClick((p, mX, mY) -> {
                     TechTreeLabel label = p.getChosenLabel(mX, mY);
                     if (label == null) return;
-                    updateSub(label.getNode());
-                    updateGrids();
+                    setChosenLabel(label);
                 });
                 addRenderableWidget(panel);
                 panel.visible = group.getValue() == chosenGroup;
@@ -159,12 +199,15 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         groupButtons.clear();
         for (ClientTechTree tree : trees.values()) {
             tree.getGroups().forEach((name, group) -> groupButtons
-                    .add(new TechTreeItemButton(group.getIcon(), 20, 20, (a, b, c) -> {
+                    .add(new TechTreeItemButton(group.getIcon(), 20, 20, group,
+                            (a, b, c) -> {
                         showSub = false;
                         chosenGroup = group;
                         panels.forEach((g, p) -> p.visible = g == chosenGroup);
                         titleLabel.setTitle(Component.translatable(chosenGroup.getTitleKey()));
                         clearSub();
+                        clearAllGrids();
+                        titleLabel.visible = true;
                     })));
         }
         groupButtons.forEach(btn -> {
@@ -172,6 +215,11 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             btn.setVisible(false);
         });
         updateGuidelines(this.scale);
+    }
+
+    private void setChosenLabel(TechTreeLabel label) {
+        updateSub(label.getNode());
+        updateGrids();
     }
 
     @Override
@@ -196,6 +244,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             // p.adjustSize(map(247, scale), map(117, scale));
             p.moveToWindowCentral(scale);
         });
+        updateGuidelines(scale);
+        clearAllGrids();
+        titleLabel.visible = true;
     }
 
     private void onScaleChanged(float neoScale) {
@@ -203,6 +254,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         scale = neoScale;
         setPanelsSize();
         updateGuidelines(scale);
+        clearAllGrids();
+        titleLabel.visible = true;
     }
 
     private void setPanelsPosition() {
@@ -270,20 +323,19 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             guideDownBtn.setPos(btnX, Math.round(bgY) + rightDownY - 8);
     }
 
-    public void updateSub(ClientTechTreeNode chosenNode) {
+    private void updateSub(ClientTechTreeNode chosenNode) {
         if (chosenLabel != null) clearSub();
-        chosenLabel = TechTreeLabel.largeLabel(chosenNode, map(getBgX() + 140, scale),
-                map(getBgY() + 45, scale), Component.empty());
+        // 150 - 12, 55 - 12
+        chosenLabel = TechTreeLabel.largeLabel(chosenNode, map(getBgX() + 145, scale),
+                map(getBgY() + 43, scale), Component.empty());
         addRenderableWidget(chosenLabel);
         for (ClientTechTreeNode node : chosenNode.getPrevNode()) {
             TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
             prevLabels.add(label);
-            addRenderableWidget(label);
         }
         for (ClientTechTreeNode node : chosenNode.getNextNode()) {
             TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
             nextLabels.add(label);
-            addRenderableWidget(label);
         }
         this.showSub = true;
         titleLabel.visible = false;
@@ -301,20 +353,35 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     private void renderTooltip(PoseStack poseStack, TechTreeLabel label,
+                               TechTreeItemButton grpBtn,
                                int mouseX, int mouseY, float partial) {
-        if (label == null) return;
-        ClientTechTreeNode node = label.getNode();
-        if (tooltip == null) {
-            tooltip = new NodeTooltip(node);
-            tooltip.updateNode();
-        } else if (tooltip.getNode() != node) {
-            tooltip = new NodeTooltip(node);
-            tooltip.updateNode();
+        if (label == null && grpBtn == null) return;
+        int tooltipX, tooltipY, smallerX;
+        if (grpBtn != null) {
+            ClientTechTreeGroup group = grpBtn.getGroup();
+            if (tooltip == null) {
+                tooltip = Tooltip.fromGroup(group);
+            } else if (!tooltip.is(group)) {
+                tooltip = Tooltip.fromGroup(group);
+            }
+            tooltipX = grpBtn.x + grpBtn.getWidth();
+            tooltipY = grpBtn.y;
+            smallerX = grpBtn.x;
+        } else {
+            ClientTechTreeNode node = label.getNode();
+            if (tooltip == null) {
+                tooltip = Tooltip.fromNode(node);
+            } else if (!tooltip.is(node)) {
+                tooltip = Tooltip.fromNode(node);
+            }
+            tooltipX = label.x + label.getWidth();
+            tooltipY = label.y;
+            smallerX = label.x;
         }
-        if (label.getX() + label.getWidth() + 1 + tooltip.getWidth() <= windowWidth)
-            tooltip.setPosition(label.getX() + label.getWidth() + 1, label.getY());
+        if (tooltipX + 1 + tooltip.getWidth() <= windowWidth)
+            tooltip.setPosition(tooltipX + 1, tooltipY);
         else
-            tooltip.setPosition(label.getX() - tooltip.getWidth() - 1, label.getY());
+            tooltip.setPosition(smallerX - tooltip.getWidth() - 1, tooltipY);
         tooltip.render(poseStack, mouseX, mouseY, partial);
     }
 
@@ -331,12 +398,37 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         super.render(poseStack, mouseX, mouseY, partialTick);
         if (showSub) {
             panels.forEach((g, p) -> p.visible = false);
-            return;
         }
-        if (chosenGroup == null || !panels.containsKey(chosenGroup)) return;
-        if (!panels.get(chosenGroup).visible) return;
-        TechTreeLabel label = panels.get(chosenGroup).getChosenLabel(mouseX, mouseY);
-        renderTooltip(poseStack, label, mouseX, mouseY, partialTick);
+        TechTreeItemButton button = null;
+        for (TechTreeItemButton btn : groupButtons) {
+            if (btn.isMouseOver(mouseX, mouseY) && btn.visible) {
+                button = btn;
+                break;
+            }
+        }
+        TechTreeLabel label = getChosenLabel(mouseX, mouseY);
+        renderTooltip(poseStack, label, button, mouseX, mouseY, partialTick);
+    }
+
+    public @Nullable TechTreeLabel getChosenLabel(double mouseX, double mouseY) {
+        if (!showSub) {
+            if (chosenGroup == null || !panels.containsKey(chosenGroup)) return null;
+            if (!panels.get(chosenGroup).visible) return null;
+            return panels.get(chosenGroup).getChosenLabel(mouseX, mouseY);
+        } else {
+            if (chosenLabel != null && chosenLabel.isMouseOver(mouseX, mouseY))
+                return chosenLabel;
+            if (prevGridIndex != -1) {
+                TechTreeLabel label = prevGrids.get(prevGridIndex)
+                        .getChosenLabel(mouseX, mouseY);
+                if (label != null) return label;
+            }
+            if (nextGridIndex != -1) {
+                return nextGrids.get(nextGridIndex)
+                        .getChosenLabel(mouseX, mouseY);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -346,6 +438,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        if (showSub) return false;
         boolean flag = super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
         for (Map.Entry<ClientTechTreeGroup, TechTreePanel> entry : panels.entrySet()) {
             flag |= entry.getValue().mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);

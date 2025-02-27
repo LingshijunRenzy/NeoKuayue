@@ -72,7 +72,7 @@
     "test_group": {
       "name": "tech_tree.kuayue.group.test",
       "description": "ready.group",
-      "icon":"create:brass_ingot",
+      "icon":"create:millstone",
       "on_unlock": {
         "description": "ready.group.unlock"
       },
