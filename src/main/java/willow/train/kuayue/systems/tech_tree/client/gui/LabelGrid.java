@@ -5,19 +5,22 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class LabelGrid extends AbstractWidget {
 
-    private HashSet<TechTreeLabel> labels;
-    public LabelGrid(int pX, int pY, @NotNull HashSet<TechTreeLabel> labels) {
+    private List<TechTreeLabel> labels;
+    public LabelGrid(int pX, int pY, @NotNull List<TechTreeLabel> labels) {
         super(pX, pY, 0, 0, Component.empty());
         if (labels.size() < 10){
             this.labels = labels;
         } else {
             int counter = 0;
-            this.labels = new HashSet<>();
+            this.labels = new ArrayList<>(9);
             for (TechTreeLabel label : labels) {
                 this.labels.add(label);
                 counter ++;
@@ -103,7 +106,18 @@ public class LabelGrid extends AbstractWidget {
 
     @Override
     public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partial) {
-        labels.forEach(label -> renderButton(poseStack, mouseX, mouseY, partial));
+        labels.forEach(label -> {
+            label.visible = this.visible;
+            render(poseStack, mouseX, mouseY, partial);
+        });
+    }
+
+    public @Nullable TechTreeLabel getChosenLabel(double mouseX, double mouseY) {
+        for (TechTreeLabel label : labels) {
+            if (label.isMouseOver(mouseX, mouseY))
+                return label;
+        }
+        return null;
     }
 
     @Override

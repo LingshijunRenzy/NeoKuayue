@@ -5,6 +5,7 @@ import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,6 +15,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import willow.train.kuayue.initial.ClientInit;
+import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
+import willow.train.kuayue.systems.editable_panel.widget.OnClick;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTree;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeManager;
@@ -43,7 +46,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     int windowWidth = 0, windowHeight = 0;
 
     private int windowCapacity = 0, windowTop = 0;
-    private ArrayList<TechTreeItemButton> groupButtons;
+    private final ArrayList<TechTreeItemButton> groupButtons;
+    private ImageButton guideUpBtn, guideDownBtn;
+
     private float bgX = 0, bgY = 0, scale = 1.0f;
     private ClientTechTreeGroup chosenGroup;
     private final HashMap<ClientTechTreeGroup, TechTreePanel> panels;
@@ -53,7 +58,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     // for node chosen
     private TechTreeLabel chosenLabel = null;
     private final HashSet<TechTreeLabel> prevLabels, nextLabels;
-    private LabelGrid prevGrid = null, nextGrid = null;
+    private ArrayList<LabelGrid> prevGrids, nextGrids;
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -74,6 +79,32 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 Component.translatable(chosenGroup.getTitleKey()));
         this.prevLabels = new HashSet<>();
         this.nextLabels = new HashSet<>();
+        this.prevGrids = new ArrayList<>();
+        this.nextGrids = new ArrayList<>();
+    }
+
+    public ImageButton genArrowButton(int x, int y, Button.OnPress action, boolean upArrow) {
+        LazyRecomputable<ImageMask> mask = upArrow ? this.upArrow : this.downArrow;
+        return new ImageButton(mask, x, y, 16, 8, Component.empty(), action);
+    }
+
+    public void updateGrids() {
+        this.prevGrids.clear();
+        this.nextGrids.clear();
+        ArrayList<TechTreeLabel> prevLabels = new ArrayList<>(this.prevLabels);
+        ArrayList<TechTreeLabel> nextLabels = new ArrayList<>(this.nextLabels);
+        for (int i = 0; ;i += 9) {
+            if (i >= prevLabels.size() && i >= nextLabels.size())
+                break;
+            if (i < prevLabels.size()) {
+                LabelGrid grid = new LabelGrid(0, 0, prevLabels.subList(i, prevLabels.size()));
+                prevGrids.add(grid);
+            }
+            if (i < nextLabels.size()) {
+                LabelGrid grid = new LabelGrid(0, 0, nextLabels.subList(i, nextLabels.size()));
+                nextGrids.add(grid);
+            }
+        }
     }
 
     @Override
@@ -90,12 +121,37 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                     TechTreeLabel label = p.getChosenLabel(mX, mY);
                     if (label == null) return;
                     updateSub(label.getNode());
+                    updateGrids();
                 });
                 addRenderableWidget(panel);
                 panel.visible = group.getValue() == chosenGroup;
             }
         }
         showSub =false;
+    }
+
+    public void setGroupsUpAndDownArrowButton() {
+        if (this.guideDownBtn != null)
+            removeWidget(this.guideDownBtn);
+        if (this.guideUpBtn != null)
+            addWidget(this.guideUpBtn);
+        ImageButton upArrowBtn = genArrowButton(0, 0,
+                button -> moveGuideWindow(true), true);
+        ImageButton downArrowBtn = genArrowButton(0, 0,
+                button -> moveGuideWindow(false), false);
+        addRenderableWidget(upArrowBtn);
+        addRenderableWidget(downArrowBtn);
+        guideUpBtn = upArrowBtn;
+        guideDownBtn = downArrowBtn;
+    }
+
+    public void moveGuideWindow(boolean up) {
+        if (up && windowTop > 0) {
+            windowTop --;
+            return;
+        }
+        if (!up && windowTop < groupButtons.size() - windowCapacity)
+            windowTop ++;
     }
 
     public void onRefresh() {
@@ -115,6 +171,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             addRenderableWidget(btn);
             btn.setVisible(false);
         });
+        updateGuidelines(this.scale);
     }
 
     @Override
@@ -145,6 +202,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         if (neoScale == scale) return;
         scale = neoScale;
         setPanelsSize();
+        updateGuidelines(scale);
     }
 
     private void setPanelsPosition() {
@@ -178,8 +236,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     // leftUp border: (7, 19); (23, 106)
-    private void renderGuidelines(PoseStack poseStack, float partial,
-                                  int mouseX, int mouseY, float scale) {
+    private void updateGuidelines(float scale) {
         int leftTopX = map(7, scale);
         int leftTopY = map(19, scale);
 
@@ -192,26 +249,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         windowCapacity = btnHeight / 20;
 
         titleLabel.setPosition(Math.round(bgX) + map(35, scale), Math.round(bgY) + map(12, scale));
-        titleLabel.render(poseStack, mouseX, mouseY, partial);
-
-        if (windowCapacity <= groupButtons.size()) {
-            ImageMask upArrowMask = upArrow.get();
-            ImageMask downArrowMask = downArrow.get();
-            float btnX = bgX + leftTopX + (float) (guideWidth - 16) / 2;
-
-            if (windowTop > 0) {
-                upArrowMask.rectangle(new Vector3f(btnX, bgY + leftTopY + .5f, 0),
-                        ImageMask.Axis.X, ImageMask.Axis.Y,
-                        true, true, 16, 8);
-                upArrowMask.renderToGui();
-            }
-            if (windowTop + windowCapacity < groupButtons.size()) {
-                downArrowMask.rectangle(new Vector3f(btnX, bgY + rightDownY - 8, 0),
-                        ImageMask.Axis.X, ImageMask.Axis.Y,
-                        true, true, 16, 8);
-                downArrowMask.renderToGui();
-            }
-        }
 
         int grpBtnY = Math.round(bgY) + leftTopY + (guideHeight - btnHeight) / 2;
         int grpBtnX = Math.round(bgX) + leftTopX + (guideWidth - 20) / 2;
@@ -222,6 +259,15 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             if (flag) button.setPosition(grpBtnX, grpBtnY + (i - windowTop) * 20);
             button.setVisible(flag);
         }
+        if (this.windowCapacity < this.groupButtons.size() &&
+                this.guideDownBtn == null && this.guideUpBtn == null) {
+            setGroupsUpAndDownArrowButton();
+        }
+        int btnX = Math.round(bgX + leftTopX + (float) (guideWidth - 16) / 2);
+        if (guideUpBtn != null)
+            guideUpBtn.setPos(btnX, Math.round(bgY) + leftTopY + 1);
+        if (guideDownBtn != null)
+            guideDownBtn.setPos(btnX, Math.round(bgY) + rightDownY - 8);
     }
 
     public void updateSub(ClientTechTreeNode chosenNode) {
@@ -283,7 +329,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         super.render(poseStack, mouseX, mouseY, partialTick);
-        renderGuidelines(poseStack, partialTick, mouseX, mouseY, scale);
         if (showSub) {
             panels.forEach((g, p) -> p.visible = false);
             return;

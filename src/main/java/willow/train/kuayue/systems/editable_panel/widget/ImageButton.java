@@ -142,7 +142,7 @@ public class ImageButton extends Button {
             if (showTooltip > 40) tooltip.render(pPoseStack, mouseX, mouseY, partialTicks);
             else showTooltip ++;
         } else if (showTooltip > 0) showTooltip --;
-        if (!renderMask)
+        if (renderMask && mask != null)
             this.mask.get().renderToGui();
     }
 

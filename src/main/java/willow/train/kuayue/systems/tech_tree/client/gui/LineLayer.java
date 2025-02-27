@@ -11,9 +11,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+@Getter
 public class LineLayer extends BoardLayer<TechTreeLine> {
 
-    @Getter
     private SimpleColor color;
     public LineLayer(int x, int y, int row, int column, int squareSide) {
         super(x, y, row, column, squareSide);
