@@ -31,7 +31,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private boolean showSub, hasJei;
     private final HashMap<String, ClientTechTree> trees;
     LazyRecomputable<ImageMask> bgMask = LazyRecomputable.of(() -> new ImageMask(ClientInit.blueprintTableBg.getImageSafe().get()));
+
     LazyRecomputable<ImageMask> bgNoSubMask = LazyRecomputable.of(() -> new ImageMask(ClientInit.blueprintTableNoSub.getImageSafe().get()));
+
     LazyRecomputable<ImageMask> upArrow = LazyRecomputable.of(
             () -> ClientInit.blueprintButtons.getImageSafe().get().getMask()
                     .copyWithOp(o -> o.rectangleUV(32f / 128f, 32f / 128f,
@@ -60,6 +62,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private final HashSet<TechTreeLabel> prevLabels, nextLabels;
     private ArrayList<LabelGrid> prevGrids, nextGrids;
     private int prevGridIndex = -1, nextGridIndex = -1;
+    private final ItemSlot[] consumptionSlots, resultSlots;
+
+
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -82,10 +87,16 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         this.nextLabels = new HashSet<>();
         this.prevGrids = new ArrayList<>();
         this.nextGrids = new ArrayList<>();
+        consumptionSlots = new ItemSlot[8];
+        resultSlots = new ItemSlot[4];
+        Arrays.fill(consumptionSlots, new ItemSlot(0,0));
+        Arrays.fill(resultSlots, new ItemSlot(0,0));
     }
 
     public ImageButton genArrowButton(int x, int y, Button.OnPress action, boolean upArrow) {
-        LazyRecomputable<ImageMask> mask = upArrow ? this.upArrow : this.downArrow;
+        LazyRecomputable<ImageMask> mask = upArrow ?
+                LazyRecomputable.of(() -> this.upArrow.get().copyWithOp(m -> m)) :
+                LazyRecomputable.of(() -> this.downArrow.get().copyWithOp(m -> m));
         return new ImageButton(mask, x, y, 16, 8, Component.empty(), action);
     }
 
@@ -111,6 +122,10 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             nextGrids.get(nextGridIndex).visible = true;
         }
         updateGridsPosition(scale);
+    }
+
+    private void updateSlots() {
+
     }
 
     private void genGrid(ArrayList<TechTreeLabel> nextLabels, OnClick<TechTreeLabel> click, int i, ArrayList<LabelGrid> nextGrids) {

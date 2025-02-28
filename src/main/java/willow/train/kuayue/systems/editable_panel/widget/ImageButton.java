@@ -6,6 +6,8 @@ import kasuga.lib.core.client.render.SimpleColor;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.Vec2f;
 import kasuga.lib.core.util.LazyRecomputable;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -19,7 +21,11 @@ public class ImageButton extends Button {
     private int showTooltip = 0;
     private OnClick<ImageButton> clk;
     private boolean isMouseDown;
+
+    @Getter
+    @Setter
     private boolean renderMask;
+
     public static final ImageButton.ImageAction baseAction = (img, btn) -> img.rectangle(new Vector3f(btn.getX(), btn.getY(), 0),
             ImageMask.Axis.X, ImageMask.Axis.Y, true, true, btn.getWidth(), btn.getHeight());
 
@@ -50,14 +56,6 @@ public class ImageButton extends Button {
         this.tooltip = new TooltipLabel(new Vec2f(this.x, this.y + this.height + 2), tooltip);
         controlImage(baseAction);
         renderMask = true;
-    }
-
-    public boolean isRenderMask() {
-        return renderMask;
-    }
-
-    public void setRenderMask(boolean renderMask) {
-        this.renderMask = renderMask;
     }
 
     public void setX(int x) {
