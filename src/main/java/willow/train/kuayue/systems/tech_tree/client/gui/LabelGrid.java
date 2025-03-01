@@ -1,23 +1,32 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import lombok.Setter;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import willow.train.kuayue.systems.editable_panel.widget.OnClick;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class LabelGrid extends AbstractWidget {
 
-    private HashSet<TechTreeLabel> labels;
-    public LabelGrid(int pX, int pY, @NotNull HashSet<TechTreeLabel> labels) {
+    private List<TechTreeLabel> labels;
+
+    @Setter
+    private OnClick<TechTreeLabel> onClick = (label, px, py) -> {};
+
+    public LabelGrid(int pX, int pY, @NotNull List<TechTreeLabel> labels) {
         super(pX, pY, 0, 0, Component.empty());
         if (labels.size() < 10){
             this.labels = labels;
         } else {
             int counter = 0;
-            this.labels = new HashSet<>();
+            this.labels = new ArrayList<>(9);
             for (TechTreeLabel label : labels) {
                 this.labels.add(label);
                 counter ++;
@@ -25,6 +34,14 @@ public class LabelGrid extends AbstractWidget {
             }
         }
         setWidthAndHeight();
+    }
+
+    public void setPos(int x, int y) {
+        int offsetX = x - this.x;
+        int offsetY = y - this.y;
+        this.x = x;
+        this.y = y;
+        labels.forEach(label -> label.setPos(label.getX() + offsetX, label.getY() + offsetY));
     }
 
     public void setWidthAndHeight() {
@@ -103,7 +120,25 @@ public class LabelGrid extends AbstractWidget {
 
     @Override
     public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partial) {
-        labels.forEach(label -> renderButton(poseStack, mouseX, mouseY, partial));
+        labels.forEach(label -> {
+            label.visible = this.visible;
+            label.render(poseStack, mouseX, mouseY, partial);
+        });
+    }
+
+    public @Nullable TechTreeLabel getChosenLabel(double mouseX, double mouseY) {
+        for (TechTreeLabel label : labels) {
+            if (label.isMouseOver(mouseX, mouseY))
+                return label;
+        }
+        return null;
+    }
+
+    @Override
+    public void onClick(double pMouseX, double pMouseY) {
+        TechTreeLabel label = getChosenLabel(pMouseX, pMouseY);
+        if (label == null) return;
+        this.onClick.click(label, pMouseX, pMouseY);
     }
 
     @Override

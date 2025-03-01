@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
 import willow.train.kuayue.systems.editable_panel.widget.OnClick;
+import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
 
 public class TechTreeItemButton extends AbstractButton {
 
@@ -18,11 +19,15 @@ public class TechTreeItemButton extends AbstractButton {
 
     @Getter
     @NotNull private ItemStack stack;
+
+    @Getter
+    private final ClientTechTreeGroup group;
     public TechTreeItemButton(@NotNull ItemStack item, int pWidth, int pHeight,
-                              OnClick<TechTreeItemButton> action) {
+                              ClientTechTreeGroup group, OnClick<TechTreeItemButton> action) {
         super(0, 0, pWidth, pHeight, Component.empty());
         this.action = action;
         stack = item;
+        this.group = group;
     }
 
     public void setStack(@NotNull ItemStack stack) {
