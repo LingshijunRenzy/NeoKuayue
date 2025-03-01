@@ -25,7 +25,6 @@ public class SingleArmPantographRenderer implements
 
     public static float STEP_FAST = 0.35f;
     public static float STEP_SLOW = 0.15f;
-    public static float RISEN_ANGLE = 120.0f;
 
     public SingleArmPantographRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -37,6 +36,8 @@ public class SingleArmPantographRenderer implements
 
         BlockState blockState = pBlockEntity.getBlockState();
         boolean risen = pBlockEntity.isRisen();
+        float risenSpeed = pBlockEntity.getRisenSpeed();
+        float risenAngle = 180 - pBlockEntity.getRisenAngle();
         double transPosY = pBlockEntity.getTransPosY();
         // 获取玩家朝向
         Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
@@ -77,15 +78,15 @@ public class SingleArmPantographRenderer implements
 
         // 升降弓拉杆角度变化
         if(risen && pBlockEntity.pullRodAngle > 135) {
-            pBlockEntity.pullRodAngle -= STEP_FAST;
-        } else if (risen && pBlockEntity.pullRodAngle <= 135 && pBlockEntity.pullRodAngle > RISEN_ANGLE) {
-            pBlockEntity.pullRodAngle -= STEP_SLOW;
+            pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
+        } else if (risen && pBlockEntity.pullRodAngle <= 135 && pBlockEntity.pullRodAngle > risenAngle) {
+            pBlockEntity.pullRodAngle -= STEP_SLOW * risenSpeed;
         } else if (!risen && pBlockEntity.pullRodAngle < 135) {
-            pBlockEntity.pullRodAngle += STEP_SLOW;
+            pBlockEntity.pullRodAngle += STEP_SLOW * risenSpeed;
         } else if (!risen && pBlockEntity.pullRodAngle >= 135 && pBlockEntity.pullRodAngle < 170) {
-            pBlockEntity.pullRodAngle += STEP_FAST;
+            pBlockEntity.pullRodAngle += STEP_FAST * risenSpeed;
         } else if (risen) {
-            pBlockEntity.pullRodAngle = RISEN_ANGLE;
+            pBlockEntity.pullRodAngle = risenAngle;
         } else {
             pBlockEntity.pullRodAngle = 170.0f;
         }
