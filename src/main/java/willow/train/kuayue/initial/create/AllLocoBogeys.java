@@ -13,6 +13,8 @@ import willow.train.kuayue.block.bogey.loco.LocoBogeyBlock;
 import willow.train.kuayue.block.bogey.loco.LocoBogeyEntity;
 import willow.train.kuayue.block.bogey.loco.MeterLocoBogeyBlock;
 import willow.train.kuayue.block.bogey.loco.MeterLocoBogeyEntity;
+import willow.train.kuayue.block.bogey.loco.AndesiteLocoBogeyEntity;
+import willow.train.kuayue.block.bogey.loco.AndesiteLocoBogeyBlock;
 import willow.train.kuayue.block.bogey.loco.renderer.*;
 import willow.train.kuayue.initial.AllElements;
 
@@ -63,6 +65,13 @@ public class AllLocoBogeys {
             .size(0.915F / 2F)
             .submit(testRegistry);
 
+    public static final BogeySizeReg ss8Andesite = new BogeySizeReg("ss8_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg ss8BackwardAndesite = new BogeySizeReg("ss8_backward_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
     public static final BogeyGroupReg locoBogeyGroup = new BogeyGroupReg("loco", "kuayue_bogey")
             .bogey(df11g.getSize(), DF11GRenderer::new, testRegistry.asResource("df11g_bogey"))
             .bogey(df11gBackward.getSize(), DF11GRenderer.Backward::new, testRegistry.asResource("df11g_backward_bogey"))
@@ -82,6 +91,11 @@ public class AllLocoBogeys {
             .translationKey("meter_loco_group")
             .submit(testRegistry);
 
+    public static final BogeyGroupReg andesiteLocoBogeyGroup = new BogeyGroupReg("andesite_loco", "standard")
+            .bogey(ss8Andesite.getSize(), SS8RendererAndesite::new, testRegistry.asResource("ss8_bogey_a"))
+            .bogey(ss8BackwardAndesite.getSize(), SS8RendererAndesite.Backward::new, testRegistry.asResource("ss8_backward_bogey_a"))
+            .translationKey("andesite_loco_group")
+            .submit(testRegistry);
     public static final BogeyBlockReg<LocoBogeyBlock> df11gBogey =
             new BogeyBlockReg<LocoBogeyBlock>("df11g_bogey")
                     .block(LocoBogeyBlock::new)
@@ -221,6 +235,35 @@ public class AllLocoBogeys {
                     .blockEntityType(MeterLocoBogeyEntity::new)
                     .addBlock(() -> df21Bogey.getEntry().get())
                     .addBlock(() -> df21BackwardBogey.getEntry().get())
+                    .withRenderer(() -> BogeyBlockEntityRenderer::new)
+                    .submit(testRegistry);
+
+    public static final BogeyBlockReg<AndesiteLocoBogeyBlock> ss8BogeyAndesite =
+            new BogeyBlockReg<AndesiteLocoBogeyBlock>("ss8_bogey_a")
+                    .block(AndesiteLocoBogeyBlock::new)
+                    .material(Material.METAL)
+                    .materialColor(MaterialColor.PODZOL)
+                    .translationKey("ss8_bogey_a")
+                    .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .property(properties -> properties.strength(2.0f, 3.0f))
+                    .size(ss8Andesite)
+                    .submit(testRegistry);
+
+    public static final BogeyBlockReg<AndesiteLocoBogeyBlock> ss8BackwardBogeyAndesite =
+            new BogeyBlockReg<AndesiteLocoBogeyBlock>("ss8_backward_bogey_a")
+                    .block(AndesiteLocoBogeyBlock::new)
+                    .material(Material.METAL)
+                    .materialColor(MaterialColor.PODZOL)
+                    .translationKey("ss8_backward_bogey_a")
+                    .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .property(properties -> properties.strength(2.0f, 3.0f))
+                    .size(ss8BackwardAndesite)
+                    .submit(testRegistry);
+    public static final BlockEntityReg<AndesiteLocoBogeyEntity> andesiteLocoBogeyEntity =
+            new BlockEntityReg<AndesiteLocoBogeyEntity>("andesite_loco_bogey_entity")
+                    .blockEntityType(AndesiteLocoBogeyEntity::new)
+                    .addBlock(() -> ss8BogeyAndesite.getEntry().get())
+                    .addBlock(() -> ss8BackwardBogeyAndesite.getEntry().get())
                     .withRenderer(() -> BogeyBlockEntityRenderer::new)
                     .submit(testRegistry);
 
