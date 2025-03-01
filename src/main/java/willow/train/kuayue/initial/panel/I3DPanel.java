@@ -170,7 +170,8 @@ public class I3DPanel {
                             "hxd3d/pantograph/hxd3d_panto_large_arm",
                             "hxd3d/pantograph/hxd3d_panto_pull_rod",
                             "hxd3d/pantograph/hxd3d_panto_small_arm",
-                            "hxd3d/pantograph/hxd3d_panto_bow_head"
+                            "hxd3d/pantograph/hxd3d_panto_bow_head",
+                            1.5f, 60
                             ))
                     .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(properties -> properties.strength(1.5f, 3f))
