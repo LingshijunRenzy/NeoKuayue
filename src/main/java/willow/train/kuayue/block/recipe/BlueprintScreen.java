@@ -4,11 +4,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
@@ -45,6 +51,22 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                     .copyWithOp(o -> o.rectangleUV(32f / 128f, 40f / 128f,
                             48f / 128f, 48f / 128f))
     );
+
+    LazyRecomputable<ImageMask> subRightArrow = LazyRecomputable.of(
+            () -> ClientInit.blueprintButtons.getImageSafe().get().getMask()
+                    .copyWithOp(o -> o.rectangleUV(64f / 128f, 0, 96f / 128f, 18f / 128f))
+    );
+
+    LazyRecomputable<ImageMask> subRightArrow2 = LazyRecomputable.of(
+            () -> subRightArrow.get().copyWithOp(o -> o)
+    );
+
+    LazyRecomputable<ImageMask> groupChosenFrame = LazyRecomputable.of(
+            () -> ClientInit.blueprintButtons.getImageSafe().get().getMask()
+                    .copyWithOp(o -> o.rectangleUV(64f / 128f, 18f / 128f,
+                            80f / 128f, 36f / 128f))
+    );
+
     int windowWidth = 0, windowHeight = 0;
 
     private int windowCapacity = 0, windowTop = 0;
@@ -63,7 +85,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private ArrayList<LabelGrid> prevGrids, nextGrids;
     private int prevGridIndex = -1, nextGridIndex = -1;
     private final ItemSlot[] consumptionSlots, resultSlots;
-
+    private MutableComponent nodeTitleComponent = null;
 
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
@@ -89,8 +111,10 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         this.nextGrids = new ArrayList<>();
         consumptionSlots = new ItemSlot[8];
         resultSlots = new ItemSlot[4];
-        Arrays.fill(consumptionSlots, new ItemSlot(0,0));
-        Arrays.fill(resultSlots, new ItemSlot(0,0));
+        for (int i = 0; i < consumptionSlots.length; i++)
+            consumptionSlots[i] = new ItemSlot(0, 0);
+        for (int i = 0; i < resultSlots.length; i++)
+            resultSlots[i] = new ItemSlot(0, 0);
     }
 
     public ImageButton genArrowButton(int x, int y, Button.OnPress action, boolean upArrow) {
@@ -124,8 +148,59 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         updateGridsPosition(scale);
     }
 
-    private void updateSlots() {
+    private void updateSlotPos(float scale) {
+        consumptionSlots[0].setPosition(getBgX() + map( 55, scale) + getSlotSidePos(scale),
+                getBgY() + map( 113, scale) + getSlotSidePos(scale));
+        for (int i = 1; i < 7; i++) {
+            consumptionSlots[i].setPosition(getBgX() + map(71, scale) +
+                            ((i - 1) / 2) * getSlotSide(scale) + getSlotSidePos(scale),
+                    getBgY() + map(105, scale) + ((i - 1) % 2) * getSlotSide(scale) + getSlotSidePos(scale));
+        }
+        consumptionSlots[7].setPosition(getBgX() + map(119, scale) + getSlotSidePos(scale),
+                getBgY() + map(113, scale) + getSlotSidePos(scale));
+        resultSlots[0].setPosition(getBgX() + map(216, scale) + getSlotSidePos(scale),
+                getBgY() + map(114, scale) + getSlotSidePos(scale));
+        resultSlots[1].setPosition(getBgX() + map(231, scale) + getSlotSidePos(scale),
+                getBgY() + map(105, scale) + getSlotSidePos(scale));
+        resultSlots[2].setPosition(getBgX() + map(231, scale) + getSlotSidePos(scale),
+                getBgY() + map(105, scale) + getSlotSide(scale) + getSlotSidePos(scale));
+        resultSlots[3].setPosition(getBgX() + map(247, scale) + getSlotSidePos(scale),
+                getBgY() + map(113, scale) + getSlotSidePos(scale));
+    }
 
+    public void updateSlotItems(ClientTechTreeNode node) {
+        clearSlotItems();
+        int counter = 0;
+        for (ItemStack item : node.getItemConsume()) {
+            ItemSlot slot = consumptionSlots[counter];
+            slot.setItemStack(item);
+            counter++;
+            if (counter >= consumptionSlots.length) break;
+        }
+    }
+
+    public void clearSlotItems() {
+        for (ItemSlot slot : consumptionSlots) {
+            slot.setItemStack(ItemStack.EMPTY);
+        }
+        for (ItemSlot slot : resultSlots) {
+            slot.setItemStack(ItemStack.EMPTY);
+        }
+    }
+
+    private void renderAllSlots(boolean flag) {
+        for (ItemSlot slot : consumptionSlots)
+            slot.visible = flag;
+        for (ItemSlot slot : resultSlots)
+            slot.visible = flag;
+    }
+
+    private int getSlotSide(float scale) {
+        return Math.round(scale * 16f);
+    }
+
+    private int getSlotSidePos(float scale) {
+        return getSlotSide(scale) / 2 - 8;
     }
 
     private void genGrid(ArrayList<TechTreeLabel> nextLabels, OnClick<TechTreeLabel> click, int i, ArrayList<LabelGrid> nextGrids) {
@@ -147,6 +222,21 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             grid.setPos(map(getBgX() + Math.round(942f / 4f) - Math.round(grid.getWidth() / 2f), scale),
                     map(getBgY() + 55 - grid.getHeight() / 2, scale));
         });
+    }
+
+    private void renderSubArrows(float scale) {
+        if (!prevGrids.isEmpty()) {
+            ImageMask arrow1 = subRightArrow.get();
+            arrow1.rectangle(new Vector3f(map(getBgX() + Math.round(314f * 3 / 8) - 16, scale), map(getBgY() + 55 - 9, scale), 0),
+                    ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 32, 18);
+            arrow1.renderToGui();
+        }
+        if (!nextGrids.isEmpty()) {
+            ImageMask arrow2 = subRightArrow2.get();
+            arrow2.rectangle(new Vector3f(map(getBgX() + Math.round(314f * 5 / 8) - 17, scale), map(getBgY() + 55 - 9, scale), 0),
+                    ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 32, 18);
+            arrow2.renderToGui();
+        }
     }
 
     private void clearAllGrids() {
@@ -181,6 +271,13 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 addRenderableWidget(panel);
                 panel.visible = group.getValue() == chosenGroup;
             }
+        }
+        updateSlotPos(scale);
+        for (ItemSlot slot : consumptionSlots) {
+            addRenderableWidget(slot);
+        }
+        for (ItemSlot slot : resultSlots) {
+            addRenderableWidget(slot);
         }
         showSub =false;
     }
@@ -222,7 +319,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                         titleLabel.setTitle(Component.translatable(chosenGroup.getTitleKey()));
                         clearSub();
                         clearAllGrids();
+                        renderAllSlots(false);
                         titleLabel.visible = true;
+                        updateFramePosition(chosenGroup);
                     })));
         }
         groupButtons.forEach(btn -> {
@@ -235,6 +334,12 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private void setChosenLabel(TechTreeLabel label) {
         updateSub(label.getNode());
         updateGrids();
+        updateSlotPos(scale);
+        renderAllSlots(true);
+        nodeTitleComponent = Component.translatable(label.getNode().getName())
+                .setStyle(Style.EMPTY.applyFormat(ChatFormatting.BOLD)
+                        .withUnderlined(true));
+        updateSlotItems(label.getNode());
     }
 
     @Override
@@ -261,6 +366,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         });
         updateGuidelines(scale);
         clearAllGrids();
+        renderAllSlots(false);
+        updateSlotPos(scale);
         titleLabel.visible = true;
     }
 
@@ -270,6 +377,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         setPanelsSize();
         updateGuidelines(scale);
         clearAllGrids();
+        renderAllSlots(false);
+        updateSlotPos(scale);
         titleLabel.visible = true;
     }
 
@@ -336,6 +445,28 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             guideUpBtn.setPos(btnX, Math.round(bgY) + leftTopY + 1);
         if (guideDownBtn != null)
             guideDownBtn.setPos(btnX, Math.round(bgY) + rightDownY - 8);
+        updateFramePosition(chosenGroup);
+    }
+
+    private void updateFramePosition(ClientTechTreeGroup group) {
+        if (group == null) return;
+        int index = -1;
+        TechTreeItemButton chosenButton = null;
+        for (int i = 0; i < groupButtons.size(); i++) {
+            TechTreeItemButton button = groupButtons.get(i);
+            if (chosenGroup == button.getGroup()) {
+                index = i;
+                chosenButton = button;
+                break;
+            }
+        }
+        if (index < 0) return;
+        index -= windowTop;
+        if (index >= windowCapacity) return;
+        ImageMask frame = groupChosenFrame.get();
+        frame.rectangle(new Vector3f(chosenButton.x + 2, chosenButton.y + 2, 0),
+                ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
+                16, 18);
     }
 
     private void updateSub(ClientTechTreeNode chosenNode) {
@@ -409,10 +540,18 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         super.render(poseStack, mouseX, mouseY, partialTick);
+        if (chosenGroup != null)
+            groupChosenFrame.get().renderToGui();
         if (showSub) {
             panels.forEach((g, p) -> p.visible = false);
+            renderSubArrows(scale);
+            if (nodeTitleComponent != null) {
+                font.draw(poseStack, nodeTitleComponent,
+                        bgX + map(39, scale),
+                        bgY + map(16, scale), 0xffffff);
+            }
         }
         TechTreeItemButton button = null;
         for (TechTreeItemButton btn : groupButtons) {

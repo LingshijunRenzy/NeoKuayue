@@ -10,6 +10,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.royawesome.jlibnoise.module.combiner.Min;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -25,7 +26,7 @@ public class ItemSlot extends AbstractWidget {
                     renderGreenMask, permanentGreenMask;
 
     @Setter
-    private boolean renderMouseOverMask;
+    private boolean renderMouseOverMask = true;
 
     public static final Color RED = Color.RED, GREEN = Color.GREEN;
     public static final int ALPHA = 0x80000000;
@@ -88,7 +89,8 @@ public class ItemSlot extends AbstractWidget {
                              int mouseX, int mouseY, float partial) {
         if (itemStack != null && itemStack != ItemStack.EMPTY) {
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-            renderer.renderGuiItem(itemStack, this.x, this.y);
+            renderer.renderAndDecorateItem(itemStack, this.x, this.y);
+            renderer.renderGuiItemDecorations(Minecraft.getInstance().font, itemStack, x, y);
         }
         renderItemMask(poseStack, renderRedMask, permanentRedMask, mouseX, mouseY, getRed());
         renderItemMask(poseStack, renderGreenMask, permanentGreenMask, mouseX, mouseY, getGreen());
