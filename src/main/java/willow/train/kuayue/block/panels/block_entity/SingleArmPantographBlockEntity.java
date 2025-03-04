@@ -23,6 +23,8 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
 
     private boolean isRisen = true;
     private PantographProps pantographType;
+    private float risenSpeed;
+    private float risenAngle;
     public double pullRodAngle = 170.0;
     private double transPosY = -0.5;
 
@@ -34,6 +36,8 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         this(AllBlocks.HXD3D_PANTOGRAPH_ENTITY.getType(), pos, state);
         if (state.getBlock() instanceof SingleArmPantographBlock block) {
             this.pantographType = block.getPantographType();
+            this.risenSpeed = block.getRisenSpeed();
+            this.risenAngle = block.getRisenAngle();
         }
 //        if (level == null)
 //            return;
@@ -55,8 +59,8 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
-        tag.getBoolean("open");
-        tag.getDouble("trans_y");
+        this.isRisen = tag.getBoolean("open");
+        this.transPosY = tag.getDouble("trans_y");
     }
 
     public void setRisen(boolean risen) {
@@ -82,6 +86,14 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
 
     public double getTransPosY() {
         return transPosY;
+    }
+
+    public float getRisenSpeed() {
+        return risenSpeed;
+    }
+
+    public float getRisenAngle() {
+        return risenAngle;
     }
 
     @Override

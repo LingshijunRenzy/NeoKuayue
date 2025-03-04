@@ -3,6 +3,7 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -16,44 +17,50 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NodeTooltip extends AbstractWidget {
+public class Tooltip extends AbstractWidget {
 
-    private ClientTechTreeNode node;
-    private MutableComponent title;
+    private final MutableComponent title;
+
+    @Getter
+    private final String identifier;
     private final List<Component> descriptions;
-    private ItemStack icon;
+    private final ItemStack icon;
+
     public static final int maxWidth = 150, boarderWidth = 1,
             boarderColor = 0xffffffff,
             backgroundColor = 0x80000000,
             fontColor = 0xffffffff;
 
 
-    public NodeTooltip(ClientTechTreeNode node) {
+    public static Tooltip fromNode(ClientTechTreeNode node) {
+        return new Tooltip(node.location.toString(), node.getName(),
+                node.getLogo(), node.getDescription());
+    }
+
+    public static Tooltip fromGroup(ClientTechTreeGroup group) {
+        return new Tooltip(group.getId().toString(), group.getTitleKey(),
+                group.getIcon(), group.getDescriptionKey());
+    }
+
+    public Tooltip(String identifier, String titleKey, ItemStack icon, String descriptionKey) {
         super(0, 0, 0, 0, Component.empty());
-        this.node = node;
-        descriptions = new ArrayList<>();
-    }
-
-    public ClientTechTreeNode getNode() {
-        return node;
-    }
-
-    public void updateNode() {
-        this.title = Component.translatable(node.getName()).withStyle(Style.EMPTY.withBold(true));
-        this.icon = node.getLogo();
-        Component component = Component.translatable(node.getDescription());
+        this.identifier = identifier;
+        this.title = Component.translatable(titleKey);
+        this.descriptions = new ArrayList<>();
+        this.icon = icon;
+        Component component = Component.translatable(descriptionKey);
         Font font = Minecraft.getInstance().font;
-        this.descriptions.clear();
         this.descriptions.addAll(lineFeed(component, font, maxWidth));
         if (descriptions.size() > 1) {
             setWidth(maxWidth + 6);
         } else {
-            if (descriptions.size() < 1) {
+            if (descriptions.isEmpty()) {
                 setWidth(font.width(title) + 22);
             } else {
                 setWidth(Math.max(font.width(title) + 22,
@@ -84,7 +91,7 @@ public class NodeTooltip extends AbstractWidget {
             String inner = font.plainSubstrByWidth(descriptionText, maxWidth);
             descriptionText = descriptionText.substring(inner.length());
             result.add(Component.literal(inner));
-            if (descriptionText.length() < 1) break;
+            if (descriptionText.isEmpty()) break;
         }
         return result;
     }
@@ -99,10 +106,10 @@ public class NodeTooltip extends AbstractWidget {
         renderRectangle(poseStack);
         int baseX = this.x + 5;
         int baseY = this.y + 2 * boarderWidth + 16;
-        fill(poseStack, baseX, baseY,
-                this.x + this.width - 5, baseY + boarderWidth, boarderColor);
         poseStack.pushPose();
         poseStack.translate(0.0D, 0.0D, 400.0D);
+        fill(poseStack, baseX, baseY,
+                this.x + this.width - 5, baseY + boarderWidth, boarderColor);
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
         renderer.renderAndDecorateItem(icon, this.x + boarderWidth + 1, this.y + boarderWidth + 1);
         Matrix4f matrix4f = poseStack.last().pose();
@@ -129,6 +136,22 @@ public class NodeTooltip extends AbstractWidget {
         fill(poseStack, x, y + height - boarderWidth, x + width, y + height, boarderColor);
         fill(poseStack, x + boarderWidth, y + boarderWidth, x + width - boarderWidth,
                 y + height - boarderWidth, backgroundColor);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Tooltip tooltip)) return false;
+        return this.identifier.equals(tooltip.identifier);
+    }
+
+    public boolean is(Object obj) {
+        if (!(obj instanceof ClientTechTreeGroup) &&
+                !(obj instanceof ClientTechTreeNode)) return false;
+        if (obj instanceof ClientTechTreeGroup group)
+            return this.identifier.equals(group.getId().toString());
+        if (obj instanceof ClientTechTreeNode node)
+            return this.identifier.equals(node.location.toString());
+        return false;
     }
 
     @Override

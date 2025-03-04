@@ -37,11 +37,13 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     private final PantographProps pantographType;
     private final Map<String, PartialModel> pantographModel;
+    private final float risenSpeed;
+    private final float risenAngle;
 
     public SingleArmPantographBlock(Properties pProperties, PantographProps pantographType,
                                     String basePath, String largeArmPath,
                                     String pullRodPath, String smallArmPath,
-                                    String bowHeadPath) {
+                                    String bowHeadPath, float risenSpeed, float risenAngle) {
         super(pProperties);
         this.pantographType = pantographType;
         Map<String, PartialModel> map = new HashMap<>();
@@ -56,6 +58,8 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
         map.put(BOW_HEAD_MODEL, bowHeadPath == null ? null :
                 new PartialModel(new ResourceLocation(Kuayue.MODID,"block/" + bowHeadPath)));
         this.pantographModel = map;
+        this.risenSpeed = risenSpeed;
+        this.risenAngle = risenAngle;
 
         registerDefaultState(this.getStateDefinition().any()
                 .setValue(OPEN, false)
@@ -80,6 +84,7 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
         if(!pLevel.isClientSide()) {
             pLevel.setBlock(pPos, pState.cycle(OPEN),3);
         }
+        playRotateSound(pLevel, pPos);
         return InteractionResult.SUCCESS;
     }
 
@@ -104,5 +109,13 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
 
     public Map<String, PartialModel> getPantographModel() {
         return pantographModel;
+    }
+
+    public float getRisenSpeed() {
+        return risenSpeed;
+    }
+
+    public float getRisenAngle() {
+        return risenAngle;
     }
 }

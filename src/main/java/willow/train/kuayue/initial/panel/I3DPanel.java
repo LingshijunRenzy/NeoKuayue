@@ -159,6 +159,14 @@ public class I3DPanel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
+    public static final SlabRegistration<TrainSlabBlock> HXD3D_UNDERBODY_EQUIP =
+            new SlabRegistration<TrainSlabBlock>("hxd3d_underbody_equip")
+                    .block(p -> new TrainSlabBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
     public static final BlockReg<SingleArmPantographBlock> HXD3D_PANTOGRAPH =
             new BlockReg<SingleArmPantographBlock>("hxd3d_pantograph")
                     .blockType(props -> new SingleArmPantographBlock(props,
@@ -170,7 +178,8 @@ public class I3DPanel {
                             "hxd3d/pantograph/hxd3d_panto_large_arm",
                             "hxd3d/pantograph/hxd3d_panto_pull_rod",
                             "hxd3d/pantograph/hxd3d_panto_small_arm",
-                            "hxd3d/pantograph/hxd3d_panto_bow_head"
+                            "hxd3d/pantograph/hxd3d_panto_bow_head",
+                            1.5f, 60
                             ))
                     .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(properties -> properties.strength(1.5f, 3f))
