@@ -97,5 +97,6 @@ public class AllElements {
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::addCustomTrades);
         MinecraftForge.EVENT_BUS.addListener(EntityTrackingListener::onEntityUnload);
         testRegistry.submit();
+        createRegistry.submit();
     }
 }
