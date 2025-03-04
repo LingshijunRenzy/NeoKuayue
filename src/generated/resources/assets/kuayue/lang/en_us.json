@@ -907,6 +907,7 @@
  "block.kuayue.hxd3d_panel_transit_2": "HXD3D Transit Panel 2",
  "block.kuayue.hxd3d_panel_middle": "HXD3D Middle Panel",
  "block.kuayue.hxd3d_pantograph": "HXD3D Pantograph",
+ "block.kuayue.hxd3d_underbody_equip": "HXD3D Underbody Equip",
 
  "tips.tech_tree": "--------------------------------all tech tree items below here-------------------------------------------",
  "tech_tree.kuayue.group.ready": "Ready Group",

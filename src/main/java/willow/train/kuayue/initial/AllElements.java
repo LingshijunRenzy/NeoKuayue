@@ -30,6 +30,8 @@ public class AllElements {
 
     public static final CreateRegistry testRegistry = new CreateRegistry(Kuayue.MODID, Kuayue.BUS);
 
+    public static final CreateRegistry createRegistry = new CreateRegistry(Create.ID, Kuayue.BUS);
+
     public static final CreativeTabReg neoKuayueMainTab = new CreativeTabReg("main")
             .icon(() -> AllBlocks.CR_LOGO.itemInstance().getDefaultInstance())
             .submit(testRegistry);
@@ -95,5 +97,6 @@ public class AllElements {
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::addCustomTrades);
         MinecraftForge.EVENT_BUS.addListener(EntityTrackingListener::onEntityUnload);
         testRegistry.submit();
+        createRegistry.submit();
     }
 }

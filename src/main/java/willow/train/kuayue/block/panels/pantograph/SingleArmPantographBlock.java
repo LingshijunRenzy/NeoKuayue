@@ -84,6 +84,7 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
         if(!pLevel.isClientSide()) {
             pLevel.setBlock(pPos, pState.cycle(OPEN),3);
         }
+        playRotateSound(pLevel, pPos);
         return InteractionResult.SUCCESS;
     }
 
