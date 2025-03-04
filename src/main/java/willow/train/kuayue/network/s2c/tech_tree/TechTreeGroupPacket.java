@@ -1,26 +1,25 @@
-package willow.train.kuayue.network.s2c;
+package willow.train.kuayue.network.s2c.tech_tree;
 
 import kasuga.lib.core.network.S2CPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import willow.train.kuayue.systems.tech_tree.client.ClientNetworkCache;
-import willow.train.kuayue.systems.tech_tree.server.TechTree;
+import willow.train.kuayue.systems.tech_tree.server.TechTreeGroup;
 
 import java.util.UUID;
 
-public class TechTreePacket extends S2CPacket {
+public class TechTreeGroupPacket extends S2CPacket {
 
-    private TechTree tree;
+    private TechTreeGroup group;
     private final UUID batch;
-    public TechTreePacket(UUID batch, TechTree tree) {
-        this.tree = tree;
+    public TechTreeGroupPacket(UUID batch, TechTreeGroup group) {
+        this.group = group;
         this.batch = batch;
     }
 
-    public TechTreePacket(FriendlyByteBuf buf) {
-        super(buf);
+    public TechTreeGroupPacket(FriendlyByteBuf buf) {
         this.batch = buf.readUUID();
-        ClientNetworkCache.INSTANCE.setTree(buf);
+        ClientNetworkCache.INSTANCE.addGroup(buf);
     }
 
     @Override
@@ -31,6 +30,6 @@ public class TechTreePacket extends S2CPacket {
     @Override
     public void encode(FriendlyByteBuf friendlyByteBuf) {
         friendlyByteBuf.writeUUID(batch);
-        tree.toNetwork(friendlyByteBuf);
+        group.toNetwork(friendlyByteBuf);
     }
 }

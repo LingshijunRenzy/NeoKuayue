@@ -7,6 +7,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Getter
 @OnlyIn(Dist.CLIENT)
@@ -16,14 +17,15 @@ public class ClientPlayerData {
 
     public static void updateDataFromNetwork(FriendlyByteBuf buf) {
         if (Minecraft.getInstance().player == null) return;
-        if (!buf.readUUID().equals(Minecraft.getInstance().player.getUUID())) return;
+        // if (!buf.readUUID().equals(Minecraft.getInstance().player.getUUID())) return;
+        UUID playerId = buf.readUUID();
         if (data == null) {
-            data = new PlayerData(buf.readUUID());
+            data = new PlayerData(playerId);
         }
         data.fromNetwork(buf);
     }
 
     public static Optional<PlayerData> getData() {
-        return Optional.of(data);
+        return Optional.ofNullable(data);
     }
 }

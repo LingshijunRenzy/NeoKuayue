@@ -1,10 +1,10 @@
-package willow.train.kuayue.network.s2c;
+package willow.train.kuayue.network.s2c.tech_tree;
 
 import kasuga.lib.core.network.S2CPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import willow.train.kuayue.initial.AllPackets;
-import willow.train.kuayue.network.c2s.TechTreeHandShakeC2SPacket;
+import willow.train.kuayue.network.c2s.tech_tree.TechTreeHandShakeC2SPacket;
 import willow.train.kuayue.systems.tech_tree.NetworkState;
 import willow.train.kuayue.systems.tech_tree.client.ClientNetworkCache;
 

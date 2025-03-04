@@ -49,12 +49,16 @@ public class ItemSlot extends AbstractWidget {
         return itemStack;
     }
 
+    public boolean isEmpty() {
+        return itemStack == null || itemStack == ItemStack.EMPTY;
+    }
+
     public static int getRed() {
-        return ALPHA + RED.getRed();
+        return ALPHA + RED.getRGB();
     }
 
     public static int getGreen() {
-        return ALPHA + GREEN.getGreen();
+        return ALPHA + GREEN.getRGB();
     }
 
     public static int getWhite() {
@@ -63,24 +67,28 @@ public class ItemSlot extends AbstractWidget {
 
     public void setRenderRedMask(boolean mask) {
         renderRedMask = mask;
-        renderGreenMask = false;
-        permanentGreenMask = false;
+        if (renderRedMask) {
+            renderGreenMask = false;
+            permanentGreenMask = false;
+        }
     }
 
     public void setPermanentRedMask(boolean mask) {
         permanentRedMask = mask;
-        setRenderRedMask(true);
+        if (permanentRedMask) setRenderRedMask(true);
     }
 
     public void setRenderGreenMask(boolean mask) {
         renderGreenMask = mask;
-        renderRedMask = false;
-        permanentGreenMask = false;
+        if (renderRedMask) {
+            renderRedMask = false;
+            permanentGreenMask = false;
+        }
     }
 
     public void setPermanentGreenMask(boolean mask) {
         permanentGreenMask = mask;
-        setRenderGreenMask(true);
+        if (permanentGreenMask) setRenderGreenMask(true);
     }
 
 

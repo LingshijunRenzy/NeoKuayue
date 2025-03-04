@@ -1,4 +1,4 @@
-package willow.train.kuayue.network.c2s;
+package willow.train.kuayue.network.c2s.tech_tree;
 
 import kasuga.lib.core.network.C2SPacket;
 import net.minecraft.network.FriendlyByteBuf;

@@ -1,11 +1,16 @@
 package willow.train.kuayue.systems.tech_tree.client;
 
+import kasuga.lib.core.util.data_type.Pair;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
+import willow.train.kuayue.systems.tech_tree.player.PlayerData;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
 public class ClientTechTree {
@@ -58,5 +63,37 @@ public class ClientTechTree {
             node.getPrevNode().addAll(needToAdd);
             needToAdd.clear();
         });
+    }
+
+    public Set<ClientTechTreeGroup> getVisiblePart(PlayerData data) {
+        Set<ClientTechTreeGroup> visibleGroups = new HashSet<>();
+        this.groups.forEach((grpName, grp) -> {
+            if (data.visibleGroups.contains(grp.getId()))
+                visibleGroups.add(grp);
+            if (data.unlockedGroups.contains(grp.getId()))
+                visibleGroups.add(grp);
+        });
+        Set<ClientTechTreeGroup> result = new HashSet<>();
+        HashMap<NodeLocation, ClientTechTreeNode> nodes = new HashMap<>();
+        visibleGroups.forEach(grp -> {
+            Pair<ClientTechTreeGroup, Map<NodeLocation, ClientTechTreeNode>> pair = grp.getVisiblePart(data);
+            nodes.putAll(pair.getSecond());
+            result.add(pair.getFirst());
+        });
+        result.forEach(grp -> {
+            grp.getNodes().forEach((location, node) -> {
+                node.getPrev().forEach(nodeLocation -> {
+                    ClientTechTreeNode n = nodes.getOrDefault(nodeLocation, null);
+                    if (n == null) return;
+                    node.getPrevNode().add(n);
+                });
+                node.getNext().forEach(nodeLocation -> {
+                    ClientTechTreeNode n = nodes.getOrDefault(nodeLocation, null);
+                    if (n == null) return;
+                    node.getNextNode().add(n);
+                });
+            });
+        });
+        return result;
     }
 }

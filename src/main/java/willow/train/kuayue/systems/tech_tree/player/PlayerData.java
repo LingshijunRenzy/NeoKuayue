@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import org.openjdk.nashorn.internal.objects.annotations.Getter;
 import willow.train.kuayue.mixins.mixin.AccessorPlayerAdvancement;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.json.HideContext;
@@ -87,51 +86,143 @@ public class PlayerData implements NbtSerializable {
         nbt.put("visible_nodes", vNode);
     }
 
-    public boolean canUnlock(ServerPlayer player, TechTreeGroup group) {
-        if (!canBeSeen(player, group.getHideContext()) &&
-                !visibleGroups.contains(group.getId())) return false;
-        for (TechTreeNode node : group.getPrev()) {
-            if (!unlocked.contains(node.getLocation())) return false;
-        }
-        return true;
+    public CheckReason canUnlock(ServerPlayer player, TechTreeGroup group) {
+        boolean seenFlag = canBeSeen(player, group.getHideContext());
+        boolean groupUnlocked = unlockedGroups.contains(group.getId());
+        Pair<Boolean, Collection<NodeLocation>> requiredNodes = checkNodes(group);
+        return new CheckReason(seenFlag && requiredNodes.getFirst(), seenFlag, groupUnlocked, true, List.of(), requiredNodes.getSecond(), "");
     }
 
-    public boolean canUnlock(ServerPlayer player, TechTreeNode node) {
-        if (!canBeSeen(player, node.getHideContext()) &&
-                !visibleNodes.contains(node.getLocation())) return false;
-        for (TechTreeNode n : node.getPrev()) {
-            if (!unlocked.contains(n.getLocation())) return false;
-        }
-        return true;
+    public Collection<NodeLocation> getRequiredNodes(TechTreeNode node) {
+        HashSet<NodeLocation> nodes = new HashSet<>();
+        node.getPrev().forEach(prev -> nodes.add(prev.getLocation()));
+        nodes.removeIf(unlocked::contains);
+        return nodes;
     }
 
-    public boolean unlock(ServerLevel level, ServerPlayer player, TechTreeNode node) {
-        if (!(canUnlock(player, node) &&
-                checkItems(player.getInventory(), node.getItemConsume()) &&
-                checkExpAndLevel(player, node.getExpAndLevel()))) return false;
-        consumeExpAndLevel(player, node.getExpAndLevel());
-        consumePlayerItem(player, level, node.getItemConsume());
-        forceUnlock(level, player, node);
-        return true;
+    public Collection<NodeLocation> getRequiredNodes(TechTreeGroup group) {
+        HashSet<NodeLocation> nodes = new HashSet<>();
+        group.getPrev().forEach(prev -> nodes.add(prev.getLocation()));
+        nodes.removeIf(unlocked::contains);
+        return nodes;
     }
 
-    public void forceUnlock(ServerLevel level, ServerPlayer player, TechTreeNode node) {
+    public Pair<Boolean, Collection<NodeLocation>> checkNodes(TechTreeNode node) {
+        Collection<NodeLocation> requiredNodes = getRequiredNodes(node);
+        return Pair.of(requiredNodes.isEmpty(), requiredNodes);
+    }
+
+    public Pair<Boolean, Collection<NodeLocation>> checkNodes(TechTreeGroup group) {
+        Collection<NodeLocation> requiredNodes = getRequiredNodes(group);
+        return Pair.of(requiredNodes.isEmpty(), requiredNodes);
+    }
+
+    public UnlockResult updateAfterUnlock(TechTreeNode node, UnlockResult result) {
+        ArrayList<TechTreeGroup> nextGroups = node.getNextGroups();
+        nextGroups.forEach(g -> {
+            if (visibleGroups.contains(g.getId()) || unlockedGroups.contains(g.getId())) return;
+            ArrayList<TechTreeNode> prevNodes = g.getPrev();
+            boolean visible = true;
+            for (TechTreeNode prevNode : prevNodes) {
+                if (!unlocked.contains(prevNode.getLocation())) {
+                    visible = false;
+                    break;
+                }
+            }
+            if (visible) {
+                visibleGroups.add(g.getId());
+                visibleNodes.add(g.getRoot().getLocation());
+            }
+        });
+        ArrayList<TechTreeNode> next = node.getNext();
+        next.forEach(n -> {
+            if (unlocked.contains(n.getLocation()) || visibleNodes.contains(n.getLocation())) return;
+            ArrayList<TechTreeNode> prev = n.getPrev();
+            boolean visible = true;
+            for (TechTreeNode prevNode : prev) {
+                if (!unlocked.contains(prevNode.getLocation())) {
+                    visible = false;
+                    break;
+                }
+            }
+            if (visible) {
+                visibleNodes.add(n.getLocation());
+            }
+        });
+        return result;
+    }
+
+    public CheckReason canUnlock(ServerPlayer player, TechTreeNode node) {
+        boolean seenFLag = canBeSeen(player, node.getHideContext());
+        boolean groupUnlockedFlag = unlockedGroups.contains(node.group.getId());
+        boolean expFlag = checkExpAndLevel(player, node.getExpAndLevel());
+        Pair<Boolean, Collection<ItemStack>> requiredItems = checkItems(player.getInventory(), node.getItemConsume());
+        Pair<Boolean, Collection<NodeLocation>> requiredNodes = checkNodes(node);
+        return new CheckReason(seenFLag && groupUnlockedFlag && expFlag && requiredNodes.getFirst() && requiredItems.getFirst(),
+                seenFLag, groupUnlockedFlag, expFlag, requiredItems.getSecond(), requiredNodes.getSecond(), "");
+    }
+
+    public UnlockResult unlock(ServerLevel level, ServerPlayer player, TechTreeNode node) {
+        CheckReason reason = canUnlock(player, node);
+        if (!reason.flag) return UnlockResult.failedEmpty();
+        ArrayList<Pair<Integer, Integer>> itemGrow = new ArrayList<>();
+        HashMap<ResourceLocation, Collection<String>> advResultHolder = new HashMap<>();
+        int expConsume = consumeExpAndLevel(player, node.getExpAndLevel());
+        consumePlayerItem(player, node.getItemConsume(), itemGrow);
+        Collection<NodeLocation> neoUnlockNodes = new HashSet<>(),
+                                neoVisibleNodes = new HashSet<>();
+        Collection<ResourceLocation> neoUnlockGroups = new HashSet<>(),
+                                    neoVisibleGroups = new HashSet<>();
+        forceUnlock(level, player, node, advResultHolder,
+                neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
+        return new UnlockResult(true, itemGrow, expConsume, advResultHolder,
+                neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
+    }
+
+    public void forceUnlock(ServerLevel level, ServerPlayer player, TechTreeNode node,
+                            HashMap<ResourceLocation, Collection<String>> advResultHolder,
+                            Collection<NodeLocation> neoUnlockNodes, Collection<NodeLocation> neoVisibleNodes,
+                            Collection<ResourceLocation> neoUnlockGroups, Collection<ResourceLocation> neoVisibleGroups) {
         unlocked.add(node.getLocation());
-        rewardPlayer(level, player, node.getUnlockContext(), node.getGroup().getTree());
+        neoUnlockNodes.add(node.getLocation());
+        if (!visibleNodes.contains(node.getLocation())) {
+            visibleNodes.add(node.getLocation());
+            neoVisibleNodes.add(node.getLocation());
+        }
+        rewardPlayer(level, player, node.getUnlockContext(), node.getGroup().getTree(), advResultHolder,
+                neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
         givePlayerItem(player, level, node.getBlueprints());
         givePlayerItem(player, level, node.getItemReward());
-        checkVisible(node.group.getTree(), player);
+        checkVisible(node.group.getTree(), player, neoVisibleNodes, neoVisibleGroups);
     }
 
-    public boolean unlock(ServerLevel level, ServerPlayer player, TechTreeGroup group) {
-        if (!canUnlock(player, group)) return false;
-        forceUnlock(level, player, group);
-        return true;
+    public UnlockResult unlock(ServerLevel level, ServerPlayer player, TechTreeGroup group) {
+        CheckReason reason = canUnlock(player, group);
+        if (!reason.flag) return UnlockResult.failedEmpty();
+        HashMap<ResourceLocation, Collection<String>> advResultHolder = new HashMap<>();
+        Collection<NodeLocation> neoUnlockNodes = new HashSet<>(),
+                neoVisibleNodes = new HashSet<>();
+        Collection<ResourceLocation> neoUnlockGroups = new HashSet<>(),
+                neoVisibleGroups = new HashSet<>();
+        forceUnlock(level, player, group, advResultHolder,
+                neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
+        return new UnlockResult(true, List.of(), 0, advResultHolder,
+                neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
     }
 
-    public void forceUnlock(ServerLevel level, ServerPlayer player, TechTreeGroup group) {
+    public void forceUnlock(ServerLevel level, ServerPlayer player, TechTreeGroup group,
+                            HashMap<ResourceLocation, Collection<String>> advResultHolder,
+                            Collection<NodeLocation> neoUnlockNodes, Collection<NodeLocation> neoVisibleNodes,
+                            Collection<ResourceLocation> neoUnlockGroups, Collection<ResourceLocation> neoVisibleGroups) {
         unlockedGroups.add(group.getId());
-        rewardPlayer(level, player, group.getUnlockContext(), group.tree);
+        neoUnlockGroups.add(group.getId());
+        if (!visibleGroups.contains(group.getId())) {
+            visibleGroups.add(group.getId());
+            neoVisibleGroups.add(group.getId());
+        }
+        rewardPlayer(level, player, group.getUnlockContext(), group.tree, advResultHolder,
+                neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
+        checkVisible(group.tree, player, neoVisibleNodes, neoVisibleGroups);
     }
 
     public boolean checkExpAndLevel(ServerPlayer player, Pair<Integer, Integer> expAndLevel) {
@@ -140,7 +231,7 @@ public class PlayerData implements NbtSerializable {
         return level >= expAndLevel.getSecond() && exp >= expAndLevel.getFirst();
     }
 
-    public static void consumeExpAndLevel(ServerPlayer player, Pair<Integer, Integer> expAndLevel) {
+    public static int consumeExpAndLevel(ServerPlayer player, Pair<Integer, Integer> expAndLevel) {
         int expConsume = expAndLevel.getFirst();
         int level;
         int exp = player.totalExperience - expConsume;
@@ -158,9 +249,13 @@ public class PlayerData implements NbtSerializable {
 
         player.experienceLevel = level;
         player.totalExperience = exp;
+        return expConsume;
     }
 
-    public void rewardPlayer(ServerLevel level, ServerPlayer player, @Nullable OnUnlockContext context, TechTree tree) {
+    public void rewardPlayer(ServerLevel level, ServerPlayer player, @Nullable OnUnlockContext context, TechTree tree,
+                             HashMap<ResourceLocation, Collection<String>> advResultHolder,
+                             Collection<NodeLocation> neoUnlockNodes, Collection<NodeLocation> neoVisibleNodes,
+                             Collection<ResourceLocation> neoUnlockGroups, Collection<ResourceLocation> neoVisibleGroups) {
         if (context == null) return;
 
         // items
@@ -168,12 +263,12 @@ public class PlayerData implements NbtSerializable {
         givePlayerItem(player, level, reward);
 
         //collect advancements
-        Set<Advancement> rewardAdvancement = new HashSet<>();
-        ResourceLocation[] advancements = context.getUnlockAdvancements();
-        for (ResourceLocation location : advancements) {
+        Set<Pair<Advancement, Collection<String>>> rewardAdvancement = new HashSet<>();
+        HashMap<ResourceLocation, Collection<String>> advancements = context.getUnlockAdvancements();
+        for (Map.Entry<ResourceLocation, Collection<String>> entry : advancements.entrySet()) {
             for (Advancement advancement : PlayerDataManager.MANAGER.getAdvancements()) {
-                if (advancement.getId().equals(location)) {
-                    rewardAdvancement.add(advancement);
+                if (advancement.getId().equals(entry.getKey())) {
+                    rewardAdvancement.add(Pair.of(advancement, entry.getValue()));
                     break;
                 }
             }
@@ -181,16 +276,30 @@ public class PlayerData implements NbtSerializable {
 
         // give all advancements
         rewardAdvancement.forEach(adv -> {
-            adv.getCriteria().forEach((s, criterion) ->
-                    player.getAdvancements().award(adv, s)
-            );
+            Advancement advancement = adv.getFirst();
+            Collection<String> criteria = adv.getSecond();
+            if (criteria.isEmpty()) {
+                advancement.getCriteria().forEach((s, criterion) ->
+                        player.getAdvancements().award(advancement, s)
+                );
+                advResultHolder.put(advancement.getId(), advancement.getCriteria().keySet());
+                return;
+            }
+            criteria.forEach(str -> {
+                advResultHolder.put(advancement.getId(), new HashSet<>());
+                if (advancement.getCriteria().containsKey(str)) {
+                    player.getAdvancements().award(advancement, str);
+                    advResultHolder.get(advancement.getId()).add(str);
+                }
+            });
         });
 
         // unlock nodes;
         for (NodeLocation location : context.getUnlockNodes()) {
             TechTreeNode node = tree.getNodes().getOrDefault(location, null);
             if (node == null) continue;
-            forceUnlock(level, player, node);
+            forceUnlock(level, player, node, advResultHolder,
+                    neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
         }
         unlocked.addAll(Arrays.asList(context.getUnlockNodes()));
     }
@@ -204,7 +313,7 @@ public class PlayerData implements NbtSerializable {
         });
     }
 
-    public static boolean consumePlayerItem(Player player, ServerLevel level, Set<ItemStack> items) {
+    public static boolean consumePlayerItem(Player player, Set<ItemStack> items, Collection<Pair<Integer, Integer>> resultHolder) {
         Inventory inventory = player.getInventory();
         HashSet<ItemStack> result = new HashSet<>();
         items.forEach(item -> {
@@ -216,8 +325,9 @@ public class PlayerData implements NbtSerializable {
                 for (int i = 0; i < 36; i++) {
                     ItemStack stack = inventory.getItem(i);
                     if (stack.getItem().equals(type) &&
-                        stack.hasTag() && stack.getTag().equals(item.getTag())
+                        stack.hasTag() && item.getTag().equals(stack.getTag())
                     ) {
+                        resultHolder.add(Pair.of(i, -1));
                         inventory.setItem(i, ItemStack.EMPTY);
                         result.add(item);
                         return;
@@ -231,24 +341,32 @@ public class PlayerData implements NbtSerializable {
                 ItemStack stack = inventory.getItem(i);
                 if (!stack.getItem().equals(type)) continue;
                 if (stack.getCount() > count) {
+                    resultHolder.add(Pair.of(i, -count));
                     stack.setCount(stack.getCount() - count);
                     result.add(item);
                     return;
                 } else if (stack.getCount() == count) {
+                    resultHolder.add(Pair.of(i, -count));
                     inventory.setItem(i, ItemStack.EMPTY);
                     result.add(item);
                     return;
                 } else {
+                    resultHolder.add(Pair.of(i, -count));
                     inventory.setItem(i, ItemStack.EMPTY);
                     count -= stack.getCount();
                 }
             }
         });
-
         return result.size() == items.size();
     }
 
-    public boolean checkItems(Inventory inventory, Collection<ItemStack> items) {
+    public Pair<Boolean, Collection<ItemStack>> checkItems(Inventory inventory, Collection<ItemStack> items) {
+        Collection<ItemStack> result = getRequiredItems(inventory, items);
+        return Pair.of(result.isEmpty(), result);
+    }
+
+    public Collection<ItemStack> getRequiredItems(Inventory inventory,
+                                                  Collection<ItemStack> items) {
         Collection<ItemStack> collection = new HashSet<>(items);
         collection.removeIf(stack -> {
             int count = stack.getCount();
@@ -265,7 +383,7 @@ public class PlayerData implements NbtSerializable {
             }
             return count <= 0;
         });
-        return collection.isEmpty();
+        return collection;
     }
 
     public boolean canBeSeen(ServerPlayer player, @Nullable HideContext hide) {
@@ -324,27 +442,40 @@ public class PlayerData implements NbtSerializable {
         return right ? pair.getSecond() : pair.getFirst();
     }
 
-    public void checkVisible(TechTree tree, ServerPlayer player) {
+    public void checkVisible(TechTree tree, ServerPlayer player,
+                             Collection<NodeLocation> neoVisibleNodes,
+                             Collection<ResourceLocation> neoVisibleGroups) {
         tree.getGroups().forEach(
                 (location, grp) -> {
-                    if (!grp.isHide()) return;
-                    if (!canBeSeen(player, grp.getHideContext())) return;
+                    if (grp.isHide() && !canBeSeen(player, grp.getHideContext())) return;
+                    if (!allNodesUnlocked(grp.getPrev())) return;
                     this.visibleGroups.add(grp.getId());
+                    if (neoVisibleGroups != null &&
+                            !visibleGroups.contains(grp.getId()))
+                        neoVisibleGroups.add(grp.getId());
                 }
         );
         tree.getNodes().forEach(
                 (location, node) -> {
-                    if (!node.isHide()) return;
-                    if (!canBeSeen(player, node.getHideContext())) return;
+                    if (node.isHide() && !canBeSeen(player, node.getHideContext())) return;
+                    if (!allNodesUnlocked(node.getPrev())) return;
                     this.visibleNodes.add(node.getLocation());
+                    if (neoVisibleNodes != null &&
+                            !visibleNodes.contains(node.getLocation()))
+                        neoVisibleNodes.add(node.getLocation());
                 }
         );
     }
 
+    public boolean allNodesUnlocked(Collection<TechTreeNode> nodes) {
+        for (TechTreeNode node : nodes) {
+            if (!unlocked.contains(node.getLocation())) return false;
+        }
+        return true;
+    }
 
     public void toNetwork(FriendlyByteBuf buf) {
-        buf.writeUUID(playerID);
-
+        buf.writeUUID(this.playerID);
         buf.writeInt(unlocked.size());
         unlocked.forEach(node -> {
             node.writeToByteBuf(buf);
@@ -380,6 +511,142 @@ public class PlayerData implements NbtSerializable {
         int visibleNodeSize = buf.readInt();
         for (int i = 0; i < visibleNodeSize; i++) {
             this.visibleNodes.add(NodeLocation.readFromByteBuf(buf));
+        }
+    }
+
+    public record CheckReason(boolean flag, boolean canBeSeen, boolean groupUnlocked,
+                              boolean enoughLevel, Collection<ItemStack> requiredItems,
+                              Collection<NodeLocation> requiredNodes, String message) {
+
+        public static CheckReason exceptionCase(String msg) {
+            return new CheckReason(false, false, false, false,
+                    List.of(), List.of(), msg);
+        }
+
+        public void toNetwork(FriendlyByteBuf buf) {
+            buf.writeBoolean(this.flag);
+            buf.writeBoolean(this.canBeSeen);
+            buf.writeBoolean(this.groupUnlocked);
+            buf.writeBoolean(this.enoughLevel);
+
+            buf.writeInt(requiredItems.size());
+            requiredItems.forEach(item -> buf.writeItemStack(item, false));
+
+            buf.writeInt(requiredNodes.size());
+            requiredNodes.forEach(node -> node.writeToByteBuf(buf));
+            buf.writeUtf(message);
+        }
+
+        public static CheckReason fromNetwork(FriendlyByteBuf buf) {
+            boolean flag = buf.readBoolean();
+            boolean canBeSeen = buf.readBoolean();
+            boolean groupUnlocked = buf.readBoolean();
+            boolean enoughLevel = buf.readBoolean();
+
+            int requiredItemCount = buf.readInt();
+            ArrayList<ItemStack> requiredItems = new ArrayList<>(requiredItemCount);
+            for (int i = 0; i < requiredItemCount; i++) {
+                requiredItems.add(buf.readItem());
+            }
+
+            int requiredNodeCount = buf.readInt();
+            ArrayList<NodeLocation> requiredNodes = new ArrayList<>(requiredNodeCount);
+            for (int i = 0; i < requiredNodeCount; i++) {
+                requiredNodes.add(NodeLocation.readFromByteBuf(buf));
+            }
+
+            String message = buf.readUtf();
+            return new CheckReason(flag, canBeSeen, groupUnlocked, enoughLevel, requiredItems, requiredNodes, message);
+        }
+    }
+
+    public record UnlockResult(boolean flag,
+                               Collection<Pair<Integer, Integer>> itemGrow,
+                               int expConsume,
+                               HashMap<ResourceLocation, Collection<String>> criteria,
+                               Collection<NodeLocation> updatedUnlockedNodes,
+                               Collection<NodeLocation> updatedVisibleNodes,
+                               Collection<ResourceLocation> updatedUnlockedGroups,
+                               Collection<ResourceLocation> updatedVisibleGroups) {
+
+        public static UnlockResult failedEmpty() {
+            return new UnlockResult(false, List.of(), 0, new HashMap<>(), Set.of(), Set.of(), Set.of(), Set.of());
+        }
+
+        public void toNetwork(FriendlyByteBuf buf) {
+            buf.writeBoolean(flag);
+            buf.writeInt(itemGrow.size());
+            itemGrow.forEach(pair -> {
+                buf.writeInt(pair.getFirst());
+                buf.writeInt(pair.getSecond());
+            });
+
+            buf.writeInt(expConsume);
+            buf.writeInt(criteria.size());
+            criteria.forEach((rl, collection) -> {
+                buf.writeResourceLocation(rl);
+                buf.writeInt(collection.size());
+                collection.forEach(buf::writeUtf);
+            });
+
+            buf.writeInt(updatedUnlockedNodes.size());
+            updatedUnlockedNodes.forEach(node -> node.writeToByteBuf(buf));
+
+            buf.writeInt(updatedVisibleNodes.size());
+            updatedVisibleNodes.forEach(node -> node.writeToByteBuf(buf));
+
+            buf.writeInt(updatedUnlockedGroups.size());
+            updatedUnlockedGroups.forEach(buf::writeResourceLocation);
+
+            buf.writeInt(updatedVisibleGroups.size());
+            updatedVisibleGroups.forEach(buf::writeResourceLocation);
+        }
+
+        public static UnlockResult fromNetwork(FriendlyByteBuf buf) {
+            boolean flag = buf.readBoolean();
+            int itemCount = buf.readInt();
+            ArrayList<Pair<Integer, Integer>> itemGrow = new ArrayList<>(itemCount);
+            for (int i = 0; i < itemCount; i++) {
+                itemGrow.add(Pair.of(buf.readInt(), buf.readInt()));
+            }
+            int expConsume = buf.readInt();
+            int criteriaCount = buf.readInt();
+            HashMap<ResourceLocation, Collection<String>> criteria = new HashMap<>(criteriaCount);
+            for (int i = 0; i < criteriaCount; i++) {
+                ResourceLocation rl = buf.readResourceLocation();
+                int count = buf.readInt();
+                HashSet<String> set = new HashSet<>(count);
+                for (int j = 0; j < count; j++) {
+                    set.add(buf.readUtf());
+                }
+                criteria.put(rl, set);
+            }
+
+            int updatedUnlockedNodeCount = buf.readInt();
+            HashSet<NodeLocation> updatedUnlockedNodes = new HashSet<>(updatedUnlockedNodeCount);
+            for (int i = 0; i < updatedUnlockedNodeCount; i++) {
+                updatedUnlockedNodes.add(NodeLocation.readFromByteBuf(buf));
+            }
+
+            int updatedVisibleNodeCount = buf.readInt();
+            HashSet<NodeLocation> updatedVisibleNodes = new HashSet<>(updatedVisibleNodeCount);
+            for (int i = 0; i < updatedVisibleNodeCount; i++) {
+                updatedVisibleNodes.add(NodeLocation.readFromByteBuf(buf));
+            }
+
+            int updatedUnlockedGroupCount = buf.readInt();
+            HashSet<ResourceLocation> updatedUnlockedGroups = new HashSet<>(updatedUnlockedGroupCount);
+            for (int i = 0; i < updatedUnlockedGroupCount; i++) {
+                updatedUnlockedGroups.add(buf.readResourceLocation());
+            }
+
+            int updatedVisibleGroupCount = buf.readInt();
+            HashSet<ResourceLocation> updatedVisibleGroups = new HashSet<>(updatedVisibleGroupCount);
+            for (int i = 0; i < updatedVisibleGroupCount; i++) {
+                updatedVisibleGroups.add(buf.readResourceLocation());
+            }
+            return new UnlockResult(flag, itemGrow, expConsume, criteria,
+                    updatedUnlockedNodes, updatedVisibleNodes, updatedUnlockedGroups, updatedVisibleGroups);
         }
     }
 }

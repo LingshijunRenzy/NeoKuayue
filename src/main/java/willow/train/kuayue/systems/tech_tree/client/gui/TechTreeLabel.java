@@ -1,6 +1,8 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import kasuga.lib.core.client.render.SimpleColor;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import kasuga.lib.core.util.data_type.Vec2i;
@@ -40,14 +42,28 @@ public class TechTreeLabel extends ImageButton {
                     .rectangleUV(25f / 128f, 25f / 128f, 32f / 128f, 32f / 128f)
     );
 
-    @Setter
-    private boolean finished;
+    private boolean finished, required;
 
     protected TechTreeLabel(LazyRecomputable<ImageMask> foreground, LazyRecomputable<ImageMask> bg, ClientTechTreeNode node,
                          int x, int y, int width, int height, Component tooltip) {
         super(foreground, bg, x, y, width, height, tooltip, b -> {});
         this.node = node;
         finished = false;
+    }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+        if (this.finished) required = false;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+        if (this.required) finished = false;
     }
 
     public static TechTreeLabel smallLabel(ClientTechTreeNode node, int x, int y, Component tooltip) {
@@ -77,5 +93,16 @@ public class TechTreeLabel extends ImageButton {
         renderer.renderAndDecorateItem(logo, x + (this.width - 16) / 2, y + (this.height - 16) / 2);
         renderer.renderGuiItemDecorations(mc.font, logo, x + (this.width - 16) / 2, y + (this.height - 16) / 2);
         renderer.blitOffset = 0.0F;
+
+        if (finished || required) {
+            finishDotMask.get().rectangle(new Vector3f(this.x + this.width - 7, this.y + this.height - 7, 0),
+                    ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 7, 7);
+            if (required) {
+                finishDotMask.get().setColor(SimpleColor.fromRGBInt(0xff0000));
+            } else {
+                finishDotMask.get().setColor(SimpleColor.fromRGBInt(0xffffff));
+            }
+            finishDotMask.get().renderToGui();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -15,14 +16,15 @@ import java.util.List;
 
 public class LabelGrid extends AbstractWidget {
 
-    private List<TechTreeLabel> labels;
+    @Getter
+    private final List<TechTreeLabel> labels;
 
     @Setter
     private OnClick<TechTreeLabel> onClick = (label, px, py) -> {};
 
     public LabelGrid(int pX, int pY, @NotNull List<TechTreeLabel> labels) {
         super(pX, pY, 0, 0, Component.empty());
-        if (labels.size() < 10){
+        if (labels.size() < 10) {
             this.labels = labels;
         } else {
             int counter = 0;
@@ -125,6 +127,8 @@ public class LabelGrid extends AbstractWidget {
             label.render(poseStack, mouseX, mouseY, partial);
         });
     }
+
+
 
     public @Nullable TechTreeLabel getChosenLabel(double mouseX, double mouseY) {
         for (TechTreeLabel label : labels) {

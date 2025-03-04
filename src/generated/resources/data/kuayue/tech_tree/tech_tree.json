@@ -8,6 +8,7 @@
       "on_unlock": {
         "description": "ready.group.unlock"
       },
+      "initial_visibility": true,
       "root_node": "node_plastic",
       "nodes": {
         "node_plastic": {

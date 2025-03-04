@@ -1,12 +1,11 @@
 package willow.train.kuayue.systems.tech_tree.server;
 
-import kasuga.lib.core.network.Packet;
 import kasuga.lib.core.network.S2CPacket;
 import lombok.Getter;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import willow.train.kuayue.initial.AllPackets;
-import willow.train.kuayue.network.s2c.*;
+import willow.train.kuayue.network.s2c.tech_tree.*;
 import willow.train.kuayue.systems.tech_tree.NetworkState;
 
 import java.util.LinkedList;

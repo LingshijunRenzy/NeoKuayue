@@ -65,4 +65,26 @@ public class ClientTechTreeNode {
         nextNode = new HashSet<>();
         prevNode = new HashSet<>();
     }
+
+    public ClientTechTreeNode(NodeLocation location, NodeType type, String name,
+                              String description, Set<ItemStack> itemConsume,
+                              ItemStack logo, Set<NodeLocation> next,
+                              Set<NodeLocation> prev) {
+        this.location = location;
+        this.type = type;
+        this.name = name;
+        this.description = description;
+        this.itemConsume = itemConsume;
+        this.logo = logo;
+        this.next = new HashSet<>(next);
+        this.prev = new HashSet<>(prev);
+        this.nextNode = new HashSet<>();
+        this.prevNode = new HashSet<>();
+        this.nextGroups = new HashSet<>();
+    }
+
+    public ClientTechTreeNode copy() {
+        return new ClientTechTreeNode(this.location, this.type, this.name,
+                this.description, this.itemConsume, this.logo, this.next, this.prev);
+    }
 }

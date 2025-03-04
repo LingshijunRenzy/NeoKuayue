@@ -1,4 +1,4 @@
-package willow.train.kuayue.network.s2c;
+package willow.train.kuayue.network.s2c.tech_tree;
 
 import kasuga.lib.core.network.S2CPacket;
 import net.minecraft.client.Minecraft;
