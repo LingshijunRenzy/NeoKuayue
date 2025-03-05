@@ -910,6 +910,8 @@
  "block.kuayue.hxd3d_underbody_equip": "HXD3D Underbody Equip",
 
  "tips.tech_tree": "--------------------------------all tech tree items below here-------------------------------------------",
+ "tech_tree.kuayue.exp_unlock_true": "Fulfill level requirements.",
+ "tech_tree.kuayue.exp_unlock_false": "Required higher level.",
  "tech_tree.kuayue.group.ready": "Ready Group",
  "tech_tree.kuayue.group.test": "Test Group",
  "tech_tree.kuayue.group.ready.node.plastic": "Polymer Technology",

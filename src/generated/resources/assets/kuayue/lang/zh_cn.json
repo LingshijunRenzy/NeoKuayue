@@ -916,6 +916,8 @@
   "block.kuayue.hxd3d_underbody_equip": "HXD3D车底设备",
 
   "tips.tech_tree": "--------------------------------以下是科技树部件-------------------------------------------",
+  "tech_tree.kuayue.exp_unlock_true": "满足等级条件",
+  "tech_tree.kuayue.exp_unlock_false": "需要更高等级",
   "tech_tree.kuayue.group.ready": "前置科技",
   "tech_tree.kuayue.group.test": "测试组",
   "tech_tree.kuayue.group.ready.node.plastic": "高分子技术",

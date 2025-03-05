@@ -28,9 +28,9 @@ public class CanUnlockNodeS2CPacket extends S2CPacket {
         if (screen == null) return;
         if (!screen.isFocusingLabel(node)) return;
         if (!reason.flag()) {
-            screen.unableToUnlock(reason.requiredNodes(), reason.requiredItems());
+            screen.unableToUnlock(reason, reason.requiredNodes(), reason.requiredItems());
         } else {
-            screen.ableToUnlock();
+            screen.ableToUnlock(reason);
         }
     }
 

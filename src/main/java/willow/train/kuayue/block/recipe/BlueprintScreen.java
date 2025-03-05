@@ -15,6 +15,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -122,6 +123,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private float mainPercentage = 0;
     private boolean nodeFinished = false;
     private FinishedTooltip finishedTooltip = null;
+    private final ExpComponentBar expBar;
 
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
@@ -140,6 +142,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         this.nextLabels = new HashSet<>();
         this.prevGrids = new ArrayList<>();
         this.nextGrids = new ArrayList<>();
+        expBar = new ExpComponentBar(0, 0, 50, 11);
+        expBar.visible = false;
         consumptionSlots = new ItemSlot[8];
         resultSlots = new ItemSlot[4];
         for (int i = 0; i < consumptionSlots.length; i++)
@@ -167,10 +171,15 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
 
     private void updateGroups(ResourceLocation prevChosen) {
         groups.clear();
+        Player player = Minecraft.getInstance().player;
         if (ClientPlayerData.getData().isPresent()) {
             PlayerData playerData = ClientPlayerData.getData().get();
             for (Map.Entry<String, ClientTechTree> tree : trees.entrySet()) {
-                groups.addAll(tree.getValue().getVisiblePart(playerData));
+                if (player != null && player.isCreative()) {
+                    groups.addAll(tree.getValue().getGroups().values());
+                } else {
+                    groups.addAll(tree.getValue().getVisiblePart(playerData));
+                }
             }
         }
         if (chosenGroup == null || prevChosen == null) {
@@ -202,6 +211,13 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         if (chosenLabel != null && showSub) {
             updateSub(chosenGroup.getNodes().get(chosenLabel.getNode().location));
             updateGrids();
+        }
+        if (result.flag()) {
+            clearUnlock();
+            renderAllSlots(false);
+            nodeFinished = true;
+            confirmButton.visible = false;
+            updateFinishTooltip(this.chosenLabel);
         }
     }
 
@@ -290,7 +306,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         }
     }
 
-    public void unableToUnlock(Collection<NodeLocation> nodeRequired,
+    public void unableToUnlock(PlayerData.CheckReason reason,
+                               Collection<NodeLocation> nodeRequired,
                                Collection<ItemStack> itemRequired) {
         clearUnlock();
         prevGrids.forEach(grid -> {
@@ -313,6 +330,11 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             }
         }
         this.confirmButton.visible = false;
+        this.expBar.updateSize();
+        this.expBar.setPos(getBgX() + map(174, scale) - expBar.getWidth() / 2,
+                getBgY() + map(113, scale) - expBar.getHeight() / 2);
+        this.expBar.setUnlock(reason.enoughLevel());
+        this.expBar.visible = true;
     }
 
     public void clearUnlock() {
@@ -333,14 +355,31 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 label.setRequired(false);
             });
         });
+        for (ItemSlot slot : resultSlots) {
+            slot.setItemStack(ItemStack.EMPTY);
+        }
+        this.expBar.visible = false;
     }
 
-    public void ableToUnlock() {
+    public void ableToUnlock(PlayerData.CheckReason reason) {
         clearUnlock();
         for (ItemSlot slot : consumptionSlots) {
             if (slot.isEmpty()) continue;
             slot.setPermanentGreenMask(true);
         }
+        if (reason.itemGot().isEmpty()) return;
+        List<ItemStack> gotList = new ArrayList<>(reason.itemGot());
+        int count = 0;
+        for (ItemSlot slot : resultSlots) {
+            ItemStack stack = gotList.get(count);
+            slot.setItemStack(stack);
+            count++;
+        }
+        this.expBar.updateSize();
+        this.expBar.setPos(getBgX() + map(174, scale) - expBar.getWidth() / 2,
+                getBgY() + map(113, scale) - expBar.getHeight() / 2);
+        this.expBar.setUnlock(true);
+        this.expBar.visible = true;
     }
 
     public void clearSlotItems() {
@@ -466,6 +505,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                             clearGridBtn();
                             updateFinishTooltip(null);
                             confirmButton.visible = false;
+                            expBar.visible = false;
                         }))
         );
         groupButtons.forEach(btn -> {
@@ -490,7 +530,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             addRenderableWidget(slot);
         }
         initGridButtons();
-        showSub =false;
+        showSub = false;
+        addRenderableWidget(expBar);
     }
 
     protected void initGridButtons() {
@@ -657,6 +698,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         titleLabel.visible = true;
         updateConfirmBtnPos();
         clearGridBtn();
+        expBar.visible = false;
     }
 
     private void updateConfirmBtnPos() {
@@ -675,6 +717,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         updatePercentage(mainPercentage);
         updateConfirmBtnPos();
         clearGridBtn();
+        expBar.visible = false;
     }
 
     private void setPanelsPosition() {

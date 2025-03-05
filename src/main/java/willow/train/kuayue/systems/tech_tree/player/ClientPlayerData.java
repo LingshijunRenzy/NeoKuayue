@@ -21,6 +21,8 @@ public class ClientPlayerData {
         UUID playerId = buf.readUUID();
         if (data == null) {
             data = new PlayerData(playerId);
+        } else {
+            data.clearUnlock();
         }
         data.fromNetwork(buf);
     }

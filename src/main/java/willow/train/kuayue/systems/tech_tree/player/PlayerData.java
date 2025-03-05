@@ -87,10 +87,16 @@ public class PlayerData implements NbtSerializable {
     }
 
     public CheckReason canUnlock(ServerPlayer player, TechTreeGroup group) {
+        if (player.isCreative()) {
+            return CheckReason.creativeSuccess(group.getRoot().getItemReward());
+        }
         boolean seenFlag = canBeSeen(player, group.getHideContext());
         boolean groupUnlocked = unlockedGroups.contains(group.getId());
         Pair<Boolean, Collection<NodeLocation>> requiredNodes = checkNodes(group);
-        return new CheckReason(seenFlag && requiredNodes.getFirst(), seenFlag, groupUnlocked, true, List.of(), requiredNodes.getSecond(), "");
+        boolean flag = seenFlag && requiredNodes.getFirst();
+        return new CheckReason(flag, seenFlag, groupUnlocked,
+                true, List.of(), requiredNodes.getSecond(),
+                flag ? group.getUnlockContext().getReward() : List.of(), "");
     }
 
     public Collection<NodeLocation> getRequiredNodes(TechTreeNode node) {
@@ -117,49 +123,23 @@ public class PlayerData implements NbtSerializable {
         return Pair.of(requiredNodes.isEmpty(), requiredNodes);
     }
 
-    public UnlockResult updateAfterUnlock(TechTreeNode node, UnlockResult result) {
-        ArrayList<TechTreeGroup> nextGroups = node.getNextGroups();
-        nextGroups.forEach(g -> {
-            if (visibleGroups.contains(g.getId()) || unlockedGroups.contains(g.getId())) return;
-            ArrayList<TechTreeNode> prevNodes = g.getPrev();
-            boolean visible = true;
-            for (TechTreeNode prevNode : prevNodes) {
-                if (!unlocked.contains(prevNode.getLocation())) {
-                    visible = false;
-                    break;
-                }
-            }
-            if (visible) {
-                visibleGroups.add(g.getId());
-                visibleNodes.add(g.getRoot().getLocation());
-            }
-        });
-        ArrayList<TechTreeNode> next = node.getNext();
-        next.forEach(n -> {
-            if (unlocked.contains(n.getLocation()) || visibleNodes.contains(n.getLocation())) return;
-            ArrayList<TechTreeNode> prev = n.getPrev();
-            boolean visible = true;
-            for (TechTreeNode prevNode : prev) {
-                if (!unlocked.contains(prevNode.getLocation())) {
-                    visible = false;
-                    break;
-                }
-            }
-            if (visible) {
-                visibleNodes.add(n.getLocation());
-            }
-        });
-        return result;
-    }
-
     public CheckReason canUnlock(ServerPlayer player, TechTreeNode node) {
+        Set<ItemStack> item = new HashSet<>();
+        if (node.getData() != null) {
+            item.addAll(node.getData().getBlueprint());
+            item.addAll(node.getData().getItemRewards());
+        }
+        if (player.isCreative()) {
+            return CheckReason.creativeSuccess(item);
+        }
         boolean seenFLag = canBeSeen(player, node.getHideContext());
         boolean groupUnlockedFlag = unlockedGroups.contains(node.group.getId());
         boolean expFlag = checkExpAndLevel(player, node.getExpAndLevel());
         Pair<Boolean, Collection<ItemStack>> requiredItems = checkItems(player.getInventory(), node.getItemConsume());
         Pair<Boolean, Collection<NodeLocation>> requiredNodes = checkNodes(node);
-        return new CheckReason(seenFLag && groupUnlockedFlag && expFlag && requiredNodes.getFirst() && requiredItems.getFirst(),
-                seenFLag, groupUnlockedFlag, expFlag, requiredItems.getSecond(), requiredNodes.getSecond(), "");
+        boolean flag = seenFLag && groupUnlockedFlag && expFlag && requiredNodes.getFirst() && requiredItems.getFirst();
+        return new CheckReason(flag, seenFLag, groupUnlockedFlag, expFlag,
+                requiredItems.getSecond(), requiredNodes.getSecond(), flag ? item : Set.of(), "");
     }
 
     public UnlockResult unlock(ServerLevel level, ServerPlayer player, TechTreeNode node) {
@@ -226,6 +206,7 @@ public class PlayerData implements NbtSerializable {
     }
 
     public boolean checkExpAndLevel(ServerPlayer player, Pair<Integer, Integer> expAndLevel) {
+        if (player.isCreative()) return true;
         int level = player.experienceLevel;
         int exp = player.totalExperience;
         return level >= expAndLevel.getSecond() && exp >= expAndLevel.getFirst();
@@ -314,6 +295,7 @@ public class PlayerData implements NbtSerializable {
     }
 
     public static boolean consumePlayerItem(Player player, Set<ItemStack> items, Collection<Pair<Integer, Integer>> resultHolder) {
+        if (player.isCreative()) return true;
         Inventory inventory = player.getInventory();
         HashSet<ItemStack> result = new HashSet<>();
         items.forEach(item -> {
@@ -514,13 +496,26 @@ public class PlayerData implements NbtSerializable {
         }
     }
 
+    public void clearUnlock() {
+        this.unlocked.clear();
+        this.unlockedGroups.clear();
+        this.visibleGroups.clear();
+        this.visibleNodes.clear();
+    }
+
     public record CheckReason(boolean flag, boolean canBeSeen, boolean groupUnlocked,
                               boolean enoughLevel, Collection<ItemStack> requiredItems,
-                              Collection<NodeLocation> requiredNodes, String message) {
+                              Collection<NodeLocation> requiredNodes,
+                              Collection<ItemStack> itemGot, String message) {
 
         public static CheckReason exceptionCase(String msg) {
             return new CheckReason(false, false, false, false,
-                    List.of(), List.of(), msg);
+                    List.of(), List.of(), List.of(), msg);
+        }
+
+        public static CheckReason creativeSuccess(Collection<ItemStack> itemGot) {
+            return new CheckReason(true, true, true, true,
+                    List.of(), List.of(), itemGot, "");
         }
 
         public void toNetwork(FriendlyByteBuf buf) {
@@ -534,6 +529,10 @@ public class PlayerData implements NbtSerializable {
 
             buf.writeInt(requiredNodes.size());
             requiredNodes.forEach(node -> node.writeToByteBuf(buf));
+
+            buf.writeInt(itemGot.size());
+            itemGot.forEach(item -> buf.writeItemStack(item, false));
+
             buf.writeUtf(message);
         }
 
@@ -555,8 +554,14 @@ public class PlayerData implements NbtSerializable {
                 requiredNodes.add(NodeLocation.readFromByteBuf(buf));
             }
 
+            int itemGotSize = buf.readInt();
+            ArrayList<ItemStack> itemGot = new ArrayList<>(itemGotSize);
+            for (int i = 0; i < itemGotSize; i++) {
+                itemGot.add(buf.readItem());
+            }
+
             String message = buf.readUtf();
-            return new CheckReason(flag, canBeSeen, groupUnlocked, enoughLevel, requiredItems, requiredNodes, message);
+            return new CheckReason(flag, canBeSeen, groupUnlocked, enoughLevel, requiredItems, requiredNodes, itemGot, message);
         }
     }
 
