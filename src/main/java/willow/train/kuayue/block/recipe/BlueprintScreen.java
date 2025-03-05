@@ -286,7 +286,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         consumptionSlots[7].setPosition(getBgX() + map(119, scale) + getSlotSidePos(scale),
                 getBgY() + map(113, scale) + getSlotSidePos(scale));
         resultSlots[0].setPosition(getBgX() + map(216, scale) + getSlotSidePos(scale),
-                getBgY() + map(114, scale) + getSlotSidePos(scale));
+                getBgY() + map(113, scale) + getSlotSidePos(scale));
         resultSlots[1].setPosition(getBgX() + map(231, scale) + getSlotSidePos(scale),
                 getBgY() + map(105, scale) + getSlotSidePos(scale));
         resultSlots[2].setPosition(getBgX() + map(231, scale) + getSlotSidePos(scale),
@@ -367,6 +367,11 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             if (slot.isEmpty()) continue;
             slot.setPermanentGreenMask(true);
         }
+        this.expBar.updateSize();
+        this.expBar.setPos(getBgX() + map(174, scale) - expBar.getWidth() / 2,
+                getBgY() + map(113, scale) - expBar.getHeight() / 2);
+        this.expBar.setUnlock(true);
+        this.expBar.visible = true;
         if (reason.itemGot().isEmpty()) return;
         List<ItemStack> gotList = new ArrayList<>(reason.itemGot());
         int count = 0;
@@ -375,11 +380,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             slot.setItemStack(stack);
             count++;
         }
-        this.expBar.updateSize();
-        this.expBar.setPos(getBgX() + map(174, scale) - expBar.getWidth() / 2,
-                getBgY() + map(113, scale) - expBar.getHeight() / 2);
-        this.expBar.setUnlock(true);
-        this.expBar.visible = true;
     }
 
     public void clearSlotItems() {
