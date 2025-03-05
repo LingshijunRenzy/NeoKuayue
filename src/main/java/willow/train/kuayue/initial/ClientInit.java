@@ -66,6 +66,9 @@ public class ClientInit {
     public static final StaticImageHolder blueprintTableNoSub =
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_table_no_sub.png"));
 
+    public static final StaticImageHolder blueprintTableCompleted =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_table_completed.png"));
+
     public static final StaticImageHolder blueprintButtons =
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_buttons.png"));
     public static final ModelReg testModel =

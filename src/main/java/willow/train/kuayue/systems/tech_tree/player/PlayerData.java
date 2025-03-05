@@ -449,20 +449,20 @@ public class PlayerData implements NbtSerializable {
                 (location, grp) -> {
                     if (grp.isHide() && !canBeSeen(player, grp.getHideContext())) return;
                     if (!allNodesUnlocked(grp.getPrev())) return;
-                    this.visibleGroups.add(grp.getId());
                     if (neoVisibleGroups != null &&
                             !visibleGroups.contains(grp.getId()))
                         neoVisibleGroups.add(grp.getId());
+                    this.visibleGroups.add(grp.getId());
                 }
         );
         tree.getNodes().forEach(
                 (location, node) -> {
                     if (node.isHide() && !canBeSeen(player, node.getHideContext())) return;
                     if (!allNodesUnlocked(node.getPrev())) return;
-                    this.visibleNodes.add(node.getLocation());
                     if (neoVisibleNodes != null &&
                             !visibleNodes.contains(node.getLocation()))
                         neoVisibleNodes.add(node.getLocation());
+                    this.visibleNodes.add(node.getLocation());
                 }
         );
     }

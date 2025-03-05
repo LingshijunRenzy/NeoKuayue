@@ -50,6 +50,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
 
     LazyRecomputable<ImageMask> bgNoSubMask = LazyRecomputable.of(() -> new ImageMask(ClientInit.blueprintTableNoSub.getImageSafe().get()));
 
+    LazyRecomputable<ImageMask> bgFinishedMask = LazyRecomputable.of(() -> new ImageMask(ClientInit.blueprintTableCompleted.getImageSafe().get()));
+
     LazyRecomputable<ImageMask> upArrow = LazyRecomputable.of(
             () -> ClientInit.blueprintButtons.getImageSafe().get().getMask()
                     .copyWithOp(o -> o.rectangleUV(32f / 128f, 32f / 128f,
@@ -118,6 +120,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             gridBtnUpRight, gridBtnDownRight;
 
     private float mainPercentage = 0;
+    private boolean nodeFinished = false;
+    private FinishedTooltip finishedTooltip = null;
 
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
@@ -185,7 +189,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     public void handleUpdateResult(NodeLocation node, PlayerData.UnlockResult result) {
         panels.clear();
         updateGroups(chosenGroup == null ? null : chosenGroup.getId());
-        refreshPanels();
+        refreshPanels(true);
         refreshGroupButtons();
         updateGuidelines(scale);
         setPanelsPosition();
@@ -196,12 +200,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         });
         setPanelsSize();
         if (chosenLabel != null && showSub) {
-            ClientTechTreeNode chosenNode = chosenLabel.getNode();
-            if (chosenNode.getLocation().equals(node)) {
-                chosenLabel.setFinished(true);
-            }
-            Collection<NodeLocation> prevLoc = chosenNode.getPrev();
-            Collection<NodeLocation> nextLoc = chosenNode.getNext();
+            updateSub(chosenGroup.getNodes().get(chosenLabel.getNode().location));
+            updateGrids();
         }
     }
 
@@ -427,7 +427,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         nextGridIndex = -1;
     }
 
-    private void refreshPanels() {
+    private void refreshPanels(boolean notVisible) {
         panels.forEach((p, w) -> removeWidget(w));
         panels.clear();
         for (ClientTechTreeGroup group : groups) {
@@ -441,7 +441,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 setChosenLabel(label);
             });
             addRenderableWidget(panel);
-            panel.visible = group == chosenGroup;
+            if (notVisible) panel.visible = false;
+            else panel.visible = group == chosenGroup;
         }
     }
 
@@ -463,6 +464,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                             titleLabel.visible = true;
                             updateFramePosition(chosenGroup);
                             clearGridBtn();
+                            updateFinishTooltip(null);
                             confirmButton.visible = false;
                         }))
         );
@@ -479,7 +481,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         confirmButton.visible = false;
         addRenderableWidget(titleLabel);
         onRefresh();
-        refreshPanels();
+        refreshPanels(false);
         updateSlotPos(scale);
         for (ItemSlot slot : consumptionSlots) {
             addRenderableWidget(slot);
@@ -601,7 +603,29 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 .setStyle(Style.EMPTY.applyFormat(ChatFormatting.BOLD)
                         .withUnderlined(true));
         updateSlotItems(label.getNode());
+        if (ClientPlayerData.getData().isPresent()) {
+            PlayerData playerData = ClientPlayerData.getData().get();
+            if (playerData.unlocked.contains(label.getNode().location)) {
+                clearUnlock();
+                renderAllSlots(false);
+                nodeFinished = true;
+                confirmButton.visible = false;
+                updateFinishTooltip(label);
+                return;
+            }
+        }
+        nodeFinished = false;
         sendCheckPacket();
+        updateFinishTooltip(null);
+    }
+
+    private void updateFinishTooltip(@Nullable TechTreeLabel label) {
+        if (finishedTooltip != null) removeWidget(finishedTooltip);
+        if (label == null) return;
+        this.finishedTooltip = new FinishedTooltip(label.getNode().getLocation().toString(), label.getNode().getName(),
+                label.getNode().getDescription(), getBgX() + map(53, scale), getBgY() + map(107, scale),
+                map(212, scale), map(33, scale));
+        addRenderableWidget(this.finishedTooltip);
     }
 
     @Override
@@ -669,7 +693,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         if (mc.screen == null) return null;
         windowWidth = mc.screen.width;
         windowHeight = mc.screen.height;
-        ImageMask mask = showSub ? bgMask.get() : bgNoSubMask.get();
+        ImageMask mask = showSub ? (nodeFinished ? bgFinishedMask.get() : bgMask.get()) : bgNoSubMask.get();
         int w = (int) (windowWidth * (hasJei ? .7f : .9f));
         onScaleChanged(((float) w / (float) mask.getImage().width()));
         int h = map(mask.getImage().height(), scale);
@@ -751,6 +775,12 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             chosenLabel.setFinished(playerData.unlocked.contains(chosenNode.location));
         }
         addRenderableWidget(chosenLabel);
+        updatePrevAndNextLabels(chosenNode);
+        this.showSub = true;
+        titleLabel.visible = false;
+    }
+
+    private void updatePrevAndNextLabels(ClientTechTreeNode chosenNode) {
         for (ClientTechTreeNode node : chosenNode.getPrevNode()) {
             TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
             if (ClientPlayerData.getData().isPresent()) {
@@ -761,10 +791,12 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         }
         for (ClientTechTreeNode node : chosenNode.getNextNode()) {
             TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
+            if (ClientPlayerData.getData().isPresent()) {
+                PlayerData data = ClientPlayerData.getData().get();
+                label.setFinished(data.unlocked.contains(label.getNode().location));
+            }
             nextLabels.add(label);
         }
-        this.showSub = true;
-        titleLabel.visible = false;
     }
 
     public void clearSub() {
@@ -899,7 +931,12 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        if (showSub) return false;
+        if (showSub) {
+            if (nodeFinished) {
+                return finishedTooltip.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+            }
+            return false;
+        }
         boolean flag = super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
         for (Map.Entry<ClientTechTreeGroup, TechTreePanel> entry : panels.entrySet()) {
             flag |= entry.getValue().mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
