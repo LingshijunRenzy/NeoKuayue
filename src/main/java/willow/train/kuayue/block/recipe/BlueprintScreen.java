@@ -921,7 +921,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             }
         }
         TechTreeLabel label = getChosenLabel(mouseX, mouseY);
-        if (label == null) return;
         renderTooltip(poseStack, label, button, mouseX, mouseY, partialTick);
     }
 
