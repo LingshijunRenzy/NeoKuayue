@@ -27,10 +27,10 @@
             "kuayue:plastic_pole": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         },
         "node_steel": {
           "next_nodes": ["node_fully"],
@@ -45,10 +45,10 @@
             "kuayue:weathering_resistant_steel_ingot": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         },
         "node_fully": {
           "next_nodes": [],
@@ -63,10 +63,10 @@
             "kuayue:fully_rusted_weathering_steel_block": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         }
       }
     },
@@ -95,10 +95,10 @@
             "kuayue:plastic_pole": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         },
         "node_sand": {
           "next_nodes": ["node_fully", "node_stone"],
@@ -113,10 +113,10 @@
             "kuayue:weathering_resistant_steel_ingot": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         },
         "node_steel": {
           "next_nodes": ["node_fully"],
@@ -131,10 +131,10 @@
             "kuayue:weathering_resistant_steel_ingot": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         },
         "node_fully": {
           "next_nodes": ["node_fully_2"],
@@ -149,10 +149,10 @@
             "kuayue:fully_rusted_weathering_steel_block": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         },
         "node_stone": {
           "next_nodes": ["node_fully_2"],
@@ -167,10 +167,10 @@
             "kuayue:weathering_resistant_steel_ingot": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         },
         "node_fully_2": {
           "next_nodes": [],
@@ -185,10 +185,10 @@
             "kuayue:fully_rusted_weathering_steel_block": 4
           },
           "advancements": [],
-          "blueprint": {},
-          "item": {
+          "blueprint": {
             "kuayue:research_report": 1
-          }
+          },
+          "item": {}
         }
       }
     }

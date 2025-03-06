@@ -126,7 +126,12 @@ public class PlayerData implements NbtSerializable {
     public CheckReason canUnlock(ServerPlayer player, TechTreeNode node) {
         Set<ItemStack> item = new HashSet<>();
         if (node.getData() != null) {
-            item.addAll(node.getData().getBlueprint());
+            Set<ItemStack> blueprintStacks = node.getBlueprints();
+            blueprintStacks.forEach(stack -> {
+                if (stack == null || stack.equals(ItemStack.EMPTY)) return;
+                stack.getOrCreateTag().putString("node", node.getLocation().toString());
+            });
+            item.addAll(blueprintStacks);
             item.addAll(node.getData().getItemRewards());
         }
         if (player.isCreative()) {
@@ -171,7 +176,12 @@ public class PlayerData implements NbtSerializable {
         }
         rewardPlayer(level, player, node.getUnlockContext(), node.getGroup().getTree(), advResultHolder,
                 neoUnlockNodes, neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
-        givePlayerItem(player, level, node.getBlueprints());
+        Set<ItemStack> blueprintStacks = node.getBlueprints();
+        blueprintStacks.forEach(stack -> {
+            if (stack == null || stack.equals(ItemStack.EMPTY)) return;
+            stack.getOrCreateTag().putString("node", node.getLocation().toString());
+        });
+        givePlayerItem(player, level, blueprintStacks);
         givePlayerItem(player, level, node.getItemReward());
         checkVisible(node.group.getTree(), player, neoVisibleNodes, neoVisibleGroups);
     }
