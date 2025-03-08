@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.systems.editable_panel.widget.OnClick;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
+import willow.train.kuayue.systems.tech_tree.player.ClientPlayerData;
 
 import java.util.*;
 
@@ -132,6 +133,7 @@ public class TechTreePanel extends AbstractWidget {
             counter ++;
             HashSet<ClientTechTreeNode> cache = new HashSet<>();
             stages.get(stages.size() - 1).forEach(node -> {
+                if (node == null) return;
                 node.getNextNode().forEach(next -> {
                     if (group.getNodes().containsValue(next))
                         cache.add(next);
@@ -168,6 +170,7 @@ public class TechTreePanel extends AbstractWidget {
         // get all lines
         RandomSource random = Minecraft.getInstance().font.random;;
         positionMap.forEach((node, pos) -> {
+            if (node == null) return;
             Set<ClientTechTreeNode> prev = node.getPrevNode();
             ArrayList<Vec2iE> prevPos = new ArrayList<>(prev.size());
             prev.forEach(p -> {
@@ -181,6 +184,9 @@ public class TechTreePanel extends AbstractWidget {
 
     private void addLabel(int x, int y, ClientTechTreeNode node) {
         TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
+        if (ClientPlayerData.getData().isPresent()) {
+            label.setFinished(ClientPlayerData.getData().get().unlocked.contains(node.location));
+        }
         labels.setWidget(x, y, label);
     }
 

@@ -24,6 +24,8 @@ public class TechTreeGroupData {
     private final NodeLocation root;
     private final HashMap<NodeLocation, TechTreeNodeData> nodes;
     private final @Nullable HideContext hide;
+    @Getter
+    private final boolean initialVisibility;
 
     @Getter
     private final @Nullable OnUnlockContext unlock;
@@ -34,7 +36,8 @@ public class TechTreeGroupData {
         this.descriptionTranslationKey = json.get("description").getAsString();
         this.icon = new ItemContext(new ResourceLocation(json.get("icon").getAsString()));
         this.root = new NodeLocation(this.tree.namespace, this.identifier, json.get("root_node").getAsString());
-
+        initialVisibility = json.has("initial_visibility") &&
+                json.get("initial_visibility").getAsBoolean();
         if (json.has("hide") && json.get("hide").isJsonObject()) {
             hide = new HideContext(this, json.getAsJsonObject("hide"));
         } else hide = null;

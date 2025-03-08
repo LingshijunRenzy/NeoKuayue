@@ -1,0 +1,18 @@
+{
+  "type": "kuayue:blueprint_deploy",
+  "node": "kuayue:test.node",
+  "ingredients": [
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "kuayue:research_report"
+    }
+  ],
+  "keepHeldItem": true,
+  "results": [
+    {
+      "item": "minecraft:dirt"
+    }
+  ]
+}
