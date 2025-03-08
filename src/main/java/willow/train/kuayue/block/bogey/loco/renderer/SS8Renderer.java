@@ -173,4 +173,35 @@ public class SS8Renderer extends BogeyRenderer {
             this.createModelInstance(materialManager, SS8_WHEEL, 2);
         }
     }
+    public static class Andesite extends SS8Renderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+
+        public static class Backward extends SS8Renderer.Backward {
+            @Override
+            public void render(
+                    CompoundTag bogeyData,
+                    float wheelAngle,
+                    PoseStack ms,
+                    int light,
+                    VertexConsumer vb,
+                    boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
+            }
+        }
+    }
 }

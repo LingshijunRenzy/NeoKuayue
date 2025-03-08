@@ -1,4 +1,4 @@
-/*package willow.train.kuayue.block.bogey.carriage;
+package willow.train.kuayue.block.bogey.carriage;
 
 
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlockEntity;
@@ -20,11 +20,11 @@ public class AndesiteCarriageBogeyEntity extends AbstractBogeyBlockEntity {
 
     @Override
     public BogeyStyle getDefaultStyle() {
-        return AllCarriageBogeys.andesiteCarriageBogeyGroup.getStyle();
+        return AllCarriageBogeys.AndesiteCarriageBogeyGroup.getStyle();
     }
 
     @Override
     protected AABB createRenderBoundingBox() {
         return super.createRenderBoundingBox();
     }
-}*/
+}

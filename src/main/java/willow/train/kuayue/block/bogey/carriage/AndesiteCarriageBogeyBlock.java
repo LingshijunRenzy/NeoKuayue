@@ -1,4 +1,4 @@
-/*package willow.train.kuayue.block.bogey.carriage;
+package willow.train.kuayue.block.bogey.carriage;
 
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
@@ -93,7 +93,7 @@ public class AndesiteCarriageBogeyBlock extends AbstractBogeyBlock<AndesiteCarri
 
     @Override
     public BogeyStyle getDefaultStyle() {
-        return AllCarriageBogeys.andesiteCarriageBogeyGroup.getStyle();
+        return AllCarriageBogeys.AndesiteCarriageBogeyGroup.getStyle();
     }
 
     @Override
@@ -140,4 +140,4 @@ public class AndesiteCarriageBogeyBlock extends AbstractBogeyBlock<AndesiteCarri
             return false;
         return !getValidPathfindingTypes(bogey.getStyle()).contains(currentEdge.getTrackMaterial().trackType);
     }
-}*/
+}
