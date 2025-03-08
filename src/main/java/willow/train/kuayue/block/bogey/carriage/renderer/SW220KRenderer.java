@@ -10,6 +10,7 @@ import com.simibubi.create.content.trains.entity.CarriageBogey;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import willow.train.kuayue.block.bogey.loco.renderer.HXD3DRenderer;
 import willow.train.kuayue.initial.create.AllCarriageBogeys;
 import willow.train.kuayue.initial.AllElements;
 
@@ -94,6 +95,37 @@ public class SW220KRenderer extends BogeyRenderer {
                 wheel.translate(0, 0.805, ((double) side) * 1.25d).rotateX(wheelAngle);
                 wheel.render(ms, light, vb);
                 if (!inInstancedContraption) ms.popPose();
+            }
+        }
+    }
+    public static class Andesite extends SW220KRenderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+
+        public static class Backward extends SW220KRenderer.Backward {
+            @Override
+            public void render(
+                    CompoundTag bogeyData,
+                    float wheelAngle,
+                    PoseStack ms,
+                    int light,
+                    VertexConsumer vb,
+                    boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
             }
         }
     }

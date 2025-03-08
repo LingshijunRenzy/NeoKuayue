@@ -201,4 +201,35 @@ public class HXD3DRenderer extends BogeyRenderer {
             this.createModelInstance(materialManager, HXD3D_WHEEL, 3);
         }
     }
+    public static class Andesite extends HXD3DRenderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+
+        public static class Backward extends HXD3DRenderer.Backward {
+            @Override
+            public void render(
+                    CompoundTag bogeyData,
+                    float wheelAngle,
+                    PoseStack ms,
+                    int light,
+                    VertexConsumer vb,
+                    boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
+            }
+        }
+    }
 }
