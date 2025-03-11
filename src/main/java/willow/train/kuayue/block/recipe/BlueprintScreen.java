@@ -621,7 +621,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         groups.forEach(group -> groupButtons
                 .add(new TechTreeItemButton(group.getIcon(), 20, 20, group,
                         (a, b, c) -> {
-                            sendCheckGroupPacket(group.getId());
+                            if (group.equals(this.chosenGroup)) setGroup(group);
+                            else sendCheckGroupPacket(group.getId());
                         }))
         );
         groupButtons.forEach(btn -> {
