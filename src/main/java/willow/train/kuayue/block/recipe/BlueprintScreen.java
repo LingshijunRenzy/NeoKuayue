@@ -376,6 +376,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 getBgX() + map(150, scale) - 60,
                 getBgY() + map(75, scale) - 40,
                 labels, b -> sendUnlockGroupPacket(this.chosenGroup.getId()));
+        unlockGroupBoard.setRenderConfirmBtn(false);
         addRenderableWidget(unlockGroupBoard);
         if (group != null) renderCover(group);
     }
@@ -392,6 +393,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         clearUnlockGroup();
         if (group == null) return;
         renderCover(group);
+        unlockGroupBoard.visible = false;
         sendUnlockGroupPacket(location);
     }
 

@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -37,6 +39,10 @@ public class UnlockGroupBoard extends AbstractWidget {
 
     private final ImageButton confirmBtn;
 
+    @Setter
+    @Getter
+    private boolean renderConfirmBtn;
+
     public UnlockGroupBoard(int pX, int pY, Collection<TechTreeLabel> unlockNodes, Button.OnPress onPress) {
         super(pX, pY, 120, 80, Component.empty());
         ArrayList<TechTreeLabel> labels = new ArrayList<>(unlockNodes);
@@ -50,6 +56,7 @@ public class UnlockGroupBoard extends AbstractWidget {
         confirmBtn = new ImageButton(confirmBtnLight, confirmBtnDark, this.x, this.y,
                 16, 32, Component.empty(), onPress);
         updateAllWidgetsPos();
+        renderConfirmBtn = true;
     }
 
     private void updateAllWidgetsPos() {
@@ -96,7 +103,7 @@ public class UnlockGroupBoard extends AbstractWidget {
     @Override
     public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
         unlockGroupBoardBg.get().renderToGui();
-        confirmBtn.visible = this.visible;
+        confirmBtn.visible = this.visible & renderConfirmBtn;
         confirmBtn.setRenderMask(!confirmBtn.isMouseOver(mouseX, mouseY));
         for (LabelGrid grid : grids) {
             if (!grid.visible) continue;
