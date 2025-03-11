@@ -134,6 +134,13 @@ public class TechTreeNode {
         getType().writeToByteBuf(buf);
         buf.writeUtf(getData().getName());
         buf.writeUtf(getData().getDescription());
+        if (getData().getUnlock() == null)
+            buf.writeUtf("");
+        else
+            buf.writeUtf(getData().getUnlock().description);
+
+        buf.writeInt(getData().getLevel());
+        buf.writeInt(getData().getExp());
         buf.writeItemStack(data.getLogo(), false);
 
         // item consume

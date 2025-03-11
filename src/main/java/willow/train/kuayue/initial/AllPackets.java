@@ -2,10 +2,7 @@ package willow.train.kuayue.initial;
 
 import kasuga.lib.registrations.common.ChannelReg;
 import willow.train.kuayue.network.c2s.*;
-import willow.train.kuayue.network.c2s.tech_tree.CanUnlockNodePacket;
-import willow.train.kuayue.network.c2s.tech_tree.TechTreeEOFC2SPacket;
-import willow.train.kuayue.network.c2s.tech_tree.TechTreeHandShakeC2SPacket;
-import willow.train.kuayue.network.c2s.tech_tree.UnlockNodePacket;
+import willow.train.kuayue.network.c2s.tech_tree.*;
 import willow.train.kuayue.network.s2c.*;
 import willow.train.kuayue.network.s2c.tech_tree.*;
 
@@ -35,6 +32,10 @@ public class AllPackets {
             .loadPacket(CanUnlockNodeS2CPacket.class, CanUnlockNodeS2CPacket::new)
             .loadPacket(UnlockNodePacket.class, UnlockNodePacket::new)
             .loadPacket(UnlockNodeResultPacket.class, UnlockNodeResultPacket::new)
+            .loadPacket(CanUnlockGroupPacket.class, CanUnlockGroupPacket::new)
+            .loadPacket(CanUnlockGroupS2CPacket.class, CanUnlockGroupS2CPacket::new)
+            .loadPacket(UnlockGroupPacket.class, UnlockGroupPacket::new)
+            .loadPacket(UnlockGroupResultPacket.class, UnlockGroupResultPacket::new)
             .submit(AllElements.testRegistry);
 
     public static final ChannelReg INTERACTION = new ChannelReg("interaction")

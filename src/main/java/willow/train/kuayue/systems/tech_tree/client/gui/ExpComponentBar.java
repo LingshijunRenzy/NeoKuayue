@@ -27,24 +27,22 @@ public class ExpComponentBar extends AbstractWidget {
             LazyRecomputable.of(() -> ClientInit.blueprintButtons.getImageSafe().get().getMask()
                     .rectangleUV(48f / 128f, 112f / 128f, 57f / 128f, 123f / 128f));
 
+    @Setter
     private boolean canUnlock = false;
     private MutableComponent component;
+
     private static int GREEN = Color.GREEN.getRGB(),
                         RED = Color.RED.getRGB();
 
-    public ExpComponentBar(int pX, int pY, int pWidth, int pHeight) {
-        super(pX, pY, pWidth, pHeight, Component.empty());
-        setUnlock(false);
+    public ExpComponentBar(int pX, int pY) {
+        super(pX, pY, 0, 0, Component.empty());
+        setUnlock(0, false);
         setPos(pX, pY);
     }
 
-    public void setUnlock(boolean unlock) {
-        canUnlock = unlock;
-        if (canUnlock) {
-            component = Component.translatable("tech_tree.kuayue.exp_unlock_true");
-        } else {
-            component = Component.translatable("tech_tree.kuayue.exp_unlock_false");
-        }
+    public void setUnlock(int level, boolean canUnlock) {
+        this.component = Component.literal(String.valueOf(level));
+        this.canUnlock = canUnlock;
         updateSize();
     }
 
@@ -73,7 +71,7 @@ public class ExpComponentBar extends AbstractWidget {
         if (canUnlock) yesBg.get().renderToGui();
         else noBg.get().renderToGui();
         font.draw(poseStack, component, this.x + 12,
-                this.y + (float) (11 - font.lineHeight) / 2, canUnlock ? GREEN : RED);
+                this.y + (float) (12 - font.lineHeight) / 2f, canUnlock ? GREEN : RED);
     }
 
     @Override
