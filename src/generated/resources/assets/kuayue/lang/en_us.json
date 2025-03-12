@@ -610,6 +610,7 @@
  "block.kuayue.platform_door": "Platform door",
  "block.kuayue.luggage_rack_m1": "M1 Luggage Rack",
  "block.kuayue.seat_m1": "M1 Seat",
+ "block.kuayue.ac_outdoor_unit": "Air Con Outdoor Unit",
 
  "tooltip.kuayue.color_selector": "Left click and drag your mouse or Scroll your mouse wheel.",
  "tooltip.kuayue.color_screen.title": "Color Editor",

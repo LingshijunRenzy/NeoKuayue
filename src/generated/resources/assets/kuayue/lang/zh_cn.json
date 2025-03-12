@@ -706,9 +706,10 @@
   "block.kuayue.platform_wall": "站台屏蔽墙",
   "block.kuayue.luggage_rack_m1": "M1客车行李架",
   "block.kuayue.seat_m1": "M1客车座椅",
-  "block.kuayue.panel_bottom_df11g": "DF11G下箱板",
-  "block.kuayue.panel_top_df11g": "DF11G上箱板",
-  "block.kuayue.panel_top_ss3": "SS3上箱板",
+  "block.kuayue.ac_outdoor_unit": "空调外机",
+  "block.kuayue.panel_bottom_df11g": "DF11G下厢板",
+  "block.kuayue.panel_top_df11g": "DF11G上厢板",
+  "block.kuayue.panel_top_ss3": "SS3上厢板",
 
 
 
