@@ -17,9 +17,11 @@ public class ClientTechTreeNode {
 
     private final NodeType type;
 
-    private final String name, description;
+    private final String name, description, onUnlockDescription;
 
     private final Set<ItemStack> itemConsume;
+
+    private final int level, exp;
 
     private final ItemStack logo;
 
@@ -35,6 +37,9 @@ public class ClientTechTreeNode {
         type = NodeType.readFromByteBuf(buf);
         name = buf.readUtf();
         description = buf.readUtf();
+        onUnlockDescription = buf.readUtf();
+        level = buf.readInt();
+        exp = buf.readInt();
         logo = buf.readItem();
 
         itemConsume = new HashSet<>();
@@ -67,13 +72,17 @@ public class ClientTechTreeNode {
     }
 
     public ClientTechTreeNode(NodeLocation location, NodeType type, String name,
-                              String description, Set<ItemStack> itemConsume,
+                              String description, String onUnlockDescription,
+                              int level, int exp, Set<ItemStack> itemConsume,
                               ItemStack logo, Set<NodeLocation> next,
                               Set<NodeLocation> prev) {
         this.location = location;
         this.type = type;
         this.name = name;
         this.description = description;
+        this.onUnlockDescription = onUnlockDescription;
+        this.level = level;
+        this.exp = exp;
         this.itemConsume = itemConsume;
         this.logo = logo;
         this.next = new HashSet<>(next);
@@ -85,6 +94,7 @@ public class ClientTechTreeNode {
 
     public ClientTechTreeNode copy() {
         return new ClientTechTreeNode(this.location, this.type, this.name,
-                this.description, this.itemConsume, this.logo, this.next, this.prev);
+                this.description, onUnlockDescription, this.level, this.exp,
+                this.itemConsume, this.logo, this.next, this.prev);
     }
 }

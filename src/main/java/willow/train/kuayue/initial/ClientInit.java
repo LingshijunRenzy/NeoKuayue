@@ -71,6 +71,10 @@ public class ClientInit {
 
     public static final StaticImageHolder blueprintButtons =
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_buttons.png"));
+
+    public static final StaticImageHolder groupUnlockBoard =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/group_unlock_board.png"));
+
     public static final ModelReg testModel =
             new ModelReg("test_model", AllElements.testRegistry.asResource("block/test_block"))
                     .submit(AllElements.testRegistry);

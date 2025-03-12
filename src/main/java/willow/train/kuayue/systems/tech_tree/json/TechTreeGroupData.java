@@ -19,6 +19,8 @@ public class TechTreeGroupData {
     public final TechTreeData tree;
 
     public final String identifier;
+    @Getter
+    private final @Nullable ResourceLocation coverId;
     private final String descriptionTranslationKey, nameTranslationKey;
     private final ItemContext icon;
     private final NodeLocation root;
@@ -31,6 +33,7 @@ public class TechTreeGroupData {
     private final @Nullable OnUnlockContext unlock;
     public TechTreeGroupData(TechTreeData tree, String identifier, JsonObject json) {
         this.tree = tree;
+        this.coverId = json.has("cover") ? new ResourceLocation(json.get("cover").getAsString()) : null;
         this.identifier = identifier;
         this.nameTranslationKey = json.get("name").getAsString();
         this.descriptionTranslationKey = json.get("description").getAsString();

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
+import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -25,15 +27,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.initial.ClientInit;
+import willow.train.kuayue.network.c2s.tech_tree.CanUnlockGroupPacket;
 import willow.train.kuayue.network.c2s.tech_tree.CanUnlockNodePacket;
+import willow.train.kuayue.network.c2s.tech_tree.UnlockGroupPacket;
 import willow.train.kuayue.network.c2s.tech_tree.UnlockNodePacket;
 import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
 import willow.train.kuayue.systems.editable_panel.widget.OnClick;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
-import willow.train.kuayue.systems.tech_tree.client.ClientTechTree;
-import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
-import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeManager;
-import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
+import willow.train.kuayue.systems.tech_tree.client.*;
 import willow.train.kuayue.systems.tech_tree.client.gui.*;
 import willow.train.kuayue.systems.tech_tree.player.ClientPlayerData;
 import willow.train.kuayue.systems.tech_tree.player.PlayerData;
@@ -102,7 +103,11 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private ImageButton guideUpBtn, guideDownBtn;
 
     private float bgX = 0, bgY = 0, scale = 1.0f;
+
+    @Getter
     private ClientTechTreeGroup chosenGroup;
+    private final HashMap<ResourceLocation, BlueprintCoverPanel> covers;
+    private final List<BlueprintCoverPanel> defaultCovers;
     private final HashMap<ClientTechTreeGroup, TechTreePanel> panels;
     private final TechTreeTitleLabel titleLabel;
     private Tooltip tooltip = null;
@@ -124,6 +129,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private boolean nodeFinished = false;
     private FinishedTooltip finishedTooltip = null;
     private final ExpComponentBar expBar;
+    private UnlockGroupBoard unlockGroupBoard;
 
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
@@ -131,6 +137,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         INSTANCE = this;
         this.showSub = false;
         groups = new ArrayList<>();
+        covers = new HashMap<>();
+        defaultCovers = new ArrayList<>();
         trees = ClientTechTreeManager.MANAGER.trees();
         updateGroups(null);
         groupButtons = new ArrayList<>();
@@ -142,7 +150,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         this.nextLabels = new HashSet<>();
         this.prevGrids = new ArrayList<>();
         this.nextGrids = new ArrayList<>();
-        expBar = new ExpComponentBar(0, 0, 50, 11);
+        expBar = new ExpComponentBar(0, 0);
         expBar.visible = false;
         consumptionSlots = new ItemSlot[8];
         resultSlots = new ItemSlot[4];
@@ -167,6 +175,43 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     public void sendUnlockPacket() {
         if (this.chosenLabel == null) return;
         AllPackets.TECH_TREE_CHANNEL.sendToServer(new UnlockNodePacket(chosenLabel.getNode().location));
+    }
+
+    public void sendCheckGroupPacket(ResourceLocation groupId) {
+        if (this.chosenGroup == null) return;
+        AllPackets.TECH_TREE_CHANNEL.sendToServer(new CanUnlockGroupPacket(groupId));
+    }
+
+    public void sendUnlockGroupPacket(ResourceLocation groupId) {
+        AllPackets.TECH_TREE_CHANNEL.sendToServer(new UnlockGroupPacket(groupId));
+    }
+
+    public void readCovers() {
+        if (!covers.isEmpty()) {
+            covers.forEach((rl, cover) -> removeWidget(cover));
+        }
+        covers.clear();
+        defaultCovers.clear();
+        BlueprintCoverManager.getInstance().getCovers().forEach((rl, cover) -> {
+            BlueprintCoverPanel panel = new BlueprintCoverPanel(getBgX(), getBgY(), 0,
+                    160, 75, input -> map(input, scale), cover, b -> setGroup(chosenGroup));
+            covers.put(rl, panel);
+            panel.visible = false;
+            addRenderableWidget(panel);
+            if (cover.isDefaultCover()) {
+                defaultCovers.add(panel);
+            }
+        });
+    }
+
+    public void updateCovers() {
+        covers.forEach((rl, cover) -> {
+            cover.updatePosition(getBgX(), getBgY(), 0, 160, 75, input -> map(input, scale));
+        });
+    }
+
+    public void hideCovers() {
+        covers.forEach((rl, cover) -> cover.visible = false);
     }
 
     private void updateGroups(ResourceLocation prevChosen) {
@@ -195,7 +240,11 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         }
     }
 
-    public void handleUpdateResult(NodeLocation node, PlayerData.UnlockResult result) {
+    public void handleUpdateResult(boolean isGroupUnlocked,
+                                   PlayerData.UnlockResult result) {
+        if (isGroupUnlocked && this.unlockGroupBoard != null) {
+            this.unlockGroupBoard.visible = false;
+        }
         panels.clear();
         updateGroups(chosenGroup == null ? null : chosenGroup.getId());
         refreshPanels(true);
@@ -207,12 +256,16 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             // p.adjustSize(map(247, scale), map(117, scale));
             p.moveToWindowCentral(scale);
         });
+        if (!showSub && isGroupUnlocked) {
+            renderCover(chosenGroup);
+            return;
+        }
         setPanelsSize();
         if (chosenLabel != null && showSub) {
             updateSub(chosenGroup.getNodes().get(chosenLabel.getNode().location));
             updateGrids();
         }
-        if (result.flag()) {
+        if (result.flag() && showSub) {
             clearUnlock();
             renderAllSlots(false);
             nodeFinished = true;
@@ -306,6 +359,81 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         }
     }
 
+    public void unableToUnlockGroup(ResourceLocation groupId,
+                                    PlayerData.CheckReason reason) {
+        ClientTechTreeGroup group = getGroup(groupId);
+        clearUnlockGroup();
+        Collection<NodeLocation> requiredNodes = reason.requiredNodes();
+        List<TechTreeLabel> labels = new ArrayList<>(requiredNodes.size());
+        requiredNodes.forEach(location -> {
+            ClientTechTreeNode node =
+                    ClientTechTreeManager.MANAGER.getNode(location);
+            if (node == null) return;
+            TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
+            labels.add(label);
+        });
+        unlockGroupBoard = new UnlockGroupBoard(
+                getBgX() + map(150, scale) - 60,
+                getBgY() + map(75, scale) - 40,
+                labels, b -> sendUnlockGroupPacket(this.chosenGroup.getId()));
+        unlockGroupBoard.setRenderConfirmBtn(false);
+        addRenderableWidget(unlockGroupBoard);
+        if (group != null) renderCover(group);
+    }
+
+    public void clearUnlockGroup() {
+        if (unlockGroupBoard != null) {
+            removeWidget(unlockGroupBoard);
+        }
+    }
+
+    public void ableToUnlockGroup(ResourceLocation location,
+                                  PlayerData.CheckReason reason) {
+        ClientTechTreeGroup group = getGroup(location);
+        clearUnlockGroup();
+        if (group == null) return;
+        renderCover(group);
+        unlockGroupBoard.visible = false;
+        sendUnlockGroupPacket(location);
+    }
+
+    private ClientTechTreeGroup getGroup(ResourceLocation location) {
+        ClientTechTreeGroup group = null;
+        for (ClientTechTreeGroup grp : groups) {
+            if (grp.getId().equals(location)) {
+                group = grp;
+                break;
+            }
+        }
+        return group;
+    }
+
+    public void renderCover(ClientTechTreeGroup group) {
+        showSub = false;
+        chosenGroup = group;
+        panels.forEach((g, p) -> p.visible = false);
+        titleLabel.setTitle(Component.translatable(chosenGroup.getTitleKey()));
+        clearSub();
+        clearAllGrids();
+        renderAllSlots(false);
+        // titleLabel.visible = true;
+        updateFramePosition(chosenGroup);
+        clearGridBtn();
+        updateFinishTooltip(null);
+        confirmButton.visible = false;
+        expBar.visible = false;
+        if (group.getCoverId() == null ||
+                !covers.containsKey(group.getCoverId())) {
+            if (Minecraft.getInstance().player == null) return;
+            int random = Minecraft.getInstance().player.getRandom()
+                    .nextInt(0, defaultCovers.size());
+            defaultCovers.get(random).visible = true;
+        } else {
+            BlueprintCoverPanel panel = covers.get(group.getCoverId());
+            panel.visible = true;
+        }
+    }
+
     public void unableToUnlock(PlayerData.CheckReason reason,
                                Collection<NodeLocation> nodeRequired,
                                Collection<ItemStack> itemRequired) {
@@ -333,7 +461,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         this.expBar.updateSize();
         this.expBar.setPos(getBgX() + map(174, scale) - expBar.getWidth() / 2,
                 getBgY() + map(113, scale) - expBar.getHeight() / 2);
-        this.expBar.setUnlock(reason.enoughLevel());
+        this.expBar.setUnlock(chosenLabel.getNode().getLevel(), reason.enoughLevel());
         this.expBar.visible = true;
     }
 
@@ -370,7 +498,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         this.expBar.updateSize();
         this.expBar.setPos(getBgX() + map(174, scale) - expBar.getWidth() / 2,
                 getBgY() + map(113, scale) - expBar.getHeight() / 2);
-        this.expBar.setUnlock(true);
+        this.expBar.setUnlock(chosenLabel.getNode().getLevel(), true);
         this.expBar.visible = true;
         if (reason.itemGot().isEmpty()) return;
         List<ItemStack> gotList = new ArrayList<>(reason.itemGot());
@@ -493,25 +621,31 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         groups.forEach(group -> groupButtons
                 .add(new TechTreeItemButton(group.getIcon(), 20, 20, group,
                         (a, b, c) -> {
-                            showSub = false;
-                            chosenGroup = group;
-                            panels.forEach((g, p) -> p.visible = g == chosenGroup);
-                            titleLabel.setTitle(Component.translatable(chosenGroup.getTitleKey()));
-                            clearSub();
-                            clearAllGrids();
-                            renderAllSlots(false);
-                            titleLabel.visible = true;
-                            updateFramePosition(chosenGroup);
-                            clearGridBtn();
-                            updateFinishTooltip(null);
-                            confirmButton.visible = false;
-                            expBar.visible = false;
+                            if (group.equals(this.chosenGroup)) setGroup(group);
+                            else sendCheckGroupPacket(group.getId());
                         }))
         );
         groupButtons.forEach(btn -> {
             addRenderableWidget(btn);
             btn.setVisible(false);
         });
+    }
+
+    private void setGroup(ClientTechTreeGroup group) {
+        showSub = false;
+        chosenGroup = group;
+        panels.forEach((g, p) -> p.visible = g == chosenGroup);
+        titleLabel.setTitle(Component.translatable(chosenGroup.getTitleKey()));
+        clearSub();
+        clearAllGrids();
+        renderAllSlots(false);
+        titleLabel.visible = true;
+        updateFramePosition(chosenGroup);
+        clearGridBtn();
+        updateFinishTooltip(null);
+        confirmButton.visible = false;
+        expBar.visible = false;
+        hideCovers();
     }
 
     @Override
@@ -532,6 +666,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         initGridButtons();
         showSub = false;
         addRenderableWidget(expBar);
+        readCovers();
+        renderCover(chosenGroup);
     }
 
     protected void initGridButtons() {
@@ -663,8 +799,10 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private void updateFinishTooltip(@Nullable TechTreeLabel label) {
         if (finishedTooltip != null) removeWidget(finishedTooltip);
         if (label == null) return;
+        String finishDescription = label.getNode().getOnUnlockDescription();
         this.finishedTooltip = new FinishedTooltip(label.getNode().getLocation().toString(), label.getNode().getName(),
-                label.getNode().getDescription(), getBgX() + map(53, scale), getBgY() + map(107, scale),
+                finishDescription.isEmpty() ? label.getNode().getDescription() : finishDescription,
+                getBgX() + map(53, scale), getBgY() + map(107, scale),
                 map(212, scale), map(33, scale));
         addRenderableWidget(this.finishedTooltip);
     }
@@ -699,6 +837,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         updateConfirmBtnPos();
         clearGridBtn();
         expBar.visible = false;
+        updateCovers();
     }
 
     private void updateConfirmBtnPos() {
@@ -718,6 +857,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         updateConfirmBtnPos();
         clearGridBtn();
         expBar.visible = false;
+        updateCovers();
     }
 
     private void setPanelsPosition() {

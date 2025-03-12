@@ -77,6 +77,10 @@ public class TechTreeGroup {
 
     public void toNetwork(FriendlyByteBuf buf) {
         buf.writeResourceLocation(getId());
+        if (data.getCoverId() == null)
+            buf.writeUtf("null");
+        else
+            buf.writeResourceLocation(data.getCoverId());
         buf.writeUtf(data.getTitle());
         buf.writeUtf(data.getDescription());
         buf.writeItemStack(icon(), false);
