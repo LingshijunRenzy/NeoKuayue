@@ -2,21 +2,34 @@ package willow.train.kuayue.systems.overhead_line.block.support;
 
 import kasuga.lib.registrations.common.BlockEntityReg;
 import kasuga.lib.registrations.common.BlockReg;
+import kasuga.lib.registrations.common.CreativeTabReg;
 import kasuga.lib.registrations.common.ItemReg;
 import kasuga.lib.registrations.registry.SimpleRegistry;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import willow.train.kuayue.common.OptionalTrackTargetingBlockItem;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.royawesome.jlibnoise.model.Line;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
+import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineBlockDynamicConfiguration;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock> extends BlockReg<T> {
-    private Predicate<OverheadLineType> allowedOverheadLineTypePredictor;
+    private Predicate<OverheadLineType> allowedOverheadLineTypePredictor = (p)->true;
+    private Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer = null;
+    private List<Vec3> connectionPoints = List.of();
+
     public OverheadLineSupportBlockReg(String registrationKey) {
         super(registrationKey);
+        this.withBlockEntity(OverheadLineSystem.OVERHEAD_LINE_SUPPORT_BLOCK_ENTITY);
     }
 
     public OverheadLineSupportBlockReg<T> allowOverheadLineType(Predicate<OverheadLineType> overheadLineTypePredictor) {
@@ -27,12 +40,16 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock> ext
     @Override
     public OverheadLineSupportBlockReg<T> submit(SimpleRegistry simpleRegistry) {
         super.submit(simpleRegistry);
-        return this;
-    }
-
-    public OverheadLineSupportBlockReg<T> withTrackTargetingItem(ResourceLocation itemModelLocation) {
-        var blockItem = OptionalTrackTargetingBlockItem.ofOptional(OverheadLineSystem.OVERHEAD_LINE_EDGE_POINT);
-        withItem(properties -> blockItem.apply(this.getBlock(), properties), itemModelLocation);
+        if(this.renderer != null) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                    ()->()-> OverheadSupportBlockRenderer.register(this::getBlock, this.renderer)
+            );
+        }
+        OverheadLineBlockDynamicConfiguration configuration = new OverheadLineBlockDynamicConfiguration(
+                this.connectionPoints,
+                this.allowedOverheadLineTypePredictor
+        );
+        OverheadLineSupportBlockEntity.registerPoint(this::getBlock, configuration);
         return this;
     }
 
@@ -57,6 +74,22 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock> ext
     @Override
     public OverheadLineSupportBlockReg<T> blockType(BlockBuilder<T> builder) {
         super.blockType(builder);
+        return this;
+    }
+
+    public OverheadLineSupportBlockReg<T> withRenderer(Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer) {
+        this.renderer = renderer;
+        return this;
+    }
+
+    @Override
+    public OverheadLineSupportBlockReg<T> tabTo(CreativeTabReg reg) {
+        super.tabTo(reg);
+        return this;
+    }
+
+    public OverheadLineSupportBlockReg<T> connectionPoints(Vec3 ...connectionPositions) {
+        this.connectionPoints = List.of(connectionPositions);
         return this;
     }
 
