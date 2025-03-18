@@ -232,6 +232,13 @@ public class AllBlocks {
 //                    .withMenuAndScreen(EditablePanelEditMenu::new, (component) -> new EditablePanelEditScreen())
 //                    .submit(AllElements.testRegistry);
 
+    public static final BlockEntityReg<SingleArmPantographBlockEntity> HXD3D_PANTOGRAPH_ENTITY =
+            new BlockEntityReg<SingleArmPantographBlockEntity>("hxd3d_pantograph_entity")
+                    .blockEntityType(SingleArmPantographBlockEntity::new)
+                    .withRenderer(() -> SingleArmPantographRenderer::new)
+                    .addBlock(I3DPanel.HXD3D_PANTOGRAPH)
+                    .submit(AllElements.testRegistry);
+
     public static void invoke() {
         C25GPanel.invoke();
         C25BPanel.invoke();

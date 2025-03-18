@@ -572,4 +572,20 @@ public class QJMainRenderer extends BogeyRenderer {
         reversing.translate(0, 2.15, -1.83)
                 .render(ms, light,vb);
     }
+    public static class Andesite extends QJMainRenderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+    }
 }
+

@@ -2,16 +2,20 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import kasuga.lib.core.client.render.SimpleColor;
+import kasuga.lib.core.util.data_type.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
+import willow.train.kuayue.systems.editable_panel.widget.OnClick;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
+import willow.train.kuayue.systems.tech_tree.player.ClientPlayerData;
 
 import java.util.*;
 
@@ -27,6 +31,10 @@ public class TechTreePanel extends AbstractWidget {
     @Setter
     private boolean lockDragging;
 
+    private Vec2iE windowLeftTop, windowRightDown;
+
+    private OnClick<TechTreePanel> onClick = (a, b, c) -> {};
+
     private final SimpleColor[] colors = new SimpleColor[] {
             SimpleColor.fromHSV(0, .85f, .95f),
             SimpleColor.fromHSV(60, .9f, 1),
@@ -41,11 +49,15 @@ public class TechTreePanel extends AbstractWidget {
         this.column = column;
         labels = null;
         lines = new ArrayList<>();
+        windowLeftTop = new Vec2iE();
+        windowRightDown = new Vec2iE();
     }
 
     private void setWindowForLayer(Layer layer) {
-        layer.setWindow(x + 10, y + 10,
-                x + width - 10, y + height - 10);
+        windowLeftTop = new Vec2iE(x + 10, y + 10);
+        windowRightDown = new Vec2iE(x + width - 10, y + height - 10);
+        layer.setWindow(windowLeftTop.x, windowLeftTop.y,
+                windowRightDown.x, windowRightDown.y);
     }
 
     public void updateWindows() {
@@ -121,6 +133,7 @@ public class TechTreePanel extends AbstractWidget {
             counter ++;
             HashSet<ClientTechTreeNode> cache = new HashSet<>();
             stages.get(stages.size() - 1).forEach(node -> {
+                if (node == null) return;
                 node.getNextNode().forEach(next -> {
                     if (group.getNodes().containsValue(next))
                         cache.add(next);
@@ -157,6 +170,7 @@ public class TechTreePanel extends AbstractWidget {
         // get all lines
         RandomSource random = Minecraft.getInstance().font.random;;
         positionMap.forEach((node, pos) -> {
+            if (node == null) return;
             Set<ClientTechTreeNode> prev = node.getPrevNode();
             ArrayList<Vec2iE> prevPos = new ArrayList<>(prev.size());
             prev.forEach(p -> {
@@ -170,6 +184,9 @@ public class TechTreePanel extends AbstractWidget {
 
     private void addLabel(int x, int y, ClientTechTreeNode node) {
         TechTreeLabel label = TechTreeLabel.smallLabel(node, 0, 0, Component.empty());
+        if (ClientPlayerData.getData().isPresent()) {
+            label.setFinished(ClientPlayerData.getData().get().unlocked.contains(node.location));
+        }
         labels.setWidget(x, y, label);
     }
 
@@ -208,12 +225,50 @@ public class TechTreePanel extends AbstractWidget {
     }
 
     @Override
+    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        if (this.active && this.visible) {
+            if (this.isValidClickButton(pButton) &&
+                    getChosenLabel(pMouseX, pMouseY) != null) {
+                this.playDownSound(Minecraft.getInstance().getSoundManager());
+                this.onClick(pMouseX, pMouseY);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setOnClick(OnClick<TechTreePanel> onClick) {
+        this.onClick = onClick;
+    }
+
+    @Override
     public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
         for (LineLayer layer : lines) {
             layer.render(poseStack, mouseX, mouseY, partial);
         }
         if (labels == null) return;
         labels.render(poseStack, mouseX, mouseY, partial);
+    }
+
+    public TechTreeLabel getChosenLabel(double mouseX, double mouseY) {
+        for (AbstractWidget widget : labels.getWidgets()) {
+            TechTreeLabel label = (TechTreeLabel) widget;
+            if (label.x < windowLeftTop.x || label.y < windowLeftTop.y ||
+            label.x >= windowRightDown.x || label.y >= windowRightDown.y)
+                continue;
+            if (label.isMouseOver(mouseX, mouseY)) return label;
+        }
+        return null;
+    }
+
+    public Pair<Vec2iE, Vec2iE> getWindow() {
+        return Pair.of(windowLeftTop, windowRightDown);
+    }
+
+    @Override
+    public void onClick(double mouseX, double mouseY) {
+        if (this.onClick == null) return;
+        this.onClick.click(this, mouseX, mouseY);
     }
 
     @Override

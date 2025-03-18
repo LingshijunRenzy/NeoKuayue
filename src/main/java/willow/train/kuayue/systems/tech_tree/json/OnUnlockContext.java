@@ -4,22 +4,23 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import kasuga.lib.core.util.ComponentHelper;
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemStack;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class OnUnlockContext {
     
     public final String description;
+    @Getter
     private final NodeLocation[] unlockNodes;
-    private final ResourceLocation[] unlockAdvancements;
+    @Getter
+    private final HashMap<ResourceLocation, Collection<String>> unlockAdvancements;
+    @Getter
     private final ItemContext[] items;
     
     public OnUnlockContext(TechTreeGroupData group, JsonObject json) {
@@ -27,12 +28,21 @@ public class OnUnlockContext {
 
         if (json.has("advancements") && json.get("advancements").isJsonArray()) {
             JsonArray array = json.getAsJsonArray("advancements");
-            unlockAdvancements = new ResourceLocation[array.size()];
+            unlockAdvancements = new HashMap<>(array.size());
             for (int i = 0; i < array.size(); i++) {
-                unlockAdvancements[i] = new ResourceLocation(array.get(i).getAsString());
+                JsonElement advJson = array.get(i);
+                if (advJson.isJsonArray()) {
+                    JsonObject advObj = advJson.getAsJsonObject();
+                    JsonArray advArray = advObj.getAsJsonArray("criteria");
+                    List<String> list = new ArrayList<>(advArray.size());
+                    advArray.forEach(element -> list.add(element.getAsString()));
+                    unlockAdvancements.put(new ResourceLocation(advObj.get("id").getAsString()), list);
+                } else {
+                    unlockAdvancements.put(new ResourceLocation(advJson.getAsString()), List.of());
+                }
             }
         } else {
-            unlockAdvancements = new ResourceLocation[0];
+            unlockAdvancements  = new HashMap<>();
         }
 
         if (json.has("items") && json.get("items").isJsonObject()) {
@@ -68,18 +78,6 @@ public class OnUnlockContext {
             result.addAll(context.getItem());
         }
         return result;
-    }
-
-    public ItemContext[] getItems() {
-        return items;
-    }
-
-    public NodeLocation[] getUnlockNodes() {
-        return unlockNodes;
-    }
-
-    public ResourceLocation[] getUnlockAdvancements() {
-        return unlockAdvancements;
     }
 
     public Component getDescription() {

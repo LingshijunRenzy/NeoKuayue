@@ -58,4 +58,19 @@ public class SW160Renderer extends BogeyRenderer {
             if (!inInstancedContraption) ms.popPose();
         }
     }
+    public static class Andesite extends SW160Renderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+    }
 }

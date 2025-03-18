@@ -1,11 +1,10 @@
 package willow.train.kuayue.initial;
 
-import kasuga.lib.core.network.Packet;
 import kasuga.lib.registrations.common.ChannelReg;
 import willow.train.kuayue.network.c2s.*;
+import willow.train.kuayue.network.c2s.tech_tree.*;
 import willow.train.kuayue.network.s2c.*;
-
-import java.util.LinkedList;
+import willow.train.kuayue.network.s2c.tech_tree.*;
 
 public class AllPackets {
     public static final String KUAYUE_NETWORK_VERSION = "v1.0.0";
@@ -28,6 +27,15 @@ public class AllPackets {
             .loadPacket(TechTreeHandShakeC2SPacket.class, TechTreeHandShakeC2SPacket::new)
             .loadPacket(TechTreeEOFS2CPacket.class, TechTreeEOFS2CPacket::new)
             .loadPacket(TechTreeEOFC2SPacket.class, TechTreeEOFC2SPacket::new)
+            .loadPacket(UpdateUnlockedS2CPacket.class, UpdateUnlockedS2CPacket::new)
+            .loadPacket(CanUnlockNodePacket.class, CanUnlockNodePacket::new)
+            .loadPacket(CanUnlockNodeS2CPacket.class, CanUnlockNodeS2CPacket::new)
+            .loadPacket(UnlockNodePacket.class, UnlockNodePacket::new)
+            .loadPacket(UnlockNodeResultPacket.class, UnlockNodeResultPacket::new)
+            .loadPacket(CanUnlockGroupPacket.class, CanUnlockGroupPacket::new)
+            .loadPacket(CanUnlockGroupS2CPacket.class, CanUnlockGroupS2CPacket::new)
+            .loadPacket(UnlockGroupPacket.class, UnlockGroupPacket::new)
+            .loadPacket(UnlockGroupResultPacket.class, UnlockGroupResultPacket::new)
             .submit(AllElements.testRegistry);
 
     public static final ChannelReg INTERACTION = new ChannelReg("interaction")

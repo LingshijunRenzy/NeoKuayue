@@ -23,6 +23,7 @@ public class DF11GRenderer extends BogeyRenderer {
     public static final PartialModel
             DF11G_FRAME = new PartialModel(asBlockModelResource("bogey/df11g/df11g_bogey_temple")),
             DF11G_WHEEL = new PartialModel(asBlockModelResource("bogey/df11g/df11g_wheel"));
+
     @Override
     public void initialiseContraptionModelData(
             MaterialManager materialManager, CarriageBogey carriageBogey) {
@@ -172,6 +173,38 @@ public class DF11GRenderer extends BogeyRenderer {
                 MaterialManager materialManager, CarriageBogey carriageBogey) {
             this.createModelInstance(materialManager, DF11G_FRAME);
             this.createModelInstance(materialManager, DF11G_WHEEL, 3);
+        }
+    }
+
+    public static class Andesite extends DF11GRenderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+
+        public static class Backward extends DF11GRenderer.Backward {
+            @Override
+            public void render(
+                    CompoundTag bogeyData,
+                    float wheelAngle,
+                    PoseStack ms,
+                    int light,
+                    VertexConsumer vb,
+                    boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
+            }
         }
     }
 }

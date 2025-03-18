@@ -30,6 +30,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.initial.recipe.AllRecipeBlock;
+import willow.train.kuayue.systems.tech_tree.player.PlayerDataManager;
 
 public class BlueprintBlock extends Block implements IBE<BlueprintBlockEntity> {
 
@@ -71,6 +72,7 @@ public class BlueprintBlock extends Block implements IBE<BlueprintBlockEntity> {
         if (!(entity instanceof BlueprintBlockEntity bpEntity))
             return InteractionResult.PASS;
         ServerPlayer serverPlayer = (ServerPlayer) player;
+        PlayerDataManager.MANAGER.updateDataToClient(serverPlayer);
         NetworkHooks.openScreen(serverPlayer, bpEntity);
         return InteractionResult.SUCCESS;
     }

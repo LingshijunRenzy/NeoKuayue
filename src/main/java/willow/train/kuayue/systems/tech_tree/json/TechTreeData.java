@@ -2,6 +2,7 @@ package willow.train.kuayue.systems.tech_tree.json;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import lombok.Getter;
 
 import java.util.HashMap;
 
@@ -11,6 +12,7 @@ public class TechTreeData {
 
     public final String namespace;
     public final String version;
+    @Getter
     private final Map<String, TechTreeGroupData> groups;
     public TechTreeData(String namespace, String version, Map<String, TechTreeGroupData> groups) {
         this.version = version;
@@ -29,7 +31,4 @@ public class TechTreeData {
         }
     }
 
-    public Map<String, TechTreeGroupData> getGroups() {
-        return groups;
-    }
 }

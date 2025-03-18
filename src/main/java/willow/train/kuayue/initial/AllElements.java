@@ -1,5 +1,6 @@
 package willow.train.kuayue.initial;
 
+import com.simibubi.create.Create;
 import kasuga.lib.core.util.Envs;
 import kasuga.lib.registrations.common.CreativeTabReg;
 import kasuga.lib.registrations.registry.CreateRegistry;
@@ -31,6 +32,8 @@ import willow.train.kuayue.systems.overhead_line.block.support.AllOverheadLineSu
 public class AllElements {
 
     public static final CreateRegistry testRegistry = new CreateRegistry(Kuayue.MODID, Kuayue.BUS);
+
+    public static final CreateRegistry createRegistry = new CreateRegistry(Create.ID, Kuayue.BUS);
 
     public static final CreativeTabReg neoKuayueMainTab = new CreativeTabReg("main")
             .icon(() -> AllBlocks.CR_LOGO.itemInstance().getDefaultInstance())
@@ -103,5 +106,6 @@ public class AllElements {
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::addCustomTrades);
         MinecraftForge.EVENT_BUS.addListener(EntityTrackingListener::onEntityUnload);
         testRegistry.submit();
+        createRegistry.submit();
     }
 }
