@@ -653,7 +653,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         super.init();
         addRenderableWidget(confirmButton);
         confirmButton.visible = false;
-        addRenderableWidget(titleLabel);
         onRefresh();
         refreshPanels(false);
         updateSlotPos(scale);
@@ -1052,6 +1051,12 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
                 this.mainArrow.get().renderToGui();
             }
             renderSlotItemTooltip(poseStack, mouseX, mouseY);
+        }
+        if (titleLabel.visible) {
+            poseStack.pushPose();
+            poseStack.translate(0, 0, 800);
+            titleLabel.render(poseStack, mouseX, mouseY, partialTick);
+            poseStack.popPose();
         }
         TechTreeItemButton button = null;
         for (TechTreeItemButton btn : groupButtons) {

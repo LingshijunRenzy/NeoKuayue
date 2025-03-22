@@ -70,7 +70,7 @@ public class TechTreeManager implements ResourceManagerReloadListener {
         namespaces.clear();
         namespaces.addAll(manager.getNamespaces());
         Map<ResourceLocation, Resource> resources =
-                manager.listResources("tech_tree", (rl) -> true);
+                manager.listResources("tech_tree", (rl) -> rl.getPath().endsWith(".json"));
         for (String namespace : namespaces) {
             JsonObject treeObject = new JsonObject();
             treeObject.addProperty("version", Kuayue.TECH_TREE_VERSION);
