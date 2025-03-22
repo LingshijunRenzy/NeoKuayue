@@ -62,6 +62,9 @@ public class ComponentTranslationTool {
     public static Component translatable(String s) {
         return Component.translatable("msg." + Kuayue.MODID + "." + s);
     }
+    public static Component translatable(String s, Object ...pArgs) {
+        return Component.translatable("msg." + Kuayue.MODID + "." + s, pArgs);
+    }
 
     public static Component literal(String s) {
         return Component.literal(s);

@@ -6,6 +6,7 @@ import kasuga.lib.registrations.common.CreativeTabReg;
 import kasuga.lib.registrations.registry.CreateRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.event.both.OnFinalizeSetup;
 import willow.train.kuayue.event.both.PlayerDataEvent;
 import willow.train.kuayue.event.client.CarriageInventoryEvents;
 import willow.train.kuayue.event.client.ClientPassengerEvent;
@@ -25,6 +26,8 @@ import willow.train.kuayue.initial.ore.FeaturesInit;
 import willow.train.kuayue.systems.device.AllDeviceItems;
 import willow.train.kuayue.initial.recipe.AllRecipes;
 import willow.train.kuayue.systems.device.EntityTrackingListener;
+import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
+import willow.train.kuayue.systems.overhead_line.block.support.AllOverheadLineSupportBlocks;
 
 public class AllElements {
 
@@ -51,6 +54,10 @@ public class AllElements {
     public static final CreativeTabReg neoKuayueDeviceTab = new CreativeTabReg("device")
             .icon(() -> AllDeviceItems.ITEM_LOGO.getItem().getDefaultInstance())
             .submit(testRegistry);
+
+    public static final CreativeTabReg neoKuayueOverheadLineTab = new CreativeTabReg("overhead_line")
+            .icon(() -> AllOverheadLineSupportBlocks.OVERHEAD_LINE_SUPPORT_A1.itemInstance().getDefaultInstance())
+            .submit(testRegistry);
     public static final CreativeTabReg neoKuayueMaterialTab = new CreativeTabReg("materials")
             .icon(() -> AllItems.CIRCUIT_MOTHERBOARD.getItem().getDefaultInstance())
             .submit(testRegistry);
@@ -72,6 +79,7 @@ public class AllElements {
         AllRecipes.invoke();
         AllEntities.invoke();
         AllOres.invoke();
+        OverheadLineSystem.invoke();
 //        FluidsInit.register(testRegistry.eventBus);
 //        FluidTypesInit.register(testRegistry.eventBus);
         FeaturesInit.register(testRegistry.eventBus);
@@ -79,6 +87,7 @@ public class AllElements {
         if (Envs.isClient()) {
             ClientInit.invoke();
             Kuayue.BUS.addListener(ClientInit::registerHUDOverlays);
+            Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
             MinecraftForge.EVENT_BUS.addListener(RenderArrowEvent::renderBlockBounds);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::unloadEvent);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::saveEvent);
