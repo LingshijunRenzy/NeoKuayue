@@ -125,6 +125,7 @@ public class EditablePanelEntity extends SmartBlockEntity
         String type = tag.getString("edit_type");
         if (!type.equals(this.editType.name())) return false;
         this.nbt = tag.getCompound("data");
+        this.markUpdated();
         return true;
     }
 
