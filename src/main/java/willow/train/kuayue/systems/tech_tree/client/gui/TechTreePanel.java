@@ -158,7 +158,7 @@ public class TechTreePanel extends AbstractWidget {
         for (int i = 0; i < stages.size(); i++) {
             int px = i * 2;
             Set<ClientTechTreeNode> column = stages.get(i);
-            int py = (boardHeight - column.size()) / 2 - 1;
+            int py = (boardHeight / 2) - column.size() + 1;
             int c = 0;
             for (ClientTechTreeNode n : column) {
                 addLabel(px, py + c, n);
