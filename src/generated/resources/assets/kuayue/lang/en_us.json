@@ -920,6 +920,27 @@
  "tech_tree.kuayue.group.ready.node.steel": "Steel Technology",
  "tech_tree.kuayue.group.ready.node.plastic.desc": "Polymer technology means that the player is able to create the synthetic materials necessary for the train.",
  "tech_tree.kuayue.group.ready.node.fully.desc": "You're ready to really develop a train.",
- "tech_tree.kuayue.group.ready.node.steel.desc": "smashing steel, quicker and cheaper"
+ "tech_tree.kuayue.group.ready.node.steel.desc": "smashing steel, quicker and cheaper",
+
+ "tech_tree.kuayue.group.carriage_blueprint.name": "Carriage Blueprint Group",
+ "tech_tree.kuayue.group.carriage_blueprint.description": "Acquire Carriage Blueprint",
+ "tech_tree.kuayue.group.carriage_blueprint.unlock": "Unlock Carriage Blueprint",
+
+ "tech_tree.kuayue.group.head_cr200j_blueprint.name": "Head CR200J",
+ "tech_tree.kuayue.group.head_cr200j_blueprint.description": "Acquire the blueprint of Head CR200J",
+ "tech_tree.kuayue.group.carriage_cr200j_blueprint.name": "Carriage CR200J",
+ "tech_tree.kuayue.group.carriage_cr200j_blueprint.description": "Acquire the blueprint of Carriage CR200J",
+ "tech_tree.kuayue.group.carriage_marshalled_blueprint.name": "Carriage Marshalled",
+ "tech_tree.kuayue.group.carriage_marshalled_blueprint.description": "Acquire the blueprint of Carriage Marshalled",
+ "tech_tree.kuayue.group.carriage_25t_blueprint.name": "Carriage 25T",
+ "tech_tree.kuayue.group.carriage_25t_blueprint.description": "Acquire the blueprint of Carriage 25T",
+ "tech_tree.kuayue.group.head_hxd3d_blueprint.name": "Head HXD3D",
+ "tech_tree.kuayue.group.head_hxd3d_blueprint.description": "Acquire the blueprint of Head HXD3D",
+ "tech_tree.kuayue.group.head_df11g_blueprint.name": "Head DF11G",
+ "tech_tree.kuayue.group.head_df11g_blueprint.description": "Acquire the blueprint of Head DF11G",
+ "tech_tree.kuayue.group.carriage_25k_blueprint.name": "Carriage 25K",
+ "tech_tree.kuayue.group.carriage_25k_blueprint.description": "Acquire the blueprint of Carriage 25K",
+ "tech_tree.kuayue.group.carriage_25z_blueprint.name": "Carriage 25Z",
+ "tech_tree.kuayue.group.carriage_25z_blueprint.description": "Acquire the blueprint of Carriage 25K"
 }
 
