@@ -30,6 +30,9 @@ public class TechTreeGroupData {
     private final boolean initialVisibility;
 
     @Getter
+    private final UnlockCondition unlockCondition;
+
+    @Getter
     private final @Nullable OnUnlockContext unlock;
     public TechTreeGroupData(TechTreeData tree, String identifier, JsonObject json) {
         this.tree = tree;
@@ -48,6 +51,11 @@ public class TechTreeGroupData {
         if (json.has("on_unlock") && json.get("on_unlock").isJsonObject()) {
             unlock = new OnUnlockContext(this, json.getAsJsonObject("on_unlock"));
         } else unlock = null;
+        if (json.has("unlock_condition")) {
+            unlockCondition = new UnlockCondition(json);
+        } else {
+            unlockCondition = null;
+        }
 
         nodes = new HashMap<>();
         if (!json.has("nodes") || !json.get("nodes").isJsonObject()) {

@@ -7,10 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.NodeType;
-import willow.train.kuayue.systems.tech_tree.json.HideContext;
-import willow.train.kuayue.systems.tech_tree.json.OnUnlockContext;
-import willow.train.kuayue.systems.tech_tree.json.TechTreeData;
-import willow.train.kuayue.systems.tech_tree.json.TechTreeNodeData;
+import willow.train.kuayue.systems.tech_tree.json.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -159,5 +156,9 @@ public class TechTreeNode {
         // prev nodes
         buf.writeInt(prev.size());
         prev.forEach(node -> node.getLocation().writeToByteBuf(buf));
+    }
+
+    public @Nullable UnlockCondition getUnlockCondition() {
+        return getData().getUnlockCondition();
     }
 }

@@ -30,6 +30,9 @@ public class TechTreeNodeData {
     private final NodeLocation[] nextNodes;
 
     @Getter
+    private final UnlockCondition unlockCondition;
+
+    @Getter
     private final ResourceLocation[] nextGroups;
 
     @Getter
@@ -55,6 +58,12 @@ public class TechTreeNodeData {
             unlock = null;
         } else {
             unlock = new OnUnlockContext(group, jsonObject.getAsJsonObject("on_unlock"));
+        }
+
+        if (jsonObject.has("unlock_condition")) {
+            unlockCondition = new UnlockCondition(jsonObject.get("unlock_condition"));
+        } else {
+            unlockCondition = null;
         }
 
         JsonArray nextNodeArray = jsonObject.getAsJsonArray("next_nodes");

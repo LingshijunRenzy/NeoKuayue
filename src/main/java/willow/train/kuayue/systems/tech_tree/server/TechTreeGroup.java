@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.json.*;
 
@@ -112,5 +113,9 @@ public class TechTreeGroup {
             }
         }
         return counter != nodes.size();
+    }
+
+    public @Nullable UnlockCondition getUnlockCondition() {
+        return getData().getUnlockCondition();
     }
 }
