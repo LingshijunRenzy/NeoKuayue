@@ -805,7 +805,7 @@
 
   "item.kuayue.head_df11g_circuit": "DF11G 车头电路板",
   "item.kuayue.head_df21_circuit": "DF21 车头电路板",
-  "item.kuayue.head_hxd3d_circuit": "Hxd3d 车头电路板",
+  "item.kuayue.head_hxd3d_circuit": "HXD3D 车头电路板",
   "item.kuayue.head_cr200j_circuit": "CR200J 车头电路板",
   "item.kuayue.carriage_25b_circuit": "原色 25B 电路板",
   "item.kuayue.carriage_25g_circuit": "原色 25G 电路板",
@@ -816,7 +816,7 @@
 
   "item.kuayue.head_df11g_circuit_constructing": "DF11G 车头电路板 (装配中)",
   "item.kuayue.head_df21_circuit_constructing": "DF21 车头电路板 (装配中)",
-  "item.kuayue.head_hxd3d_circuit_constructing": "Hxd3d 车头电路板 (装配中)",
+  "item.kuayue.head_hxd3d_circuit_constructing": "HXD3D 车头电路板 (装配中)",
   "item.kuayue.head_cr200j_circuit_constructing": "CR200J 车头电路板 (装配中)",
   "item.kuayue.carriage_25b_circuit_constructing": "原色 25B 电路板 (装配中)",
   "item.kuayue.carriage_25g_circuit_constructing": "原色 25G 电路板 (装配中)",
@@ -827,7 +827,7 @@
 
   "item.kuayue.head_df11g_mould": "DF11G 车头模具",
   "item.kuayue.head_df21_mould": "DF21 车头模具",
-  "item.kuayue.head_hxd3d_mould": "Hxd3d 车头模具",
+  "item.kuayue.head_hxd3d_mould": "HXD3D 车头模具",
   "item.kuayue.head_cr200j_mould": "CR200J 车头模具",
   "item.kuayue.carriage_25b_mould": "原色 25B 模具",
   "item.kuayue.carriage_25g_mould": "原色 25G 模具",
@@ -840,7 +840,7 @@
 
   "item.kuayue.head_df11g_mould_constructing": "DF11G 车头模具(装配中)",
   "item.kuayue.head_df21_mould_constructing": "DF21 车头模具(装配中)",
-  "item.kuayue.head_hxd3d_mould_constructing": "Hxd3d 车头模具(装配中)",
+  "item.kuayue.head_hxd3d_mould_constructing": "HXD3D 车头模具(装配中)",
   "item.kuayue.head_cr200j_mould_constructing": "CR200J 车头模具(装配中)",
   "item.kuayue.carriage_25b_mould_constructing": "原色 25B 模具 (装配中)",
   "item.kuayue.carriage_25g_mould_constructing": "原色 25G 模具 (装配中)",
@@ -901,7 +901,7 @@
   "block.kuayue.df11g_panel_bottom_eh_blind": "DF11G设备间下格栅",
   "block.kuayue.df11g_panel_upper_ph_blind": "DF11G动力间上格栅",
   "block.kuayue.df11g_chimney": "DF11G烟囱",
-  "block.kuayue.panel_logo_num_hxd3d": "hxd3d车厢板'HXD3D'",
+  "block.kuayue.panel_logo_num_hxd3d": "HXD3D车厢板'HXD3D'",
 
   "block.kuayue.salt_ore": "盐矿石",
   "block.kuayue.deepslate_salt_ore": "深层盐矿石",
@@ -926,5 +926,14 @@
   "tech_tree.kuayue.group.ready.node.steel": "钢铁技术",
   "tech_tree.kuayue.group.ready.node.plastic.desc": "高分子技术代表你能够制造列车必须之合成材料。",
   "tech_tree.kuayue.group.ready.node.fully.desc": "你已经准备好真正开发一列列车了",
-  "tech_tree.kuayue.group.ready.node.steel.desc": "大炼钢铁，多快好省"
+  "tech_tree.kuayue.group.ready.node.steel.desc": "大炼钢铁，多快好省",
+
+  "tech_tree.kuayue.group.carriage_blueprint.name": "车体蓝图组",
+  "tech_tree.kuayue.group.carriage_blueprint.description": "获取一系列车体蓝图",
+  "tech_tree.kuayue.group.carriage_blueprint.unlock": "解锁车体蓝图",
+
+  "tech_tree.kuayue.group.head_cr200j_blueprint.name": "CR200J车头总体设计图",
+  "tech_tree.kuayue.group.head_cr200j_blueprint.description": "获得CR200J车头总体设计图",
+  "tech_tree.kuayue.group.carriage_cr200j_blueprint.name": "CR200J车厢总体设计图",
+  "tech_tree.kuayue.group.carriage_cr200j_blueprint.description": "获得CR200J车厢总体设计图"
 }
