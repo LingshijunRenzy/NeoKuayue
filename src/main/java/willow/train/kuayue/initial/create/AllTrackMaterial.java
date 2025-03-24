@@ -74,5 +74,21 @@ public class AllTrackMaterial {
             .sleeper(Blocks.ANDESITE_SLAB)
             .submit(testRegistry);
 
+    public static final TrackMaterialReg guardMaterial = new TrackMaterialReg("guard")
+            .lang("guard_track")
+            .block(() -> AllTracks.guardTrack)
+            .trackParticle(new ResourceLocation("minecraft", "block/palettes/stone_types/polished/andesite_cut_polished"))
+            .type(testRegistry.asResource("guard"), builder::build)
+            .customModel(
+                    () -> new PartialModel(testRegistry.asResource("block/track/guard/tie")),
+                    () -> new PartialModel(testRegistry.asResource("block/track/guard/segment_left")),
+                    () -> new PartialModel(testRegistry.asResource("block/track/guard/segment_right"))
+            )
+            .simpleTrackModelOffset(0.755f)
+            .sleeper(Blocks.ANDESITE_SLAB)
+            .submit(testRegistry);
+
+
+
     public static void invoke(){}
 }

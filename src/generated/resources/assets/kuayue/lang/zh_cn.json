@@ -13,6 +13,7 @@
   "block.kuayue.ballastless_track": "无砟轨道",
   "block.kuayue.tieless_track": "无枕轨道",
   "block.kuayue.meter_track": "米轨",
+  "block.kuayue.guard_track": "标准轨距护轮轨",
   "block.kuayue.ky_standard_bogey": "CW2转向架",
   "kuayue.bogeys.styles.kystandardbogey": "客车转向架",
   "kuayue.bogeys.styles.df11gbogey": "机车转向架",
@@ -871,7 +872,6 @@
   "block.kuayue.panel_symbol_marshalled_25k": "统型 25K 标识线下厢板",
   "block.kuayue.panel_symbol_marshalled_25k_b": "统型 25K 标识线下厢板 (类型B)",
 
-  "block.kuayue.floor_df11g": "DF11G地板",
   "block.kuayue.df11g_carport_kua": "DF11G车顶“跨”字",
   "block.kuayue.df11g_carport_yue": "DF11G车顶“越”字",
   "block.kuayue.df11g_carport": "DF11G车顶",
