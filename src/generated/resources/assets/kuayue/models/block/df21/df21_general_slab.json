@@ -6,6 +6,7 @@
   "textures": {
     "particle": "kuayue:block/df21/df21_general_slab"
   },
+  "gui_light": "front",
   "display": {
     "thirdperson_righthand": {
       "translation": [0.5, -2.25, -3.25],

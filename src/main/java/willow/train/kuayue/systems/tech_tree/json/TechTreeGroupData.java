@@ -19,6 +19,8 @@ public class TechTreeGroupData {
     public final TechTreeData tree;
 
     public final String identifier;
+    @Getter
+    private final @Nullable ResourceLocation coverId;
     private final String descriptionTranslationKey, nameTranslationKey;
     private final ItemContext icon;
     private final NodeLocation root;
@@ -28,9 +30,13 @@ public class TechTreeGroupData {
     private final boolean initialVisibility;
 
     @Getter
+    private final UnlockCondition unlockCondition;
+
+    @Getter
     private final @Nullable OnUnlockContext unlock;
     public TechTreeGroupData(TechTreeData tree, String identifier, JsonObject json) {
         this.tree = tree;
+        this.coverId = json.has("cover") ? new ResourceLocation(json.get("cover").getAsString()) : null;
         this.identifier = identifier;
         this.nameTranslationKey = json.get("name").getAsString();
         this.descriptionTranslationKey = json.get("description").getAsString();
@@ -45,6 +51,11 @@ public class TechTreeGroupData {
         if (json.has("on_unlock") && json.get("on_unlock").isJsonObject()) {
             unlock = new OnUnlockContext(this, json.getAsJsonObject("on_unlock"));
         } else unlock = null;
+        if (json.has("unlock_condition")) {
+            unlockCondition = new UnlockCondition(json);
+        } else {
+            unlockCondition = null;
+        }
 
         nodes = new HashMap<>();
         if (!json.has("nodes") || !json.get("nodes").isJsonObject()) {

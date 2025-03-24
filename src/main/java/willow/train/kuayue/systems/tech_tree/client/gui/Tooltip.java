@@ -25,7 +25,7 @@ import java.util.List;
 
 public class Tooltip extends AbstractWidget {
 
-    private final MutableComponent title;
+    private MutableComponent title;
 
     @Getter
     private final String identifier;
@@ -68,6 +68,7 @@ public class Tooltip extends AbstractWidget {
             }
         }
         setHeight(getContentHeight(this.descriptions.size(), font.lineHeight));
+        title = Component.literal(font.substrByWidth(title, this.width - 22).getString());
     }
 
     public void setX(int x) {

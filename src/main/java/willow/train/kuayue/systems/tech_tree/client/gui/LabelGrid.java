@@ -68,7 +68,7 @@ public class LabelGrid extends AbstractWidget {
             for (TechTreeLabel label : labels) {
                 int labelX;
                 if (labels.size() == 3 && counter == 2) {
-                    labelX = this.x + 41 / 2;
+                    labelX = this.x + 21 / 2;
                 } else {
                     labelX = this.x + (counter % 2 == 0 ? 0 : 21);
                 }

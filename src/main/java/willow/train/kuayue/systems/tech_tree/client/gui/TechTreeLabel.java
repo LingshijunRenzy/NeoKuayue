@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
+import willow.train.kuayue.systems.tech_tree.NodeType;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTree;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
 
@@ -30,6 +31,11 @@ public class TechTreeLabel extends ImageButton {
     private static final LazyRecomputable<ImageMask> smallDarkBgMask = LazyRecomputable.of(
             () -> new ImageMask(ClientInit.blueprintButtons.getImageSafe().get())
                     .rectangleUV(0, 36f / 128f, 20f / 128f, 56f / 128f)
+    );
+
+    private static final LazyRecomputable<ImageMask> smallGoldBgMask = LazyRecomputable.of(
+            () -> new ImageMask(ClientInit.blueprintButtons.getImageSafe().get())
+                    .rectangleUV(96f / 128, 16f / 128, 116f / 128, 36f / 128)
     );
 
     private static final LazyRecomputable<ImageMask> largeBgMask = LazyRecomputable.of(
@@ -67,7 +73,9 @@ public class TechTreeLabel extends ImageButton {
     }
 
     public static TechTreeLabel smallLabel(ClientTechTreeNode node, int x, int y, Component tooltip) {
-        return new TechTreeLabel(LazyRecomputable.of(() -> smallBgMask.get().copyWithOp(o -> o)),
+        return new TechTreeLabel(node.getType() == NodeType.EPIC ?
+                LazyRecomputable.of(() -> smallGoldBgMask.get().copyWithOp(o -> o)) :
+                LazyRecomputable.of(() -> smallBgMask.get().copyWithOp(o -> o)),
                 LazyRecomputable.of(() -> smallDarkBgMask.get().copyWithOp(o -> o)),
                 node, x, y, 20, 20, tooltip);
     }

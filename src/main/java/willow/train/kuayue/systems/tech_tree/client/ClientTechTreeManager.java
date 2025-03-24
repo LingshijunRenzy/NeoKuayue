@@ -1,6 +1,7 @@
 package willow.train.kuayue.systems.tech_tree.client;
 
 import lombok.Getter;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
@@ -33,5 +34,12 @@ public class ClientTechTreeManager {
         ClientTechTree tree = trees().getOrDefault(namespace, null);
         if (tree == null) return null;
         return tree.getNodes().getOrDefault(location, null);
+    }
+
+    public @Nullable ClientTechTreeGroup getGroup(ResourceLocation location) {
+        String namespace = location.getNamespace();
+        ClientTechTree tree = trees().getOrDefault(namespace, null);
+        if (tree == null) return null;
+        return tree.getGroups().getOrDefault(location.getPath(), null);
     }
 }

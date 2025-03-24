@@ -111,13 +111,13 @@ public class TechTreePanel extends AbstractWidget {
         int dy = (this.getHeight() - labels.getHeight()) / 2;
         if (widthFlag) {
             int dx = (this.getWidth() - labels.getWidth()) / 2;
-            labels.onDrag(dx, dy);
-            lines.forEach(l -> l.onDrag(dx, dy));
-            if (heightFlag) lockDragging = true;
+            labels.onDrag(dx + 10, dy);
+            lines.forEach(l -> l.onDrag(dx + 10, dy));
         } else {
-            labels.onDrag(0, dy);
-            lines.forEach(l -> l.onDrag(0, dy));
+            labels.onDrag(10, dy);
+            lines.forEach(l -> l.onDrag(10, dy));
         }
+        forceCheckDraggable();
     }
 
     public void compileGroup(ClientTechTreeGroup group) {
@@ -158,7 +158,7 @@ public class TechTreePanel extends AbstractWidget {
         for (int i = 0; i < stages.size(); i++) {
             int px = i * 2;
             Set<ClientTechTreeNode> column = stages.get(i);
-            int py = (boardHeight - column.size()) / 2;
+            int py = (boardHeight / 2) - column.size() + 1;
             int c = 0;
             for (ClientTechTreeNode n : column) {
                 addLabel(px, py + c, n);
@@ -250,9 +250,24 @@ public class TechTreePanel extends AbstractWidget {
         labels.render(poseStack, mouseX, mouseY, partial);
     }
 
+    public boolean forceCheckDraggable() {
+        for (AbstractWidget widget : labels.getWidgets()) {
+            if (!(widget instanceof TechTreeLabel label)) continue;
+            if (!widget.visible) return true;
+        }
+        for (LineLayer layer : lines) {
+            for (AbstractWidget widget : layer.getWidgets()) {
+                if (!(widget instanceof TechTreeLine line)) continue;
+                if (!line.visible) return true;
+            }
+        }
+        return false;
+    }
+
     public TechTreeLabel getChosenLabel(double mouseX, double mouseY) {
         for (AbstractWidget widget : labels.getWidgets()) {
             TechTreeLabel label = (TechTreeLabel) widget;
+            if (!label.visible) return null;
             if (label.x < windowLeftTop.x || label.y < windowLeftTop.y ||
             label.x >= windowRightDown.x || label.y >= windowRightDown.y)
                 continue;

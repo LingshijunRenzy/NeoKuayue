@@ -36,7 +36,7 @@ public class UnlockNodeResultPacket extends S2CPacket {
             data.visibleGroups.addAll(result.updatedVisibleGroups());
             data.unlockedGroups.addAll(result.updatedUnlockedGroups());
         }
-        screen.handleUpdateResult(location, result);
+        screen.handleUpdateResult(false, result);
     }
 
     @Override

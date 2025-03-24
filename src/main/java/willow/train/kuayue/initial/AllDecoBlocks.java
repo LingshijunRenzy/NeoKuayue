@@ -2,14 +2,13 @@ package willow.train.kuayue.initial;
 
 import kasuga.lib.registrations.common.BlockReg;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import willow.train.kuayue.block.panels.TrainPanelBlock;
+import willow.train.kuayue.block.panels.deco.ACOutdoorUnitBlock;
 import willow.train.kuayue.block.panels.deco.TeaBoilerBlock;
 import willow.train.kuayue.block.panels.deco.YZTableBlock;
 import willow.train.kuayue.block.panels.slab.CeilinShelfBlock;
@@ -272,5 +271,18 @@ public class AllDecoBlocks {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
+
+    public static final BlockReg<ACOutdoorUnitBlock> AC_OUTDOOR_UNIT =
+            new BlockReg<ACOutdoorUnitBlock>("ac_outdoor_unit")
+                    .blockType(ACOutdoorUnitBlock::new)
+                    .material(Material.METAL)
+                    .materialColor(MaterialColor.COLOR_BLACK)
+                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+                    .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .addProperty(properties -> properties.strength(1.0f, 2.0f))
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueMainTab)
+                    .submit(AllElements.testRegistry);
+
     public static void invoke(){}
 }

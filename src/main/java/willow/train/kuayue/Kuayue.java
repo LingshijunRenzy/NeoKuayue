@@ -19,6 +19,8 @@ public class Kuayue {
     public static CRRailwayGraphData RAILWAY_GRAPH = new CRRailwayGraphData();
     public static final LocalFileEnv LOCAL_FILE = new LocalFileEnv("./kuayue");
     public static final TechTreeManager TECH_TREE = TechTreeManager.MANAGER;
+    public static final String TECH_TREE_VERSION = "1.0.0";
+
     public Kuayue() {
         BUS.register(this);
         AllElements.invoke();

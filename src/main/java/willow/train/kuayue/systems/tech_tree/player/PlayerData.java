@@ -23,6 +23,7 @@ import willow.train.kuayue.mixins.mixin.AccessorPlayerAdvancement;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.json.HideContext;
 import willow.train.kuayue.systems.tech_tree.json.OnUnlockContext;
+import willow.train.kuayue.systems.tech_tree.json.UnlockCondition;
 import willow.train.kuayue.systems.tech_tree.server.TechTree;
 import willow.train.kuayue.systems.tech_tree.server.TechTreeGroup;
 import willow.train.kuayue.systems.tech_tree.server.TechTreeManager;
@@ -101,6 +102,10 @@ public class PlayerData implements NbtSerializable {
 
     public Collection<NodeLocation> getRequiredNodes(TechTreeNode node) {
         HashSet<NodeLocation> nodes = new HashSet<>();
+        if (node.getUnlockCondition() != null) {
+            UnlockCondition unlockCondition = node.getUnlockCondition();
+            return unlockCondition.checkNode(node, this);
+        }
         node.getPrev().forEach(prev -> nodes.add(prev.getLocation()));
         nodes.removeIf(unlocked::contains);
         return nodes;
@@ -108,6 +113,10 @@ public class PlayerData implements NbtSerializable {
 
     public Collection<NodeLocation> getRequiredNodes(TechTreeGroup group) {
         HashSet<NodeLocation> nodes = new HashSet<>();
+        if (group.getUnlockCondition() != null) {
+            UnlockCondition unlockCondition = group.getUnlockCondition();
+            return unlockCondition.checkGroup(group, this);
+        }
         group.getPrev().forEach(prev -> nodes.add(prev.getLocation()));
         nodes.removeIf(unlocked::contains);
         return nodes;
@@ -170,6 +179,10 @@ public class PlayerData implements NbtSerializable {
                             Collection<ResourceLocation> neoUnlockGroups, Collection<ResourceLocation> neoVisibleGroups) {
         unlocked.add(node.getLocation());
         neoUnlockNodes.add(node.getLocation());
+        if (player.isCreative() && !unlockedGroups.contains(node.group.getId())) {
+            forceUnlock(level, player, node.group, advResultHolder, neoUnlockNodes,
+                    neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
+        }
         if (!visibleNodes.contains(node.getLocation())) {
             visibleNodes.add(node.getLocation());
             neoVisibleNodes.add(node.getLocation());
@@ -440,7 +453,7 @@ public class PlayerData implements NbtSerializable {
         tree.getGroups().forEach(
                 (location, grp) -> {
                     if (grp.isHide() && !canBeSeen(player, grp.getHideContext())) return;
-                    if (!allNodesUnlocked(grp.getPrev())) return;
+                    if (!checkNodes(grp).getFirst()) return;
                     if (neoVisibleGroups != null &&
                             !visibleGroups.contains(grp.getId()))
                         neoVisibleGroups.add(grp.getId());
@@ -450,20 +463,13 @@ public class PlayerData implements NbtSerializable {
         tree.getNodes().forEach(
                 (location, node) -> {
                     if (node.isHide() && !canBeSeen(player, node.getHideContext())) return;
-                    if (!allNodesUnlocked(node.getPrev())) return;
+                    if (!checkNodes(node).getFirst()) return;
                     if (neoVisibleNodes != null &&
                             !visibleNodes.contains(node.getLocation()))
                         neoVisibleNodes.add(node.getLocation());
                     this.visibleNodes.add(node.getLocation());
                 }
         );
-    }
-
-    public boolean allNodesUnlocked(Collection<TechTreeNode> nodes) {
-        for (TechTreeNode node : nodes) {
-            if (!unlocked.contains(node.getLocation())) return false;
-        }
-        return true;
     }
 
     public void toNetwork(FriendlyByteBuf buf) {
