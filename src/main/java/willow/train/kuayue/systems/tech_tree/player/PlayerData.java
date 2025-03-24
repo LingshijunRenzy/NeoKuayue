@@ -179,6 +179,10 @@ public class PlayerData implements NbtSerializable {
                             Collection<ResourceLocation> neoUnlockGroups, Collection<ResourceLocation> neoVisibleGroups) {
         unlocked.add(node.getLocation());
         neoUnlockNodes.add(node.getLocation());
+        if (player.isCreative() && !unlockedGroups.contains(node.group.getId())) {
+            forceUnlock(level, player, node.group, advResultHolder, neoUnlockNodes,
+                    neoVisibleNodes, neoUnlockGroups, neoVisibleGroups);
+        }
         if (!visibleNodes.contains(node.getLocation())) {
             visibleNodes.add(node.getLocation());
             neoVisibleNodes.add(node.getLocation());
