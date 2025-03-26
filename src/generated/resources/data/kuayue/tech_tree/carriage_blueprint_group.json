@@ -7,11 +7,14 @@
   "on_unlock": {
     "description": "tech_tree.kuayue.group.carriage_blueprint.unlock"
   },
+  "initial_visibility": true,
   "root_node": "node_weathering_resistant_steel_ingot",
+
   "nodes": {
     "node_weathering_resistant_steel_ingot": {
       "next_nodes": [
-        "node_carriage_25b_blueprint"
+        "node_weathering_resistant_steel_board",
+        "node_weathering_resistant_steel_pole"
       ],
       "next_groups": [],
       "name": "tech_tree.kuayue.group.weathering_resistant_steel_ingot.name",
@@ -26,7 +29,52 @@
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:weathering_resistant_steel_ingot": 4
+        "kuayue:weathering_resistant_steel_block_0": 1,
+        "create:experience_nugget": 32
+      }
+    },
+
+    "node_weathering_resistant_steel_board": {
+      "next_nodes": [
+        "node_carriage_25b_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.weathering_resistant_steel_board.name",
+      "description": "tech_tree.kuayue.group.weathering_resistant_steel_board.description",
+      "type": "plain",
+      "logo": "kuayue:weathering_resistant_steel_board",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:weathering_resistant_steel_board": 1
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:weathering_resistant_steel_block_0": 1,
+        "create:experience_nugget": 32
+      }
+    },
+
+    "node_weathering_resistant_steel_pole": {
+      "next_nodes": [
+        "node_carriage_25b_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.weathering_resistant_steel_pole.name",
+      "description": "tech_tree.kuayue.group.weathering_resistant_steel_pole.description",
+      "type": "plain",
+      "logo": "kuayue:weathering_resistant_steel_pole",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:weathering_resistant_steel_pole": 1
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:weathering_resistant_steel_block_0": 1,
+        "create:experience_nugget": 32
       }
     },
 
@@ -42,14 +90,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 16,
+        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:research_report": 8,
+        "create:precision_mechanism": 2
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_25b_blueprint": 1
+        "kuayue:carriage_25b_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
@@ -68,14 +118,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 16,
+        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:research_report": 8,
+        "create:precision_mechanism": 2
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_25g_blueprint": 1
+        "kuayue:carriage_25g_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
@@ -89,14 +141,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 16,
+        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:research_report": 8,
+        "create:precision_mechanism": 2
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:head_df21_blueprint": 1
+        "kuayue:head_df21_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
@@ -110,19 +164,24 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 16,
+        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:research_report": 8,
+        "create:precision_mechanism": 2
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_m1_blueprint": 1
+        "kuayue:carriage_m1_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
     "node_carriage_25z_blueprint": {
-      "next_nodes": [],
+      "next_nodes": [
+        "node_carriage_25t_blueprint",
+        "node_head_df11g_blueprint"
+      ],
       "next_groups": [],
       "name": "tech_tree.kuayue.group.carriage_25z_blueprint.name",
       "description": "tech_tree.kuayue.group.carriage_25z_blueprint.description",
@@ -131,14 +190,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 32,
+        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:research_report": 16,
+        "create:precision_mechanism": 4
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_25z_blueprint": 1
+        "kuayue:carriage_25z_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
@@ -155,14 +216,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 32,
+        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:research_report": 16,
+        "create:precision_mechanism": 4
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_25k_blueprint": 1
+        "kuayue:carriage_25k_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
@@ -170,6 +233,7 @@
       "next_nodes": [
         "node_head_hxd3d_blueprint"
       ],
+      "unlock_condition": "any",
       "next_groups": [],
       "name": "tech_tree.kuayue.group.head_df11g_blueprint.name",
       "description": "tech_tree.kuayue.group.head_df11g_blueprint.description",
@@ -178,14 +242,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 32,
+        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:research_report": 16,
+        "create:precision_mechanism": 8
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:head_df11g_blueprint": 1
+        "kuayue:head_df11g_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
@@ -194,6 +260,7 @@
         "node_carriage_marshalled_blueprint",
         "node_head_hxd3d_blueprint"
       ],
+      "unlock_condition": "any",
       "next_groups": [],
       "name": "tech_tree.kuayue.group.carriage_25t_blueprint.name",
       "description": "tech_tree.kuayue.group.carriage_25t_blueprint.description",
@@ -202,14 +269,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
-        "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "kuayue:weathering_resistant_steel_board": 32,
+        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:research_report": 16,
+        "create:precision_mechanism": 8
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_25t_blueprint": 1
+        "kuayue:carriage_25t_blueprint": 1,
+        "create:experience_nugget": 64
       }
     },
 
@@ -223,13 +292,13 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:green_brush": 1,
-        "minecraft:green_dye": 256
+        "minecraft:green_dye": 128
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_marshalled_blueprint": 1
+        "kuayue:carriage_marshalled_blueprint": 1,
+        "create:experience_nugget": 32
       }
     },
 
@@ -246,14 +315,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 64,
+        "kuayue:weathering_resistant_steel_board": 32,
+        "kuayue:weathering_resistant_steel_stick": 32,
         "kuayue:research_report": 32,
-        "create:precision_mechanism": 32
+        "create:precision_mechanism": 16
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:head_hxd3d_blueprint": 1
+        "kuayue:head_hxd3d_blueprint": 1,
+        "create:experience_nugget": 128
       }
     },
 
@@ -267,14 +338,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 128,
+        "kuayue:weathering_resistant_steel_board": 64,
+        "kuayue:weathering_resistant_steel_stick": 64,
         "kuayue:research_report": 64,
-        "create:precision_mechanism": 64
+        "create:precision_mechanism": 32
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:carriage_cr200j_blueprint": 1
+        "kuayue:carriage_cr200j_blueprint": 1,
+        "create:experience_nugget": 128
       }
     },
 
@@ -288,14 +361,16 @@
       "exp": 0,
       "level": 0,
       "item_consume": {
-        "kuayue:weathering_resistant_steel_ingot": 128,
+        "kuayue:weathering_resistant_steel_board": 64,
+        "kuayue:weathering_resistant_steel_stick": 64,
         "kuayue:research_report": 64,
-        "create:precision_mechanism": 64
+        "create:precision_mechanism": 32
       },
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:head_cr200j_blueprint": 1
+        "kuayue:head_cr200j_blueprint": 1,
+        "create:experience_nugget": 128
       }
     }
   }
