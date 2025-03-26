@@ -743,7 +743,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         if (this.guideDownBtn != null)
             removeWidget(this.guideDownBtn);
         if (this.guideUpBtn != null)
-            addWidget(this.guideUpBtn);
+            removeWidget(this.guideUpBtn);
         ImageButton upArrowBtn = genArrowButton(0, 0,
                 button -> moveGuideWindow(true), true);
         ImageButton downArrowBtn = genArrowButton(0, 0,
@@ -752,15 +752,21 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         addRenderableWidget(downArrowBtn);
         guideUpBtn = upArrowBtn;
         guideDownBtn = downArrowBtn;
+        guideUpBtn.visible = windowTop > 0;
+        guideDownBtn.visible = windowTop + windowCapacity < groupButtons.size();
     }
 
     public void moveGuideWindow(boolean up) {
+        boolean shouldUpdate = false;
         if (up && windowTop > 0) {
             windowTop --;
-            return;
+            shouldUpdate = true;
+        } else if (!up && windowTop < groupButtons.size() - windowCapacity) {
+            windowTop++;
+            shouldUpdate = true;
         }
-        if (!up && windowTop < groupButtons.size() - windowCapacity)
-            windowTop ++;
+        if (!shouldUpdate) return;
+        updateGuidelines(scale);
     }
 
     public void onRefresh() {
@@ -914,8 +920,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             if (flag) button.setPosition(grpBtnX, grpBtnY + (i - windowTop) * 20);
             button.setVisible(flag);
         }
-        if (this.windowCapacity < this.groupButtons.size() &&
-                this.guideDownBtn == null && this.guideUpBtn == null) {
+        if (this.windowCapacity < this.groupButtons.size()) {
             setGroupsUpAndDownArrowButton();
         }
         int btnX = Math.round(bgX + leftTopX + (float) (guideWidth - 16) / 2);
@@ -1037,8 +1042,12 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         super.render(poseStack, mouseX, mouseY, partialTick);
         this.confirmButton.setRenderMask(this.confirmButton.isMouseOver(mouseX, mouseY));
-        if (chosenGroup != null)
-            groupChosenFrame.get().renderToGui();
+        if (chosenGroup != null) {
+            int groupIndex = groups.indexOf(chosenGroup);
+            if (groupIndex >= windowTop && groupIndex < windowTop + windowCapacity) {
+                groupChosenFrame.get().renderToGui();
+            }
+        }
         if (showSub) {
             panels.forEach((g, p) -> p.visible = false);
             renderSubArrows(scale);
