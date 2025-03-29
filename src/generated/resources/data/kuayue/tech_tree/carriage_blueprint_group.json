@@ -36,7 +36,9 @@
 
     "node_weathering_resistant_steel_board": {
       "next_nodes": [
-        "node_carriage_25b_blueprint"
+        "node_carriage_25b_blueprint",
+        "node_freight_c70_blueprint",
+        "node_freight_nx70_blueprint"
       ],
       "next_groups": [],
       "name": "tech_tree.kuayue.group.weathering_resistant_steel_board.name",
