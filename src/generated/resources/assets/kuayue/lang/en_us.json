@@ -797,6 +797,8 @@
  "item.kuayue.carriage_cr200j_blueprint": "Carriage CR200J Blueprint",
  "item.kuayue.carriage_m1_blueprint": "Carriage M1 Blueprint",
  "item.kuayue.carriage_marshalled_blueprint": "Carriage Marshalled Blueprint",
+ "item.kuayue.freight_nx70_blueprint": "Freight NX70 Blueprint",
+ "item.kuayue.freight_c70_blueprint": "Freight C70 Blueprint",
 
  "item.kuayue.head_df11g_circuit": "DF11G Loco Head Circuit",
  "item.kuayue.head_df21_circuit": "DF21 Loco Head Circuit",
@@ -832,6 +834,8 @@
  "item.kuayue.carriage_cr200j_mould": "Carriage CR200J Mould",
  "item.kuayue.carriage_m1_mould": "Carriage M1 Mould",
  "item.kuayue.carriage_marshalled_mould": "Carriage Marshalled Mould",
+ "item.kuayue.freight_c70_mould":"Freight C70 Mould",
+ "item.kuayue.freight_nx70_mould":"Freight NX70 Mould",
 
  "item.kuayue.head_df11g_mould_constructing": "DF11G Loco Head Mould (Assembling)",
  "item.kuayue.head_df21_mould_constructing": "DF21 Loco Head Mould (Assembling)",
@@ -845,6 +849,8 @@
  "item.kuayue.carriage_cr200j_mould_constructing": "Carriage CR200J Mould (Assembling)",
  "item.kuayue.carriage_m1_mould_constructing": "Carriage M1 Mould (Assembling)",
  "item.kuayue.carriage_marshalled_mould_constructing": "Carriage Marshalled Mould (Assembling)",
+ "item.kuayue.freight_c70_mould_constructing":"Freight C70 Mould (Assembling)",
+ "item.kuayue.freight_nx70_mould_constructing":"Freight NX70 Mould (Assembling)",
 
  "item.kuayue.color_masterbatch": "Color Masterbatch",
  "item.kuayue.carbon_dust": "Carbon Dust",
@@ -937,6 +943,10 @@
 
  "tech_tree.kuayue.group.carriage_25b_blueprint.name": "Carriage 25B Blueprint",
  "tech_tree.kuayue.group.carriage_25b_blueprint.description": "Design and prototype Carriage 25B. Be able to obtain the design drawings of Carriage 25B.",
+ "tech_tree.kuayue.group.freight_c70_blueprint.name": "Freight C70 Blueprint",
+ "tech_tree.kuayue.group.freight_c70_blueprint.description": "Design and prototype Freight C70. Be able to obtain the design drawings of Freight C70.",
+ "tech_tree.kuayue.group.freight_nx70_blueprint.name": "Freight NX70 Blueprint",
+ "tech_tree.kuayue.group.freight_nx70_blueprint.description": "Design and prototype Freight NX70. Be able to obtain the design drawings of Freight NX70.",
  "tech_tree.kuayue.group.carriage_25g_blueprint.name": "Carriage 25G Blueprint",
  "tech_tree.kuayue.group.carriage_25g_blueprint.description": "Design and prototype Carriage 25G. Be able to obtain the design drawings of Carriage 25G.",
  "tech_tree.kuayue.group.head_df21_blueprint.name": "Head DF21 Blueprint",

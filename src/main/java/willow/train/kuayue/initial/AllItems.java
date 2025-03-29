@@ -220,6 +220,8 @@ public class AllItems {
                     .element("carriage_cr200j_blueprint")
                     .element("carriage_m1_blueprint")
                     .element("carriage_marshalled_blueprint")
+                    .element("freight_c70_blueprint")
+                    .element("freight_nx70_blueprint")
                     .submit(AllElements.testRegistry);
 
 
@@ -275,6 +277,8 @@ public class AllItems {
                     .element("carriage_cr200j_mould")
                     .element("carriage_m1_mould")
                     .element("carriage_marshalled_mould")
+                    .element("freight_c70_mould")
+                    .element("freight_nx70_mould")
                     .submit(AllElements.testRegistry);
 
     public static final BundledReg<ItemReg<Item>> MOULDS_CONSTRUCTING =
@@ -294,6 +298,8 @@ public class AllItems {
                     .element("carriage_cr200j_mould_constructing")
                     .element("carriage_m1_mould_constructing")
                     .element("carriage_marshalled_mould_constructing")
+                    .element("freight_c70_mould_constructing")
+                    .element("freight_nx70_mould_constructing")
                     .submit(AllElements.testRegistry);
 
     public static void invoke() {

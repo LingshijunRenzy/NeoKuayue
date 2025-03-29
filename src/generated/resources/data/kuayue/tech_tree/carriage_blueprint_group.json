@@ -58,7 +58,9 @@
 
     "node_weathering_resistant_steel_pole": {
       "next_nodes": [
-        "node_carriage_25b_blueprint"
+        "node_carriage_25b_blueprint",
+        "node_freight_c70_blueprint",
+        "node_freight_nx70_blueprint"
       ],
       "next_groups": [],
       "name": "tech_tree.kuayue.group.weathering_resistant_steel_pole.name",
@@ -78,6 +80,52 @@
       }
     },
 
+    "node_freight_c70_blueprint": {
+      "next_nodes": [],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.freight_c70_blueprint.name",
+      "description": "tech_tree.kuayue.group.freight_c70_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:freight_c70_end_face",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:weathering_resistant_steel_board": 16,
+        "kuayue:weathering_resistant_steel_pole": 16,
+        "kuayue:research_report": 8,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:freight_c70_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_freight_nx70_blueprint": {
+      "next_nodes": [],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.freight_nx70_blueprint.name",
+      "description": "tech_tree.kuayue.group.freight_nx70_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:freight_nx70_end_face",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:weathering_resistant_steel_board": 16,
+        "kuayue:weathering_resistant_steel_pole": 16,
+        "kuayue:research_report": 8,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:freight_nx70_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
     "node_carriage_25b_blueprint": {
       "next_nodes": [
         "node_carriage_25g_blueprint"
@@ -91,7 +139,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 16,
-        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:weathering_resistant_steel_pole": 16,
         "kuayue:research_report": 8,
         "create:precision_mechanism": 2
       },
@@ -119,7 +167,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 16,
-        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:weathering_resistant_steel_pole": 16,
         "kuayue:research_report": 8,
         "create:precision_mechanism": 2
       },
@@ -142,7 +190,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 16,
-        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:weathering_resistant_steel_pole": 16,
         "kuayue:research_report": 8,
         "create:precision_mechanism": 2
       },
@@ -165,7 +213,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 16,
-        "kuayue:weathering_resistant_steel_stick": 16,
+        "kuayue:weathering_resistant_steel_pole": 16,
         "kuayue:research_report": 8,
         "create:precision_mechanism": 2
       },
@@ -191,7 +239,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 32,
-        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:weathering_resistant_steel_pole": 32,
         "kuayue:research_report": 16,
         "create:precision_mechanism": 4
       },
@@ -217,7 +265,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 32,
-        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:weathering_resistant_steel_pole": 32,
         "kuayue:research_report": 16,
         "create:precision_mechanism": 4
       },
@@ -243,7 +291,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 32,
-        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:weathering_resistant_steel_pole": 32,
         "kuayue:research_report": 16,
         "create:precision_mechanism": 8
       },
@@ -270,7 +318,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 32,
-        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:weathering_resistant_steel_pole": 32,
         "kuayue:research_report": 16,
         "create:precision_mechanism": 8
       },
@@ -316,7 +364,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 32,
-        "kuayue:weathering_resistant_steel_stick": 32,
+        "kuayue:weathering_resistant_steel_pole": 32,
         "kuayue:research_report": 32,
         "create:precision_mechanism": 16
       },
@@ -339,7 +387,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 64,
-        "kuayue:weathering_resistant_steel_stick": 64,
+        "kuayue:weathering_resistant_steel_pole": 64,
         "kuayue:research_report": 64,
         "create:precision_mechanism": 32
       },
@@ -362,7 +410,7 @@
       "level": 0,
       "item_consume": {
         "kuayue:weathering_resistant_steel_board": 64,
-        "kuayue:weathering_resistant_steel_stick": 64,
+        "kuayue:weathering_resistant_steel_pole": 64,
         "kuayue:research_report": 64,
         "create:precision_mechanism": 32
       },

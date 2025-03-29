@@ -803,6 +803,8 @@
   "item.kuayue.carriage_cr200j_blueprint": "CR200J车厢 总体设计图",
   "item.kuayue.carriage_m1_blueprint": "M1车厢 总体设计图",
   "item.kuayue.carriage_marshalled_blueprint": "统型车厢 总体设计图",
+  "item.kuayue.freight_nx70_blueprint": "NX70型平车 总体设计图",
+  "item.kuayue.freight_c70_blueprint": "C70型敞车 总体设计图",
 
   "item.kuayue.head_df11g_circuit": "DF11G 车头电路板",
   "item.kuayue.head_df21_circuit": "DF21 车头电路板",
@@ -838,6 +840,8 @@
   "item.kuayue.carriage_cr200j_mould": "CR200J车厢 模具",
   "item.kuayue.carriage_m1_mould": "M1车厢 模具",
   "item.kuayue.carriage_marshalled_mould": "统型车厢 模具",
+  "item.kuayue.freight_c70_mould":"C70敞车 模具",
+  "item.kuayue.freight_nx70_mould":"NX70平车 模具",
 
   "item.kuayue.head_df11g_mould_constructing": "DF11G 车头模具(装配中)",
   "item.kuayue.head_df21_mould_constructing": "DF21 车头模具(装配中)",
@@ -851,6 +855,8 @@
   "item.kuayue.carriage_cr200j_mould_constructing": "CR200J车厢 模具 (装配中)",
   "item.kuayue.carriage_m1_mould_constructing": "M1车厢 模具 (装配中)",
   "item.kuayue.carriage_marshalled_mould_constructing": "统型车厢 模具 (装配中)",
+  "item.kuayue.freight_c70_mould_constructing":"C70敞车 模具 (装配中)",
+  "item.kuayue.freight_nx70_mould_constructing":"NX70平车 模具 (装配中)",
 
   "item.kuayue.color_masterbatch": "色母",
   "item.kuayue.carbon_dust": "碳粉",
@@ -942,6 +948,10 @@
 
   "tech_tree.kuayue.group.carriage_25b_blueprint.name": "25B型客车总体设计图",
   "tech_tree.kuayue.group.carriage_25b_blueprint.description": "设计并试制25B型客车以获取25B型客车总体设计图",
+  "tech_tree.kuayue.group.freight_c70_blueprint.name": "C70型敞车总体设计图",
+  "tech_tree.kuayue.group.freight_c70_blueprint.description": "设计并试制C70型敞车以获取C70型敞车总体设计图",
+  "tech_tree.kuayue.group.freight_nx70_blueprint.name": "NX70型平车总体设计图",
+  "tech_tree.kuayue.group.freight_nx70_blueprint.description": "设计并试制NX70型平车以获取NX70型平车总体设计图",
   "tech_tree.kuayue.group.carriage_25g_blueprint.name": "25G型客车总体设计图",
   "tech_tree.kuayue.group.carriage_25g_blueprint.description": "设计并试制25G型客车以获取25G型客车总体设计图",
   "tech_tree.kuayue.group.head_df21_blueprint.name": "DF21车头总体设计图",
