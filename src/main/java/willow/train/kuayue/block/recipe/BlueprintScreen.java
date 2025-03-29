@@ -131,6 +131,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     private final ExpComponentBar expBar;
     private UnlockGroupBoard unlockGroupBoard;
 
+    @Setter @Getter
+    boolean renderCover;
+
 
     public BlueprintScreen(BlueprintMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -161,6 +164,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         confirmButton = new ImageButton(confirmBtnDark, confirmBtnLight, 0, 0, 16, 16, Component.empty(), b -> {
             sendUnlockPacket();
         });
+        renderCover = false;
     }
 
     public boolean isFocusingLabel(NodeLocation node) {
@@ -208,10 +212,13 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         covers.forEach((rl, cover) -> {
             cover.updatePosition(getBgX(), getBgY(), 0, 160, 75, input -> map(input, scale));
         });
+        renderCover = true;
+        titleLabel.visible = false;
     }
 
     public void hideCovers() {
         covers.forEach((rl, cover) -> cover.visible = false);
+        renderCover = false;
     }
 
     private void updateGroups(ResourceLocation prevChosen) {
@@ -416,7 +423,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         clearSub();
         clearAllGrids();
         renderAllSlots(false);
-        // titleLabel.visible = true;
         updateFramePosition(chosenGroup);
         clearGridBtn();
         updateFinishTooltip(null);
@@ -432,6 +438,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             BlueprintCoverPanel panel = covers.get(group.getCoverId());
             panel.visible = true;
         }
+        renderCover = true;
+        titleLabel.visible = false;
     }
 
     public void unableToUnlock(PlayerData.CheckReason reason,
@@ -621,7 +629,10 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         groups.forEach(group -> groupButtons
                 .add(new TechTreeItemButton(group.getIcon(), 20, 20, group,
                         (a, b, c) -> {
-                            if (group.equals(this.chosenGroup)) setGroup(group);
+                            if (group.equals(this.chosenGroup)) {
+                                setRenderCover(false);
+                                setGroup(group);
+                            }
                             else sendCheckGroupPacket(group.getId());
                         }))
         );
@@ -743,7 +754,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         if (this.guideDownBtn != null)
             removeWidget(this.guideDownBtn);
         if (this.guideUpBtn != null)
-            addWidget(this.guideUpBtn);
+            removeWidget(this.guideUpBtn);
         ImageButton upArrowBtn = genArrowButton(0, 0,
                 button -> moveGuideWindow(true), true);
         ImageButton downArrowBtn = genArrowButton(0, 0,
@@ -752,15 +763,21 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         addRenderableWidget(downArrowBtn);
         guideUpBtn = upArrowBtn;
         guideDownBtn = downArrowBtn;
+        guideUpBtn.visible = windowTop > 0;
+        guideDownBtn.visible = windowTop + windowCapacity < groupButtons.size();
     }
 
     public void moveGuideWindow(boolean up) {
+        boolean shouldUpdate = false;
         if (up && windowTop > 0) {
             windowTop --;
-            return;
+            shouldUpdate = true;
+        } else if (!up && windowTop < groupButtons.size() - windowCapacity) {
+            windowTop++;
+            shouldUpdate = true;
         }
-        if (!up && windowTop < groupButtons.size() - windowCapacity)
-            windowTop ++;
+        if (!shouldUpdate) return;
+        updateGuidelines(scale);
     }
 
     public void onRefresh() {
@@ -832,7 +849,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         clearAllGrids();
         renderAllSlots(false);
         updateSlotPos(scale);
-        titleLabel.visible = true;
         updateConfirmBtnPos();
         clearGridBtn();
         expBar.visible = false;
@@ -914,8 +930,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             if (flag) button.setPosition(grpBtnX, grpBtnY + (i - windowTop) * 20);
             button.setVisible(flag);
         }
-        if (this.windowCapacity < this.groupButtons.size() &&
-                this.guideDownBtn == null && this.guideUpBtn == null) {
+        if (this.windowCapacity < this.groupButtons.size()) {
             setGroupsUpAndDownArrowButton();
         }
         int btnX = Math.round(bgX + leftTopX + (float) (guideWidth - 16) / 2);
@@ -1037,8 +1052,12 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         super.render(poseStack, mouseX, mouseY, partialTick);
         this.confirmButton.setRenderMask(this.confirmButton.isMouseOver(mouseX, mouseY));
-        if (chosenGroup != null)
-            groupChosenFrame.get().renderToGui();
+        if (chosenGroup != null) {
+            int groupIndex = groups.indexOf(chosenGroup);
+            if (groupIndex >= windowTop && groupIndex < windowTop + windowCapacity) {
+                groupChosenFrame.get().renderToGui();
+            }
+        }
         if (showSub) {
             panels.forEach((g, p) -> p.visible = false);
             renderSubArrows(scale);
@@ -1052,7 +1071,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             }
             renderSlotItemTooltip(poseStack, mouseX, mouseY);
         }
-        if (titleLabel.visible) {
+        if (titleLabel.visible && !renderCover) {
             poseStack.pushPose();
             poseStack.translate(0, 0, 800);
             titleLabel.render(poseStack, mouseX, mouseY, partialTick);

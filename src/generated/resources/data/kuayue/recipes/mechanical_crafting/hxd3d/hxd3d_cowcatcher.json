@@ -1,0 +1,23 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": false,
+  "key": {
+    "A": {
+      "item": "kuayue:weathering_resistant_steel_block_0"
+    },
+    "B": {
+      "item": "kuayue:weathering_resistant_steel_board"
+    },
+    "C": {
+      "item": "kuayue:weathering_resistant_steel_pole"
+    }
+  },
+  "pattern": [
+    "BAAAB",
+    "BCCCB"
+  ],
+  "result": {
+    "count": 1,
+    "item": "kuayue:hxd3d_cowcatcher"
+  }
+}
