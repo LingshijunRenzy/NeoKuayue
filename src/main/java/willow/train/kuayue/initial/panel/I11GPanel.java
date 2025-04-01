@@ -71,20 +71,20 @@ public class I11GPanel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<TrainPanelBlock> PANEL_CR_DF11G =
+/*    public static final PanelRegistration<TrainPanelBlock> PANEL_CR_DF11G =
             new PanelRegistration<TrainPanelBlock>("panel_cr_df11g")
                     .block(p -> new TrainPanelBlock(p, new Vec2(-1, 0), new Vec2(2, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final PanelRegistration<TrainPanelBlock> PANEL_GENERAL_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final PanelRegistration<TrainPanelBlock> PANEL_GENERAL_DF11G =
             new PanelRegistration<TrainPanelBlock>("panel_general_df11g")
                     .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
+                    .submit(AllElements.testRegistry);*/
     public static final PanelRegistration<TrainPanelBlock> PANEL_KUAYUE_DF11G =
             new PanelRegistration<TrainPanelBlock>("panel_kuayue_df11g")
                     .block(p -> new TrainPanelBlock(p, new Vec2(-1, 0), new Vec2(2, 1)))
@@ -92,98 +92,98 @@ public class I11GPanel {
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
-    public static final PanelRegistration<TrainHingePanelBlock> PANEL_MIDDLE_FRONT_DF11G =
+/*    public static final PanelRegistration<TrainHingePanelBlock> PANEL_MIDDLE_FRONT_DF11G =
             new PanelRegistration<TrainHingePanelBlock>("panel_middle_front_df11g")
                     .block(p -> new TrainHingePanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final PanelRegistration<TrainHingePanelBlock> PANEL_MIDDLE_FRONT_DF11G_2 =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final PanelRegistration<TrainHingePanelBlock> PANEL_MIDDLE_FRONT_DF11G_2 =
             new PanelRegistration<TrainHingePanelBlock>("panel_middle_front_df11g_2")
                     .block(p -> new TrainHingePanelBlock(p, new Vec2(0, 0), new Vec2(1, 2)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final PanelRegistration<TrainPanelBlock> PANEL_MIDDLE_GENERAL_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final PanelRegistration<TrainPanelBlock> PANEL_MIDDLE_GENERAL_DF11G =
             new PanelRegistration<TrainPanelBlock>("panel_middle_general_df11g")
                     .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final PanelRegistration<TrainPanelBlock> PANEL_MIDDLE_SHADES_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final PanelRegistration<TrainPanelBlock> PANEL_MIDDLE_SHADES_DF11G =
             new PanelRegistration<TrainPanelBlock>("panel_middle_shades_df11g")
                     .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final PanelRegistration<TrainPanelBlock> PANEL_SHADES_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final PanelRegistration<TrainPanelBlock> PANEL_SHADES_DF11G =
             new PanelRegistration<TrainPanelBlock>("panel_shades_df11g")
                     .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final PanelRegistration<TrainUnOpenableSmallWindowBlock> WINDOW_MIDDLE_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final PanelRegistration<TrainUnOpenableSmallWindowBlock> WINDOW_MIDDLE_DF11G =
             new PanelRegistration<TrainUnOpenableSmallWindowBlock>("window_middle_df11g")
                     .block(TrainUnOpenableSmallWindowBlock::new)
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
+                    .submit(AllElements.testRegistry);*/
 
-    public static final SlabRegistration<HingeSlabBlock> CARPORT_DF11G =
+/*    public static final SlabRegistration<HingeSlabBlock> CARPORT_DF11G =
             new SlabRegistration<HingeSlabBlock>("carport_df11g")
                     .block(p -> new HingeSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final SlabRegistration<HingeSlabBlock> CARPORT_DF11G_2 =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final SlabRegistration<HingeSlabBlock> CARPORT_DF11G_2 =
             new SlabRegistration<HingeSlabBlock>("carport_df11g_2")
                     .block(p -> new HingeSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final SlabRegistration<TrainSlabBlock> CARPORT_GENERAL_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final SlabRegistration<TrainSlabBlock> CARPORT_GENERAL_DF11G =
             new SlabRegistration<TrainSlabBlock>("carport_general_df11g")
                     .block(p -> new TrainSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final SlabRegistration<TrainSlabBlock> CARPORT_KUAYUE_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final SlabRegistration<TrainSlabBlock> CARPORT_KUAYUE_DF11G =
             new SlabRegistration<TrainSlabBlock>("carport_kuayue_df11g")
                     .block(p -> new TrainSlabBlock(p, true, -1, 2))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final SlabRegistration<TrainSlabBlock> CARPORT_LOUVER_DF11G =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final SlabRegistration<TrainSlabBlock> CARPORT_LOUVER_DF11G =
             new SlabRegistration<TrainSlabBlock>("carport_louver_df11g")
                     .block(p -> new TrainSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final SlabRegistration<TrainSlabBlock> CARPORT_LOUVER_DF11G_2 =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final SlabRegistration<TrainSlabBlock> CARPORT_LOUVER_DF11G_2 =
             new SlabRegistration<TrainSlabBlock>("carport_louver_df11g_2")
                     .block(p -> new TrainSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-    public static final SlabRegistration<TrainSlabBlock> CARPORT_LOUVER_DF11G_3 =
+                    .submit(AllElements.testRegistry);*/
+/*    public static final SlabRegistration<TrainSlabBlock> CARPORT_LOUVER_DF11G_3 =
             new SlabRegistration<TrainSlabBlock>("carport_louver_df11g_3")
                     .block(p -> new TrainSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
+                    .submit(AllElements.testRegistry);*/
 
     public static final BlockReg<FullShapeDirectionalBlock> COWCATCHER_DF11G =
             new BlockReg<FullShapeDirectionalBlock>("cowcatcher_df11g")
