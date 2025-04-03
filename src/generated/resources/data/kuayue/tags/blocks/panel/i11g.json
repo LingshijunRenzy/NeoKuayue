@@ -37,6 +37,9 @@
     "kuayue:df11g_carport_filter_blind",
     "kuayue:df11g_panel_bottom_eh_blind",
     "kuayue:df11g_panel_bottom_ph_blind",
-    "kuayue:df11g_chimney"
+    "kuayue:df11g_chimney",
+
+    "kuayue:end_face_df11g",
+    "kuayue:df11g_panel_upper_ph_blind"
   ]
 }
