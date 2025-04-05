@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "kuayue:df11g_carport_eh_ad"
+    },
+    {
+      "item": "create:andesite_bars"
+    }
+  ],
+  "keepHeldItem": false,
+  "results": [
+    {
+      "item": "kuayue:df11g_carport_filter_blind"
+    }
+  ]
+}
