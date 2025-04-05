@@ -472,6 +472,18 @@ public class PlayerData implements NbtSerializable {
         );
     }
 
+    public void checkAllDefaults() {
+        TechTreeManager.MANAGER.trees().forEach((treeName, tree) -> {
+            tree.getGroups().forEach((grpName, grp) -> {
+                if (!grp.hasRing() && grp.getData().isInitialVisibility()) {
+                    visibleGroups.add(grp.getId());
+                    unlockedGroups.add(grp.getId());
+                    visibleNodes.add(grp.getRoot().getLocation());
+                }
+            });
+        });
+    }
+
     public void toNetwork(FriendlyByteBuf buf) {
         buf.writeUUID(this.playerID);
         buf.writeInt(unlocked.size());
