@@ -14,14 +14,15 @@ import java.util.List;
 @Mixin(StationBlockEntity.class)
 public class MixinStationBlockEntity {
 
-    @Shadow
+    @Shadow(remap = false)
     AbstractBogeyBlock<?>[] bogeyTypes;
 
-    @Shadow
+    @Shadow(remap = false)
     int[] bogeyLocations;
 
     @Redirect(method = "assemble", at = @At(value = "INVOKE",
-            target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
+            target = "Ljava/util/List;add(Ljava/lang/Object;)Z"),
+            remap = false)
     public boolean tryInject(List instance, Object e) {
         if (!(e instanceof Double value)) {
             StationMixinCache.instance = null;
@@ -52,7 +53,8 @@ public class MixinStationBlockEntity {
     }
 
     @Redirect(method = "assemble", at = @At(value = "INVOKE",
-            target = "Lcom/simibubi/create/content/trains/bogey/AbstractBogeyBlock;getWheelPointSpacing()D"))
+            target = "Lcom/simibubi/create/content/trains/bogey/AbstractBogeyBlock;getWheelPointSpacing()D"),
+            remap = false)
     public double getIndex(AbstractBogeyBlock instance) {
         if (!(instance instanceof ISingleSideBogey)) {
             StationMixinCache.instance = null;
