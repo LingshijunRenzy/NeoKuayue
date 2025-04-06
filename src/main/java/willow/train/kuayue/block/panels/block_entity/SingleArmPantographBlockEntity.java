@@ -15,9 +15,11 @@ import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.pantograph.PantographProps;
 import willow.train.kuayue.block.panels.pantograph.SingleArmPantographBlock;
 import willow.train.kuayue.initial.AllBlocks;
+import willow.train.kuayue.initial.AllTags;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class SingleArmPantographBlockEntity extends SmartBlockEntity implements IContraptionMovementBlockEntity {
 
@@ -105,7 +107,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
             return;
         this.isRisen = level.getBlockState(this.getBlockPos()).getValue(SingleArmPantographBlock.OPEN);
         BlockState belowBlockstate = level.getBlockState(this.getBlockPos().below());
-        if (!belowBlockstate.getBlock().getDescriptionId().equals("block.kuayue.hxd3d_carport_center")) {
+        if (!belowBlockstate.is(Objects.requireNonNull(AllTags.LOCO_CARPORT.tag()))) {
             this.transPosY = 0;
         } else {
             this.transPosY = -0.5;
