@@ -183,6 +183,7 @@ public class AllItems {
                     .element("incomplete_ballastless_track")
                     .element("incomplete_tieless_track")
                     .element("incomplete_meter_track")
+                    .element("incomplete_guard_track")
                     .submit(AllElements.testRegistry);
 
     public static final BundledReg<ItemReg<Item>> CIRCUIT_BLUEPRINTS =

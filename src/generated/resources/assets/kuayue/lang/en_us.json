@@ -193,6 +193,7 @@
  "item.kuayue.incomplete_ballastless_track": "Incomplete Ballastless Track",
  "item.kuayue.incomplete_tieless_track": "Incomplete Tieless Track",
  "item.kuayue.incomplete_meter_track": "Incomplete Meter Track",
+ "item.kuayue.incomplete_guard_track": "Incomplete Guard Track",
 
  "item.kuayue.animatable_block_controller": "Animatable Block Controller",
  "item.kuayue.automatic_control_coupling": "Automatic Control Coupling",
