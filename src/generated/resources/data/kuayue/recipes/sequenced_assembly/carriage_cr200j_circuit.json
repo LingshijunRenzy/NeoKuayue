@@ -6,15 +6,11 @@
   "loops": 2,
   "results": [
     {
-      "chance": 0.6,
+      "chance": 0.8,
       "item": "kuayue:carriage_cr200j_circuit"
     },
     {
       "chance": 0.1,
-      "item": "minecraft:redstone"
-    },
-    {
-      "chance": 0.2,
       "item": "create:precision_mechanism"
     },
     {
