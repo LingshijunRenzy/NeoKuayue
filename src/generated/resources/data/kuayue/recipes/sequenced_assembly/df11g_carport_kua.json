@@ -3,7 +3,7 @@
   "ingredient": {
     "item": "kuayue:head_df11g_mould"
   },
-  "loops": 2,
+  "loops": 3,
   "results": [
     {
       "item": "kuayue:df11g_carport_kua"
@@ -17,7 +17,7 @@
           "item": "kuayue:head_df11g_mould_constructing"
         },
         {
-          "item": "kuayue:weathering_resistant_steel_block_0"
+          "item": "kuayue:weathering_resistant_steel_ingot"
         }
       ],
       "results": [

@@ -31,7 +31,7 @@ public class MixinStationBlockEntity {
         if (StationMixinCache.instance == null) return instance.add(value);
         int index = StationMixinCache.instance.index();
         AbstractBogeyBlock bogeyType = StationMixinCache.instance.bogey();
-        if (index == -1) return false;
+        if (index == -1) instance.add(e);
         int loc = bogeyLocations[index];
         double bogeySize = StationMixinCache.instance.bogeySpacing();
         double front = (double) loc + 0.5 - bogeySize / 2.0;

@@ -6,6 +6,11 @@
     "kuayue:carport_air_condition_25bgzk",
     "kuayue:carport_air_condition_side_25bgzk",
     "kuayue:carport_center_25bgzkt",
-    "kuayue:carport_water_tank_25bgzkt"
+    "kuayue:carport_water_tank_25bgzkt",
+    "kuayue:panel_slab_universal_25",
+    "kuayue:auxiliary_reservoir",
+    "kuayue:auxiliary_reservoir_longitudinal",
+    "kuayue:carriage_battery",
+    "kuayue:carriage_brake_cylinder"
   ]
 }

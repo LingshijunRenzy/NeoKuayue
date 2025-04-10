@@ -3,7 +3,7 @@
   "acceptMirrored": false,
   "key": {
     "A": {
-      "item": "kuayue:floor_m1"
+      "item": "kuayue:weathering_resistant_steel_pole"
     },
     "B": {
       "item": "kuayue:weathering_resistant_steel_board"
@@ -16,18 +16,14 @@
     },
     "E": {
       "item": "kuayue:zinc_dust"
-    },
-    "F": {
-      "item": "kuayue:weathering_resistant_steel_pole"
     }
   },
   "pattern": [
-    "  A  ",
-    "FCDEF",
+    "ACDEA",
     "BBBBB"
   ],
   "result": {
-    "count": 1,
-    "item": "kuayue:floor_battery_m1"
+    "count": 2,
+    "item": "kuayue:carriage_battery"
   }
 }

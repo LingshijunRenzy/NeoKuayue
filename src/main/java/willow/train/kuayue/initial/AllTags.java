@@ -35,6 +35,9 @@ public class AllTags {
     public static final BlockTagReg CARPORT = new BlockTagReg("carport", "panel/carport")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg LOCO_CARPORT = new BlockTagReg("loco_carport", "panel/loco_carport")
+            .submit(AllElements.testRegistry);
+
     public static final BlockTagReg FLOOR = new BlockTagReg("floor", "panel/floor")
             .submit(AllElements.testRegistry);
 
