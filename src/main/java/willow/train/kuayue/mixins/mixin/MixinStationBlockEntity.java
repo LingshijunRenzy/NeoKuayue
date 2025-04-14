@@ -34,22 +34,22 @@ public class MixinStationBlockEntity {
         if (index == -1) instance.add(e);
         int loc = bogeyLocations[index];
         double bogeySize = StationMixinCache.instance.bogeySpacing();
-        double front = (double) loc + 0.5 - bogeySize / 2.0;
-        double back = (double) loc + 0.5 + bogeySize / 2.0;
-        ISingleSideBogey single = (ISingleSideBogey) bogeyType;
-        if (single.useFrontLocator()) {
+
+        if (bogeyType instanceof ISingleSideBogey single) {
+            double frontOffset = single.getFrontOffset();
+            double backOffset = single.getBackOffset();
+            double front = (double) loc + 0.5 + frontOffset;
+            double back = (double) loc + 0.5 + backOffset;
+
             if (value.equals(front)) {
                 return instance.add(value);
-            } else {
-                return instance.add((double) loc + 0.5);
-            }
-        } else {
-            if (value.equals(back)) {
+            } else if (value.equals(back)) {
                 return instance.add(value);
             } else {
                 return instance.add((double) loc + 0.5);
             }
         }
+        return instance.add(value);
     }
 
     @Redirect(method = "assemble", at = @At(value = "INVOKE",

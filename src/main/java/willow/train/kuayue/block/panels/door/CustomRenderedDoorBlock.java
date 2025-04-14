@@ -34,7 +34,6 @@ public class CustomRenderedDoorBlock extends TrainDoorBlock implements IBE<Custo
     final Couple<PartialModel> rightDoorModels;
     final Vec3 offset;
     final RenderShape renderShape;
-
     public CustomRenderedDoorBlock(BlockBehaviour.Properties pProperties,
                                    Couple<ResourceLocation> leftDoorModels,
                                    Couple<ResourceLocation> rightDoorModels,
