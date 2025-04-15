@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.DebugLevelSource;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -110,7 +111,11 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         if (!belowBlockstate.is(Objects.requireNonNull(AllTags.LOCO_CARPORT.tag()))) {
             this.transPosY = 0;
         } else {
-            this.transPosY = -0.5;
+            if (!belowBlockstate.is(Objects.requireNonNull(AllTags.LOCO_CARPORT_10.tag()))) {
+                this.transPosY = -0.5;
+            } else {
+                this.transPosY = -0.375;
+            }
         }
     }
 

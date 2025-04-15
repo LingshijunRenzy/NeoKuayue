@@ -15,6 +15,8 @@ import willow.train.kuayue.block.bogey.loco.MeterLocoBogeyBlock;
 import willow.train.kuayue.block.bogey.loco.MeterLocoBogeyEntity;
 import willow.train.kuayue.block.bogey.loco.AndesiteLocoBogeyEntity;
 import willow.train.kuayue.block.bogey.loco.AndesiteLocoBogeyBlock;
+import willow.train.kuayue.block.bogey.loco.AsymmetryLocoBogeyEntity;
+import willow.train.kuayue.block.bogey.loco.AsymmetryLocoBogeyBlock;
 import willow.train.kuayue.block.bogey.loco.renderer.*;
 import willow.train.kuayue.initial.AllElements;
 
@@ -102,6 +104,14 @@ public class AllLocoBogeys {
             .size(0.915F / 2F)
             .submit(testRegistry);
 
+    public static final BogeySizeReg qjGuideAndesite = new BogeySizeReg("qj_guide_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg qjGuide = new BogeySizeReg("qj_guide")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
     public static final BogeySizeReg dfh21 = new BogeySizeReg("dfh21")
             .size(0.915F / 2F)
             .submit(testRegistry);
@@ -148,6 +158,11 @@ public class AllLocoBogeys {
             .translationKey("meter_loco_group")
             .submit(testRegistry);
 
+    public static final BogeyGroupReg asymmetryLocoBogeyGroup = new BogeyGroupReg("asymmetry_loco", "kuayue_bogey")
+            .bogey(qjGuide.getSize(), QJGuideRenderer::new, testRegistry.asResource("qj_guide_bogey"))
+            .translationKey("asymmetry_loco_group")
+            .submit(testRegistry);
+
     public static final BogeyGroupReg andesiteLocoBogeyGroup = new BogeyGroupReg("andesite_loco", "standard")
             .bogey(ss8Andesite.getSize(), SS8Renderer.Andesite::new, testRegistry.asResource("ss8_bogey_a"))
             .bogey(ss8BackwardAndesite.getSize(), SS8Renderer.Andesite.Backward::new, testRegistry.asResource("ss8_backward_bogey_a"))
@@ -156,6 +171,7 @@ public class AllLocoBogeys {
             .bogey(df11gAndesite.getSize(), DF11GRenderer.Andesite::new, testRegistry.asResource("df11g_bogey_a"))
             .bogey(df11gBackwardAndesite.getSize(), DF11GRenderer.Andesite.Backward::new, testRegistry.asResource("df11g_backward_bogey_a"))
             .bogey(qjMainAndesite.getSize(), QJMainRenderer.Andesite::new, testRegistry.asResource("qj_bogey_a"))
+            .bogey(qjGuideAndesite.getSize(), QJGuideRenderer.Andesite::new, testRegistry.asResource("qj_guide_a"))
             .bogey(hxd3dAndesite.getSize(), HXD3DRenderer.Andesite::new, testRegistry.asResource("hxd3d_bogey_a"))
             .bogey(hxd3dBackwardAndesite.getSize(), HXD3DRenderer.Andesite.Backward::new, testRegistry.asResource("hxd3d_backward_bogey_a"))
             .bogey(dfh21Andesite.getSize(), DFH21Renderer.Andesite::new, testRegistry.asResource("dfh21_bogey_a"))
@@ -297,7 +313,23 @@ public class AllLocoBogeys {
                     .addBlock(() -> dfh21BackwardBogeyStandard.getEntry().get())
                     .withRenderer(() -> BogeyBlockEntityRenderer::new)
                     .submit(testRegistry);
+    public static final BogeyBlockReg<AsymmetryLocoBogeyBlock> qjGuideBogey =
+            new BogeyBlockReg<AsymmetryLocoBogeyBlock>("qj_guide_bogey")
+                    .block(AsymmetryLocoBogeyBlock::new)
+                    .material(Material.METAL)
+                    .materialColor(MaterialColor.PODZOL)
+                    .translationKey("qj_guide_bogey")
+                    .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .property(properties -> properties.strength(2.0f, 3.0f))
+                    .size(qjGuide)
+                    .submit(testRegistry);
 
+    public static final BlockEntityReg<AsymmetryLocoBogeyEntity> asymmetryLocoBogeyEntity =
+            new BlockEntityReg<AsymmetryLocoBogeyEntity>("asymmetry_bogey_entity")
+                    .blockEntityType(AsymmetryLocoBogeyEntity::new)
+                    .addBlock(() -> qjGuideBogey.getEntry().get())
+                    .withRenderer(() -> BogeyBlockEntityRenderer::new)
+                    .submit(testRegistry);
     public static final BogeyBlockReg<MeterLocoBogeyBlock> df21Bogey =
             new BogeyBlockReg<MeterLocoBogeyBlock>("df21_bogey")
                     .block(MeterLocoBogeyBlock::new)
@@ -451,6 +483,16 @@ public class AllLocoBogeys {
                     .size(qjMainAndesite)
                     .submit(testRegistry);
 
+    public static final BogeyBlockReg<AndesiteLocoBogeyBlock> qjGuideBogeyAndesite =
+            new BogeyBlockReg<AndesiteLocoBogeyBlock>("qj_guide_bogey_a")
+                    .block(AndesiteLocoBogeyBlock::new)
+                    .material(Material.METAL)
+                    .materialColor(MaterialColor.PODZOL)
+                    .translationKey("qj_guide_bogey_a")
+                    .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .property(properties -> properties.strength(2.0f, 3.0f))
+                    .size(qjGuideAndesite)
+                    .submit(testRegistry);
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> dfh21BogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("dfh21_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
@@ -484,6 +526,7 @@ public class AllLocoBogeys {
                     .addBlock(() -> df11gBogeyAndesite.getEntry().get())
                     .addBlock(() -> df11gBackwardBogeyAndesite.getEntry().get())
                     .addBlock(() -> qjMainBogeyAndesite.getEntry().get())
+                    .addBlock(() -> qjGuideBogeyAndesite.getEntry().get())
                     .addBlock(() -> dfh21BogeyAndesite.getEntry().get())
                     .addBlock(() -> dfh21BackwardBogeyAndesite.getEntry().get())
                     .withRenderer(() -> BogeyBlockEntityRenderer::new)

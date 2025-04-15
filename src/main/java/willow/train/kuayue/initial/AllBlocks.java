@@ -146,6 +146,7 @@ public class AllBlocks {
                     .addBlock(I3DPanel.DOOR_CABIN_HXD3D.block)
                     .addBlock(I21Panel.DOOR_CABIN_DF21.block)
                     .addBlock(I21Panel.DOOR_EQUIP_DF21.block)
+                    .addBlock(ISS8Panel.SS8_DOOR.block)
                     .addBlock(CM1Panel.DOOR_M1.block)
                     .submit(AllElements.testRegistry);
 
@@ -255,6 +256,7 @@ public class AllBlocks {
         CR200JPanel.invoke();
         AllDeviceBlocks.invoke();
         ISS3Panel.invoke();
+        ISS8Panel.invoke();
         AllRecipeBlock.invoke();
     }
 

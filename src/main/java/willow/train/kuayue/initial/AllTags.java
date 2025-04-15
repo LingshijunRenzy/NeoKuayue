@@ -38,6 +38,9 @@ public class AllTags {
     public static final BlockTagReg LOCO_CARPORT = new BlockTagReg("loco_carport", "panel/loco_carport")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg LOCO_CARPORT_10 = new BlockTagReg("loco_carport_10", "panel/loco_carport_10")
+            .submit(AllElements.testRegistry);
+
     public static final BlockTagReg FLOOR = new BlockTagReg("floor", "panel/floor")
             .submit(AllElements.testRegistry);
 
@@ -74,6 +77,8 @@ public class AllTags {
     public static final BlockTagReg I21 = new BlockTagReg("i21", "panel/i21")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg ISS8 = new BlockTagReg("iss8", "panel/iss8")
+            .submit(AllElements.testRegistry);
     public static final BlockTagReg MULTI_SEAT_BLOCK = new BlockTagReg("multi_seat_block", "multi_seat_block")
             .submit(AllElements.testRegistry);
 

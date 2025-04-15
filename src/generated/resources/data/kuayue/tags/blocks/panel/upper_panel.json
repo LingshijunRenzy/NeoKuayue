@@ -20,6 +20,10 @@
     "kuayue:panel_top_df11g",
     "kuayue:panel_top_ss3",
     "kuayue:df11g_panel_upper_blind",
-    "kuayue:df11g_panel_upper_cooling_blind"
+    "kuayue:df11g_panel_upper_cooling_blind",
+    "kuayue:ss8_panel_upper",
+    "kuayue:ss8_panel_upper_ad",
+    "kuayue:ss8_windows_small",
+    "kuayue:ss8_windows_big"
   ]
 }

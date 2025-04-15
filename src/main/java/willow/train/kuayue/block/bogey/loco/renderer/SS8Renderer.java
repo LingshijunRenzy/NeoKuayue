@@ -66,7 +66,7 @@ public class SS8Renderer extends BogeyRenderer {
                 for (int side = -1; side < 1; side++) {
                     if (!inInstancedContraption) ms.pushPose();
                     BogeyModelData wheel = wheels[side + 1];
-                    wheel.translate(0, 0.12, ((double) side) * dp+ad)
+                    wheel.translate(0, 0.905, ((double) side) * dp+ad)
                             .rotateX(wheelAngle)
                             .render(ms, light, vb);
                     if (!inInstancedContraption) ms.popPose();

@@ -32,6 +32,12 @@
     "kuayue:df11g_carport_filter_blind",
 
     "kuayue:hxd3d_carport",
-    "kuayue:hxd3d_carport_center"
+    "kuayue:hxd3d_carport_center",
+    "kuayue:ss8_carport",
+    "kuayue:ss8_carport_center",
+    "kuayue:ss8_carport_ad",
+    "kuayue:ss8_carport_fan",
+    "kuayue:ss8_carport_link",
+    "kuayue:ss8_roof"
   ]
 }
