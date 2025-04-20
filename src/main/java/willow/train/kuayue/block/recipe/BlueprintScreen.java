@@ -416,6 +416,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     public void renderCover(ClientTechTreeGroup group) {
+        if (group == null) return;
         showSub = false;
         chosenGroup = group;
         panels.forEach((g, p) -> p.visible = false);

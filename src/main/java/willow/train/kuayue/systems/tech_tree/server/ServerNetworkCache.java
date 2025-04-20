@@ -116,7 +116,8 @@ public class ServerNetworkCache implements Runnable {
         if (waiting && times >= timeout) {
             clear();
             return false;
-        } else if (waiting && delay < handshakeDelay) {
+        } else if (waiting && transmitStage == TransmitStage.HANDSHAKE &&
+                delay > 0 && delay < handshakeDelay) {
             delay();
             delay++;
         } else if (waiting) {
