@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class OverheadSupportBlockRenderer extends SmartBlockEntityRenderer<OverheadLineSupportBlockEntity> implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
+public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEntity> extends SmartBlockEntityRenderer<T> implements BlockEntityRenderer<T> {
 
     private static final HashMap<Supplier<Block>, BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> RENDERER_SUPPLIERS = new HashMap<>();
     private final HashMap<Block, BlockEntityRenderer<OverheadLineSupportBlockEntity>> RENDERERS = new HashMap<>();
@@ -40,6 +40,7 @@ public class OverheadSupportBlockRenderer extends SmartBlockEntityRenderer<Overh
         if(RENDERERS.containsKey(block)){
             RENDERERS.get(block).render(blockEntity, partialTicks, ms, buffer, light, overlay);
         }
+        /*
         ms.pushPose();
         List<OverheadLineSupportBlockEntity.Connection> connections = blockEntity.getConnections();
         ms.scale(-0.01f,-0.01f,-0.01f);
@@ -73,6 +74,7 @@ public class OverheadSupportBlockRenderer extends SmartBlockEntityRenderer<Overh
         ms.translate(-pos.getX(), -pos.getY(), -pos.getZ());
         for (OverheadLineSupportBlockEntity.Connection connection : blockEntity.getConnections()) {
             RenderCurve curve = OverheadLineCurveGenerator.conicHangLine(
+                    blockEntity.getLevel(),
                     blockEntity.getConnectionPointByIndex(connection.connectionIndex()),
                     new Vec3(connection.toPosition()),
                     1.3f,
@@ -81,9 +83,9 @@ public class OverheadSupportBlockRenderer extends SmartBlockEntityRenderer<Overh
                     5,
                     0.03f
             );
-            CachedCurveRenderer.render(AllOverheadLineSupportModels.KUAYUE_TEST_LINE, curve, ms, buffer, light, overlay);
+            CachedCurveRenderer.render(AllOverheadLineSupportModels.KUAYUE_TEST_LINE, curve, ms, buffer, overlay);
         }
-        ms.popPose();
+        ms.popPose(); */
     }
 
     public static void register(Supplier<Block> block, Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer) {

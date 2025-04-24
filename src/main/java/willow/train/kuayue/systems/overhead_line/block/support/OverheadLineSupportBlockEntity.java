@@ -166,6 +166,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                 )
         );
         this.notifyUpdate();
+        onConnectionModification();
     }
 
     public void removeAllConnections(){
@@ -185,6 +186,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     public void notifyRemoveConnection(BlockPos from){
         connections.removeIf(connection -> connection.absolutePos().equals(from));
         this.notifyUpdate();
+        onConnectionModification();
     }
 
     @Override
@@ -228,6 +230,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                 }
             }
         }
+        onConnectionModification();
     }
 
     @Override
@@ -263,9 +266,17 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         removeAllConnections();
     }
 
+    @Override
+    public void onChunkUnloaded() {
+        if(this.level == null || !this.level.isClientSide)
+            return;
+    }
+
     public List<Connection> getConnections(){
         return connections;
     }
+
+    public void onConnectionModification(){}
 
     @Override
     public AABB getRenderBoundingBox() {

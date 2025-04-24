@@ -1,17 +1,27 @@
 package willow.train.kuayue.systems.overhead_line.block.support;
 
+import kasuga.lib.registrations.common.BlockEntityReg;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.level.ChunkDataEvent;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
-import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineInsulatorRenderer;
-import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineSupportARenderer;
-import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineSupportBRenderer;
-import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineSupportCRenderer;
+import willow.train.kuayue.systems.overhead_line.block.support.variants.*;
 
 public class AllOverheadLineSupportBlocks {
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_SUPPORT_A1 =
+
+    public static BlockEntityReg<OverheadLineEndWeightBlockEntity> OVERHEAD_LINE_END_WEIGHT_BLOCK_ENTITY =
+            new BlockEntityReg<OverheadLineEndWeightBlockEntity>("overhead_line_end_weight_block_entity")
+                    .blockEntityType(OverheadLineEndWeightBlockEntity::new)
+                    .blockPredicates((r, i)->i instanceof OverheadLineSupportBlock)
+                    .withRenderer(()->OverheadSupportBlockRenderer::new)
+                    .submit(AllElements.testRegistry);
+
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_A1 =
             new OverheadLineSupportBlockReg<>("overhead_line_support_a1")
-                    .blockType(OverheadLineSupportBlock::new)
+                    .blockType(NormalOverheadLineSupportBlock::new)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()->OverheadLineSupportARenderer.A1Renderer::new)
@@ -19,10 +29,10 @@ public class AllOverheadLineSupportBlocks {
                             new Vec3(1.55, .125, 0)
                     )
                     .submit(AllElements.testRegistry);
-    
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_SUPPORT_A2 =
+
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_A2 =
             new OverheadLineSupportBlockReg<>("overhead_line_support_a2")
-                    .blockType(OverheadLineSupportBlock::new)
+                    .blockType(NormalOverheadLineSupportBlock::new)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()->OverheadLineSupportARenderer.A2Renderer::new)
@@ -31,9 +41,9 @@ public class AllOverheadLineSupportBlocks {
                     )
                     .submit(AllElements.testRegistry);
 
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_SUPPORT_B =
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_B =
             new OverheadLineSupportBlockReg<>("overhead_line_support_b")
-                    .blockType(OverheadLineSupportBlock::new)
+                    .blockType(NormalOverheadLineSupportBlock::new)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineSupportBRenderer.B1Renderer::new)
@@ -42,9 +52,9 @@ public class AllOverheadLineSupportBlocks {
                     )
                     .submit(AllElements.testRegistry);
 
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_SUPPORT_B2 =
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_B2 =
             new OverheadLineSupportBlockReg<>("overhead_line_support_b2")
-                    .blockType(OverheadLineSupportBlock::new)
+                    .blockType(NormalOverheadLineSupportBlock::new)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineSupportBRenderer.B2Renderer::new)
@@ -52,10 +62,10 @@ public class AllOverheadLineSupportBlocks {
                             new Vec3(2.25, .125, 0)
                     )
                     .submit(AllElements.testRegistry);
-                    
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_SUPPORT_C =
+
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_C =
             new OverheadLineSupportBlockReg<>("overhead_line_support_c")
-                    .blockType(OverheadLineSupportBlock::new)
+                    .blockType(NormalOverheadLineSupportBlock::new)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineSupportCRenderer.C1Renderer::new)
@@ -64,10 +74,10 @@ public class AllOverheadLineSupportBlocks {
                             new Vec3(2.25, .125, .52)
                     )
                     .submit(AllElements.testRegistry);
-                    
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_SUPPORT_C2 =
+
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_C2 =
             new OverheadLineSupportBlockReg<>("overhead_line_support_c2")
-                    .blockType(OverheadLineSupportBlock::new)
+                    .blockType(NormalOverheadLineSupportBlock::new)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineSupportCRenderer.C2Renderer::new)
@@ -77,15 +87,15 @@ public class AllOverheadLineSupportBlocks {
                     )
                     .submit(AllElements.testRegistry);
 
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_INSULATOR_A =
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_INSULATOR_A =
             new OverheadLineSupportBlockReg<>("overhead_line_insulator_a")
                     .blockType(OverheadLineSupportInsulatorBlock::new)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineInsulatorRenderer.ARenderer::new)
                     .submit(AllElements.testRegistry);
-                    
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> OVERHEAD_LINE_INSULATOR_B =
+
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_INSULATOR_B =
             new OverheadLineSupportBlockReg<>("overhead_line_insulator_b")
                     .blockType(OverheadLineSupportInsulatorBlock::new)
                     .defaultBlockItem()
@@ -93,5 +103,15 @@ public class AllOverheadLineSupportBlocks {
                     .withRenderer(()-> OverheadLineInsulatorRenderer.BRenderer::new)
                     .submit(AllElements.testRegistry);
 
-    public static void invoke(){}
+    public static OverheadLineSupportBlockReg<OverheadLineEndWeightBlock, OverheadLineEndWeightBlockEntity> OVERHEAD_LINE_END_WEIGHT =
+            new OverheadLineSupportBlockReg<OverheadLineEndWeightBlock, OverheadLineEndWeightBlockEntity>("overhead_line_end_weight")
+                    .blockType(OverheadLineEndWeightBlock::new)
+                    .withBlockEntity(OVERHEAD_LINE_END_WEIGHT_BLOCK_ENTITY)
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueOverheadLineTab)
+                    .withRenderer(()-> OverheadLineEndCounterWeightRenderer::new)
+                    .submit(AllElements.testRegistry);
+    public static void invoke(){
+
+    }
 }

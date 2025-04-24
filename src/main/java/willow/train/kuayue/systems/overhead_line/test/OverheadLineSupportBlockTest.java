@@ -9,14 +9,6 @@ import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSuppo
 import willow.train.kuayue.systems.overhead_line.item.OverheadLineItem;
 
 public class OverheadLineSupportBlockTest {
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock> BLOCK =
-            new OverheadLineSupportBlockReg<>("overhead_line_support_block")
-                    .blockType(OverheadLineSupportBlock::new)
-                    .withBlockEntity(OverheadLineSystem.OVERHEAD_LINE_SUPPORT_BLOCK_ENTITY)
-                    .defaultBlockItem()
-                    .submit(AllElements.testRegistry);
-
-
     public static ItemReg<OverheadLineItem> ITEM =
             new ItemReg<OverheadLineItem>("test_overhead_line")
                     .itemType(OverheadLineItem::new)
