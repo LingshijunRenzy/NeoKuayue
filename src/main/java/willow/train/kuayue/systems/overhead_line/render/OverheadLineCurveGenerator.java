@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -14,11 +15,11 @@ public class OverheadLineCurveGenerator {
 
     public static final Vec3 UP = new Vec3(0, 1, 0);
 
-    public static RenderCurve straightLine(Vec3 a, Vec3 b, float r) {
+    public static RenderCurve straightLine(Level level, Vec3 a, Vec3 b, float r) {
         RenderCurve.Builder builder = RenderCurve.create();
         prepareLine(builder, a, b.subtract(a), r);
         straightLine(builder, a, b, r);
-        return builder.build();
+        return builder.build(level);
     }
 
     public static void prepareLine(RenderCurve.Builder builder, Vec3 a, Vec3 dir, float r){
@@ -39,14 +40,14 @@ public class OverheadLineCurveGenerator {
         builder.store();
     }
     
-    public static RenderCurve conicHangLine(Vec3 first, Vec3 last, float firstOffset, float secondOffset, 
-                                           float distance, float setonSpacing, float r) {
+    public static RenderCurve conicHangLine(Level level, Vec3 first, Vec3 last, float firstOffset, float secondOffset,
+                                            float distance, float setonSpacing, float r) {
         RenderCurve.Builder builder = RenderCurve.create();
         conicHangLine(builder, first, last, firstOffset, secondOffset, distance, setonSpacing, r);
         builder.getPoseStack().setIdentity();
         prepareLine(builder, first, last.subtract(first), r);
         straightLine(builder, first, last, r);
-        return builder.build();
+        return builder.build(level);
     }
 
     public static void conicHangLine(RenderCurve.Builder builder, Vec3 first, Vec3 last, 
