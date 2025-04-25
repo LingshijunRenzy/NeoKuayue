@@ -19,6 +19,7 @@ public class TrainStationBlockEntityRenderer
 
     public TrainStationBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
+        bedrockModel.init();
     }
 
     @Override
