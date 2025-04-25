@@ -103,8 +103,6 @@
       "next_nodes": [
         "node_carriage_25b_circuit_blueprint",
         "node_carriage_25g_circuit_blueprint",
-        "node_carriage_25k_circuit_blueprint",
-        "node_carriage_25z_circuit_blueprint",
         "node_head_df21_circuit_blueprint"
       ],
       "next_groups": [],
@@ -127,8 +125,9 @@
 
     "node_carriage_25b_circuit_blueprint": {
       "next_nodes": [
-        "node_carriage_25t_circuit_blueprint",
-        "node_head_df11g_circuit_blueprint"
+        "node_carriage_25k_circuit_blueprint",
+        "node_carriage_25z_circuit_blueprint",
+        "node_head_ss8_circuit_blueprint"
       ],
       "next_groups": [],
       "name": "tech_tree.kuayue.group.carriage_25b_circuit_blueprint.name",
@@ -154,8 +153,9 @@
 
     "node_carriage_25g_circuit_blueprint": {
       "next_nodes": [
-        "node_carriage_25t_circuit_blueprint",
-        "node_head_df11g_circuit_blueprint"
+        "node_carriage_25k_circuit_blueprint",
+        "node_carriage_25z_circuit_blueprint",
+        "node_head_ss8_circuit_blueprint"
       ],
       "next_groups": [],
       "name": "tech_tree.kuayue.group.carriage_25g_circuit_blueprint.name",
@@ -175,6 +175,34 @@
       "blueprint": {},
       "item": {
         "kuayue:carriage_25g_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_head_df21_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_25k_circuit_blueprint",
+        "node_carriage_25z_circuit_blueprint",
+        "node_head_ss8_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.head_df21_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_df21_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:head_df21",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 8,
+        "minecraft:redstone": 8,
+        "kuayue:research_report": 8,
+        "create:electron_tube": 2,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:head_df21_circuit_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -233,16 +261,16 @@
       }
     },
 
-    "node_head_df21_circuit_blueprint": {
+    "node_head_ss8_circuit_blueprint": {
       "next_nodes": [
         "node_carriage_25t_circuit_blueprint",
         "node_head_df11g_circuit_blueprint"
       ],
       "next_groups": [],
-      "name": "tech_tree.kuayue.group.head_df21_circuit_blueprint.name",
-      "description": "tech_tree.kuayue.group.head_df21_circuit_blueprint.description",
+      "name": "tech_tree.kuayue.group.head_ss8_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_ss8_circuit_blueprint.description",
       "type": "plain",
-      "logo": "kuayue:head_df21",
+      "logo": "kuayue:ss8_head",
       "exp": 0,
       "level": 0,
       "item_consume": {
@@ -255,7 +283,7 @@
       "advancements": [],
       "blueprint": {},
       "item": {
-        "kuayue:head_df21_circuit_blueprint": 1,
+        "kuayue:head_ss8_circuit_blueprint": 1,
         "create:experience_nugget": 64
       }
     },

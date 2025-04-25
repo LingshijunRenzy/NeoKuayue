@@ -1,0 +1,27 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": false,
+  "key": {
+    "A": {
+      "item": "kuayue:ss8_carport"
+    },
+    "B": {
+      "item": "kuayue:weathering_resistant_steel_pole"
+    },
+    "C": {
+      "item": "create:propeller"
+    },
+    "D": {
+      "item": "kuayue:weathering_resistant_steel_board"
+    }
+  },
+  "pattern": [
+    "DDDD",
+    "BCCB",
+    " AA "
+  ],
+  "result": {
+    "count": 1,
+    "item": "kuayue:ss8_carport_fan"
+  }
+}

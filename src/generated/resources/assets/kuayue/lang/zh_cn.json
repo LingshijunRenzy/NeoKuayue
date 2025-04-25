@@ -775,6 +775,7 @@
   "item.kuayue.carriage_25t_circuit_blueprint": "原色 25T 电路板蓝图",
   "item.kuayue.carriage_25z_circuit_blueprint": "原色 25Z 电路板蓝图",
   "item.kuayue.carriage_cr200j_circuit_blueprint": "CR200J车厢 电路板蓝图",
+  "item.kuayue.head_ss8_circuit_blueprint": "SS8 车头电路板蓝图",
 
   "item.kuayue.head_df11g_blueprint": "DF11G 车头总体设计图",
   "item.kuayue.head_df21_blueprint": "DF21 车头总体设计图",
@@ -790,6 +791,7 @@
   "item.kuayue.carriage_marshalled_blueprint": "统型车厢 总体设计图",
   "item.kuayue.freight_nx70_blueprint": "NX70型平车 总体设计图",
   "item.kuayue.freight_c70_blueprint": "C70型敞车 总体设计图",
+  "item.kuayue.head_ss8_blueprint": "SS8 车头总体设计图",
 
   "item.kuayue.head_df11g_circuit": "DF11G 车头电路板",
   "item.kuayue.head_df21_circuit": "DF21 车头电路板",
@@ -801,6 +803,7 @@
   "item.kuayue.carriage_25t_circuit": "原色 25T 电路板",
   "item.kuayue.carriage_25z_circuit": "原色 25Z 电路板",
   "item.kuayue.carriage_cr200j_circuit": "CR200J车厢 电路板",
+  "item.kuayue.head_ss8_circuit": "SS8 车头电路板",
 
   "item.kuayue.head_df11g_circuit_constructing": "DF11G 车头电路板 (装配中)",
   "item.kuayue.head_df21_circuit_constructing": "DF21 车头电路板 (装配中)",
@@ -812,6 +815,7 @@
   "item.kuayue.carriage_25t_circuit_constructing": "原色 25T 电路板 (装配中)",
   "item.kuayue.carriage_25z_circuit_constructing": "原色 25Z 电路板 (装配中)",
   "item.kuayue.carriage_cr200j_circuit_constructing": "CR200J车厢 电路板 (装配中)",
+  "item.kuayue.head_ss8_circuit_constructing": "SS8 车头电路板 (装配中)",
 
   "item.kuayue.head_df11g_mould": "DF11G 车头模具",
   "item.kuayue.head_df21_mould": "DF21 车头模具",
@@ -827,6 +831,7 @@
   "item.kuayue.carriage_marshalled_mould": "统型车厢 模具",
   "item.kuayue.freight_c70_mould":"C70敞车 模具",
   "item.kuayue.freight_nx70_mould":"NX70平车 模具",
+  "item.kuayue.head_ss8_mould": "SS8 车头模具",
 
   "item.kuayue.head_df11g_mould_constructing": "DF11G 车头模具(装配中)",
   "item.kuayue.head_df21_mould_constructing": "DF21 车头模具(装配中)",
@@ -842,6 +847,7 @@
   "item.kuayue.carriage_marshalled_mould_constructing": "统型车厢 模具 (装配中)",
   "item.kuayue.freight_c70_mould_constructing":"C70敞车 模具 (装配中)",
   "item.kuayue.freight_nx70_mould_constructing":"NX70平车 模具 (装配中)",
+  "item.kuayue.head_ss8_mould_constructing": "SS8 车头模具 (装配中)",
 
   "item.kuayue.color_masterbatch": "色母",
   "item.kuayue.carbon_dust": "碳粉",
@@ -856,6 +862,7 @@
   "item.kuayue.plastic_board": "塑料板",
   "item.kuayue.plastic_nugget": "塑料球粒",
   "item.kuayue.plastic_ingot": "塑料块",
+  "item.kuayue.insulator": "绝缘子",
   "item.kuayue.weathering_resistant_steel_dust": "耐候钢粉",
   "item.kuayue.weathering_resistant_steel_pole": "耐候钢杆",
 
@@ -929,6 +936,7 @@
   "block.kuayue.ss8_transformer": "SS8车底变压器",
   "block.kuayue.ss8_windows_big": "SS8车窗（A型）",
   "block.kuayue.ss8_windows_small": "SS8车窗（B型）",
+  "block.kuayue.ss8_door": "SS8驾驶室门",
   "container.kuayue.inventory.loco.button.ss8": "SS8",
 
   "tips.tech_tree": "--------------------------------以下是科技树部件-------------------------------------------",
@@ -972,6 +980,8 @@
   "tech_tree.kuayue.group.carriage_25k_blueprint.description": "设计并试制25K型客车以获取25K型客车总体设计图",
   "tech_tree.kuayue.group.carriage_25z_blueprint.name": "25Z型客车总体设计图",
   "tech_tree.kuayue.group.carriage_25z_blueprint.description": "设计并试制25Z型客车以获取25Z型客车总体设计图",
+  "tech_tree.kuayue.group.head_ss8_blueprint.name": "SS8车头总体设计图",
+  "tech_tree.kuayue.group.head_ss8_blueprint.description": "设计并试制SS8车头以获取SS8车头总体设计图",
 
   "tech_tree.kuayue.group.carriage_25t_blueprint.name": "25T型客车总体设计图",
   "tech_tree.kuayue.group.carriage_25t_blueprint.description": "设计并试制25T型客车以获取25T型客车总体设计图",
@@ -1013,6 +1023,8 @@
   "tech_tree.kuayue.group.carriage_25z_circuit_blueprint.description": "研发25Z型客车电路板",
   "tech_tree.kuayue.group.head_df21_circuit_blueprint.name": "DF21车头电路板设计图",
   "tech_tree.kuayue.group.head_df21_circuit_blueprint.description": "研发DF21车头电路板",
+  "tech_tree.kuayue.group.head_ss8_circuit_blueprint.name": "SS8车头电路板设计图",
+  "tech_tree.kuayue.group.head_ss8_circuit_blueprint.description": "研发SS8车头电路板",
 
   "tech_tree.kuayue.group.carriage_25t_circuit_blueprint.name": "25T型客车电路板设计图",
   "tech_tree.kuayue.group.carriage_25t_circuit_blueprint.description": "研发25T型客车电路板",

@@ -1,0 +1,27 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": false,
+  "key": {
+    "A": {
+      "item": "kuayue:ss8_floor"
+    },
+    "B": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "kuayue:weathering_resistant_steel_board"
+    },
+    "D": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "   A   ",
+    "CBDBDBC",
+    "CBDBDBC"
+  ],
+  "result": {
+    "count": 1,
+    "item": "kuayue:ss8_transformer"
+  }
+}

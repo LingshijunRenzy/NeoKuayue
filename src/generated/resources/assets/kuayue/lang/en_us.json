@@ -772,6 +772,7 @@
  "item.kuayue.carriage_25t_circuit_blueprint": "Carriage 25T Circuit Blueprint",
  "item.kuayue.carriage_25z_circuit_blueprint": "Carriage 25Z Circuit Blueprint",
  "item.kuayue.carriage_cr200j_circuit_blueprint": "Carriage CR200J Circuit Blueprint",
+ "item.kuayue.head_ss8_circuit_blueprint": "Head SS8 Circuit Blueprint",
 
  "item.kuayue.head_df11g_blueprint": "DF11G Loco Head Blueprint",
  "item.kuayue.head_df21_blueprint": "DF21 Loco Head Blueprint",
@@ -787,6 +788,7 @@
  "item.kuayue.carriage_marshalled_blueprint": "Carriage Marshalled Blueprint",
  "item.kuayue.freight_nx70_blueprint": "Freight NX70 Blueprint",
  "item.kuayue.freight_c70_blueprint": "Freight C70 Blueprint",
+ "item.kuayue.head_ss8_blueprint": "Head SS8 Blueprint",
 
  "item.kuayue.head_df11g_circuit": "DF11G Loco Head Circuit",
  "item.kuayue.head_df21_circuit": "DF21 Loco Head Circuit",
@@ -798,6 +800,7 @@
  "item.kuayue.carriage_25t_circuit": "Carriage 25T Circuit",
  "item.kuayue.carriage_25z_circuit": "Carriage 25Z Circuit",
  "item.kuayue.carriage_cr200j_circuit": "Carriage CR200J Circuit",
+ "item.kuayue.head_ss8_circuit": "Head SS8 Circuit",
 
  "item.kuayue.head_df11g_circuit_constructing": "DF11G Loco Head Circuit (Assembling)",
  "item.kuayue.head_df21_circuit_constructing": "DF21 Loco Head Circuit (Assembling)",
@@ -809,6 +812,7 @@
  "item.kuayue.carriage_25t_circuit_constructing": "Carriage 25T Circuit (Assembling)",
  "item.kuayue.carriage_25z_circuit_constructing": "Carriage 25Z Circuit (Assembling)",
  "item.kuayue.carriage_cr200j_circuit_constructing": "Carriage CR200J Circuit (Assembling)",
+ "item.kuayue.head_ss8_circuit_constructing": "Head SS8 Circuit (Assembling)",
 
  "item.kuayue.head_df11g_mould": "DF11G Loco Head Mould",
  "item.kuayue.head_df21_mould": "DF21 Loco Head Mould",
@@ -824,6 +828,7 @@
  "item.kuayue.carriage_marshalled_mould": "Carriage Marshalled Mould",
  "item.kuayue.freight_c70_mould":"Freight C70 Mould",
  "item.kuayue.freight_nx70_mould":"Freight NX70 Mould",
+ "item.kuayue.head_ss8_mould": "Head SS8 Mould",
 
  "item.kuayue.head_df11g_mould_constructing": "DF11G Loco Head Mould (Assembling)",
  "item.kuayue.head_df21_mould_constructing": "DF21 Loco Head Mould (Assembling)",
@@ -839,6 +844,7 @@
  "item.kuayue.carriage_marshalled_mould_constructing": "Carriage Marshalled Mould (Assembling)",
  "item.kuayue.freight_c70_mould_constructing":"Freight C70 Mould (Assembling)",
  "item.kuayue.freight_nx70_mould_constructing":"Freight NX70 Mould (Assembling)",
+ "item.kuayue.head_ss8_mould_constructing": "Head SS8 Mould (Assembling)",
 
  "item.kuayue.color_masterbatch": "Color Masterbatch",
  "item.kuayue.carbon_dust": "Carbon Dust",
@@ -853,6 +859,7 @@
  "item.kuayue.plastic_board": "Plastic Board",
  "item.kuayue.plastic_nugget": "Plastic Nugget",
  "item.kuayue.plastic_ingot": "Plastic Cubic",
+ "item.kuayue.insulator": "Insulator",
  "item.kuayue.weathering_resistant_steel_dust": "Weathering Resistant Steel Dust",
  "item.kuayue.weathering_resistant_steel_pole": "Weathering Resistant Steel Pole",
  "block.kuayue.df11g_carport_kua": "DF11G Carport with KUA Roof ",
@@ -927,6 +934,7 @@
  "block.kuayue.ss8_transformer": "SS8 Underbody Transformer",
  "block.kuayue.ss8_windows_big": "SS8 Windows（Type 1）",
  "block.kuayue.ss8_windows_small": "SS8 Windows（Type 2）",
+ "block.kuayue.ss8_door": "SS8 Door",
  "container.kuayue.inventory.loco.button.ss8": "SS8",
 
  "tips.tech_tree": "--------------------------------all tech tree items below here-------------------------------------------",
@@ -970,6 +978,8 @@
  "tech_tree.kuayue.group.carriage_25k_blueprint.description": "Design and prototype Carriage 25K. Be able to obtain the design drawings of Carriage 25K.",
  "tech_tree.kuayue.group.carriage_25z_blueprint.name": "Carriage 25Z Blueprint",
  "tech_tree.kuayue.group.carriage_25z_blueprint.description": "Design and prototype Carriage 25Z. Be able to obtain the design drawings of Carriage 25Z.",
+ "tech_tree.kuayue.group.head_ss8_blueprint.name": "Head SS8 Blueprint",
+ "tech_tree.kuayue.group.head_ss8_blueprint.description": "Design and prototype Head SS8. Be able to obtain the design drawings of Head SS8.",
 
  "tech_tree.kuayue.group.carriage_25t_blueprint.name": "Carriage 25T Blueprint",
  "tech_tree.kuayue.group.carriage_25t_blueprint.description": "Design and prototype Carriage 25T. Be able to obtain the design drawings of Carriage 25T.",
@@ -1011,6 +1021,8 @@
  "tech_tree.kuayue.group.carriage_25z_circuit_blueprint.description": "Develop the circuit board for the Carriage 25Z",
  "tech_tree.kuayue.group.head_df21_circuit_blueprint.name": "Head DF21 Circuit Blueprint",
  "tech_tree.kuayue.group.head_df21_circuit_blueprint.description": "Develop the circuit board for the Head DF21",
+ "tech_tree.kuayue.group.head_ss8_circuit_blueprint.name": "Head SS8 Circuit Blueprint",
+ "tech_tree.kuayue.group.head_ss8_circuit_blueprint.description": "Develop the circuit board for the Head SS8",
 
  "tech_tree.kuayue.group.carriage_25t_circuit_blueprint.name": "Carriage 25T Circuit Blueprint",
  "tech_tree.kuayue.group.carriage_25t_circuit_blueprint.description": "Develop the circuit board for the Carriage 25T",

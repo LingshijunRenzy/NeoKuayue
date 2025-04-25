@@ -1,12 +1,12 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "kuayue:head_df11g_mould"
+    "item": "kuayue:head_ss8_mould"
   },
   "loops": 2,
   "results": [
     {
-      "item": "kuayue:df11g_carport_kua"
+      "item": "kuayue:ss8_carport"
     }
   ],
   "sequence": [
@@ -14,7 +14,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         },
         {
           "item": "kuayue:weathering_resistant_steel_ingot"
@@ -22,7 +22,7 @@
       ],
       "results": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         }
       ]
     },
@@ -30,7 +30,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         },
         {
           "item": "kuayue:weathering_resistant_steel_pole"
@@ -38,7 +38,7 @@
       ],
       "results": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         }
       ]
     },
@@ -46,7 +46,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         },
         {
           "item": "kuayue:weathering_resistant_steel_board"
@@ -54,7 +54,7 @@
       ],
       "results": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         }
       ]
     },
@@ -62,7 +62,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         },
         {
           "item": "kuayue:color_masterbatch"
@@ -70,7 +70,7 @@
       ],
       "results": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         }
       ]
     },
@@ -78,17 +78,17 @@
       "type": "create:cutting",
       "ingredients": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         }
       ],
       "results": [
         {
-          "item": "kuayue:head_df11g_mould_constructing"
+          "item": "kuayue:head_ss8_mould_constructing"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "kuayue:head_df11g_mould_constructing"
+    "item": "kuayue:head_ss8_mould_constructing"
   }
 }

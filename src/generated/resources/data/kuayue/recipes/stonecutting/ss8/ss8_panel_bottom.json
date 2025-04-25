@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 4,
+  "ingredient": {
+    "item": "kuayue:ss8_carport"
+  },
+  "result": "kuayue:ss8_panel_bottom"
+}

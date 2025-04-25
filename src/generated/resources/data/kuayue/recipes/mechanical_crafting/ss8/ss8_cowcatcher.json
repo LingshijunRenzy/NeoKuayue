@@ -16,11 +16,11 @@
     }
   },
   "pattern": [
-    "BBAAABB",
-    "BDCACDB"
+    "DBAAABD",
+    "BBCACBB"
   ],
   "result": {
     "count": 1,
-    "item": "kuayue:hxd3d_cowcatcher"
+    "item": "kuayue:ss8_cowcatcher"
   }
 }

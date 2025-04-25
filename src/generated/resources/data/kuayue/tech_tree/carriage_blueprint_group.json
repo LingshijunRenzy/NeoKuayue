@@ -157,6 +157,7 @@
       "next_nodes": [
         "node_carriage_25z_blueprint",
         "node_carriage_25k_blueprint",
+        "node_head_ss8_blueprint",
         "node_head_df21_blueprint",
         "node_carriage_m1_blueprint"
       ],
@@ -223,6 +224,32 @@
       "blueprint": {},
       "item": {
         "kuayue:carriage_m1_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_head_ss8_blueprint": {
+      "next_nodes": [
+        "node_carriage_25t_blueprint",
+        "node_head_df11g_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.head_ss8_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_ss8_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:ss8_head",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:weathering_resistant_steel_board": 32,
+        "kuayue:weathering_resistant_steel_pole": 32,
+        "kuayue:research_report": 16,
+        "create:precision_mechanism": 4
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:head_ss8_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
