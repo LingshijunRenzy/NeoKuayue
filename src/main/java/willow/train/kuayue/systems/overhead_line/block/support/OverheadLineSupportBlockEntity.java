@@ -16,9 +16,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.ForgeRegistries;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
+import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererBridge;
+import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineBlockDynamicConfiguration;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 import willow.train.kuayue.systems.overhead_line.wire.WireReg;
@@ -311,6 +315,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     public void onChunkUnloaded() {
         if(this.level == null || !this.level.isClientSide)
             return;
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()-> OverheadLineRendererBridge.unloadBlockEntity(this));
     }
 
     public List<Connection> getConnections(){
@@ -318,8 +323,12 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     }
 
     public void onConnectionModification(){
-        if(this.level == null || this.level.isClientSide)
+        if(this.level == null)
             return;
+        if(this.level.isClientSide) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()-> OverheadLineRendererBridge.setBlockEntity(this, this.connections));
+            return;
+        }
         if(!connections.isEmpty()) {
             Kuayue.OVERHEAD.savedData.getMigration().setConnectionNode(
                     level,
@@ -335,6 +344,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
             );
         }
     }
+
 
     @Override
     public AABB getRenderBoundingBox() {

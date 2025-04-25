@@ -68,7 +68,8 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
             ms.translate(0, 10, 0);
         }
         ms.popPose();
-
+        /*
+        ms.popPose();
         ms.pushPose();
         BlockPos pos = blockEntity.getBlockPos();
         ms.translate(-pos.getX(), -pos.getY(), -pos.getZ());
@@ -93,7 +94,7 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
 
             CachedCurveRenderer.render(OverheadLineRendererSystem.getRendererFor(connection.type()).getModel(), curve, ms, buffer, overlay);
         }
-        ms.popPose();
+         */
     }
 
     public static void register(Supplier<Block> block, Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer) {
