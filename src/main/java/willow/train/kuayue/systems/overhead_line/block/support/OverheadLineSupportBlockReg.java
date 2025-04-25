@@ -15,31 +15,44 @@ import net.minecraftforge.fml.DistExecutor;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineBlockDynamicConfiguration;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
+import willow.train.kuayue.systems.overhead_line.wire.WireReg;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, V extends OverheadLineSupportBlockEntity> extends BlockReg<T> {
-    private Predicate<OverheadLineType> allowedOverheadLineTypePredictor = (p)->true;
+    private Predicate<OverheadLineType> allowedWireTypePredictor = null;
+    private final List<WireReg> allowedWireTypes = new ArrayList<>();
     private Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer = null;
     private List<ResourceLocation> lineRenderModes = List.of();
     private List<Vec3> connectionPoints = List.of();
+
+    private OverheadLineBlockDynamicConfiguration.ConnectionPointBuilder connectionPointBuilder = null;
 
     public OverheadLineSupportBlockReg(String registrationKey) {
         super(registrationKey);
         this.withBlockEntity(OverheadLineSystem.OVERHEAD_LINE_SUPPORT_BLOCK_ENTITY);
     }
 
-    public OverheadLineSupportBlockReg<T, V> allowOverheadLineType(Predicate<OverheadLineType> overheadLineTypePredictor) {
-        this.allowedOverheadLineTypePredictor = overheadLineTypePredictor;
+    public OverheadLineSupportBlockReg<T, V> addAllowedWireType(WireReg ...wireType){
+        this.allowedWireTypes.addAll(List.of(wireType));
+        return this;
+    }
+
+    public OverheadLineSupportBlockReg<T, V> allowedWireType(Predicate<OverheadLineType> overheadLineTypePredictor) {
+        this.allowedWireTypePredictor = overheadLineTypePredictor;
         return this;
     }
 
     public OverheadLineSupportBlockReg<T, V> withLineRendererMode(List<ResourceLocation> lineRendererTypes) {
         this.lineRenderModes = lineRendererTypes;
+        return this;
+    }
+
+    public OverheadLineSupportBlockReg<T, V> withConnectionPointBuilder(OverheadLineBlockDynamicConfiguration.ConnectionPointBuilder connectionPointBuilder) {
+        this.connectionPointBuilder = connectionPointBuilder;
         return this;
     }
 
@@ -51,9 +64,13 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
                     ()->()-> OverheadSupportBlockRenderer.register(this::getBlock, this.renderer)
             );
         }
+        List<OverheadLineType> allowedTypes = new ArrayList<>();
+        for(WireReg wireType : this.allowedWireTypes) {
+            allowedTypes.add(wireType.getWireType());
+        }
         OverheadLineBlockDynamicConfiguration configuration = new OverheadLineBlockDynamicConfiguration(
-                this.connectionPoints,
-                this.allowedOverheadLineTypePredictor,
+                connectionPointBuilder != null ? connectionPointBuilder : (a,b,c)->this.connectionPoints,
+                allowedWireTypePredictor != null ? allowedWireTypePredictor : allowedTypes::contains,
                 this.lineRenderModes
         );
         OverheadLineSupportBlockEntity.registerPoint(this::getBlock, configuration);

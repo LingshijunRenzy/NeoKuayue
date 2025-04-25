@@ -5,6 +5,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import willow.train.kuayue.systems.overhead_line.wire.AllWires;
 
 
 public class OverheadLineEndWeightBlockEntity extends OverheadLineSupportBlockEntity {
@@ -32,6 +33,7 @@ public class OverheadLineEndWeightBlockEntity extends OverheadLineSupportBlockEn
 
     @Override
     public void lazyTick() {
+        super.lazyTick();
         if(this.level == null || !this.level.isClientSide)
             return;
         refreshHeight(this.level);
@@ -55,9 +57,10 @@ public class OverheadLineEndWeightBlockEntity extends OverheadLineSupportBlockEn
 
     @Override
     public void onConnectionModification() {
+        super.onConnectionModification();
         if(connections.isEmpty())
             renderState = RenderState.EMPTY;
-        else if(connections.parallelStream().anyMatch((connection)-> true))
+        else if(connections.parallelStream().anyMatch((connection)-> connection.type() == AllWires.OVERHEAD_LINE_WIRE.getWireType()))
             renderState = RenderState.DUAL;
         else
             renderState = RenderState.SINGLE;

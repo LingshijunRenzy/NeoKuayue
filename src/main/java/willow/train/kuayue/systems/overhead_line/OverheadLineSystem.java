@@ -9,6 +9,9 @@ import willow.train.kuayue.systems.overhead_line.block.support.OverheadSupportBl
 import willow.train.kuayue.systems.overhead_line.block.support.variants.AllOverheadLineSupportModels;
 import willow.train.kuayue.systems.overhead_line.save.OverheadLineSaved;
 import willow.train.kuayue.systems.overhead_line.test.OverheadLineSupportBlockTest;
+import willow.train.kuayue.systems.overhead_line.wire.AllWires;
+import willow.train.kuayue.systems.overhead_line.wire.WireReg;
+
 public class OverheadLineSystem {
 
     public static BlockEntityReg<OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_BLOCK_ENTITY =
@@ -20,6 +23,7 @@ public class OverheadLineSystem {
     public static void invoke(){
         OverheadLineSupportBlockTest.invoke();
         AllOverheadLineSupportBlocks.invoke();
+        AllWires.invoke();
     }
 
     public OverheadLineSaved savedData = new OverheadLineSaved();

@@ -4,6 +4,7 @@ import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import kasuga.lib.core.create.boundary.ResourcePattle;
+import kasuga.lib.core.util.Envs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -15,8 +16,12 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineBlockDynamicConfiguration;
+import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
+import willow.train.kuayue.systems.overhead_line.wire.WireReg;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -26,7 +31,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     public record Connection(
             BlockPos absolutePos,
             BlockPos relativePos,
-            ResourceLocation type,
+            OverheadLineType type,
             int connectionIndex,
             int targetIndex,
             Vector3f toPosition
@@ -35,7 +40,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         public Connection(
                 BlockPos absolutePos,
                 BlockPos relativePos,
-                ResourceLocation type,
+                OverheadLineType type,
                 int connectionIndex,
                 int targetIndex,
                 Vector3f toPosition
@@ -79,11 +84,23 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     public OverheadLineSupportBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         configuration = CONNECTION_POINTS_SUPPLIERS.get(this.getBlockState().getBlock());
+        if(Envs.isDevEnvironment()){
+            setLazyTickRate(20);
+        }
     }
 
     public OverheadLineSupportBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(OverheadLineSystem.OVERHEAD_LINE_SUPPORT_BLOCK_ENTITY.getType(), blockPos, blockState);
         configuration = CONNECTION_POINTS_SUPPLIERS.get(this.getBlockState().getBlock());
+    }
+
+    protected List<Vec3> connectionPoints = List.of();
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        this.connectionPoints = configuration.connectionPoints().get(this.level, this.getBlockPos(), this.getBlockState());
+        onConnectionModification();
     }
 
     protected final OverheadLineBlockDynamicConfiguration configuration;
@@ -143,8 +160,9 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         return index >= getConnectionPoints().size() ? Vec3.atCenterOf(getBlockPos()) : getActualConnectionPoints().get(index);
     }
 
-    private List<Vec3> getConnectionPoints() {
-        return configuration.connectionPoints();
+
+    public List<Vec3> getConnectionPoints() {
+        return connectionPoints;
     }
 
     public void addConnection(
@@ -159,7 +177,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                 new Connection(
                         target,
                         target.subtract(thisPos),
-                        itemType,
+                        WireReg.get(itemType),
                         thisConnectionIndex,
                         targetConnectionIndex,
                         new Vector3f(targetBlockEntity.getConnectionPointByIndex(targetConnectionIndex))
@@ -200,10 +218,16 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                 for(int i = 0; i < connectionTags.size(); i++) {
                     CompoundTag connectionTag = connectionTags.getCompound(i);
                     BlockPos absolutePosition = NbtUtils.readBlockPos(connectionTag.getCompound("absolutePos"));
+                    ResourceLocation connectionType = palette.decode(connectionTag.getInt("type"));
+                    OverheadLineType overheadLineType = WireReg.get(connectionType);
+                    if(overheadLineType == null) {
+                        Kuayue.LOGGER.warn("Unknown connection type: " + connectionType);
+                        continue;
+                    }
                     connections.add(new Connection(
                             absolutePosition,
                             NbtUtils.readBlockPos(connectionTag.getCompound("absolutePos")).subtract(this.getBlockPos()),
-                            palette.decode(connectionTag.getInt("type")),
+                            overheadLineType,
                             connectionTag.getInt("index"),
                             connectionTag.getInt("targetIndex"),
                             new Vector3f(connectionTag.getFloat("tX"), connectionTag.getFloat("tY"), connectionTag.getFloat("tZ"))
@@ -219,10 +243,16 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                     if(!absolutePos.subtract(this.getBlockPos()).equals(relativePos)) {
                         absolutePos = relativePos.offset(this.getBlockPos());
                     }
+                    ResourceLocation connectionType = palette.decode(connectionTag.getInt("type"));
+                    OverheadLineType overheadLineType = WireReg.get(connectionType);
+                    if(overheadLineType == null || !this.configuration.typePredictor().test(overheadLineType)) {
+                        Kuayue.LOGGER.warn("OverheadLineSupportBlockEntity: {} connection type {} is not valid", this.getBlockPos(), connectionType);
+                        continue;
+                    }
                     connections.add(new Connection(
                             absolutePos,
                             relativePos,
-                            palette.decode(connectionTag.getInt("type")),
+                            overheadLineType,
                             connectionTag.getInt("index"),
                             connectionTag.getInt("targetIndex"),
                             new Vector3f(connectionTag.getFloat("tX"), connectionTag.getFloat("tY"), connectionTag.getFloat("tZ"))
@@ -230,7 +260,9 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                 }
             }
         }
-        onConnectionModification();
+        if(this.level != null) {
+            onConnectionModification();
+        }
     }
 
     @Override
@@ -244,7 +276,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
             if(!clientPacket){
                 connectionTag.put("relativePos", NbtUtils.writeBlockPos(connection.relativePos()));
             }
-            connectionTag.putInt("type", palette.encode(connection.type()));
+            connectionTag.putInt("type", palette.encode(WireReg.getName(connection.type())));
             connectionTag.putInt("index", connection.connectionIndex());
             connectionTag.putInt("targetIndex", connection.targetIndex());
 
@@ -264,6 +296,15 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     public void destroy() {
         super.destroy();
         removeAllConnections();
+
+    }
+
+    @Override
+    public void lazyTick() {
+        super.lazyTick();
+        if(Envs.isDevEnvironment()){
+            this.connectionPoints = configuration.connectionPoints().get(this.level, this.getBlockPos(), this.getBlockState());
+        }
     }
 
     @Override
@@ -276,7 +317,24 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         return connections;
     }
 
-    public void onConnectionModification(){}
+    public void onConnectionModification(){
+        if(this.level == null || this.level.isClientSide)
+            return;
+        if(!connections.isEmpty()) {
+            Kuayue.OVERHEAD.savedData.getMigration().setConnectionNode(
+                    level,
+                    this.getBlockPos(),
+                    ForgeRegistries.BLOCKS.getKey(this.getBlockState().getBlock()),
+                    this.getConnections()
+            );
+        } else {
+            Kuayue.OVERHEAD.savedData.getMigration().removeConnectionNode(
+                    level,
+                    this.getBlockPos(),
+                    ForgeRegistries.BLOCKS.getKey(this.getBlockState().getBlock())
+            );
+        }
+    }
 
     @Override
     public AABB getRenderBoundingBox() {

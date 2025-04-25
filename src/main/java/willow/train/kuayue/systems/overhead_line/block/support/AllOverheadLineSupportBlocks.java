@@ -9,6 +9,7 @@ import net.minecraftforge.event.level.ChunkDataEvent;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.variants.*;
+import willow.train.kuayue.systems.overhead_line.wire.AllWires;
 
 public class AllOverheadLineSupportBlocks {
 
@@ -28,6 +29,10 @@ public class AllOverheadLineSupportBlocks {
                     .connectionPoints(
                             new Vec3(1.55, .125, 0)
                     )
+                    .addAllowedWireType(
+                            AllWires.OVERHEAD_LINE_WIRE,
+                            AllWires.ELECTRONIC_WIRE
+                    )
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_A2 =
@@ -38,6 +43,10 @@ public class AllOverheadLineSupportBlocks {
                     .withRenderer(()->OverheadLineSupportARenderer.A2Renderer::new)
                     .connectionPoints(
                             new Vec3(2.25, .125, 0)
+                    )
+                    .addAllowedWireType(
+                            AllWires.OVERHEAD_LINE_WIRE,
+                            AllWires.ELECTRONIC_WIRE
                     )
                     .submit(AllElements.testRegistry);
 
@@ -50,6 +59,10 @@ public class AllOverheadLineSupportBlocks {
                     .connectionPoints(
                             new Vec3(1.55, .125, 0)
                     )
+                    .addAllowedWireType(
+                            AllWires.OVERHEAD_LINE_WIRE,
+                            AllWires.ELECTRONIC_WIRE
+                    )
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_B2 =
@@ -60,6 +73,10 @@ public class AllOverheadLineSupportBlocks {
                     .withRenderer(()-> OverheadLineSupportBRenderer.B2Renderer::new)
                     .connectionPoints(
                             new Vec3(2.25, .125, 0)
+                    )
+                    .addAllowedWireType(
+                            AllWires.OVERHEAD_LINE_WIRE,
+                            AllWires.ELECTRONIC_WIRE
                     )
                     .submit(AllElements.testRegistry);
 
@@ -73,6 +90,10 @@ public class AllOverheadLineSupportBlocks {
                             new Vec3(1.55, .125, - .52),
                             new Vec3(2.25, .125, .52)
                     )
+                    .addAllowedWireType(
+                            AllWires.OVERHEAD_LINE_WIRE,
+                            AllWires.ELECTRONIC_WIRE
+                    )
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_C2 =
@@ -85,6 +106,10 @@ public class AllOverheadLineSupportBlocks {
                             new Vec3(1.55, .125, .52),
                             new Vec3(2.25, .125, -.52)
                     )
+                    .addAllowedWireType(
+                            AllWires.OVERHEAD_LINE_WIRE,
+                            AllWires.ELECTRONIC_WIRE
+                    )
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_INSULATOR_A =
@@ -93,6 +118,10 @@ public class AllOverheadLineSupportBlocks {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineInsulatorRenderer.ARenderer::new)
+                    .withConnectionPointBuilder(OverheadLineInsulatorRenderer.ARenderer::getConnectionPointIf)
+                    .addAllowedWireType(
+                            AllWires.ELECTRONIC_WIRE
+                    )
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_INSULATOR_B =
@@ -101,6 +130,10 @@ public class AllOverheadLineSupportBlocks {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineInsulatorRenderer.BRenderer::new)
+                    .withConnectionPointBuilder(OverheadLineInsulatorRenderer.BRenderer::getConnectionPointIf)
+                    .addAllowedWireType(
+                            AllWires.ELECTRONIC_WIRE
+                    )
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineEndWeightBlock, OverheadLineEndWeightBlockEntity> OVERHEAD_LINE_END_WEIGHT =
@@ -110,6 +143,11 @@ public class AllOverheadLineSupportBlocks {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineEndCounterWeightRenderer::new)
+                    .addAllowedWireType(
+                            AllWires.OVERHEAD_LINE_WIRE,
+                            AllWires.ELECTRONIC_WIRE
+                    )
+                    .withConnectionPointBuilder(OverheadLineEndCounterWeightRenderer::getConnectionPointIf)
                     .submit(AllElements.testRegistry);
     public static void invoke(){
 

@@ -5,10 +5,15 @@ import kasuga.lib.core.client.model.anim_model.AnimModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineEndWeightBlockEntity;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
+import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportInsulatorBlock;
 
 import java.util.List;
 
@@ -48,7 +53,7 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
         pPoseStack.pushPose();
         pPoseStack.mulPoseMatrix(
                 AllOverheadLineSupportModels.getDirectionOf.apply(
-                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1f
+                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
                 )
         );
         AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT_EMPTY.render(
@@ -84,7 +89,7 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
         pPoseStack.pushPose();
         pPoseStack.mulPoseMatrix(
                 AllOverheadLineSupportModels.getDirectionOf.apply(
-                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1f
+                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
                 )
         );
         AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT_SMALL.render(
@@ -119,7 +124,7 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
         pPoseStack.pushPose();
         pPoseStack.mulPoseMatrix(
                 AllOverheadLineSupportModels.getDirectionOf.apply(
-                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1f
+                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
                 )
         );
         AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT.render(
@@ -174,6 +179,10 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
                 pPackedLight,
                 pPackedOverlay
         );
+    }
+
+    public static List<Vec3> getConnectionPointIf(Level level, BlockPos blockPos, BlockState blockState) {
+        return List.of(new Vec3(2.5,0.075,0));
     }
 
 }

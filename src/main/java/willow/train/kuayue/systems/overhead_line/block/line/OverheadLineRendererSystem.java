@@ -11,6 +11,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import willow.train.kuayue.systems.overhead_line.render.CachedCurveRenderer;
 import willow.train.kuayue.systems.overhead_line.render.RenderCurve;
+import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
+import willow.train.kuayue.systems.overhead_line.wire.OverheadLineRendererUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,20 @@ import static net.minecraftforge.client.event.RenderLevelStageEvent.Stage.AFTER_
 
 public class OverheadLineRendererSystem {
 
+    public static final HashMap<OverheadLineType, OverheadLineRenderer> RENDERERS = new HashMap<>();
+
     public HashMap<Pair<Vec3, Vec3>, ClientOverheadLine> overheadLines = new HashMap<>();
+
+    public static void registerRenderer(OverheadLineType wireType, Supplier<Supplier<OverheadLineRenderer>> renderer) {
+        RENDERERS.put(wireType, renderer.get().get());
+    }
+
+    public static OverheadLineRenderer getRendererFor(OverheadLineType type) {
+        if(!RENDERERS.containsKey(type)){
+            throw new IllegalArgumentException("Unknown wire type: " + type);
+        }
+        return RENDERERS.get(type);
+    }
 
 
     public void onRenderLevelLast(RenderLevelStageEvent event) {
