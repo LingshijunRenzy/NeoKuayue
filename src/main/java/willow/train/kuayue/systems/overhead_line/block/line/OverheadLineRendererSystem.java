@@ -3,16 +3,20 @@ package willow.train.kuayue.systems.overhead_line.block.line;
 import kasuga.lib.core.client.model.anim_model.AnimModel;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import org.mozilla.javascript.ast.Block;
+import willow.train.kuayue.mixins.mixin.LevelRendererAccessor;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 import willow.train.kuayue.systems.overhead_line.render.CachedCurveRenderer;
 import willow.train.kuayue.systems.overhead_line.render.RenderCurve;
@@ -43,12 +47,17 @@ public class OverheadLineRendererSystem {
 
 
     public static record OverheadLineLocator(
+            ResourceKey<Level> level,
             BlockPos fromPosition,
             BlockPos toPosition,
             int fromIndex,
             int toIndex
     ) {
-        public static OverheadLineLocator createFromConnection(BlockPos $fromPosition ,OverheadLineSupportBlockEntity.Connection connection) {
+        public static OverheadLineLocator createFromConnection(
+                ResourceKey<Level> level,
+                BlockPos $fromPosition,
+                OverheadLineSupportBlockEntity.Connection connection
+        ) {
 
             BlockPos $targetPosition = connection.absolutePos();
 
@@ -66,6 +75,7 @@ public class OverheadLineRendererSystem {
             }
 
             return new OverheadLineLocator(
+                level,
                 $fromPosition,
                 $targetPosition,
                 $fromIndex,
@@ -86,7 +96,7 @@ public class OverheadLineRendererSystem {
     public static HashMap<OverheadLineLocator, Pair<Boolean, Boolean>> LOCK = new HashMap<>();
 
     public static void registerOverheadLine(OverheadLineSupportBlockEntity blockEntity, OverheadLineSupportBlockEntity.Connection connection){
-        OverheadLineLocator locator = OverheadLineLocator.createFromConnection(blockEntity.getBlockPos(), connection);
+        OverheadLineLocator locator = OverheadLineLocator.createFromConnection(blockEntity.getLevel().dimension(), blockEntity.getBlockPos(), connection);
         boolean isFirst = locator.fromPosition() == blockEntity.getBlockPos();
         if(LOCK.containsKey(locator)) {
             LOCK.put(locator, replace(LOCK.get(locator), isFirst, true));
@@ -109,7 +119,7 @@ public class OverheadLineRendererSystem {
     }
 
     public static void removeOverheadLine(OverheadLineSupportBlockEntity blockEntity, OverheadLineSupportBlockEntity.Connection connection){
-        OverheadLineLocator locator = OverheadLineLocator.createFromConnection(blockEntity.getBlockPos(), connection);
+        OverheadLineLocator locator = OverheadLineLocator.createFromConnection(blockEntity.getLevel().dimension(), blockEntity.getBlockPos(), connection);
         boolean isFirst = locator.fromPosition() == blockEntity.getBlockPos();
         if(!LOCK.containsKey(locator)) {
             OVERHEAD_LINES.remove(locator);
@@ -127,6 +137,9 @@ public class OverheadLineRendererSystem {
     }
 
     public static void onRenderLevelLast(RenderLevelStageEvent event) {
+
+        ClientLevel level = ((LevelRendererAccessor) event.getLevelRenderer()).getLevel();
+
         MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 
         if(event.getStage() != AFTER_SKY)
@@ -141,7 +154,9 @@ public class OverheadLineRendererSystem {
         event.getPoseStack().pushPose();
         event.getPoseStack().translate(-d0, -d1, -d2);
 
-        OVERHEAD_LINES.values().forEach((rendering)->{
+        OVERHEAD_LINES.forEach((position, rendering)->{
+            if(position.level() != level.dimension())
+                return;
             AABB boundingBox = rendering.boundingBox();
             if(boundingBox == null || !frustum.isVisible(boundingBox))
                 return;

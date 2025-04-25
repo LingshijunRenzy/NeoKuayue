@@ -265,6 +265,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
             }
         }
         if(this.level != null) {
+            this.connectionPoints = configuration.connectionPoints().get(this.level, this.getBlockPos(), this.getBlockState());
             onConnectionModification();
         }
     }
@@ -300,7 +301,14 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     public void destroy() {
         super.destroy();
         removeAllConnections();
+    }
 
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        if(this.level == null || !this.level.isClientSide)
+            return;
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()-> OverheadLineRendererBridge.unloadBlockEntity(this));
     }
 
     @Override
