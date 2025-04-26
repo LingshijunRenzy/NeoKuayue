@@ -1,3 +1,5 @@
+import willow.train.kuayue.build.ModuleCompilePlugin
+
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
@@ -20,6 +22,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: ModuleCompilePlugin
 
 version = "${mod_version}"
 group = 'willow.train.kuayue' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
