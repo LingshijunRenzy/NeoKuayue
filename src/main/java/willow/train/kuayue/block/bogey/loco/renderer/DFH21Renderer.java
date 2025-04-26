@@ -90,7 +90,7 @@ public class DFH21Renderer extends BogeyRenderer {
 
                 transmissionRod
                         .translate(0,0.85, 0)
-                        .rotateX(wheelAngle * 3.256)
+                        .rotateZ(wheelAngle * 3.256)
                         .render(ms, light, vb);
             } else {
                 main.rotateY(180).translate(0, 0, 0).render(ms, light, vb);
