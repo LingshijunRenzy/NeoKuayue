@@ -1,5 +1,6 @@
 package willow.train.kuayue.systems.overhead_line.block.support;
 
+import kasuga.lib.registrations.builders.SelfReferenceItemBuilder;
 import kasuga.lib.registrations.common.BlockEntityReg;
 import kasuga.lib.registrations.common.BlockReg;
 import kasuga.lib.registrations.common.CreativeTabReg;
@@ -57,6 +58,12 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
     }
 
     @Override
+    public OverheadLineSupportBlockReg<T, V> shouldCustomRenderItem(boolean flag) {
+        super.shouldCustomRenderItem(flag);
+        return this;
+    }
+
+    @Override
     public OverheadLineSupportBlockReg<T, V> submit(SimpleRegistry simpleRegistry) {
         super.submit(simpleRegistry);
         if(this.renderer != null) {
@@ -79,6 +86,12 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
 
     @Override
     public <R extends Item> OverheadLineSupportBlockReg<T, V> withItem(ItemReg.ItemBuilder<R> builder, ResourceLocation itemModelLocation) {
+        super.withItem(builder, itemModelLocation);
+        return this;
+    }
+
+    @Override
+    public <R extends Item> OverheadLineSupportBlockReg<T, V> withItem(SelfReferenceItemBuilder<R, T> builder, ResourceLocation itemModelLocation) {
         super.withItem(builder, itemModelLocation);
         return this;
     }
