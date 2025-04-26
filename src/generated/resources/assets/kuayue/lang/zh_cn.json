@@ -924,7 +924,7 @@
   "block.kuayue.ss8_carport_center": "SS8中央车顶",
   "block.kuayue.ss8_carport_fan": "SS8通风窗车顶",
   "block.kuayue.ss8_carport_link": "SS8连接车顶",
-  "block.kuayue.ss8_cowcatcher": "ss8排障器",
+  "block.kuayue.ss8_cowcatcher": "SS8排障器",
   "block.kuayue.ss8_head": "SS8车头",
   "block.kuayue.ss8_floor": "SS8地板",
   "block.kuayue.ss8_panel_bottom": "SS8通用下箱板",
@@ -959,6 +959,13 @@
 
   "tip.kuayue.ss8_head":"使用扳手右键切换(ss8早期型车头/ss8后期型车头）",
   "tip.kuayue.ss3_head":"使用扳手右键切换(ss3外挂空调车头/ss3集成空调车头)",
+
+  "block.kuayue.df11_cowcatcher": "DF11排障器",
+  "block.kuayue.df11_head": "DF11车头",
+  "block.kuayue.df11_floor": "DF11地板",
+  "block.kuayue.df11_carport_equip_a": "DF11设备间车顶A",
+  "block.kuayue.df11_carport_equip_b": "DF11设备间车顶B",
+  "container.kuayue.inventory.loco.button.df11": "DF11",
 
   "tips.tech_tree": "--------------------------------以下是科技树部件-------------------------------------------",
   "tech_tree.kuayue.exp_unlock_true": "满足等级条件",

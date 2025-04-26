@@ -259,6 +259,7 @@ public class AllBlocks {
         ISS3Panel.invoke();
         ISS8Panel.invoke();
         AllRecipeBlock.invoke();
+        I11Panel.invoke();
     }
 
     public static void generateDrops(String name) {

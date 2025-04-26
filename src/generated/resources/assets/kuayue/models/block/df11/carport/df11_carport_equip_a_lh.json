@@ -1,0 +1,6 @@
+{
+  "loader": "forge:obj",
+  "render_type": "cutout_mipped",
+  "model": "kuayue:models/block/df11/carport/df11_carport_equip_a_lh.obj",
+  "flip_v": true
+}

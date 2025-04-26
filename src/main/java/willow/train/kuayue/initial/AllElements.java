@@ -27,6 +27,7 @@ import willow.train.kuayue.systems.device.AllDeviceItems;
 import willow.train.kuayue.initial.recipe.AllRecipes;
 import willow.train.kuayue.systems.device.EntityTrackingListener;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
+import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.AllOverheadLineSupportBlocks;
 
 public class AllElements {
@@ -89,6 +90,7 @@ public class AllElements {
             Kuayue.BUS.addListener(ClientInit::registerHUDOverlays);
             Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
             MinecraftForge.EVENT_BUS.addListener(RenderArrowEvent::renderBlockBounds);
+            MinecraftForge.EVENT_BUS.addListener(OverheadLineRendererSystem::onRenderLevelLast);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::unloadEvent);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::saveEvent);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::loadEvent);

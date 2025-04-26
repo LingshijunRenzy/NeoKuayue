@@ -922,7 +922,7 @@
  "block.kuayue.ss8_carport_center": "SS8 Center Carport",
  "block.kuayue.ss8_carport_fan": "SS8 Fan Blind Carport",
  "block.kuayue.ss8_carport_link": "SS8 Link Carport",
- "block.kuayue.ss8_cowcatcher": "ss8 Cowcatcher",
+ "block.kuayue.ss8_cowcatcher": "SS8 Cowcatcher",
  "block.kuayue.ss8_head": "SS8 Head",
  "block.kuayue.ss8_floor": "SS8 Floor ",
  "block.kuayue.ss8_panel_bottom": "SS8 Universal Bottom Panel ",
@@ -957,6 +957,13 @@
 
  "tip.kuayue.ss3_head": "Use wrench and right-click to switch (SS3 head with external air conditioner/SS3 head with integrated air conditioner)",
  "tip.kuayue.ss8_head": "Use wrench and right-click to switch (Early model SS8 head/Late model SS8 head)",
+
+ "block.kuayue.df11_cowcatcher": "DF11 Cowcatcher",
+ "block.kuayue.df11_head": "DF11 Head",
+ "block.kuayue.df11_floor": "DF11 Floor",
+ "block.kuayue.df11_carport_equip_a": "DF11 Equipment Room Carport (Type A)",
+ "block.kuayue.df11_carport_equip_b": "DF11 Equipment Room Carport (Type B)",
+ "container.kuayue.inventory.loco.button.df11": "DF11",
 
  "tips.tech_tree": "--------------------------------all tech tree items below here-------------------------------------------",
  "tech_tree.kuayue.exp_unlock_true": "Fulfill level requirements.",
