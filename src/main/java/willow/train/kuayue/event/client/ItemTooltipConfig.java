@@ -7,12 +7,28 @@ import net.minecraft.network.chat.Style;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The ItemTooltipConfig class is designed to manage the configuration of item tooltips.
+ * It stores mappings between item IDs, translation keys, and text colors, and provides
+ * methods to retrieve and create tooltip components based on these mappings.
+ *
+ * <p>This class plays a role in conjunction with event handlers related to item tooltips,
+ * This class works in conjunction with the event handlers related to item tooltips,
+ * and is associated with the {@link willow.train.kuayue.event.client.TooltipEvent#onItemTooltipCheckItemType}.
+ * When an item tooltip event is triggered, the relevant event handler can use this class
+ * to obtain the appropriate tooltip information for the item and add it to the tooltip list.</p>
+ *
+ * <p>You should use this class when you need to customize the tooltips for different items
+ * and support multi - language display. By adding new item IDs, translation keys, and colors
+ * in the static block, you can easily expand the configuration of item tooltips.</p>
+ */
 public class ItemTooltipConfig {
     private static final Map<String, TooltipInfo> itemTooltipMap = new HashMap<>();
 
     static {
-        addItemTooltip("ss8_head", "tip.kuayue.ss8_head", ChatFormatting.GREEN);
-        addItemTooltip("ss3_head", "tip.kuayue.ss3_head", ChatFormatting.GREEN);
+        // Use translation keys instead of specific tooltip texts
+        addItemTooltip("ss8_head", "tooltip.willow.train.kuayue.ss8_head", ChatFormatting.GREEN);
+        addItemTooltip("ss3_head", "tooltip.willow.train.kuayue.ss3_head", ChatFormatting.GREEN);
     }
 
     private static void addItemTooltip(String itemId, String translationKey, ChatFormatting color) {
