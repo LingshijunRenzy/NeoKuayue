@@ -83,7 +83,7 @@ public class AllOverheadLineSupportBlocks {
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_C =
             new OverheadLineSupportBlockReg<>("overhead_line_support_c")
                     .blockType(NormalOverheadLineSupportBlock::new)
-                    .defaultBlockItem()
+                    .withItem((b, p)->new CustomRendererItem(b, p).withRenderer(()->OverheadLineSupportCRenderer.C1ItemRenderer::new), AllElements.testRegistry.asResource("dynamic_renderer_item/overhead_line_support_c1"))
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineSupportCRenderer.C1Renderer::new)
                     .connectionPoints(
@@ -94,12 +94,13 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .shouldCustomRenderItem(true)
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_C2 =
             new OverheadLineSupportBlockReg<>("overhead_line_support_c2")
                     .blockType(NormalOverheadLineSupportBlock::new)
-                    .defaultBlockItem()
+                    .withItem((b, p)->new CustomRendererItem(b, p).withRenderer(()->OverheadLineSupportCRenderer.C2ItemRenderer::new), AllElements.testRegistry.asResource("dynamic_renderer_item/overhead_line_support_c2"))
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineSupportCRenderer.C2Renderer::new)
                     .connectionPoints(
@@ -110,6 +111,7 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .shouldCustomRenderItem(true)
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_INSULATOR_A =
