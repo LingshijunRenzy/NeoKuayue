@@ -71,6 +71,7 @@ public class AllTags {
 
     public static final BlockTagReg I11G = new BlockTagReg("i11g", "panel/i11g")
             .submit(AllElements.testRegistry);
+
     public static final BlockTagReg ISS3 = new BlockTagReg("iss3", "panel/iss3")
             .submit(AllElements.testRegistry);
 
@@ -79,6 +80,10 @@ public class AllTags {
 
     public static final BlockTagReg ISS8 = new BlockTagReg("iss8", "panel/iss8")
             .submit(AllElements.testRegistry);
+
+    public static final BlockTagReg I11 = new BlockTagReg("i11", "panel/i11")
+            .submit(AllElements.testRegistry);
+
     public static final BlockTagReg MULTI_SEAT_BLOCK = new BlockTagReg("multi_seat_block", "multi_seat_block")
             .submit(AllElements.testRegistry);
 

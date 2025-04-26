@@ -30,7 +30,7 @@ import java.util.Set;
 public class CarriageInventoryEvents {
 
     private static final int CARRIAGE_TYPE_COUNTS = 10;
-    private static final int LOCO_TYPE_COUNTS = 5;
+    private static final int LOCO_TYPE_COUNTS = 6;
     private static int carriageType = 0;
     private static int locoType = 0;
     ItemIconButton[] imgBtn = new ItemIconButton[CARRIAGE_TYPE_COUNTS];
@@ -122,6 +122,7 @@ public class CarriageInventoryEvents {
         locoIcons[2] = new ItemStack(I3DPanel.HEAD_HXD3D.getBlock());
         locoIcons[3] = new ItemStack(I21Panel.HEAD_DF21.getBlock());
         locoIcons[4] = new ItemStack(ISS8Panel.SS8_HEAD.getBlock());
+        locoIcons[5] = new ItemStack(I11Panel.DF11_HEAD.getBlock());
         // 定义左侧向上箭头按钮
         upAndDownBtn[0] = new ImageButton(upRegex, this.guiLeft - 22, this.guiTop - 8, 20, 20, Component.empty(),
                 b -> {
@@ -203,6 +204,8 @@ public class CarriageInventoryEvents {
                 Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.df21");
         locoComponents[4] =
                 Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.ss8");
+        locoComponents[5] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.df11");
 
         // 定义所有列车车厢板类型按钮
         for (int i = 0; i < imgBtn.length; i++) {
@@ -493,12 +496,17 @@ public class CarriageInventoryEvents {
                 menu.items.clear();
                 menu.items.addAll(locoItemList.get(3));
                 break;
+            case 5: // DF11
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(4));
+                break;
             default: // locoType为0时添加所有类型
                 menu.items.clear();
                 menu.items.addAll(locoItemList.get(0)); // DF11G
                 menu.items.addAll(locoItemList.get(1)); // HXD3D
                 menu.items.addAll(locoItemList.get(2)); // DF21
                 menu.items.addAll(locoItemList.get(3)); // SS8
+                menu.items.addAll(locoItemList.get(4)); // DF11
         }
     }
 
@@ -527,6 +535,7 @@ public class CarriageInventoryEvents {
                         add(getListByTag(AllTags.I3D.tag())); // HXD3D 1
                         add(getListByTag(AllTags.I21.tag())); // DF21 2
                         add(getListByTag(AllTags.ISS8.tag())); // SS8 3
+                        add(getListByTag(AllTags.I11.tag())); // I11 4
                     }
                 };
     }
