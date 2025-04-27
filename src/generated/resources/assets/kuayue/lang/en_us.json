@@ -940,6 +940,7 @@
  "block.kuayue.df11_cowcatcher": "DF11 Cowcatcher",
  "block.kuayue.df11_head": "DF11 Head",
  "container.kuayue.inventory.loco.button.df11": "DF11",
+ "block.kuayue.panel_top_df11": "DF11 Top Panel",
 
  "tips.tech_tree": "--------------------------------all tech tree items below here-------------------------------------------",
  "tech_tree.kuayue.exp_unlock_true": "Fulfill level requirements.",
