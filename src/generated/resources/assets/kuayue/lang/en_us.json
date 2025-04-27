@@ -963,6 +963,9 @@
  "block.kuayue.df11_carport_equip_b": "DF11 Equipment Room Carport (Type B)",
  "block.kuayue.df11_carport_general": "DF11 General Carport",
  "block.kuayue.df11_carport_center_cooling_fan": "DF11 Center Cooling Fan",
+ "block.kuayue.df11_carport_equip_blinds": "DF11 Mechanical Room Ventilation Louvers",
+ "block.kuayue.df11_carport_louver_fan": "DF11 Resistance Brake Louver Fan",
+ "block.kuayue.df11_door": "DF11 Door",
  "block.kuayue.df11_reservoir_tank": "DF11 Reservoir & Tank",
 
  "container.kuayue.inventory.loco.button.df11": "DF11",
