@@ -957,6 +957,9 @@
   "block.kuayue.ss3_roof_vent": "SS3车顶进气窗",
   "block.kuayue.ss3_transformer": "SS3车底变压器",
 
+  "tip.kuayue.ss8_head":"使用扳手右键切换(ss8早期型车头/ss8后期型车头）",
+  "tip.kuayue.ss3_head":"使用扳手右键切换(ss3外挂空调车头/ss3集成空调车头)",
+
   "block.kuayue.df11_cowcatcher": "DF11排障器",
   "block.kuayue.df11_head": "DF11车头",
   "block.kuayue.df11_floor": "DF11地板",

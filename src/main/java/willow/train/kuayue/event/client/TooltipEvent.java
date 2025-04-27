@@ -13,6 +13,9 @@ import net.minecraftforge.fml.common.Mod;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeManager;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class TooltipEvent {
@@ -33,5 +36,21 @@ public class TooltipEvent {
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD));
             event.getToolTip().add(component);
         } catch (Exception ignored) {}
+    }
+
+    @SubscribeEvent
+    public static void onItemTooltipCheckItemType(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        Item item = stack.getItem();
+        ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(item);
+        if (itemRegistryName != null) {
+            String itemPath = itemRegistryName.getPath();
+            ItemTooltipConfig.TooltipInfo tooltipInfo = ItemTooltipConfig.getTooltipInfo(itemPath);
+            if (tooltipInfo != null) {
+                try {
+                    event.getToolTip().add(tooltipInfo.createTooltipComponent());
+                } catch (Exception ignored) {}
+            }
+        }
     }
 }
