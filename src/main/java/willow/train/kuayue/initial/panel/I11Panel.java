@@ -58,5 +58,30 @@ public class I11Panel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
+    public static final SlabRegistration<HingeSlabBlock> DF11_CARPORT_CENTER_COOLING_FAN =
+            new SlabRegistration<HingeSlabBlock>("df11_carport_center_cooling_fan")
+                    .block(p -> new HingeSlabBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> DF11_CARPORT_GENERAL =
+            new SlabRegistration<TrainSlabBlock>("df11_carport_general")
+                    .block(p -> new TrainSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final BlockReg<FullShapeDirectionalBlock> DF11_RESERVOIR_TANK =
+            new BlockReg<FullShapeDirectionalBlock>("df11_reservoir_tank")
+                    .blockType(FullShapeDirectionalBlock::new)
+                    .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
+                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueLocoTab)
+                    .submit(AllElements.testRegistry);
+
     public static void invoke(){}
 }

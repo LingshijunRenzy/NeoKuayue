@@ -962,6 +962,10 @@
   "block.kuayue.df11_floor": "DF11地板",
   "block.kuayue.df11_carport_equip_a": "DF11设备间车顶A",
   "block.kuayue.df11_carport_equip_b": "DF11设备间车顶B",
+  "block.kuayue.df11_carport_general": "DF11通用车顶",
+  "block.kuayue.df11_carport_center_cooling_fan": "DF11中央冷却风扇",
+  "block.kuayue.df11_reservoir_tank": "DF11风缸油箱",
+
   "container.kuayue.inventory.loco.button.df11": "DF11",
 
   "tips.tech_tree": "--------------------------------以下是科技树部件-------------------------------------------",
