@@ -38,6 +38,10 @@
     "kuayue:ss8_carport_ad",
     "kuayue:ss8_carport_fan",
     "kuayue:ss8_carport_link",
-    "kuayue:ss8_roof"
+    "kuayue:ss8_roof",
+
+    "kuayue:ss3_roof",
+    "kuayue:ss3_carport",
+    "kuayue:ss3_carport_ad"
   ]
 }

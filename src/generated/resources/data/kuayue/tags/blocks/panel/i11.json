@@ -1,6 +1,16 @@
 {
   "values": [
     "kuayue:df11_cowcatcher",
-    "kuayue:df11_head"
+    "kuayue:df11_head",
+    "kuayue:df11_floor",
+    "kuayue:df11_carport_equip_b",
+    "kuayue:df11_carport_equip_a",
+    "kuayue:df11_carport_general",
+    "kuayue:df11_carport_center_cooling_fan",
+    "kuayue:df11_carport_equip_blinds",
+    "kuayue:df11_carport_louver_fan",
+
+    "kuayue:df11_door",
+    "kuayue:df11_reservoir_tank"
   ]
 }

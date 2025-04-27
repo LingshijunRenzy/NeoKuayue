@@ -1,11 +1,19 @@
 package willow.train.kuayue.initial.panel;
 
+import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.registrations.common.BlockReg;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
+import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
+import willow.train.kuayue.block.panels.slab.HingeSlabBlock;
+import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
 import willow.train.kuayue.initial.AllElements;
+import willow.train.kuayue.initial.registration.PanelRegistration;
+import willow.train.kuayue.initial.registration.SlabRegistration;
 
 public class I11Panel {
 
@@ -29,6 +37,87 @@ public class I11Panel {
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueLocoTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> DF11_FLOOR =
+            new SlabRegistration<TrainSlabBlock>("df11_floor")
+                    .block(p -> new TrainSlabBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLACK)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<HingeSlabBlock> DF11_CARPORT_EQUIP_B =
+            new SlabRegistration<HingeSlabBlock>("df11_carport_equip_b")
+                    .block(p -> new HingeSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<HingeSlabBlock> DF11_CARPORT_EQUIP_A =
+            new SlabRegistration<HingeSlabBlock>("df11_carport_equip_a")
+                    .block(p -> new HingeSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<HingeSlabBlock> DF11_CARPORT_CENTER_COOLING_FAN =
+            new SlabRegistration<HingeSlabBlock>("df11_carport_center_cooling_fan")
+                    .block(p -> new HingeSlabBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> DF11_CARPORT_GENERAL =
+            new SlabRegistration<TrainSlabBlock>("df11_carport_general")
+                    .block(p -> new TrainSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> DF11_CARPORT_EQUIP_BLINDS =
+            new SlabRegistration<TrainSlabBlock>("df11_carport_equip_blinds")
+                    .block(p -> new TrainSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> DF11_CARPORT_LOUVER_FAN =
+            new SlabRegistration<TrainSlabBlock>("df11_carport_louver_fan")
+                    .block(p -> new TrainSlabBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final BlockReg<FullShapeDirectionalBlock> DF11_RESERVOIR_TANK =
+            new BlockReg<FullShapeDirectionalBlock>("df11_reservoir_tank")
+                    .blockType(FullShapeDirectionalBlock::new)
+                    .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
+                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueLocoTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<CustomRenderedDoorBlock> DF11_DOOR =
+            new PanelRegistration<CustomRenderedDoorBlock>("df11_door")
+                    .block(p -> new CustomRenderedDoorBlock(p,
+                            Couple.create(
+                                    AllElements.testRegistry.asResource("df11/door/df11_door_bottom_left"),
+                                    AllElements.testRegistry.asResource("df11/door/df11_door_upper_left")
+                            ), Couple.create(
+                            AllElements.testRegistry.asResource("df11/door/df11_door_bottom_right"),
+                            AllElements.testRegistry.asResource("df11/door/df11_door_upper_right")
+                    ), new Vec3(0, 0, 0), RenderShape.ENTITYBLOCK_ANIMATED, false
+                    ))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .tab(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}

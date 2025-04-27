@@ -147,7 +147,9 @@ public class AllBlocks {
                     .addBlock(I21Panel.DOOR_CABIN_DF21.block)
                     .addBlock(I21Panel.DOOR_EQUIP_DF21.block)
                     .addBlock(ISS8Panel.SS8_DOOR.block)
+                    .addBlock(ISS3Panel.SS3_DOOR.block)
                     .addBlock(CM1Panel.DOOR_M1.block)
+                    .addBlock(I11Panel.DF11_DOOR.block)
                     .submit(AllElements.testRegistry);
 
     public static final BlockEntityReg<CustomRenderedEndfaceEntity> CUSTOM_RENDERED_ENDFACE_ENTITY =
