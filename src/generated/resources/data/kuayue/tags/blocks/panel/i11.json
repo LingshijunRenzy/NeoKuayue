@@ -12,10 +12,12 @@
     "kuayue:df11_panel_air_intake",
     "kuayue:df11_window_equip_small",
     "kuayue:df11_panel_equip_bottom",
+    "kuayue:df11_panel_equip_top",
 
     "kuayue:df11_door",
     "kuayue:df11_reservoir_tank",
     "kuayue:panel_bottom_df11",
     "kuayue:panel_top_df11"
+
   ]
 }

@@ -165,5 +165,13 @@ public class I11Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<TrainHingePanelBlock> DF11_PANEL_EQUIP_TOP =
+            new PanelRegistration<TrainHingePanelBlock>("df11_panel_equip_top")
+            .block(TrainHingePanelBlock::new)
+            .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+            .tab(AllElements.neoKuayueLocoTab)
+            .noOcclusion().strengthAndTool(1.5f,3f)
+            .submit(AllElements.testRegistry);
+
     public static void invoke(){}
 }

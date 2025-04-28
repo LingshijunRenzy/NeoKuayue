@@ -5,11 +5,10 @@
 		"8": "kuayue:block/df11/df11_window_equip_small",
 		"particle": "kuayue:block/df11/df11_window_equip_small"
 	},
-	"gui_light": "front",
 	"elements": [
 		{
-			"from": [9.5, 0, 15],
-			"to": [11, 16, 17.25],
+			"from": [9.5, 0, 14.75],
+			"to": [11, 16, 17],
 			"rotation": {"angle": 0, "axis": "y", "origin": [13, 0, 16]},
 			"faces": {
 				"north": {"uv": [3, 0.15, 2, 8.15], "texture": "#8"},
@@ -21,8 +20,8 @@
 			}
 		},
 		{
-			"from": [0, 0, 15],
-			"to": [2.5, 16, 17.25],
+			"from": [0, 0, 14.75],
+			"to": [2.5, 16, 17],
 			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, 16]},
 			"faces": {
 				"north": {"uv": [2, 0.15, 0.5, 8.15], "texture": "#8"},
@@ -34,8 +33,8 @@
 			}
 		},
 		{
-			"from": [2.5, 14, 15],
-			"to": [9.5, 16, 17.25],
+			"from": [2.5, 14, 14.75],
+			"to": [9.5, 16, 17],
 			"rotation": {"angle": 0, "axis": "y", "origin": [1, 14, 16]},
 			"faces": {
 				"north": {"uv": [13.5, 2.15, 9, 3.15], "texture": "#8"},
@@ -47,8 +46,8 @@
 			}
 		},
 		{
-			"from": [2.5, 13, 16],
-			"to": [9.5, 14, 16],
+			"from": [2.5, 13, 14.75],
+			"to": [9.5, 14, 14.75],
 			"rotation": {"angle": 0, "axis": "y", "origin": [1, 12, 16]},
 			"faces": {
 				"north": {"uv": [13.5, 5.15, 10, 5.65], "texture": "#8"},
@@ -60,8 +59,8 @@
 			}
 		},
 		{
-			"from": [2.5, 4, 16],
-			"to": [9.5, 5, 16],
+			"from": [2.5, 4, 14.75],
+			"to": [9.5, 5, 14.75],
 			"rotation": {"angle": 0, "axis": "y", "origin": [1, 3, 16]},
 			"faces": {
 				"north": {"uv": [13.5, 4.15, 10, 4.65], "texture": "#8"},
@@ -73,8 +72,8 @@
 			}
 		},
 		{
-			"from": [8.5, 5, 16],
-			"to": [9.5, 13, 16],
+			"from": [8.5, 5, 14.75],
+			"to": [9.5, 13, 14.75],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 1, 16]},
 			"faces": {
 				"north": {"uv": [11.5, 6.15, 11, 10.15], "texture": "#8"},
@@ -86,8 +85,8 @@
 			}
 		},
 		{
-			"from": [2.5, 5, 16],
-			"to": [3.5, 13, 16],
+			"from": [2.5, 5, 14.75],
+			"to": [3.5, 13, 14.75],
 			"rotation": {"angle": 0, "axis": "y", "origin": [-6, 1, 16]},
 			"faces": {
 				"north": {"uv": [8, 8.65, 7.5, 12.65], "texture": "#8"},
@@ -99,8 +98,8 @@
 			}
 		},
 		{
-			"from": [2.5, 0, 15],
-			"to": [9.5, 4, 17.25],
+			"from": [2.5, 0, 14.75],
+			"to": [9.5, 4, 17],
 			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, 16]},
 			"faces": {
 				"north": {"uv": [15, 9.15, 11.5, 11.15], "texture": "#8"},
@@ -112,6 +111,7 @@
 			}
 		}
 	],
+	"gui_light": "front",
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [0, -180, 0],
