@@ -13,9 +13,14 @@
     "kuayue:df11_window_equip_small",
     "kuayue:df11_panel_equip_bottom",
     "kuayue:df11_panel_equip_top",
+    "kuayue:df11_panel_blind_top",
+    "kuayue:df11_panel_blind_bottom",
+    "kuayue:df11_equip_room_window_1",
+    "kuayue:df11_equip_room_window_2",
 
     "kuayue:df11_door",
     "kuayue:df11_reservoir_tank",
+    "kuayue:df11_road_sign",
     "kuayue:panel_bottom_df11",
     "kuayue:panel_top_df11"
 

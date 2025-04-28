@@ -173,5 +173,45 @@ public class I11Panel {
             .noOcclusion().strengthAndTool(1.5f,3f)
             .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<TrainPanelBlock> DF11_PANEL_BLIND_TOP =
+            new PanelRegistration<TrainPanelBlock>("df11_panel_blind_top")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> DF11_PANEL_BLIND_BOTTOM =
+            new PanelRegistration<TrainPanelBlock>("df11_panel_blind_bottom")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> DF11_ROAD_SIGN =
+            new PanelRegistration<TrainPanelBlock>("df11_road_sign")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(-1,0),new Vec2(2,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> DF11_EQUIP_ROOM_WINDOW_1 =
+            new PanelRegistration<TrainPanelBlock>("df11_equip_room_window_1")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> DF11_EQUIP_ROOM_WINDOW_2 =
+            new PanelRegistration<TrainPanelBlock>("df11_equip_room_window_2")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
     public static void invoke(){}
 }
