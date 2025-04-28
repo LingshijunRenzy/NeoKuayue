@@ -18,6 +18,8 @@ import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.registration.PanelRegistration;
 import willow.train.kuayue.initial.registration.SlabRegistration;
 
+
+
 public class I11Panel {
 
     public static final BlockReg<FullShapeDirectionalBlock> DF11_COWCATCHER =
@@ -146,6 +148,30 @@ public class I11Panel {
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> PANEL_BOTTOM_DF11 =
+            new PanelRegistration<TrainPanelBlock>("panel_bottom_df11")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> PANEL_TOP_DF11 =
+            new PanelRegistration<TrainPanelBlock>("panel_top_df11")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainHingePanelBlock> DF11_PANEL_EQUIP_TOP =
+            new PanelRegistration<TrainHingePanelBlock>("df11_panel_equip_top")
+            .block(TrainHingePanelBlock::new)
+            .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+            .tab(AllElements.neoKuayueLocoTab)
+            .noOcclusion().strengthAndTool(1.5f,3f)
+            .submit(AllElements.testRegistry);
 
     public static void invoke(){}
 }
