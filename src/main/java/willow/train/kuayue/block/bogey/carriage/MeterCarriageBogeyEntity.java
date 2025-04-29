@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import willow.train.kuayue.initial.create.AllCarriageBogeys;
 
-public class MeterCarriageBogeyEntity extends AbstractBogeyBlockEntity {
+public class MeterCarriageBogeyEntity extends AbstractBogeyBlockEntity implements ISingleBogeyBlockEntity {
     public MeterCarriageBogeyEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
@@ -25,5 +25,9 @@ public class MeterCarriageBogeyEntity extends AbstractBogeyBlockEntity {
     @Override
     protected AABB createRenderBoundingBox() {
         return super.createRenderBoundingBox();
+    }
+    @Override
+    public boolean isBogeyStyleValid(BogeyStyle style) {
+        return style.equals(getDefaultStyle());
     }
 }

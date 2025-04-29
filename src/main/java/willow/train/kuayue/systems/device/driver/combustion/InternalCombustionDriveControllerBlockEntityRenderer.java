@@ -69,7 +69,6 @@ public class InternalCombustionDriveControllerBlockEntityRenderer extends SmartB
         worldContext.setBufferSource(bufferSource);
         worldContext.setPoseStack(poseStack);
         worldContext.pushLight(packedLight);
-        worldContext.pushLight(LightTexture.FULL_BRIGHT);
         worldContext.setSource(WorldRendererTarget.class);
 
         (holder.getMenu(0)).ifPresent(menu -> {
