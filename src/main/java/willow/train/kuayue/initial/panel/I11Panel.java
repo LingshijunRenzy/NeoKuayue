@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
+import willow.train.kuayue.block.panels.carport.DF11ChimneyBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.slab.HingeSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
@@ -208,6 +209,14 @@ public class I11Panel {
     public static final PanelRegistration<TrainPanelBlock> DF11_EQUIP_ROOM_WINDOW_2 =
             new PanelRegistration<TrainPanelBlock>("df11_equip_room_window_2")
                     .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<DF11ChimneyBlock> DF11_CHIMNEY =
+            new SlabRegistration<DF11ChimneyBlock>("df11_chimney")
+                    .block(p -> new DF11ChimneyBlock(p, false))
                     .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f,3f)

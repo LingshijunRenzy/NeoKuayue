@@ -228,6 +228,7 @@ public class AllBlocks {
             new BlockEntityReg<DF11GChimneyEntity>("df11g_chimney_entity")
                     .blockEntityType(DF11GChimneyEntity::new)
                     .addBlock(I11GPanel.DF11G_CHIMNEY.block)
+                    .addBlock(I11Panel.DF11_CHIMNEY.block)
                     .submit(AllElements.testRegistry);
 
 //    public static final MenuReg<EditablePanelEditMenu, EditablePanelEditScreen, EditablePanelEditScreen> EDITABLE_PANEL_EDIT_MENU =

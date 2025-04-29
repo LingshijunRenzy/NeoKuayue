@@ -11,7 +11,7 @@
 			"to": [11, 16, 17],
 			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, 16, 16.125]},
 			"faces": {
-				"north": {"uv": [0, 0, 5.5, 8], "texture": "#1"},
+				"north": {"uv": [0, 0.15, 5.5, 8.15], "texture": "#1"},
 				"east": {"uv": [0, 8, 1, 16], "texture": "#1"},
 				"south": {"uv": [5.5, 0, 11, 8], "texture": "#1"},
 				"west": {"uv": [1, 8, 2, 16], "texture": "#1"},
@@ -20,7 +20,6 @@
 			}
 		}
 	],
-	"gui_light": "front",
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [0, -180, 0],
