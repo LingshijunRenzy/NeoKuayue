@@ -6,6 +6,8 @@ import kasuga.lib.core.menu.base.GuiMenuType;
 import kasuga.lib.core.menu.targets.Target;
 import kasuga.lib.core.menu.targets.WorldRendererTarget;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 
 import java.util.UUID;
 
@@ -25,12 +27,16 @@ public class CIRMenu extends GuiMenu {
     @Override
     protected void createGuiInstance() {
         super.createGuiInstance();
-        WorldRendererTarget.attach(this);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()->{
+            WorldRendererTarget.attach(this);
+        });
     }
 
     @Override
     protected void closeGuiInstance() {
-        WorldRendererTarget.detach(this);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()->{
+            WorldRendererTarget.detach(this);
+        });
         super.closeGuiInstance();
     }
 }
