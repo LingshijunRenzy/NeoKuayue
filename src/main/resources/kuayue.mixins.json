@@ -11,6 +11,7 @@
     "MixinSimpleBlockMovingInteraction",
     "MixinStationBlockEntity",
     "MixinTrackTargetingBlockItem",
+    "SnrCompatibilityMixinAbstractBogeyBlockEntity",
     "client.MixinBlockReg"
   ],
   "client": [
