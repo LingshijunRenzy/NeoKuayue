@@ -1,9 +1,11 @@
 package willow.train.kuayue.systems.device.driver.path.point.mark;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.StaticImage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.driver.path.PathMarkRenderTexture;
 import willow.train.kuayue.systems.device.driver.path.list.EdgePathPoint;
@@ -26,7 +28,18 @@ public class StationMarkRenderer implements EdgePathPointRenderer<StationMark> {
                 left + 6,12,0
         );
         mask.renderToGui();
-        LKJ2000SpeedLimitCurveRenderer.renderQuad(left, 10, 1, top, 0,0, 1);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tesselator.getBuilder();
+        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        LKJ2000SpeedLimitCurveRenderer.renderQuad(bufferBuilder ,left, 10, 1, top, 0,0, 1);
+
+        tesselator.end();
+
+        RenderSystem.disableBlend();
         Minecraft.getInstance().font.draw(new PoseStack(), stationMark.getStationName(), left + 8, 1, 0xFFFFFF);
     }
 }

@@ -1,5 +1,6 @@
 package willow.train.kuayue.systems.device.track.train_station;
 
+import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.graph.DimensionPalette;
 import com.simibubi.create.content.trains.graph.TrackEdge;
 import com.simibubi.create.content.trains.graph.TrackGraph;
@@ -12,15 +13,22 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.AllDeviceEdgePoints;
+import willow.train.kuayue.systems.device.graph.CRRailwayGraphData;
+import willow.train.kuayue.systems.device.graph.KuaYueRailwayManager;
+import willow.train.kuayue.systems.device.graph.station.GraphStation;
 import willow.train.kuayue.systems.device.track.entry.StationSegment;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class TrainStation extends SingleBlockEntityEdgePoint {
-    UUID segmentId;
 
+    protected UUID segmentId;
+
+    protected GraphStationInfo localInfo = null;
 
     @Override
     public boolean canMerge() {
@@ -49,24 +57,6 @@ public class TrainStation extends SingleBlockEntityEdgePoint {
     }
 
     @Override
-    public void tick(TrackGraph graph, boolean preTrains) {
-        super.tick(graph, preTrains);
-        TrackEdge edge = graph.getConnection(this.edgeLocation.map(graph::locateNode));
-        CustomTrackSegment segment =
-                CustomSegmentUtil.getSegment(
-                        graph,
-                        edge,
-                        AllDeviceEdgePoints.STATION_ENTRY.getType(),
-                        this.getLocationOn(edge)
-                );
-        if(segment == null || !(segment instanceof StationSegment stationSegment)) {
-            return;
-        }
-        UUID segmentId = stationSegment.getSegmentId();
-    }
-
-
-    @Override
     public void write(FriendlyByteBuf buffer, DimensionPalette dimensions) {
         super.write(buffer, dimensions);
     }
@@ -75,4 +65,75 @@ public class TrainStation extends SingleBlockEntityEdgePoint {
     public void write(CompoundTag nbt, DimensionPalette dimensions) {
         super.write(nbt, dimensions);
     }
+
+
+    private int lazyTickCount = -1;
+
+    @Override
+    public void tick(TrackGraph graph, boolean preTrains) {
+
+        super.tick(graph, preTrains);
+
+        if(preTrains) {
+            return;
+        }
+
+
+        if(lazyTickCount >= 0 && lazyTickCount++ < 20) return;
+        lazyTickCount = 0;
+
+        TrackEdge edge = graph.getConnection(this.edgeLocation.map(graph::locateNode));
+        CustomTrackSegment segment =
+                CustomSegmentUtil.getSegment(
+                        graph,
+                        edge,
+                        AllDeviceEdgePoints.STATION_ENTRY.getType(),
+                        this.getLocationOn(edge)
+                );
+
+        if(!(segment instanceof StationSegment stationSegment)) {
+            return;
+        }
+
+        UUID newSegmentId = stationSegment.getSegmentId();
+
+        if(Objects.equals(newSegmentId,segmentId)){
+
+            Kuayue.RAILWAY.SERVER.getOptionalStation(segmentId)
+                    .ifPresent((station)->{
+                        this.localInfo = station.getStationInfo();
+                    });
+            return;
+        }
+
+        if(segmentId != null){
+            Kuayue.RAILWAY.SERVER.getOptionalStation(segmentId)
+                    .ifPresent((station)->{
+                        station.removeStation(this);
+                        Kuayue.RAILWAY.SERVER.notifyStationGC(station);
+                    });
+        }
+
+        if(newSegmentId != null) {
+            GraphStation station = Kuayue.RAILWAY.SERVER.getOrCreateStation(newSegmentId);
+            station.addStation(this);
+            if(localInfo != null){
+                station.updateInfo(localInfo);
+            }
+        }
+
+        segmentId = newSegmentId;
+    }
+
+    @Override
+    public void onRemoved(TrackGraph graph) {
+        super.onRemoved(graph);
+
+        Kuayue.RAILWAY.SERVER.getOptionalStation(segmentId)
+                .ifPresent((station)->{
+                    station.removeStation(this);
+                    Kuayue.RAILWAY.SERVER.notifyStationGC(station);
+                });
+    }
+
 }

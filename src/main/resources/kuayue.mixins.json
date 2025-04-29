@@ -17,7 +17,8 @@
     "LevelRendererAccessor",
     "client.AccessorEditBox",
     "client.MixinCarriageContraptionEntityRenderer",
-    "client.MixinLivingEntityRenderer"
+    "client.MixinLivingEntityRenderer",
+    "client.TextureManagerAccessor"
   ],
   "minVersion": "0.8"
 }

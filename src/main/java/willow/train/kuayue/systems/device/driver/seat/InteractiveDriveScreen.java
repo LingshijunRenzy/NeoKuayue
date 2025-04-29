@@ -3,27 +3,26 @@ package willow.train.kuayue.systems.device.driver.seat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
-import kasuga.lib.core.client.frontend.gui.GuiScreen;
+import kasuga.lib.core.client.frontend.common.layouting.LayoutBox;
+import kasuga.lib.core.client.frontend.gui.SourceInfo;
+import kasuga.lib.core.client.frontend.gui.events.mouse.MouseClickEvent;
+import kasuga.lib.core.client.frontend.gui.events.mouse.MouseDownEvent;
+import kasuga.lib.core.client.frontend.gui.events.mouse.MouseEvent;
 import kasuga.lib.core.client.frontend.rendering.RenderContext;
 import kasuga.lib.core.client.interaction.GuiOperatingPerspectiveScreen;
-import kasuga.lib.core.menu.base.GuiBindingTarget;
-import kasuga.lib.core.menu.base.GuiMenu;
-import kasuga.lib.core.menu.targets.ClientScreenTarget;
 import kasuga.lib.core.menu.targets.Target;
 import kasuga.lib.core.menu.targets.WorldRendererTarget;
+import kasuga.lib.core.util.data_type.Vec2i;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.c2s.OnSeatActionPacket;
 import willow.train.kuayue.network.c2s.SeatDismountPacket;
-import willow.train.kuayue.systems.editable_panel.widget.ItemIconButton;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     private final Contraption contraption;
@@ -31,7 +30,11 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
 
     private final HashMap<InteractiveBehaviour.MenuEntry, MenuProp> props = new HashMap<InteractiveBehaviour.MenuEntry, MenuProp>();
 
+    private final HashMap<InteractiveBehaviour.MenuEntry, InteractiveScreenTarget> interactiveTargets = new HashMap<>();
+
     private final List<InteractiveBehaviour.MenuEntry> interactiveSet = new ArrayList<>();
+
+    Vec2 lastClickedPos = null;
 
     public InteractiveDriveScreen(
             Contraption contraption,
@@ -45,10 +48,35 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
                 interactiveSet.addAll(interactiveBehaviour.getMenusOf(context));
             }
         });
+
+        interactiveSet.forEach(entry->{
+            InteractiveScreenTarget target = entry.menuSupplier().get().getBinding().apply(GuiTargets.INTERACTIVE);
+            interactiveTargets.put(entry, target);
+            target.attach();
+        });
     }
 
     @Override
+    protected void init() {
+        super.init();
+        interactiveTargets.forEach(((entry, target) -> {
+            target.updateSizeInfo(InteractiveScreenTarget.class, new SourceInfo(LayoutBox.of(
+                    0,
+                    0,
+                    entry.getSize().x,
+                    entry.getSize().y
+            )));
+        }));
+    }
+
+    int lazyTickRate = 0;
+
+    @Override
     public void tick() {
+        if(lazyTickRate ++ > 20) {
+            lazyTickRate = 0;
+
+        }
         if(
                 contraption.disassembled ||
                 entity.isRemoved() ||
@@ -89,31 +117,26 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        RenderContext worldContext = new RenderContext(RenderContext.RenderContextType.SCREEN);
-        worldContext.setPoseStack(pPoseStack);
-        worldContext.pushLight(LightTexture.FULL_BRIGHT);
-        worldContext.setSource(WorldRendererTarget.class);
+        RenderContext screenTarget = new RenderContext(RenderContext.RenderContextType.SCREEN);
+        screenTarget.setPoseStack(pPoseStack);
+        screenTarget.pushLight(LightTexture.FULL_BRIGHT);
+        screenTarget.setSource(InteractiveScreenTarget.class);
         for(InteractiveBehaviour.MenuEntry entry : interactiveSet) {
-            worldContext.pushPose();
-            worldContext.pose().translate(
+            screenTarget.pushPose();
+            screenTarget.pose().translate(
                     entry.getPosition().x,
                     entry.getPosition().y,
                     0
             );
-            worldContext.pose().scale(
+            screenTarget.pose().scale(
                     entry.getScale().x,
                     entry.getScale().y,
                     1
             );
             if(entry.isAvailable().get()){
-                entry
-                        .menuSupplier()
-                        .get()
-                        .getBinding()
-                        .apply(Target.WORLD_RENDERER)
-                        .render(worldContext);
+                this.interactiveTargets.get(entry).render(screenTarget);
             }
-            worldContext.popPose();
+            screenTarget.popPose();
         }
     }
 
@@ -147,11 +170,49 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         if(interactive.isPresent()) {
             if(pButton == 1){
                 interactive.get().setDragging(true);
+                this.freshDraggingState();
                 return true;
             }
+
+            dispatchInteractive(
+                    interactive.get(),
+                    new Vec2((float) pMouseX, (float) pMouseY),
+                    (localPosition)->
+                        MouseDownEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), pButton)
+            );
+
+            lastClickedPos = new Vec2((float) pMouseX, (float) pMouseY);
+
             return true;
         }
+
         return super.mouseClicked(pMouseX, pMouseY, pButton);
+    }
+
+    HashSet<InteractiveBehaviour.MenuEntry> dragging = new HashSet<>();
+
+    private void freshDraggingState() {
+        dragging.clear();
+        dragging.addAll(interactiveSet.parallelStream().filter(t->t.dragging).collect(Collectors.toUnmodifiableSet()));
+    }
+
+    public Vec2 transformInteractive(InteractiveBehaviour.MenuEntry entry, Vec2 globalPosition) {
+        // Transform Global Position into local position
+        return new Vec2(
+                (globalPosition.x - entry.getPosition().x) / entry.getScale().x,
+                (globalPosition.y - entry.getPosition().y) / entry.getScale().y
+        );
+    }
+
+    public void dispatchInteractive(
+            InteractiveBehaviour.MenuEntry entry,
+            Vec2 globalPosition,
+            Function<Vec2, MouseEvent> eventFunction
+    ) {
+        Vec2 local = transformInteractive(entry, globalPosition);
+
+        entry.menuSupplier().get().getBinding().apply(GuiTargets.INTERACTIVE)
+                .dispatchMouseEvent(InteractiveScreenTarget.class, eventFunction.apply(local));
     }
 
     @Override
@@ -160,12 +221,31 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
             for (InteractiveBehaviour.MenuEntry menuEntry : interactiveSet) {
                 menuEntry.setDragging(false);
             }
+            this.freshDraggingState();
             return true;
         }
         Optional<InteractiveBehaviour.MenuEntry> interactive = getMouseAtInteractiveItem(pMouseX, pMouseY);
         if(interactive.isPresent()) {
+            dispatchInteractive(
+                    interactive.get(),
+                    new Vec2((float) pMouseX, (float) pMouseY),
+                    (localPosition)->
+                            MouseDownEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), pButton)
+            );
+            if(lastClickedPos != null) {
+                if(Math.abs(lastClickedPos.x - pMouseX) + Math.abs(lastClickedPos.y - pMouseY) < 0.1){
+                    dispatchInteractive(
+                            interactive.get(),
+                            new Vec2((float) pMouseX, (float) pMouseY),
+                            (localPosition)->
+                                    MouseClickEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), pButton)
+                    );
+                }
+            }
+            lastClickedPos = null;
             return true;
         }
+        lastClickedPos = null;
         return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
 
@@ -197,10 +277,18 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     }
 
     @Override
+    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        if(!this.dragging.isEmpty())
+            return true;
+        return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    }
+
+    @Override
     public void onClose() {
         if(Minecraft.getInstance().screen != this)
             return;
         super.onClose();
+        this.interactiveTargets.forEach((i,s)->s.detach());
     }
 
     private static class MenuProp {

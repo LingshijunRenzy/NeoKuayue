@@ -32,9 +32,12 @@ public class LKJ2000SpeedLimitCurveRenderer {
     protected StaticImage image;
     protected float yDistance = 0.0F;
 
-    protected float displayMaxSpeed = 0.0F;
+    protected float displayMaxSpeed = 140.0F;
 
 
+    public void setDisplayMaxSpeed(float displayMaxSpeed) {
+        this.displayMaxSpeed = displayMaxSpeed;
+    }
 
     public LKJ2000SpeedLimitCurveRenderer(
             TextureTarget textureTarget,
@@ -61,12 +64,12 @@ public class LKJ2000SpeedLimitCurveRenderer {
         }
              */
         curveLineRenderer.init();
+        curveLineRenderer.render();
     }
 
     public void render(){
-
-        curveLineRenderer.render();
-
+        if( curveLineRenderer == null || textureTarget == null )
+            return;
         this.textureTarget.clear(true);
         this.textureTarget.bindWrite(true);
         this.renderCurve();
@@ -99,8 +102,10 @@ public class LKJ2000SpeedLimitCurveRenderer {
         float nextPositionX = Float.MAX_VALUE;
         float nextSpeedLimit = (float) generator.maxSpeed;
 
-        PoseStack pose = new PoseStack();
+        boolean penetrate = false;
+        float penetrateSpeedLimit = 0.0F;
 
+        PoseStack pose = new PoseStack();
 
         while(nextPositionX > 0){
             if(curve.isEmpty()){
@@ -119,7 +124,7 @@ public class LKJ2000SpeedLimitCurveRenderer {
             float thisPositionX = (entry.getKey().floatValue() - backDistance);
             float speed = entry.getValue().floatValue();
 
-            if(speed <= nextSpeedLimit) {
+            if(speed <= nextSpeedLimit && !penetrate) {
                 drawLinearSpeedSegment(
                         thisPositionX * yScale,
                         (nextPositionX - thisPositionX) * yScale,
@@ -128,13 +133,15 @@ public class LKJ2000SpeedLimitCurveRenderer {
                         tHeight
                 );
             } else {
-                float breakDistance = (float) Math.abs(generator.getBreakDistance(nextSpeedLimit, speed));
+                float breakDistance = (float) Math.abs( penetrate ? generator.getBreakDistance(nextSpeedLimit, speed) : generator.getBreakDistance(penetrateSpeedLimit, speed));
                 float stopBreakPositionX = nextPositionX;
                 float startLinePositionX = thisPositionX;
                 float startBreakPositionX = Math.max(nextPositionX - breakDistance, startLinePositionX);
                 float stopLinePositionX = startBreakPositionX;
 
-                if(stopLinePositionX >= startLinePositionX){
+                boolean notEnoughDistanceBreak = true;
+
+                if(stopLinePositionX > startLinePositionX){
                     drawLinearSpeedSegment(
                             startLinePositionX * yScale,
                             (stopLinePositionX - startLinePositionX) * yScale,
@@ -142,14 +149,27 @@ public class LKJ2000SpeedLimitCurveRenderer {
                             speed * xScale,
                             tHeight
                     );
+                    notEnoughDistanceBreak = false;
                 }
+
+                if(notEnoughDistanceBreak && !curve.isEmpty() && curve.lastEntry().getValue() >= speed) {
+                    penetrate = true;
+                    penetrateSpeedLimit = speed;
+                    continue;
+                }
+
+                penetrate = false;
+
+
                 this.curveLineRenderer.renderToScreen(
                         startBreakPositionX * yScale,
                         tHeight - (float) generator.maxSpeed * xScale,
                         (stopBreakPositionX - startBreakPositionX) * yScale,
                         (float) generator.maxSpeed * xScale,
                         1,0,0,
-                        speed,
+                        notEnoughDistanceBreak ? (float) Math.sqrt(
+                                Math.pow(nextSpeedLimit, 2) + 2 * (stopBreakPositionX - startBreakPositionX) * this.generator.acceleration
+                        ) : speed,
                         nextSpeedLimit,
                         yScale
                 );
@@ -188,35 +208,36 @@ public class LKJ2000SpeedLimitCurveRenderer {
             float thisMaxSpeed,
             float top
     ) {
-        System.out.printf("left: %f, tWidth: %f, previousMaxSpeed: %f, thisMaxSpeed: %f, top: %f\n", left, tWidth, nextMaxSpeed, thisMaxSpeed, top);
+        // System.out.printf("left: %f, tWidth: %f, previousMaxSpeed: %f, thisMaxSpeed: %f, top: %f\n", left, tWidth, nextMaxSpeed, thisMaxSpeed, top);
         float r = 1.0f;
         float g = 0.0f;
         float b = 0.0f;
 
-        renderQuad(left, top - thisMaxSpeed, tWidth, 1, r, g, b);
-        renderQuad(left + tWidth, top - Math.max(nextMaxSpeed, thisMaxSpeed), 1, Math.abs(nextMaxSpeed - thisMaxSpeed), r, g, b);
-        renderQuad(left, top - thisMaxSpeed + 1, tWidth, 3, 0.3f, 0.3f, 0.3f);
-    }
-
-    public static void renderQuad(float x, float y, float width, float height, float r, float g, float b){
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
         Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        bufferbuilder.vertex(x, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
-        bufferbuilder.vertex(x + width, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
-        bufferbuilder.vertex(x + width, y, 0.0D).color(r, g, b, 1.0F).endVertex();
-        bufferbuilder.vertex(x, y, 0.0D).color(r, g, b, 1.0F).endVertex();
-        tesselator.end();
+        BufferBuilder bufferBuilder = tesselator.getBuilder();
+        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
+        renderQuad(bufferBuilder, left, top - thisMaxSpeed, tWidth, 1, r, g, b);
+        renderQuad(bufferBuilder, left + tWidth, top - Math.max(nextMaxSpeed, thisMaxSpeed), 1, Math.abs(nextMaxSpeed - thisMaxSpeed), r, g, b);
+        renderQuad(bufferBuilder, left, top - thisMaxSpeed + 1, tWidth, 3, 0.3f, 0.3f, 0.3f);
+
+        tesselator.end();
         RenderSystem.disableBlend();
     }
 
-    public static void renderLayer(){
+    public static void renderQuad(BufferBuilder bufferBuilder,float x, float y, float width, float height, float r, float g, float b){
+        bufferBuilder.vertex(x, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
+        bufferBuilder.vertex(x + width, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
+        bufferBuilder.vertex(x + width, y, 0.0D).color(r, g, b, 1.0F).endVertex();
+        bufferBuilder.vertex(x, y, 0.0D).color(r, g, b, 1.0F).endVertex();
 
+    }
+
+    public static void renderLayer(){
     }
 
     public static void test(){

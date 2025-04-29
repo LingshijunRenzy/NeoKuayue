@@ -7,6 +7,7 @@ import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
+import willow.train.kuayue.event.client.ClientRenderTickManager;
 import willow.train.kuayue.initial.AllElements;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class SpeedCurveLineRenderer {
     }
 
     public void render(){
+        if(textureTarget == null)
+            return;
         this.textureTarget.clear(true);
         this.textureTarget.bindWrite(true);
         this.renderCurve();
@@ -53,6 +56,16 @@ public class SpeedCurveLineRenderer {
         float yScale = height / (float)generator.maxSpeed;
 
         float previousValue = 0;
+
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tesselator.getBuilder();
+        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+
         for (int i = 0; i < size; i++) {
             float currentValue = list.get(i);
 
@@ -64,30 +77,27 @@ public class SpeedCurveLineRenderer {
             y -= h*0.5f;
             h *= 2;
 
-            renderQuad(x, y, w, h, 1.0f, 1.0f, 1.0f);
+
+            renderQuad(bufferBuilder, x, y, w, h, 1.0f, 1.0f, 1.0f);
+
+
             // System.out.printf("x: %f, y: %f, w: %f, h: %f\n", x, y, w, h);
             previousValue = currentValue;
         }
+
+        tesselator.end();
+
+        RenderSystem.disableBlend();
 
         //Minecraft.getInstance().font.draw(new PoseStack(),"aaa",20,20,7105644);
 
     }
 
-    private void renderQuad(float x, float y, float width, float height, float r, float g, float b){
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        bufferbuilder.vertex(x, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
-        bufferbuilder.vertex(x + width, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
-        bufferbuilder.vertex(x + width, y, 0.0D).color(r, g, b, 1.0F).endVertex();
-        bufferbuilder.vertex(x, y, 0.0D).color(r, g, b, 1.0F).endVertex();
-        tesselator.end();
-
-        RenderSystem.disableBlend();
+    private void renderQuad(BufferBuilder bufferBuilder, float x, float y, float width, float height, float r, float g, float b){
+        bufferBuilder.vertex(x, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
+        bufferBuilder.vertex(x + width, y + height, 0.0D).color(r, g, b, 1.0F).endVertex();
+        bufferBuilder.vertex(x + width, y, 0.0D).color(r, g, b, 1.0F).endVertex();
+        bufferBuilder.vertex(x, y, 0.0D).color(r, g, b, 1.0F).endVertex();
     }
 
     public void output(){
