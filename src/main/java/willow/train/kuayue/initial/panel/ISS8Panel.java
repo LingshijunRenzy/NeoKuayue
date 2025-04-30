@@ -112,9 +112,9 @@ public class ISS8Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<TrainPanelBlock> SS8_PANEL_UPPER =
-            new PanelRegistration<TrainPanelBlock>("ss8_panel_upper")
-                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+    public static final PanelRegistration<TrainHingePanelBlock> SS8_PANEL_UPPER =
+            new PanelRegistration<TrainHingePanelBlock>("ss8_panel_upper")
+                    .block(p -> new TrainHingePanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
                     .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f,3f)
