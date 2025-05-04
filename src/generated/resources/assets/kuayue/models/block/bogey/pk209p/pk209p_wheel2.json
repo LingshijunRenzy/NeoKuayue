@@ -2,5 +2,5 @@
   "parent": "block/block",
   "loader": "forge:obj",
   "flip_v": true,
-  "model": "kuayue:models/block/bogey/pk209p/pk209p_wheel2.obj"
+  "model": "kuayue:models/block/bogey/915mm_carriage_general_wheel.obj"
 }
