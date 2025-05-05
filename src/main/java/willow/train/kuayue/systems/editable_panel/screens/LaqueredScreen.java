@@ -116,14 +116,29 @@ public class LaqueredScreen
      */
     @Override
     public void init() {
-        Minecraft mcInstance = Minecraft.getInstance();
-        if (mcInstance.screen == null) return;
+        Minecraft instance = Minecraft.getInstance();
+        if (instance.screen == null) return;
+        int sW = instance.screen.width;
+        int sH = instance.screen.height;
+// 获取窗口的 GUI 缩放尺寸（更准确，考虑 UI 缩放）
+        Window window = instance.getWindow();
+        int guiScaledWidth = window.getGuiScaledWidth();
+        int guiScaledHeight = window.getGuiScaledHeight();
+
+        // 获取 ImageMask 背景
+        ImageMask imageMask = laqueredBoardWhiteBg.get();
+        ImageMask logoIm = laqueredBoardLogo.get();
+        ImageMask leftColorBoard = leftLaqueredColorBoard.get();
+        ImageMask rightColorBoard = rightLaqueredColorBoard.get();
+
+
+
         // 初始化颜色编辑器组件
         colorEditorInit();
         // 初始化按钮组件
         buttonsInit();
 
-        Font font = mcInstance.font;
+        Font font = instance.font;
         CompoundTag nbt = getNbt();
         // 获取可编辑面板实体对象
         EditablePanelEntity entity = getScreen().getMenu().getEditablePanelEntity();
@@ -155,6 +170,7 @@ public class LaqueredScreen
 
 //        revert = nbt.getBoolean("revert");
         innerInit(values, color, font, revert);
+
 
         cancelBtn.setOnClick((w, x, y) -> {
             AllPackets.CHANNEL.sendToServer(new DiscardChangeC2SPacket(entity.getBlockPos()));
@@ -192,107 +208,177 @@ public class LaqueredScreen
 
     private void innerInit(String[] values, int color, Font font, boolean revert) {
         // 设置文本缩放因子
-        float textScaleFactor = 4f;
+        float textScaleFactor = 11f;
+        float textScaleFactorForEnglish = 16f;
 
-        // 计算每个不同位置文本值对应的宽度，乘以相应系数和缩放因子，目前暂时去除了特定系数
-        float size0 = ((float) Minecraft.getInstance().font.width(values[0])) * textScaleFactor; // 水牌中文文字左
-        float size1 = ((float) Minecraft.getInstance().font.width(values[1])) * textScaleFactor; // 水牌英文文字左
-        float size2 = ((float) Minecraft.getInstance().font.width(values[2])) * textScaleFactor; // 水牌中文文字右
-        float size3 = ((float) Minecraft.getInstance().font.width(values[3])) * textScaleFactor; // 水牌英文文字右
-//        float size4 = ((float) Minecraft.getInstance().font.width(values[4])) * 0.3f * textScaleFactor; // 25T
-        //  检查屏幕并获取屏幕尺寸
-        if (Minecraft.getInstance().screen == null) return;
-        int sW = Minecraft.getInstance().screen.width;
-        int sH = Minecraft.getInstance().screen.height;
-        int guiScaledWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
-        int guiScaledHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-        int height = font.lineHeight;
+// 获取窗口和字体信息
+        Minecraft minecraft = Minecraft.getInstance();
+        Window window = minecraft.getWindow();
+//        Font font = minecraft.font;
 
-        int bgHeight = (int) (150 * scale);
+// 动态获取当前GUI缩放后的尺寸
+        int guiScaledWidth = window.getGuiScaledWidth();
+        int guiScaledHeight = window.getGuiScaledHeight();
 
-        // 计算中文文字宽度（用于间距） todo 放入局标宽度
-        int chineseCharWidth = (int) (bgHeight * 0.5); // 一个中文字符的宽度
-// 计算布局参数
-        int lineHeight = (int) (font.lineHeight * textScaleFactor); // 单行高度
-        int verticalSpacing = lineHeight / 2; // 行间距等于行高
-// 计算第一行宽度（values[0]和values[1] + 一个中文字符的间距）
-        float firstLineWidth = size0 + chineseCharWidth + size1;
-// 计算第二行宽度（values[2]和values[3] + 一个中文字符的间距）
-        float secondLineWidth = size2 + chineseCharWidth + size3;
-// 取两行中较大的宽度用于居中计算
-        float maxLineWidth = Math.max(firstLineWidth, secondLineWidth);
-        // 计算起始坐标（整体居中）
-        // 动态计算基准位置（考虑窗口安全边距）
-        int minMargin = 20; // 最小边距
-        int baseX = (int)Math.max(minMargin, (guiScaledWidth - maxLineWidth) / 2);
-        int baseY = (int)((guiScaledHeight - (lineHeight * 2 + verticalSpacing)) / 2);
-//        int baseX = (int)((guiScaledWidth - maxLineWidth) / 2);
+// 计算文本显示尺寸（考虑缩放因子）
+        float size0 = font.width(values[0]) * textScaleFactor;
+        float size1 = font.width(values[1]) * textScaleFactorForEnglish;
+        float size2 = font.width(values[2]) * textScaleFactor;
+        float size3 = font.width(values[3]) * textScaleFactorForEnglish;
+
+
+        float bgImageXStarter = (float) (guiScaledWidth * 0.15); // 偏移至从左到右第25%的位置
+        float bgImageYStarter = (float) (guiScaledHeight * 0.3); // 偏移至从下到上第35%的位置
+        float imageBgWidth = (float) (guiScaledWidth * 0.70); // 宽度为窗口宽度的70%，
+        float imageBgHeight = (float) (guiScaledHeight * 0.3); // 高度为窗口高度的40%
+//        float colorBarHeightStart = (bgImageYStarter + imageBgHeight * 0.70f); // 高度为   // todo 可能会到上面去
+        float colorBarHeightStart = (bgImageYStarter + imageBgHeight * 0.70f); // 高度为   // todo 可能会到上面去
+        float colorBarHeightEnd = (bgImageYStarter + imageBgHeight) * 1f; // 高度为
+        float leftColorBarXStarter = (float) (guiScaledWidth * 0.15); // 偏移至从左到右第25%的位置
+        float colorBarWidth = (float) (imageBgWidth * 0.4); // 彩条宽度为水牌宽度的20%
+        float colorBarHeight = (float) (imageBgHeight * 0.25); // 彩条高度为水牌高的23%
+        float leftColorBarXEnd = (float) ((guiScaledWidth * 0.15) + (imageBgWidth * 0.4)); // 0.4+0.4 -> 0.8
+        float rightColorBarXEnd = (float) ((guiScaledWidth * 0.15) + imageBgWidth); // 偏移至从左到右第25%的位置
+        // 使logo的大小是水牌背景高度的20%
+        double logoWidthHalf = imageBgHeight * 0.7;
+        float rightColorBarXStarter = (float) ((imageBgWidth * 0.6)   + (imageBgWidth * 0.2133));
+//                + (imageBgWidth * 0.475) + ( imageBgHeight * 0.40)
+        // 偏移至从左到右第25%的位置
+        float logoXStarter =  (float)( (guiScaledWidth / 2) - (logoWidthHalf / 2)); //
+        float logoYStarter = (float) (bgImageYStarter + ((imageBgHeight / 2) - (logoWidthHalf / 2))); //
+
+        // 中间基线
+        float middleLineY = (float) (bgImageYStarter + (imageBgHeight / 2));
+        float middleLineX = (float) (guiScaledWidth / 2);
+
+        // 计算得出文字应在当前屏幕x y 时的文字比例（修改文字缩放参数）
+        double nonEngScaleNumber = (bgImageXStarter / 100) * 0.5;
+//        double nonEngScaleNumber = (imageBgWidth * 0.2) + bgImageXStarter;
+        float resizedTextScaleFactor = (float) ((textScaleFactor * nonEngScaleNumber));
+        double engLineScaleNumber = (bgImageXStarter / 100) * 0.15;
+//        double engLineScaleNumber = (imageBgWidth * 0.3) + bgImageXStarter;
+        float resizedTextScaleFactorForEnglish = (float) (textScaleFactorForEnglish * engLineScaleNumber);
+
+        // 左边距
+//        float leftMoJiMargin = (float) (nonEngScaleNumber * imageBgWidth);
+//        font.width(values[0]) * 3.55
+//        float leftMoJiMargin = (float) (font.width(values[0]) * 3.55);
+//        float leftMoJiMargin = (float) 80f; // calculateDynamicMargin(values[0], font, imageBgWidth);
+        // todo 2025-05-05 根据输入文字长度动态计算左右边距
+        float leftMoJiMargin = (float) calculateDynamicMargin(values[0], font, imageBgWidth);
+//        float leftEngMoJiMargin = (float) (engLineScaleNumber * imageBgWidth);
+        float leftEngMoJiMargin = (float) (font.width(values[1]) * 2);
+        float rightMoJiMargin = (float) (nonEngScaleNumber );
+        float rightEngMoJiMargin = (float) (engLineScaleNumber);
+
+//        int bgHeight = (int) (170 * scale); // 固定高度或按需调整
+//        double logoWidthHalf = bgHeight * 0.55;
+
+//// 计算布局参数
+//        int lineHeight = (int)(font.lineHeight * textScaleFactor);
+//        int lineHeightForEnglish = (int)(font.lineHeight * textScaleFactorForEnglish);
+//        int verticalSpacing = lineHeight / 2; // 行间距
+//        int chineseCharWidth = (int)(logoWidthHalf * textScaleFactor * 1.2f); // 基于实际中文字符宽度
+//        int chineseCharWidthForEnglish = (int)(logoWidthHalf * textScaleFactorForEnglish * 1.2f); // 基于实际中文字符宽度
+//
+//// 计算行宽
+//        float firstLineWidth = size0 + chineseCharWidth + size1;
+//        float secondLineWidth = size2 + chineseCharWidth + size3;
+//        float maxLineWidth = Math.max(firstLineWidth, secondLineWidth);
+//
+//// 动态计算基准位置（考虑窗口安全边距）
+//        int minMargin = 20; // 最小边距
+//        int baseX = (int)Math.max(minMargin, (guiScaledWidth - maxLineWidth) / 2);
 //        int baseY = (int)((guiScaledHeight - (lineHeight * 2 + verticalSpacing)) / 2);
 
-        // 初始化界面中央偏下一排的按钮
-        buttonsInnerInit(font, textScaleFactor, size0, size1, size2, size3
-//                , size4
-                , sW, sH);
-
-        // 保存初始x坐标用于第二行
-//        int initialX = basicX;
-        // 第一行：values[0]和values[1]
-        int firstLineY = baseY;
+// 始发地布局（values[0]和values[1]）
+//        int firstLineY = baseY;
         addWidget(new TransparentEditBox(font,
-                baseX,
-                firstLineY,
+                // 使其根据文本内容大小偏移
+//                baseX +  font.width(values[0]),
+//                firstLineY,
+                        (int) (leftMoJiMargin+ bgImageXStarter),
+                        (int) bgImageYStarter,
                 font.width(values[0]),
-                height,
-                textScaleFactor,
-                textScaleFactor,
+                font.lineHeight,
+                resizedTextScaleFactor,
+                resizedTextScaleFactor,
                 Component.empty(),
                 values[0],
                 color)
         );
-
-        // values[1]放在values[0]右侧，间隔一个values[0]的宽度
-//        basicX += size0 + Minecraft.getInstance().font.width(values[0]) * textScaleFactor;
+//        int secondLineY = baseY + lineHeight + verticalSpacing;
         addWidget(new TransparentEditBox(font,
-                (int) (baseX + size0 + chineseCharWidth),
-                firstLineY,
+                (int) (leftEngMoJiMargin + bgImageXStarter),
+                (int) colorBarHeightStart,
                 font.width(values[1]),
-                height,
-                textScaleFactor,
-                textScaleFactor,
+                font.lineHeight,
+                resizedTextScaleFactorForEnglish,
+                resizedTextScaleFactorForEnglish,
                 Component.empty(),
                 values[1],
                 color));
-
-        // 第二行：values[2]和values[3]，放在第一行下方
-//        basicY += height * textScaleFactor; // 下移一行
-//        basicX = initialX; // 重置x坐标
-// 第二行：values[2]和values[3]
-        int secondLineY = baseY + lineHeight + verticalSpacing;
+        // 目的地布局（values[2]和values[3]）
         addWidget(new TransparentEditBox(font,
-                baseX,
-                secondLineY,
+                // imageBgWidth * 0.6 用于将文字偏移到logo右边
+                (int) (rightMoJiMargin + (bgImageXStarter + (imageBgWidth * 0.6))),
+                (int) bgImageYStarter,  //firstLineY,
                 font.width(values[2]),
-                height,
-                textScaleFactor,
-                textScaleFactor,
+                font.lineHeight,
+                resizedTextScaleFactor,
+                resizedTextScaleFactor,
                 Component.empty(),
                 values[2],
                 color));
 
-        // values[3]放在values[2]右侧，间隔一个values[0]的宽度
-//        basicX += size2 + Minecraft.getInstance().font.width(values[0]) * textScaleFactor;
         addWidget(new TransparentEditBox(font,
-                (int) (baseX + size2 + chineseCharWidth),
-                secondLineY,
+                // imageBgWidth * 0.6 用于将文字偏移到logo右边
+                (int) (rightEngMoJiMargin + (bgImageXStarter + (imageBgWidth * 0.6))),
+                (int) colorBarHeightStart, // secondLineY,
                 font.width(values[3]),
-                height,
-                textScaleFactor,
-                textScaleFactor,
+                font.lineHeight,
+                resizedTextScaleFactorForEnglish,
+                resizedTextScaleFactorForEnglish,
                 Component.empty(),
                 values[3],
                 color));
     }
 
+    /**
+     * 根据文字长度计算动态偏移量
+     * @param text 待测量的文字
+     * @param font
+     * @return 水平偏移量（像素值）
+     */
+    public static float calculateDynamicMargin(String text, Font font, float bgWidth) {
+//        int textWidth = font.width(text);
+//        int baseMargin = 0; // 基础偏移量（可根据需求调整）
+//
+//        // 动态计算规则
+//        if (text.length() > 10) {
+//            return -baseMargin - (text.length() - 10); // 长度超10时负偏移
+//        } else {
+//            return baseMargin + (10 - text.length()); // 长度≤10时正偏移
+//        }
+        // 基础参数（可配置化） 当中文那行是 北京 时，则边距应为80f 以使其在中间
+        final float BASE_MARGIN = 80f;    // 基础偏移量
+        final float LENGTH_THRESHOLD = 4f; // 长度临界点
+        final float PIXEL_PER_CHAR = 1f;  // 每字符补偿系数
+
+        // 获取有效长度（考虑Unicode组合字符）
+//        int codePointCount = text.codePointCount(0, text.length());
+        int codePointCount = font.width(text) / 9;
+        float lengthFactor = codePointCount / LENGTH_THRESHOLD;
+
+        // 动态计算规则 当codePointCount / LENGTH_THRESHOLD 大于1则代表超出 LENGTH_THRESHOLD 中规定的文字长度限制，否则未超出限制
+        if (lengthFactor > 1.0f) {
+            // 超长文本负偏移公式：-baseMargin - (extraLength * compensation)
+            return -BASE_MARGIN - ((codePointCount - LENGTH_THRESHOLD));
+        } else {
+            // 短文本正偏移公式：baseMargin + (remainingSpace * compensation)
+            return BASE_MARGIN + ((LENGTH_THRESHOLD - codePointCount) * 0.6f);
+        }
+    }
 
     public void buttonsInnerInit(Font font, float textScaleFactor, float size0,
                                  float size1, float size2, float size3
@@ -318,25 +404,38 @@ public class LaqueredScreen
         offsetEditor.getEditorBtn().setPos(basicX + labelW - 100, btnY);
     }
 
-
     public void buttonsInit() {
+        Minecraft minecraft = Minecraft.getInstance();
+        Window window = minecraft.getWindow();
+// 动态获取当前GUI缩放后的尺寸
+        int guiScaledWidth = window.getGuiScaledWidth();
+        int guiScaledHeight = window.getGuiScaledHeight();
+
+        float bgImageXStarter = (float) (guiScaledWidth * 0.15); // 偏移至从左到右第25%的位置
+        float bgImageYStarter = (float) (guiScaledHeight * 0.3); // 偏移至从下到上第35%的位置
+        float imageBgWidth = (float) (guiScaledWidth * 0.70); // 宽度为窗口宽度的70%，
+        float imageBgHeight = (float) (guiScaledHeight * 0.3); // 高度为窗口高度的40%
+
+        int offsetButtonX = (int) (bgImageXStarter );
+        int offsetButtonY = (int) (bgImageYStarter + imageBgHeight + 16);
         titleLabel = new Label(Component.translatable("tooltip.kuayue.type_screen.title"));
+        titleLabel.setPosition(bgImageXStarter, bgImageYStarter - 20);
         addWidget(titleLabel);
 
-        mirrorBtn = new ImageButton(mirrorBtnImage, 0, 0, 16, 16, Component.empty(), b -> {
+        mirrorBtn = new ImageButton(mirrorBtnImage, offsetButtonX + (16), offsetButtonY, 16, 16, Component.empty(), b -> {
             revert = !revert;
             refresh();
         });
 
-        offsetEditor = new OffsetEditor(0, 0, Component.literal("offset"),
+        offsetEditor = new OffsetEditor(offsetButtonX + (16 * 2), offsetButtonY, Component.literal("offset"),
                 -.5f, .5f, -.5f, .5f, 0f, 0f);
         offsetEditor.setPosition((Minecraft.getInstance().screen.width - offsetEditor.getWidth()) / 2,
                 (Minecraft.getInstance().screen.height - offsetEditor.getHeight()) / 2);
         offsetEditor.visible = false;
 
-        cancelBtn = new ImageButton(cancelBtnImage, 0, 0, 16, 16, Component.empty(), b -> {
+        cancelBtn = new ImageButton(cancelBtnImage, offsetButtonX + (16 * 3), offsetButtonY, 16, 16, Component.empty(), b -> {
         });
-        confirmBtn = new ImageButton(acceptBtnImage, 0, 0, 16, 16, Component.empty(), b -> {
+        confirmBtn = new ImageButton(acceptBtnImage, offsetButtonX + (16 * 4), offsetButtonY, 16, 16, Component.empty(), b -> {
         });
 
         editBar.onCancelClick((w, x, y) -> editBar.visible = false);
@@ -360,13 +459,21 @@ public class LaqueredScreen
         });
 
         addWidget(cancelBtn);
+        // todo 2025-05-05 点击提交按钮后会恢复成初始值，且设定的内容没有同步到服务器
         addWidget(confirmBtn);
         addWidget(editBar);
+        ImageButton editorBtn = offsetEditor.getEditorBtn();
+        editorBtn.setPos(offsetButtonX + (16 * 5), offsetButtonY);
+        addWidget(editorBtn);
         addWidget(mirrorBtn);
-        addWidget(colorEditor.getColorBtn());
-        addWidget(colorEditor.getTemplateBtn());
+        ImageButton colorBtn = colorEditor.getColorBtn();
+        colorBtn.setPos(offsetButtonX + (16 * 6), offsetButtonY);
+        // todo 2025-05-05 颜色调好后点提交按钮后颜色没有同步到服务器，且只有右键点开编辑界面才会显示改后的颜色
+        addWidget(colorBtn);
+        ImageButton templateBtn = colorEditor.getTemplateBtn();
+        templateBtn.setPos(offsetButtonX + (16 * 7), offsetButtonY);
+        addWidget(templateBtn);
         addWidget(offsetEditor);
-        addWidget(offsetEditor.getEditorBtn());
     }
 
     private void refresh() {
@@ -460,27 +567,54 @@ public class LaqueredScreen
         ImageMask logoIm = laqueredBoardLogo.get();
         ImageMask leftColorBoard = leftLaqueredColorBoard.get();
         ImageMask rightColorBoard = rightLaqueredColorBoard.get();
+
+        // starter ender 都是锚点，width是宽度，height是高度
+        // 确定水牌图片背景的左上角x百分比  0.25-> 0.15   0.35 -> 0.3
+        float bgImageXStarter = (float) (guiScaledWidth * 0.15); // 偏移至从左到右第25%的位置
+        float bgImageYStarter = (float) (guiScaledHeight * 0.3); // 偏移至从下到上第35%的位置
+        float imageBgWidth = (float) (guiScaledWidth * 0.70); // 宽度为窗口宽度的70%，
+        float imageBgHeight = (float) (guiScaledHeight * 0.3); // 高度为窗口高度的40%
+//        float colorBarHeightStart = (bgImageYStarter + imageBgHeight * 0.70f); // 高度为   // todo 可能会到上面去
+        float colorBarHeightStart = (bgImageYStarter + imageBgHeight * 0.70f); // 高度为   // todo 可能会到上面去
+        float colorBarHeightEnd = (bgImageYStarter + imageBgHeight) * 1f; // 高度为
+        float leftColorBarXStarter = (float) (guiScaledWidth * 0.15); // 偏移至从左到右第25%的位置
+        float colorBarWidth = (float) (imageBgWidth * 0.4); // 彩条宽度为水牌宽度的20%
+        float colorBarHeight = (float) (imageBgHeight * 0.25); // 彩条高度为水牌高的23%
+        float leftColorBarXEnd = (float) ((guiScaledWidth * 0.15) + (imageBgWidth * 0.4)); // 0.4+0.4 -> 0.8
+        float rightColorBarXEnd = (float) ((guiScaledWidth * 0.15) + imageBgWidth); // 偏移至从左到右第25%的位置
+        // 使logo的大小是水牌背景高度的20%
+        double logoWidthHalf = imageBgHeight * 0.7;
+        float rightColorBarXStarter = (float) ((imageBgWidth * 0.6)   + (imageBgWidth * 0.2133));
+//                + (imageBgWidth * 0.475) + ( imageBgHeight * 0.40)
+         // 偏移至从左到右第25%的位置
+        float logoXStarter =  (float)( (guiScaledWidth / 2) - (logoWidthHalf / 2)); //
+        float logoYStarter = (float) (bgImageYStarter + ((imageBgHeight / 2) - (logoWidthHalf / 2))); //
+
+
         // 计算背景尺寸（宽度和高度）
 //        int bgWidth = (int) (windowWidth * (hasJei ? .7f : .9f));
 //        int bgHeight = (int) (150 * scale);
-        int bgWidth = (int) (guiScaledWidth * (hasJei ? 0.7f : 0.9f)); // 动态宽度（70% 或 90% 窗口宽度）
-        int bgHeight = (int) (150 * scale); // 固定高度或按需调整
-        // 计算背景的起始坐标 (bgX, bgY)，使其与 values[0] 对齐
-        int bgX = (guiScaledWidth  - bgWidth) / 2;  // 与 values[0] 的 basicX 计算方式一致
-        int bgY = (guiScaledHeight  - bgHeight) / 2;  // 与 values[0] 的 basicY 计算方式一致
+//        int bgWidth = (int) (guiScaledWidth * (hasJei ? 0.6f : 0.8f)); // 动态宽度（70% 或 90% 窗口宽度）
+//        int bgHeight = (int) (170 * scale); // 固定高度或按需调整
+//        // 计算背景的起始坐标 (bgX, sH)，使其与 values[0] 对齐
+//        int bgX = (guiScaledWidth  - bgWidth) / 2;  // 与 values[0] 的 basicX 计算方式一致
+//        int sH = (guiScaledHeight  - bgHeight) / 2;  // 与 values[0] 的 basicY 计算方式一致
         // 确保背景的 x 和 y 原点与 values[0] 对齐
         imageMask.rectangle(
-                new Vector3f(bgX, bgY, 0),  // 使用与 values[0] 相同的原点
+                new Vector3f(bgImageXStarter, bgImageYStarter, 0),  // 使用与 values[0] 相同的原点
                 ImageMask.Axis.X,
                 ImageMask.Axis.Y,
                 true,
                 true,
-                bgWidth,
-                bgHeight
+                imageBgWidth,
+                imageBgHeight
         );
-        double logoWidthHalf = bgHeight * 0.5;
         logoIm.rectangle(
-                new Vector3f((guiScaledWidth / 2) - (float)(logoWidthHalf / 2), (guiScaledHeight / 2) - 5, 1),  // 使用与 values[0] 相同的原点
+//                new Vector3f((guiScaledWidth / 2) - (float)(logoWidthHalf / 2),
+                new Vector3f(logoXStarter,
+//                        (float)( (guiScaledHeight / 2) - (logoWidthHalf / 2)),
+                        logoYStarter,
+                        1),
                 ImageMask.Axis.X,
                 ImageMask.Axis.Y,
                 true,
@@ -489,25 +623,34 @@ public class LaqueredScreen
                 (float) logoWidthHalf
         );
         leftColorBoard.rectangle(
-                new Vector3f(bgX, bgY + 200, 1),  // 使用与 values[0] 相同的原点
+//                new Vector3f(bgImageXStarter,
+                new Vector3f(leftColorBarXStarter,
+//                        bgImageYStarter + 200,
+                        colorBarHeightStart,
+                        1),  // 使用与 values[0] 相同的原点
                 ImageMask.Axis.X,
                 ImageMask.Axis.Y,
                 true,
                 true,
-                (float) (bgWidth * 0.35),
-                (float) (bgHeight * 0.15)
+//                (float) (imageBgWidth * 0.35),
+                colorBarWidth,
+//                (float) (imageBgHeigth * 0.15)
+                colorBarHeight
         );
         leftColorBoard .setColor(SimpleColor.BLACK);
         rightColorBoard.rectangle(
-                new Vector3f(bgX - 400, bgY + 200, 2),  // 使用与 values[0] 相同的原点
+//                new Vector3f(bgImageXStarter - 400, bgImageYStarter + 200, 2),  // 使用与 values[0] 相同的原点
+                new Vector3f(rightColorBarXStarter, colorBarHeightStart, 1),  // 使用与 values[0] 相同的原点
                 ImageMask.Axis.X,
                 ImageMask.Axis.Y,
                 true,
                 true,
-                (float) (bgWidth * 0.35),
-                (float) (bgHeight * 0.15)
+//                (float) (imageBgWidth * 0.35),
+                colorBarWidth,
+//                (float) (imageBgHeigth * 0.15)
+                colorBarHeight
         );
-        rightColorBoard.setColor(SimpleColor.fromRGB(0.5f, 0.6f, 0.7f));
+        rightColorBoard.setColor(SimpleColor.fromRGBA(255, 76, 0, 1.0f));
         // 渲染背景
         imageMask.renderToGui();
         leftColorBoard.renderToGui();
