@@ -1,7 +1,7 @@
 {
 	"credit": "Made by WillowKoishi",
-	"render_type": "translucent",
 	"ambientocclusion": false,
+	"render_type": "translucent",
 	"textures": {
 		"15": "kuayue:block/carriage/carriage_25z/end_face_original_25z_bottom",
 		"particle": "kuayue:block/carriage/carriage_25z/end_face_original_25z_bottom"

@@ -4,9 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.KuayueConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +18,11 @@ public class OverheadLineCurveGenerator {
 
     public static final Vec3 UP = new Vec3(0, 1, 0);
 
-    public static RenderCurve straightLine(Vec3 a, Vec3 b, float r) {
+    public static RenderCurve straightLine(Level level, Vec3 a, Vec3 b, float r) {
         RenderCurve.Builder builder = RenderCurve.create();
         prepareLine(builder, a, b.subtract(a), r);
         straightLine(builder, a, b, r);
-        return builder.build();
+        return builder.build(level);
     }
 
     public static void prepareLine(RenderCurve.Builder builder, Vec3 a, Vec3 dir, float r){
@@ -39,14 +43,14 @@ public class OverheadLineCurveGenerator {
         builder.store();
     }
     
-    public static RenderCurve conicHangLine(Vec3 first, Vec3 last, float firstOffset, float secondOffset, 
-                                           float distance, float setonSpacing, float r) {
+    public static RenderCurve conicHangLine(Level level, Vec3 first, Vec3 last, float firstOffset, float secondOffset,
+                                            float distance, float setonSpacing, float r) {
         RenderCurve.Builder builder = RenderCurve.create();
         conicHangLine(builder, first, last, firstOffset, secondOffset, distance, setonSpacing, r);
         builder.getPoseStack().setIdentity();
         prepareLine(builder, first, last.subtract(first), r);
         straightLine(builder, first, last, r);
-        return builder.build();
+        return builder.build(level);
     }
 
     public static void conicHangLine(RenderCurve.Builder builder, Vec3 first, Vec3 last, 
@@ -94,7 +98,6 @@ public class OverheadLineCurveGenerator {
         for(int i = 1; i <= segments; i++) {
             float currentOffset = firstOffset + (secondOffset - firstOffset) * (float) i / segments;
             Vec2 thisPoint = new Vec2(i * stepLength, calculateParabolaY(paramA, paramB, (float) i * stepLength));
-            // From (thisPoint.x, thisPoint.y) to (previousPoint.x, previousPoint.y)
             float zRot = (float) Math.atan2(thisPoint.y - previousPoint.y, thisPoint.x - previousPoint.x);
             float length = (float) Math.sqrt(Math.pow(thisPoint.x - previousPoint.x, 2) + Math.pow(thisPoint.y - previousPoint.y, 2));
             pose.pushPose();
@@ -105,9 +108,7 @@ public class OverheadLineCurveGenerator {
             pose.popPose();
 
             if (i < segments) {
-                // 计算直线基准位置
                 float referenceY = calculateStraightLineY(straightSlope, -firstOffset, i * stepLength);
-                // 计算曲线与直线的垂直偏移量
                 float verticalOffset = thisPoint.y - referenceY;
                 pose.pushPose();
                 pose.translate(0, thisPoint.y - verticalOffset + currentOffset , -thisPoint.x);
@@ -129,5 +130,93 @@ public class OverheadLineCurveGenerator {
 
     private static float calculateStraightLineY(float slope, float intercept, float x) {
         return slope * x + intercept;
+    }
+
+    public static RenderCurve catenaryLine(Level level, Vec3 first, Vec3 last, float partSpacing, float r) {
+        RenderCurve.Builder builder = RenderCurve.create();
+        catenaryLine(builder, first, last, partSpacing, r);
+        return builder.build(level);
+    }
+
+    public static void catenaryLine(RenderCurve.Builder builder, Vec3 first, Vec3 last, float partSpacing, float r) {
+        float horizontalDistance = (float) last.subtract(first).horizontalDistance();
+        float dy = (float) (last.y() - first.y());
+        
+        float constant_g = KuayueConfig.CONFIG.getDefaultDouble("OVERHEAD_LINE_SAGGING_COEFFICIENT").floatValue();
+        float constant_step = Math.abs(dy);
+        float offset_result;
+        
+        // 计算悬链线偏移
+        if (dy == 0) {
+            offset_result = -horizontalDistance / 2;
+        } else {
+            float d = dy > 0 ? -horizontalDistance : horizontalDistance;
+            float x = d / 2;
+
+            float first_y = cosh(constant_g, x);
+            float last_y = cosh(constant_g, x - d);
+
+            float gap = Math.abs(first_y - last_y) - Math.abs(dy);
+
+            boolean positive = false;
+
+            while(Math.abs(gap) > 0.01f) {
+
+                if(gap > 0 && !positive) {
+                    constant_step = - (float) .5 * constant_step;
+                    positive = true;
+                }
+
+                if(gap < 0 && positive) {
+                    constant_step = - (float) .5 * constant_step;
+                    positive = false;
+                }
+
+                x += constant_step;
+                first_y = cosh(constant_g, x);
+                last_y = cosh(constant_g, x - d);
+
+                gap = Math.abs(first_y - last_y) - Math.abs(dy);
+            }
+            offset_result = x;
+        }
+        
+        // 准备渲染
+        prepareLine(builder, first, last.subtract(first), r);
+        PoseStack pose = builder.getPoseStack();
+        
+        // 计算分段
+        float parts = (float) Math.ceil(horizontalDistance/partSpacing);
+        float trueSpacing = horizontalDistance/parts;
+        float x = offset_result;
+        float last_y = cosh(constant_g, x);
+        float spx = dy >= 0 ? trueSpacing : -trueSpacing;
+
+        float actualLastY = 0f, actualLastX = 0f;
+        
+        // 生成曲线段
+        for (int i = 0; i < parts; i++) {
+            x += spx;
+            float current_y = cosh(constant_g, x);
+            float deltaY = current_y - last_y;
+            float zRot = (float) Math.atan2(deltaY, Math.abs(trueSpacing));
+            float segmentLength = (float) Math.sqrt(deltaY * deltaY + trueSpacing * trueSpacing);
+
+            pose.pushPose();
+            pose.translate(0, actualLastY, actualLastX);
+            pose.mulPose(Vector3f.XP.rotation(-zRot));
+
+            actualLastY += (float) (segmentLength * Math.sin(zRot));
+            actualLastX += (float) (segmentLength * Math.cos(zRot));
+            pose.scale(r, r, segmentLength);
+            builder.store();
+            pose.popPose();
+            
+            last_y = current_y;
+        }
+    }
+
+    private static float cosh(float constant_g, float x) {
+        return (float) (constant_g * (Math.pow(Math.E, x/constant_g) + Math.pow(Math.E, -x/constant_g))/2);
     }
 }

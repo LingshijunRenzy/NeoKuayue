@@ -81,6 +81,12 @@ public class OverheadLineItem extends Item {
         if(!(clickedBlockEntity instanceof OverheadLineSupportBlockEntity overheadLineSupportBlockEntity)){
             return;
         }
+
+        if(overheadLineSupportBlockEntity.getConnectionPoints().isEmpty()){
+            ComponentTranslationTool.showError(player, "overhead_line_target_unavailable", true);
+            return;
+        }
+
         CompoundTag tag = item.getOrCreateTag();
 
         tag.put("target", NbtUtils.writeBlockPos(clickedPos));
@@ -138,6 +144,12 @@ public class OverheadLineItem extends Item {
         ResourceLocation itemType = ForgeRegistries.ITEMS.getKey(this);
 
         int index = clickedSupport.getConnectionIndexOf(player.getEyePosition());
+
+
+        if(clickedSupport.getConnectionPoints().isEmpty()){
+            ComponentTranslationTool.showError(player, "overhead_line_target_unavailable", true);
+            return false;
+        }
 
         clickedSupport.addConnection(targetPos, itemType, index, previousIndex, targetSupport);
         targetSupport.addConnection(clickedPos, itemType, previousIndex, index, clickedSupport);

@@ -3,7 +3,7 @@
   "ingredient": {
     "item": "kuayue:carriage_25g_mould"
   },
-  "loops": 6,
+  "loops": 2,
   "results": [
     {
       "item": "kuayue:end_face_25g_1"

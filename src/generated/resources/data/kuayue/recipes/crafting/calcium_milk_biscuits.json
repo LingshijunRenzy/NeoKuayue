@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "building",
   "key": {
     "#": {
       "item": "create:wheat_flour"

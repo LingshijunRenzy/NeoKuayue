@@ -1,14 +1,15 @@
 package willow.train.kuayue.initial;
 
 import com.jozufozu.flywheel.core.PartialModel;
-import kasuga.lib.KasugaLib;
 import kasuga.lib.core.client.render.texture.StaticImageHolder;
 import kasuga.lib.registrations.client.ModelReg;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.Kuayue;
-import willow.train.kuayue.systems.device.driver.devices.components.LKJ2000CurveRenderer;
+import willow.train.kuayue.systems.device.driver.devices.components.LKJ2000CurveRenderNode;
+import willow.train.kuayue.systems.device.driver.seat.InteractiveScreenTarget;
+import willow.train.kuayue.systems.device.driver.seat.WorldTrainSoundManager;
 import willow.train.kuayue.systems.editable_panel.AllColorTemplates;
 import willow.train.kuayue.systems.editable_panel.overlay.GetShareOverlay;
 
@@ -98,7 +99,9 @@ public class ClientInit {
 
     public static void invoke() {
         AllKeys.invoke();
-        LKJ2000CurveRenderer.init();
+        LKJ2000CurveRenderNode.init();
+        InteractiveScreenTarget.init();
+        WorldTrainSoundManager.init();
     }
 
     private static PartialModel block(String key) {

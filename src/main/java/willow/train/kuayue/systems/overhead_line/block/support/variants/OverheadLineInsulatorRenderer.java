@@ -8,10 +8,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportInsulatorBlock;
+
+import java.util.List;
 
 public abstract class OverheadLineInsulatorRenderer {
 
@@ -36,6 +42,14 @@ public abstract class OverheadLineInsulatorRenderer {
                         );
             pPoseStack.popPose();
         }
+
+        public static List<Vec3> getConnectionPointIf(Level level, BlockPos blockPos, BlockState blockState) {
+            if(blockState.getValue(OverheadLineSupportInsulatorBlock.WALL)) {
+                return List.of();
+            } else {
+                return List.of();
+            }
+        }
     }
 
     public static class BRenderer extends OverheadLineInsulatorRenderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
@@ -58,6 +72,13 @@ public abstract class OverheadLineInsulatorRenderer {
                             pPackedOverlay
                     );
             pPoseStack.popPose();
+        }
+        public static List<Vec3> getConnectionPointIf(Level level, BlockPos blockPos, BlockState blockState) {
+            if(blockState.getValue(OverheadLineSupportInsulatorBlock.WALL)) {
+                return List.of();
+            } else {
+                return List.of();
+            }
         }
     }
 }

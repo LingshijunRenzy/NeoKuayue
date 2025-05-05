@@ -3,7 +3,9 @@ package willow.train.kuayue.systems.tech_tree.server;
 import kasuga.lib.core.network.S2CPacket;
 import lombok.Getter;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.player.Player;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.tech_tree.*;
 import willow.train.kuayue.systems.tech_tree.NetworkState;
@@ -23,9 +25,10 @@ public class ServerNetworkCache implements Runnable {
     private boolean waiting;
     private int delay, times;
     private TransmitStage transmitStage;
-    private static final int handshakeDelay = 10, timeout = 30;
+    private static final int handshakeDelay = 150000, timeout = 300000;
     private boolean threadStarted;
     private final Thread myThread;
+
     public ServerNetworkCache(Player player) {
         packets = new LinkedList<>();
         waitingForSend = new LinkedList<>();
@@ -113,7 +116,8 @@ public class ServerNetworkCache implements Runnable {
         if (waiting && times >= timeout) {
             clear();
             return false;
-        } else if (waiting && delay < handshakeDelay) {
+        } else if (waiting && transmitStage == TransmitStage.HANDSHAKE &&
+                delay > 0 && delay < handshakeDelay) {
             delay();
             delay++;
         } else if (waiting) {
@@ -141,6 +145,9 @@ public class ServerNetworkCache implements Runnable {
     }
 
     public void forceStop() {
+        Kuayue.LOGGER.error("Failed to send tech tree data to player {} on phase {}, " +
+                        "already waiting for {} ms.",
+                player.getDisplayName().getString(), transmitStage, times * 10);
         clear();
         waitingForSend.clear();
         transmitStage = TransmitStage.STANDING_BY;
@@ -148,7 +155,7 @@ public class ServerNetworkCache implements Runnable {
 
     private void delay() {
         try {
-            Thread.sleep(10);
+            Thread.sleep(20);
         } catch (InterruptedException ignored) {}
     }
 
@@ -161,10 +168,20 @@ public class ServerNetworkCache implements Runnable {
         AllPackets.TECH_TREE_CHANNEL.sendToClient(new TechTreeEOFS2CPacket(batch), (ServerPlayer) player);
     }
 
-    public enum TransmitStage {
+    public enum TransmitStage implements StringRepresentable {
         STANDING_BY,
         HANDSHAKE,
         TRANSMITTING,
         EOF;
+
+        @Override
+        public String getSerializedName() {
+            return switch (this) {
+                case STANDING_BY -> "standing_by";
+                case HANDSHAKE -> "handshake";
+                case TRANSMITTING -> "transmitting";
+                case EOF -> "end_of_file";
+            };
+        }
     }
 }

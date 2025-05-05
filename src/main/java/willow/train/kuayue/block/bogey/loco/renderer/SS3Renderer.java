@@ -44,7 +44,7 @@ public class SS3Renderer extends BogeyRenderer {
             VertexConsumer vb,
             boolean inContraption) {
 
-        light *= 1.1;
+        light *= 1;
 
         Direction direction =
                 bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)

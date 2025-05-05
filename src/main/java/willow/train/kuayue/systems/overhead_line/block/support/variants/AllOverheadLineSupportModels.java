@@ -37,6 +37,16 @@ public class AllOverheadLineSupportModels {
 
     public static AnimModel OVERHEAD_LINE_SUPPORT_INSULATOR_B_WALL;
 
+    public static AnimModel OVERHEAD_LINE_END_COUNTERWEIGHT;
+    public static AnimModel OVERHEAD_LINE_END_COUNTERWEIGHT_SMALL;
+
+    public static AnimModel OVERHEAD_LINE_END_COUNTERWEIGHT_EMPTY;
+    public static AnimModel OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE;
+    public static AnimModel OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE_SMALL;
+    public static AnimModel OVERHEAD_LINE_WEIGHT;
+    public static AnimModel OVERHEAD_LINE_WEIGHT_ON_GROUND;
+    public static AnimModel OVERHEAD_LINE_WEIGHT_SMALL;
+
     public static AnimModel KUAYUE_TEST;
     public static AnimModel KUAYUE_TEST_LINE;
 
@@ -87,7 +97,7 @@ public class AllOverheadLineSupportModels {
                 RenderType.cutoutMipped()
         );
         OVERHEAD_LINE_SUPPORT_INSULATOR_A_WALL = BedrockModelLoader.getModel(
-                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_a"),
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_a_wall"),
                 RenderType.cutoutMipped()
         );
         OVERHEAD_LINE_SUPPORT_INSULATOR_B = BedrockModelLoader.getModel(
@@ -95,7 +105,7 @@ public class AllOverheadLineSupportModels {
                 RenderType.cutoutMipped()
         );
         OVERHEAD_LINE_SUPPORT_INSULATOR_B_WALL = BedrockModelLoader.getModel(
-                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_b"),
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_b_wall"),
                 RenderType.cutoutMipped()
         );
         KUAYUE_TEST = BedrockModelLoader.getModel(
@@ -107,6 +117,41 @@ public class AllOverheadLineSupportModels {
                 RenderType.cutoutMipped()
         );
 
+        OVERHEAD_LINE_END_COUNTERWEIGHT = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight"),
+                RenderType.cutoutMipped()
+        );
+
+        OVERHEAD_LINE_END_COUNTERWEIGHT_SMALL = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_small"),
+                RenderType.cutoutMipped()
+        );
+
+        OVERHEAD_LINE_END_COUNTERWEIGHT_EMPTY = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_empty"),
+                RenderType.cutoutMipped()
+        );
+        OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_hanger_line"),
+                RenderType.cutoutMipped()
+        );
+        OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE_SMALL = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_hanger_line_small"),
+                RenderType.cutoutMipped()
+        );
+        OVERHEAD_LINE_WEIGHT = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_weight"),
+                RenderType.cutoutMipped()
+        );
+        OVERHEAD_LINE_WEIGHT_ON_GROUND = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_weight_on_ground"),
+                RenderType.cutoutMipped()
+        );
+        OVERHEAD_LINE_WEIGHT_SMALL = BedrockModelLoader.getModel(
+                AllElements.testRegistry.asResource("block/overhead_line/overhead_line_weight_small"),
+                RenderType.cutoutMipped()
+        );
+
         OVERHEAD_LINE_SUPPORT_A1_MODEL.init();
         OVERHEAD_LINE_SUPPORT_A2_MODEL.init();
         OVERHEAD_LINE_SUPPORT_C1_MODEL.init();
@@ -115,6 +160,16 @@ public class AllOverheadLineSupportModels {
         OVERHEAD_LINE_SUPPORT_INSULATOR_A_WALL.init();
         OVERHEAD_LINE_SUPPORT_INSULATOR_B.init();
         OVERHEAD_LINE_SUPPORT_INSULATOR_B_WALL.init();
+
+        OVERHEAD_LINE_END_COUNTERWEIGHT.init();
+        OVERHEAD_LINE_END_COUNTERWEIGHT_SMALL.init();
+        OVERHEAD_LINE_END_COUNTERWEIGHT_EMPTY.init();
+        OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE.init();
+        OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE_SMALL.init();
+        OVERHEAD_LINE_WEIGHT.init();
+        OVERHEAD_LINE_WEIGHT_ON_GROUND.init();
+        OVERHEAD_LINE_WEIGHT_SMALL.init();
+
         KUAYUE_TEST.init();
         KUAYUE_TEST_LINE.init();
     }

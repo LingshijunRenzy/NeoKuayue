@@ -53,6 +53,7 @@ public class PlayerDataManager extends SavedData implements NbtSerializable {
     public PlayerData getOrCreatePlayerData(UUID id) {
         PlayerData result = playerData.getOrDefault(id, null);
         if (result == null) result = createPlayerData(id);
+        result.checkAllDefaults();
         return result;
     }
 
@@ -62,15 +63,6 @@ public class PlayerDataManager extends SavedData implements NbtSerializable {
 
     public PlayerData createPlayerData(UUID id) {
         PlayerData result = new PlayerData(id);
-        TechTreeManager.MANAGER.trees().forEach((treeName, tree) -> {
-            tree.getGroups().forEach((grpName, grp) -> {
-                if (!grp.hasRing() && grp.getData().isInitialVisibility()) {
-                    result.visibleGroups.add(grp.getId());
-                    result.unlockedGroups.add(grp.getId());
-                    result.visibleNodes.add(grp.getRoot().getLocation());
-                }
-            });
-        });
         playerData.put(id, result);
         return result;
     }

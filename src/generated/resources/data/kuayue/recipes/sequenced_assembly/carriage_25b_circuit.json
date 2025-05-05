@@ -6,20 +6,7 @@
   "loops": 2,
   "results": [
     {
-      "chance": 0.6,
       "item": "kuayue:carriage_25b_circuit"
-    },
-    {
-      "chance": 0.1,
-      "item": "minecraft:redstone"
-    },
-    {
-      "chance": 0.2,
-      "item": "create:precision_mechanism"
-    },
-    {
-      "chance": 0.1,
-      "item": "create:electron_tube"
     }
   ],
   "sequence": [
