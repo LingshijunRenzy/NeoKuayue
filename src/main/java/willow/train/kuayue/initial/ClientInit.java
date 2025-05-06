@@ -29,6 +29,11 @@ public class ClientInit {
                     , 0, 16, 16, 16);
 
      */
+    public static final StaticImageHolder laqueredBoardLogo =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/laquered_board/laquered_board_logo.png"));
+
+    public static final StaticImageHolder laqueredBoardWhiteBg =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/laquered_board/1px_1px_white_bg.png"));
 
     public static final StaticImageHolder arrow =
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/overlay/arrows.png"));

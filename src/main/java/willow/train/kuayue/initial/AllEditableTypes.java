@@ -5,6 +5,7 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 import willow.train.kuayue.systems.editable_panel.*;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
 import willow.train.kuayue.initial.item.EditablePanelItem;
+import willow.train.kuayue.systems.editable_panel.screens.LaqueredScreen;
 import willow.train.kuayue.systems.editable_panel.screens.SpeedScreen;
 import willow.train.kuayue.systems.editable_panel.screens.TypeScreen;
 
@@ -59,14 +60,15 @@ public class AllEditableTypes {
                     () -> () -> EditableTypeConstants.CARRIAGE_NO_SIGN,
                     () -> EditableTypeConstants.CARRIAGE_NO_SIGN_MESSAGES,
                     () -> EditableTypeConstants.CARRIAGE_NO_SIGN_METHODS);
+                    */
 
     public static final SignType LAQUERED_BOARD_SIGN = EditableTypeConstants
             .signLambdaRegister("laquered_board",
                     TrainPanelProperties.EditType.LAQUERED,
                     () -> () -> EditableTypeConstants.LAQUERED_BOARD_SIGN,
                     () -> EditableTypeConstants.LAQUERED_BOARD_MESSAGES,
-                    () -> EditableTypeConstants.LAQUERED_BOARD_METHODS);
-
+                    () -> LaqueredScreen::new);
+/*
     public static final SignType TRAIN_SPEED_SIGN = EditableTypeConstants
             .signLambdaRegister("train_speed_sign",
                     TrainPanelProperties.EditType.SPEED,
