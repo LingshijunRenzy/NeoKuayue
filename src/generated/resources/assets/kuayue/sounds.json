@@ -4,9 +4,53 @@
     "sounds": [
       "kuayue:crossing_ringing"
     ]
-
+  },
+  "lkj2000/beep": {
+    "subtitle": "sounds.kuayue.lkj2000.beep",
+    "sounds": [
+      "kuayue:lkj2000/beep"
+    ]
+  },
+  "lkj2000/settings/contraption_count": {
+    "subtitle": "sounds.kuayue.lkj2000.settings.contraption_count",
+    "sounds": [
+      "kuayue:lkj2000/settings/contraption_count"
+    ]
+  },
+  "lkj2000/settings/driver_number": {
+    "subtitle": "sounds.kuayue.lkj2000.settings.driver_number",
+    "sounds": [
+      "kuayue:lkj2000/settings/driver_number"
+    ]
+  },
+  "lkj2000/settings/pull_weight": {
+    "subtitle": "sounds.kuayue.lkj2000.settings.pull_weight",
+    "sounds": [
+      "kuayue:lkj2000/settings/pull_weight"
+    ]
+  },
+  "lkj2000/settings/sequence_id": {
+    "subtitle": "sounds.kuayue.lkj2000.settings.sequence_id",
+    "sounds": [
+      "kuayue:lkj2000/settings/sequence_id"
+    ]
+  },
+  "lkj2000/settings/station_number": {
+    "subtitle": "sounds.kuayue.lkj2000.settings.station_number",
+    "sounds": [
+      "kuayue:lkj2000/settings/station_number"
+    ]
+  },
+  "lkj2000/settings/train_number": {
+    "subtitle": "sounds.kuayue.lkj2000.settings.train_number",
+    "sounds": [
+      "kuayue:lkj2000/settings/train_number"
+    ]
+  },
+  "lkj2000/settings/train_type": {
+    "subtitle": "sounds.kuayue.lkj2000.settings.train_type",
+    "sounds": [
+      "kuayue:lkj2000/settings/train_type"
+    ]
   }
-
-
-
 }

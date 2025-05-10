@@ -25,6 +25,9 @@
     "kuayue:panel_slab_universal_25",
     "kuayue:ss8_floor",
     "kuayue:ss8_transformer",
-    "kuayue:ss8_sandbox_front"
+    "kuayue:ss8_sandbox_front",
+    "kuayue:ss3_floor",
+    "kuayue:ss3_floor_center",
+    "kuayue:ss3_transformer"
   ]
 }

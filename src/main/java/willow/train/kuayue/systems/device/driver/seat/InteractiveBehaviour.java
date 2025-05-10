@@ -28,14 +28,16 @@ public interface InteractiveBehaviour {
                 ResourceLocation icon,
                 Supplier<Boolean> isAvailable,
                 Supplier<GuiMenu> menuSupplier,
+                Vec2 defaultPosition,
+                Vec2 defaultScale,
                 Vec2 size
         ) {
             this._displayName = displayName;
             this._icon = icon;
             this._isAvailable = isAvailable;
             this._menuSupplier = menuSupplier;
-            this.position = new Vec2(0,0);
-            this.scale = new Vec2(1,1);
+            this.position = defaultPosition;
+            this.scale = defaultScale;
             this.size = size;
         }
 

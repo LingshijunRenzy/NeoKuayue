@@ -44,7 +44,8 @@ public class MergeRange extends LinearRange{
         while(
                 iterators.stream().anyMatch(Iterator::hasNext) ||
                 !activate.isEmpty() ||
-                lastDistanceSpeed.isPresent()
+                lastDistanceSpeed.isPresent() ||
+                entries.stream().anyMatch(Objects::nonNull)
         ) {
             double minDistance = Double.MAX_VALUE;
             for (var entry : entries) {

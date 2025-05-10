@@ -9,13 +9,14 @@ import net.minecraft.world.level.LevelAccessor;
 import willow.train.kuayue.initial.AllEdgePoints;
 import willow.train.kuayue.systems.device.graph.track.StationTrack;
 import willow.train.kuayue.systems.device.track.entry.StationEntry;
+import willow.train.kuayue.systems.device.track.train_station.GraphStationInfo;
 import willow.train.kuayue.systems.device.track.train_station.TrainStation;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class GraphStation {
-    public UUID networkId;
+    private UUID networkId;
     public final UUID uuid;
     public String name;
     public String shortenCode;
@@ -36,7 +37,6 @@ public class GraphStation {
 
     public CompoundTag write(){
         CompoundTag tag = new CompoundTag();
-        tag.putUUID("NetworkId", networkId);
         tag.putUUID("StationId", uuid);
         tag.putString("Name", name);
         tag.putString("ShortenCode", shortenCode);
@@ -66,7 +66,7 @@ public class GraphStation {
         return tag;
     }
 
-    public static GraphStation read(LevelAccessor side,CompoundTag tag){
+    public static GraphStation read(LevelAccessor side, CompoundTag tag){
         UUID uuid = tag.getUUID("StationId");
         GraphStation station = new GraphStation(uuid);
         station.onUpdateData(side, tag);
@@ -75,7 +75,7 @@ public class GraphStation {
 
     private void onUpdateData(LevelAccessor side, CompoundTag nbt) {
         this.networkId = nbt.getUUID("NetworkId");
-        TrackGraph network = Create.RAILWAYS.sided(side).trackNetworks.get(networkId);
+        TrackGraph network = (side == null ? Create.RAILWAYS : Create.RAILWAYS.sided(side)).trackNetworks.get(networkId);
         this.name = nbt.getString("Name");
         this.shortenCode = nbt.getString("ShortenCode");
 
@@ -108,5 +108,24 @@ public class GraphStation {
             StationTrack track = StationTrack.read(network, trackTag);
             this.stationTracks.add(track);
         }
+    }
+
+    public void removeStation(TrainStation station) {
+        this.stations.remove(station);
+    }
+
+    public void addStation(TrainStation trainStation) {
+        if(this.stations.contains(trainStation))
+            return;
+        this.stations.add(trainStation);
+    }
+
+    public void updateInfo(GraphStationInfo localInfo) {
+        this.name = localInfo.name();
+        this.shortenCode = localInfo.shortenCode();
+    }
+
+    public GraphStationInfo getStationInfo() {
+        return new GraphStationInfo(this.name, this.shortenCode);
     }
 }
