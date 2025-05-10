@@ -1,4 +1,4 @@
-import willow.train.kuayue.build.ModuleCompilePlugin
+import willow.train.kuayue.builder.ModuleCompilePlugin
 
 buildscript {
     repositories {
