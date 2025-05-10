@@ -62,7 +62,7 @@ public class CW2BogeyRenderer extends BogeyRenderer {
         for (int side : Iterate.positiveAndNegative) {
             if (!inInstancedContraption) ms.pushPose();
             BogeyModelData wheel = wheels[(side + 1) / 2];
-            wheel.translate(0, 0.805, ((double) side) * 1.2d).rotateX(wheelAngle);
+            wheel.translate(0, 0.805, ((double) side) * 1.18d).rotateX(wheelAngle);
             wheel.render(ms, light, vb);
             if (!inInstancedContraption) ms.popPose();
         }
