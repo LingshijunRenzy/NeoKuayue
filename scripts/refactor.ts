@@ -5,7 +5,7 @@ import { load as loadYaml } from 'js-yaml';
 import { mkdir, copyFile } from 'fs/promises';
 
 async function readResources(): Promise<Record<string, string>> {
-  const resourceDir = join(__dirname, '../src/generated/resources');
+  const resourceDir = join(__dirname, '../.backup/');
   const resources: Record<string, string> = {};
 
   async function scanDirectory(dir: string) {
@@ -253,7 +253,7 @@ export async function i18nProcessor(files: Record<string, string>) {
       const categoryContent: Record<string, string> = {};
       for (const key of keys) {
         if(key.startsWith("tips") || key.startsWith("auto.gen"))
-          return;
+          continue;
         if (content[key]) {
           categoryContent[key] = content[key];
         }
@@ -268,7 +268,7 @@ export async function i18nProcessor(files: Record<string, string>) {
     const defaultContent: Record<string, string> = {};
     for (const key of unprocessedKeys) {
       if(key.startsWith("tips") || key.startsWith("auto.gen"))
-        return;
+        continue;
       if (content[key]) {
         defaultContent[key] = content[key];
       }
