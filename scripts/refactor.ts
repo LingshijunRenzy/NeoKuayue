@@ -1,13 +1,17 @@
 import { readdir } from 'fs/promises';
-import { join, relative } from 'path';
-import { readFileSync } from 'fs';
+import { join, relative, dirname } from 'path';
+import { readFileSync, writeFileSync, writeFileSyncSync } from 'fs';
 import { load as loadYaml } from 'js-yaml';
+import { mkdir, copyFile } from 'fs/promises';
 
 async function readResources(): Promise<Record<string, string>> {
   const resourceDir = join(__dirname, '../src/generated/resources');
   const resources: Record<string, string> = {};
 
   async function scanDirectory(dir: string) {
+    if(dir.startsWith("script")) {
+      return;
+    }
     const entries = await readdir(dir, { withFileTypes: true });
     
     for (const entry of entries) {
@@ -80,9 +84,37 @@ function categoryFile(resources: Record<string, string>): Record<string, Record<
   return result;
 }
 
-export function defaultProcessor(files: Record<string, string>) {
-  const categorized : Record<string, string> = {};
+// 添加工具函数来创建目录
+async function ensureDir(dir: string) {
+  try {
+    await mkdir(dir, { recursive: true });
+  } catch (error) {
+    if ((error as any).code !== 'EEXIST') {
+      throw error;
+    }
+  }
+}
+
+// 处理文件路径转换
+function processPath(relativePath: string): string {
+  if (relativePath.startsWith('assets/kuayue/')) {
+    return relativePath.replace('assets/kuayue/', '');
+  }
+  return relativePath;
+}
+
+// 添加复制函数
+async function copyToDestination(sourcePath: string, destPath: string) {
+  const destDir = dirname(destPath);
+  await ensureDir(destDir);
+  await copyFile(sourcePath, destPath);
+}
+
+// 修改 defaultProcessor
+export async function defaultProcessor(files: Record<string, string>) {
+  const categorized: Record<string, string> = {};
   const configures = config.config.default;
+  
   for(const rule of configures.rules) {
     const regexes = rule['match'].map((t:string)=>new RegExp(t));
     for(const [relativePath, fullPath] of Object.entries(files)) {
@@ -118,9 +150,36 @@ export function defaultProcessor(files: Record<string, string>) {
       console.info(` |- ${file}`);
     }
   }
+
+  const categories = new Set<string>(Object.values(categorized));
+  
+
+  // 添加文件复制逻辑
+  for (const [relativePath, category] of Object.entries(categorized)) {
+    const sourcePath = files[relativePath];
+    const processedPath = processPath(relativePath);
+    const destPath = join(__dirname, '../resources/generated', category, processedPath);
+    await copyToDestination(sourcePath, destPath);
+  }
+
+  // 处理未分类的文件
+  for (const relativePath of unprocessedFiles) {
+    const sourcePath = files[relativePath];
+    const processedPath = processPath(relativePath);
+    const destPath = join(__dirname, '../resources/generated/default', processedPath);
+    await copyToDestination(sourcePath, destPath);
+  }
+
+  // 创建 module.yml
+  for(const category of categories) {
+    const moduleYml = join(__dirname, '../resources/generated', category, 'module.yml');
+    await ensureDir(dirname(moduleYml));
+    await writeFileSync(moduleYml, "");
+  }
 }
 
-export function i18nProcessor(files: Record<string, string>) {
+// 修改 i18nProcessor
+export async function i18nProcessor(files: Record<string, string>) {
   const categorized: Record<string, string[]> = {};
   const configures = config.config.i18n;
   
@@ -184,11 +243,205 @@ export function i18nProcessor(files: Record<string, string>) {
       console.info(key);
     }
   }
+
+  // 为每个分类创建语言文件
+  for (const [relativePath, fullPath] of Object.entries(files)) {
+    const content = JSON.parse(readFileSync(fullPath, 'utf8'));
+    const langFileName = relativePath.split('/').pop()!;
+
+    for (const [category, keys] of Object.entries(categorized)) {
+      const categoryContent: Record<string, string> = {};
+      for (const key of keys) {
+        if(key.startsWith("tips") || key.startsWith("auto.gen"))
+          return;
+        if (content[key]) {
+          categoryContent[key] = content[key];
+        }
+      }
+
+      const destPath = join(__dirname, '../resources/generated', category, 'lang', langFileName);
+      await ensureDir(dirname(destPath));
+      await writeFileSync(destPath, JSON.stringify(categoryContent, null, 2));
+    }
+
+    // 处理未分类的键
+    const defaultContent: Record<string, string> = {};
+    for (const key of unprocessedKeys) {
+      if(key.startsWith("tips") || key.startsWith("auto.gen"))
+        return;
+      if (content[key]) {
+        defaultContent[key] = content[key];
+      }
+    }
+    const defaultDestPath = join(__dirname, '../resources/generated/default/lang', langFileName);
+    await ensureDir(dirname(defaultDestPath));
+    await writeFileSync(defaultDestPath, JSON.stringify(defaultContent, null, 2));
+  }
+
+  const categories = new Set<string>(Object.keys(categorized));
+
+  // 创建 module.yml
+  for(const category of categories) {
+    const moduleYml = join(__dirname, '../resources/generated', category, 'module.yml');
+    await ensureDir(dirname(moduleYml));
+    await writeFileSync(moduleYml, "");
+  }
+}
+
+// 修改 tagProcessor
+export async function tagProcessor(files: Record<string, string>) {
+  const configures = config.config.tag;
+  
+  for (const [relativePath, fullPath] of Object.entries(files)) {
+    try {
+      // 读取并解析 JSON 文件
+      const content = JSON.parse(readFileSync(fullPath, 'utf8'));
+      
+      if (!Array.isArray(content.values)) continue;
+
+      // 为每个文件创建单独的分类结果
+      const fileCategories: Record<string, string[]> = {};
+      const processedValues = new Set<string>();
+      
+      // 对文件中的每个值进行分类
+      for (const value of content.values) {
+        let matched = false;
+        for (const rule of configures.rules) {
+          const regexes = rule.match.map((t: string) => new RegExp(t));
+          if (regexes.some((regex: RegExp) => regex.test(value))) {
+            if (!fileCategories[rule.category]) {
+              fileCategories[rule.category] = [];
+            }
+            fileCategories[rule.category].push(value);
+            processedValues.add(value);
+            matched = true;
+            break;
+          }
+        }
+      }
+
+      // 输出当前文件的分类结果
+      console.info(`\nFile: ${relativePath}`);
+      console.info('Categories:');
+      for (const [category, values] of Object.entries(fileCategories)) {
+        console.info(`${category}: ${values.length} values:`);
+        for (const value of values) {
+          console.info(` |- ${value}`);
+        }
+      }
+
+      // 查找当前文件中未匹配的值
+      const unprocessedValues = content.values.filter(value => !processedValues.has(value));
+
+      const otherJson = JSON.parse(JSON.stringify(content));
+      delete otherJson['values'];
+
+      if (unprocessedValues.length > 0 || Object.keys(otherJson).length > 0) {
+        console.info(`Unprocessed values in ${relativePath}: ${unprocessedValues.length}:`);
+        for (const value of unprocessedValues) {
+          console.info(` |- ${value}`);
+        }
+        // 将未匹配的值写入到未分类的文件中
+        const defaultDestPath = join(__dirname, '../resources/generated/default', relativePath);
+        await ensureDir(dirname(defaultDestPath));
+        await writeFileSync(defaultDestPath, JSON.stringify({values: unprocessedValues, ...otherJson}, null, 2));
+      }
+
+      // 为每个分类创建 tag 文件
+      for (const [category, values] of Object.entries(fileCategories)) {
+        const categoryContent = { ...content, values };
+        const processedPath = processPath(relativePath);
+        const destPath = join(__dirname, '../resources/generated', category, processedPath);
+        await ensureDir(dirname(destPath));
+        await writeFileSync(destPath, JSON.stringify(categoryContent, null, 2));
+      }
+      
+    } catch (error) {
+      console.error(`Error processing file ${relativePath}:`, error);
+    }
+
+  }
+}
+
+// 添加 animModelProcessor
+export async function animModelProcessor(files: Record<string, string>) {
+  const configures = config.config.anim_model;
+  
+  for (const [relativePath, fullPath] of Object.entries(files)) {
+    try {
+      // 读取并解析 JSON 文件
+      const content = JSON.parse(readFileSync(fullPath, 'utf8'));
+      
+      if (!Array.isArray(content.model)) continue;
+
+      // 为每个文件创建单独的分类结果
+      const fileCategories: Record<string, string[]> = {};
+      const processedModels = new Set<string>();
+      
+      // 对文件中的每个模型进行分类
+      for (const model of content.model) {
+        let matched = false;
+        for (const rule of configures.rules) {
+          const regexes = rule.match.map((t: string) => new RegExp(t));
+          if (regexes.some((regex: RegExp) => regex.test(model))) {
+            if (!fileCategories[rule.category]) {
+              fileCategories[rule.category] = [];
+            }
+            fileCategories[rule.category].push(model);
+            processedModels.add(model);
+            matched = true;
+            break;
+          }
+        }
+      }
+
+      // 输出当前文件的分类结果
+      console.info(`\nFile: ${relativePath}`);
+      console.info('Categories:');
+      for (const [category, models] of Object.entries(fileCategories)) {
+        console.info(`${category}: ${models.length} models:`);
+        for (const model of models) {
+          console.info(` |- ${model}`);
+        }
+      }
+
+      // 查找当前文件中未匹配的模型
+      const unprocessedModels = content.model.filter(model => !processedModels.has(model));
+
+      const otherJson = JSON.parse(JSON.stringify(content));
+      delete otherJson['model'];
+
+      if (unprocessedModels.length > 0 || Object.keys(otherJson).length > 0) {
+        console.info(`Unprocessed models in ${relativePath}: ${unprocessedModels.length}:`);
+        for (const model of unprocessedModels) {
+          console.info(` |- ${model}`);
+        }
+        // 将未匹配的模型写入到未分类的文件中
+        const defaultDestPath = join(__dirname, '../resources/generated/default', relativePath);
+        await ensureDir(dirname(defaultDestPath));
+        await writeFileSync(defaultDestPath, JSON.stringify({model: unprocessedModels, ...otherJson}, null, 2));
+      }
+
+      // 为每个分类创建文件
+      for (const [category, models] of Object.entries(fileCategories)) {
+        const categoryContent = { ...content, model: models };
+        const processedPath = processPath(relativePath);
+        const destPath = join(__dirname, '../resources/generated', category, processedPath);
+        await ensureDir(dirname(destPath));
+        await writeFileSync(destPath, JSON.stringify(categoryContent, null, 2));
+      }
+      
+    } catch (error) {
+      console.error(`Error processing file ${relativePath}:`, error);
+    }
+  }
 }
 
 export const processors: Record<string, (files: Record<string, string>) => void> = {
   'default': defaultProcessor,
   'i18n': i18nProcessor,
+  'tag': tagProcessor,
+  'anim_model': animModelProcessor,
 }
 
 async function main() {

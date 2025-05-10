@@ -250,6 +250,9 @@ jar {
     }
 }
 
+
+processResources.dependsOn("resourceCompileTask")
+
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file
 // 当需要发布正式版本的时候用下面这个，给开发用的版本则不要用这个，task 跑 jarJar
