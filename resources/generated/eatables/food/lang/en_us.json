@@ -1,0 +1,14 @@
+{
+  "block.kuayue.kua_cola": "Kuayue Cola",
+  "block.kuayue.blue_bull": "Blue Bull",
+  "item.kuayue.lunch_box": "Lunch Box",
+  "item.kuayue.empty_can": "Empty Can",
+  "item.kuayue.empty_can_blue": "Blue Empty Can",
+  "item.kuayue.spicy_fish_tofu": "Piquancy Fish DouFu",
+  "item.kuayue.cola_fluid_bucket": "Kua Cola Bucket",
+  "fluid_type.kuayue.cola_fluid": "Kua Cola Fluid",
+  "item.kuayue.blue_bull_fluid_bucket": "Blue Bull Fluid Bucket",
+  "fluid_type.kuayue.blue_bull_fluid": "Blue Bull Fluid",
+  "item.kuayue.tooltip.kua_cola.tip0": "The leap in taste, starting from Kuayue Cola!",
+  "item.kuayue.tooltip.blue_bull.tip0": "Be a jump master!"
+}

@@ -1,0 +1,14 @@
+{
+  "block.kuayue.kua_cola": "跨可乐",
+  "block.kuayue.blue_bull": "蓝牛运动饮料",
+  "item.kuayue.lunch_box": "餐盒",
+  "item.kuayue.empty_can": "空易拉罐",
+  "item.kuayue.empty_can_blue": "空易拉罐(蓝色)",
+  "item.kuayue.spicy_fish_tofu": "香辣鱼豆腐",
+  "item.kuayue.cola_fluid_bucket": "跨可乐桶",
+  "fluid_type.kuayue.cola_fluid": "跨可乐流体",
+  "item.kuayue.blue_bull_fluid_bucket": "蓝牛运动饮料桶",
+  "fluid_type.kuayue.blue_bull_fluid": "蓝牛运动饮料流体",
+  "item.kuayue.tooltip.kua_cola.tip0": "味觉上的跨越，从跨越可乐开始！",
+  "item.kuayue.tooltip.blue_bull.tip0": "不是黑牛，更不是黄牛！"
+}

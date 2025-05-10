@@ -1,0 +1,15 @@
+{
+  "block.kuayue.blueprint_table": "Blueprint Table",
+  "item.kuayue.carriage_marshalled_blueprint": "Carriage Marshalled Blueprint",
+  "item.kuayue.circuit_motherboard": "Circuit Motherboard",
+  "tech_tree.kuayue.group.carriage_blueprint.name": "Carriage Blueprint Group",
+  "tech_tree.kuayue.group.carriage_blueprint.description": "Advance the technology tree to obtain the overall design drawings of all types of trains.",
+  "tech_tree.kuayue.group.carriage_blueprint.unlock": "Unlock Carriage Blueprint",
+  "tech_tree.kuayue.group.carriage_marshalled_blueprint.name": "Carriage Marshalled Blueprint",
+  "tech_tree.kuayue.group.carriage_marshalled_blueprint.description": "All can be painted green! Obtain the design drawings of Carriage Marshalled.",
+  "tech_tree.kuayue.group.circuit_blueprint.name": "Carriage Circuit Blueprint Group",
+  "tech_tree.kuayue.group.circuit_blueprint.description": "Advance the technology tree to unlock all train circuit board design drawings.",
+  "tech_tree.kuayue.group.circuit_blueprint.unlock": "Unlock Carriage Circuit Blueprint",
+  "tech_tree.kuayue.group.circuit_motherboard.name": "Circuit Motherboard",
+  "tech_tree.kuayue.group.circuit_motherboard.description": "Synthesized Circuit Motherboard"
+}
