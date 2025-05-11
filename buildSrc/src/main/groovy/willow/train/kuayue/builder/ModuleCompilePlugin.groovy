@@ -101,7 +101,7 @@ class ModuleCompilePlugin implements Plugin<Project> {
                             if (!targetFile.parentFile.exists()) {
                                 targetFile.parentFile.mkdirs()
                             }
-                            targetFile.text = new GsonBuilder().setPrettyPrinting().create().toJson(mergedJson)
+                            targetFile.write(new GsonBuilder().setPrettyPrinting().create().toJson(mergedJson), 'utf-8', true)
                         } else {
                             throw new RuntimeException("Unaccpetable conflict found for file: ${targetFile.path}, please resolve it manually.")
                         }
