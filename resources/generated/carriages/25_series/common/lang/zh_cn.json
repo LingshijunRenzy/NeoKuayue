@@ -16,5 +16,10 @@
   "block.kuayue.floor_marshalled_25": "刷绿25系列车厢地板",
   "block.kuayue.panel_bottom_marshalled_25": "刷绿25系列厢下厢板",
   "block.kuayue.window_marshalled_25": "高阻绿25车厢窗户",
-  "block.kuayue.panel_slab_universal_25": "25型客车通用中置地板"
+  "block.kuayue.panel_slab_universal_25": "25型客车通用中置地板",
+
+  "block.kuayue.carriage_brake_cylinder": "客车制动风缸",
+  "block.kuayue.carriage_battery": "客车蓄电池",
+  "block.kuayue.auxiliary_reservoir_longitudinal": "客车副风缸(纵向）",
+  "block.kuayue.auxiliary_reservoir": "客车副风缸"
 }

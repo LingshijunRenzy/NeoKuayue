@@ -176,23 +176,9 @@
   "clip_board.type": "Carriage Type Sign",
   "clip_board.speed": "Carriage Speed Sign",
   "clip_board.num": "Carriage No Sign",
-  "block.kuayue.dried_instant_noodles": "Unbrewed Instant Noodles",
-  "block.kuayue.soaked_instant_noodles": "Instant Noodles",
-  "item.kuayue.ham_sausage": "HAM",
-  "item.kuayue.marinated_egg": "Spiced Corned Egg",
-  "item.kuayue.half_marinated_egg": "Half Spiced Corned Egg",
-  "item.kuayue.calcium_milk_biscuits": "Calcium Milk Biscuit",
+
   "item.kuayue.colored_brush.tooltip_5": "durability",
-  "item.kuayue.monosodium_glutamate": "Monosodium Glutamate",
-  "item.kuayue.tooltip.dried_instant_noodles.tip0": "Really want to eat this?",
-  "item.kuayue.tooltip.dried_instant_noodles.tip1": "Right click the boiler to brew.",
-  "item.kuayue.tooltip.soaked_instant_noodles.tip0": "REALLY HOT",
-  "item.kuayue.tooltip.soaked_instant_noodles.tip1": "Don't JUMP on any time.",
-  "item.kuayue.tooltip.restores_health": "Energy recovery: %s",
-  "item.kuayue.tooltip.restores_saturation": "Saturability recovery: %s",
-  "effect.kuayue.warm": "Warm",
-  "msg.kuayue.jump_with_soaked_instant_noodles": "So fxxking hot!!!",
-  "msg.kuayue.step_on_soaked_instant_noodles": "Why stand on top of it!?",
+
   "item.kuayue.carriage_marshalled_mould": "Carriage Marshalled Mould",
   "item.kuayue.carriage_marshalled_mould_constructing": "Carriage Marshalled Mould (Assembling)",
   "item.kuayue.color_masterbatch": "Color Masterbatch",
@@ -203,9 +189,6 @@
   "item.kuayue.research_report_thinking": "Research Report (Researching)",
   "item.kuayue.research_report": "Research Report",
   "item.kuayue.solidify_slime_ball": "Solidify Slime Ball",
-  "block.kuayue.carriage_brake_cylinder": "carriage brake cylinder",
-  "block.kuayue.carriage_battery": "carriage battery",
-  "block.kuayue.auxiliary_reservoir_longitudinal": "carriage auxiliary reservoir (longitudinal)",
-  "block.kuayue.auxiliary_reservoir": "carriage auxiliary reservoir",
+
   "block.kuayue.240km_monument": "China's First High-Speed Milestone Plaque (240 km/h)"
 }

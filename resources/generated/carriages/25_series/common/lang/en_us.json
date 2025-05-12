@@ -16,5 +16,10 @@
   "block.kuayue.floor_marshalled_25": "Marshalled 25 Series Floor",
   "block.kuayue.panel_bottom_marshalled_25": "Marshalled 25 Series Bottom Panel",
   "block.kuayue.window_marshalled_25": "Marshalled 25 Window",
-  "block.kuayue.panel_slab_universal_25": "25Series Universal Slab"
+  "block.kuayue.panel_slab_universal_25": "25Series Universal Slab",
+
+  "block.kuayue.carriage_brake_cylinder": "carriage brake cylinder",
+  "block.kuayue.carriage_battery": "carriage battery",
+  "block.kuayue.auxiliary_reservoir_longitudinal": "carriage auxiliary reservoir (longitudinal)",
+  "block.kuayue.auxiliary_reservoir": "carriage auxiliary reservoir"
 }

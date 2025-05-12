@@ -18,5 +18,23 @@
   "kuayue.advancement.diet": "Urgh, that's BAD",
   "kuayue.advancement.diet.desc": "Obtain and eat Train Meal",
   "block.kuayue.train_diet_1": "Train Boxed Meal",
-  "item.kuayue.tooltip.train_diet_1.tip0": "Taste Pandora"
+  "item.kuayue.tooltip.train_diet_1.tip0": "Taste Pandora",
+
+  "block.kuayue.dried_instant_noodles": "Unbrewed Instant Noodles",
+  "block.kuayue.soaked_instant_noodles": "Instant Noodles",
+  "item.kuayue.ham_sausage": "HAM",
+  "item.kuayue.marinated_egg": "Spiced Corned Egg",
+  "item.kuayue.half_marinated_egg": "Half Spiced Corned Egg",
+  "item.kuayue.calcium_milk_biscuits": "Calcium Milk Biscuit",
+
+  "item.kuayue.monosodium_glutamate": "Monosodium Glutamate",
+  "item.kuayue.tooltip.dried_instant_noodles.tip0": "Really want to eat this?",
+  "item.kuayue.tooltip.dried_instant_noodles.tip1": "Right click the boiler to brew.",
+  "item.kuayue.tooltip.soaked_instant_noodles.tip0": "REALLY HOT",
+  "item.kuayue.tooltip.soaked_instant_noodles.tip1": "Don't JUMP on any time.",
+  "item.kuayue.tooltip.restores_health": "Energy recovery: %s",
+  "item.kuayue.tooltip.restores_saturation": "Saturability recovery: %s",
+  "effect.kuayue.warm": "Warm",
+  "msg.kuayue.jump_with_soaked_instant_noodles": "So fxxking hot!!!",
+  "msg.kuayue.step_on_soaked_instant_noodles": "Why stand on top of it!?"
 }

@@ -18,5 +18,23 @@
   "kuayue.advancement.diet": "Yeeee,不好吃啊",
   "kuayue.advancement.diet.desc": "获得并食用火车餐",
   "block.kuayue.train_diet_1": "火车盒饭",
-  "item.kuayue.tooltip.train_diet_1.tip0": "味觉盲盒"
+  "item.kuayue.tooltip.train_diet_1.tip0": "味觉盲盒",
+
+  "block.kuayue.dried_instant_noodles": "未冲泡的方便面",
+  "block.kuayue.soaked_instant_noodles": "已冲泡的方便面",
+  "item.kuayue.ham_sausage": "玉中玉火腿肠",
+  "item.kuayue.marinated_egg": "六香卤蛋",
+  "item.kuayue.half_marinated_egg": "六香卤蛋(半个)",
+  "item.kuayue.calcium_milk_biscuits": "钙奶饼干",
+
+  "item.kuayue.monosodium_glutamate": "味精",
+  "item.kuayue.tooltip.dried_instant_noodles.tip0": "确定要当成干脆面吃吗？",
+  "item.kuayue.tooltip.dried_instant_noodles.tip1": "右击茶炉可以冲泡",
+  "item.kuayue.tooltip.soaked_instant_noodles.tip0": "《这回是真加开水了》",
+  "item.kuayue.tooltip.soaked_instant_noodles.tip1": "请勿手持冲好的泡面起跳！",
+  "item.kuayue.tooltip.restores_health": "回复%s点饥饿值",
+  "item.kuayue.tooltip.restores_saturation": "回复%s点饱和度",
+  "effect.kuayue.warm": "温暖",
+  "msg.kuayue.jump_with_soaked_instant_noodles": "辊斤拷烫烫烫！",
+  "msg.kuayue.step_on_soaked_instant_noodles": "这个不能用来泡脚！"
 }
