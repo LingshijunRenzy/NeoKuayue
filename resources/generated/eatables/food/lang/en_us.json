@@ -10,5 +10,13 @@
   "item.kuayue.blue_bull_fluid_bucket": "Blue Bull Fluid Bucket",
   "fluid_type.kuayue.blue_bull_fluid": "Blue Bull Fluid",
   "item.kuayue.tooltip.kua_cola.tip0": "The leap in taste, starting from Kuayue Cola!",
-  "item.kuayue.tooltip.blue_bull.tip0": "Be a jump master!"
+  "item.kuayue.tooltip.blue_bull.tip0": "Be a jump master!",
+
+  "item.kuayue.train_diet_1": "Train Meal A",
+  "item.kuayue.train_diet_1.tooltip": "Guess who loves to eat it?",
+  "itemGroup.diet": "Kuayue·Catering",
+  "kuayue.advancement.diet": "Urgh, that's BAD",
+  "kuayue.advancement.diet.desc": "Obtain and eat Train Meal",
+  "block.kuayue.train_diet_1": "Train Boxed Meal",
+  "item.kuayue.tooltip.train_diet_1.tip0": "Taste Pandora"
 }
