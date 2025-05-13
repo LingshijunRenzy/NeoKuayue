@@ -19,5 +19,6 @@
   "container.kuayue.laquered_board_edit_menu.pinyin_color": "拼音颜色 (十进制或十六进制)",
   "container.kuayue.laquered_board_edit_menu.x_offset": "x轴偏移",
   "container.kuayue.laquered_board_edit_menu.edit_color": "编辑颜色",
-  "container.kuayue.laquered_board_edit_menu.edit_text": "编辑文本"
+  "container.kuayue.laquered_board_edit_menu.edit_text": "编辑文本",
+  "block.kuayue.ac_outdoor_unit": "空调外机"
 }

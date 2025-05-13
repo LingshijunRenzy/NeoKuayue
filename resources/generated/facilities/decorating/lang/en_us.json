@@ -19,5 +19,6 @@
   "container.kuayue.laquered_board_edit_menu.pinyin_color": "Color of pinyin letters (HEX or OCT)",
   "container.kuayue.laquered_board_edit_menu.x_offset": "x offset",
   "container.kuayue.laquered_board_edit_menu.edit_color": "Edit colors",
-  "container.kuayue.laquered_board_edit_menu.edit_text": "Edit text"
+  "container.kuayue.laquered_board_edit_menu.edit_text": "Edit text",
+  "block.kuayue.ac_outdoor_unit": "Air Con Outdoor Unit"
 }
