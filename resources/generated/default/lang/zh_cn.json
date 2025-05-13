@@ -17,16 +17,13 @@
   "block.kuayue.signal_pole_light": "信号机(柱)",
   "block.kuayue.tactile_paving_straight": "直盲道",
   "block.kuayue.tactile_paving_pin": "点盲道",
-  "block.kuayue.flourescent_light": "日光灯",
-  "block.kuayue.boiling_water_place": "茶炉",
+
   "block.kuayue.train_bottom_panel_block": "车种标签",
   "block.kuayue.train_no_block": "车厢号码贴纸",
   "block.kuayue.train_speed_block": "车厢速度等级贴纸",
   "block.kuayue.turns_a_block": "闸机",
   "block.kuayue.turns_b_block": "国铁闸机",
-  "block.kuayue.ceilin_shelf": "行李架",
-  "block.kuayue.ceilin_shelf_2": "车厢天花板(带空调)",
-  "block.kuayue.ceilin_shelf_3": "车厢天花板",
+
   "block.kuayue.internal_combustion_drive_controller": "内燃机通用驾驶台",
   "item.kuayue.general_straight": "钢缆线轴",
   "item.kuayue.general_hyperbolic": "电缆线轴",
@@ -190,7 +187,6 @@
   "item.kuayue.research_report": "研究报告",
   "item.kuayue.solidify_slime_ball": "固化粘液球",
 
-  "block.kuayue.240km_monument": "中华第一速纪念挂牌",
   "easter.eggs.topaz": "由topaz命名，感谢",
   "easter.eggs.l99": "L99被管理员禁言29天23小时59分钟"
 }

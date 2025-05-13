@@ -17,16 +17,13 @@
   "block.kuayue.signal_pole_light": "Signal(in column)",
   "block.kuayue.tactile_paving_straight": "typhlosole(Line)",
   "block.kuayue.tactile_paving_pin": "Typhlosole(Point)",
-  "block.kuayue.flourescent_light": "Fluorescent lamp",
-  "block.kuayue.boiling_water_place": "Tea Stove",
+
   "block.kuayue.train_bottom_panel_block": "Train Type Sign",
   "block.kuayue.train_no_block": "Train No Sticker",
   "block.kuayue.train_speed_block": "Train speed Sticker",
   "block.kuayue.turns_a_block": "Turnstile",
   "block.kuayue.turns_b_block": "Turnstile (cr)",
-  "block.kuayue.ceilin_shelf": "Ceilin Shelf",
-  "block.kuayue.ceilin_shelf_2": "Carriage Ceiling (With ac)",
-  "block.kuayue.ceilin_shelf_3": "Carriage Ceiling",
+
   "block.kuayue.internal_combustion_drive_controller": "Common Drive Controller of Internal Combustion Trains",
   "item.kuayue.general_straight": "Straight Line Coil",
   "item.kuayue.general_hyperbolic": "Hyperbolic Line Coil",
@@ -188,7 +185,5 @@
   "item.kuayue.zinc_dust": "Zinc Dust",
   "item.kuayue.research_report_thinking": "Research Report (Researching)",
   "item.kuayue.research_report": "Research Report",
-  "item.kuayue.solidify_slime_ball": "Solidify Slime Ball",
-
-  "block.kuayue.240km_monument": "China's First High-Speed Milestone Plaque (240 km/h)"
+  "item.kuayue.solidify_slime_ball": "Solidify Slime Ball"
 }
