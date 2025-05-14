@@ -1,0 +1,10 @@
+{
+  "block.kuayue.ticket_vendor": "Ticket vendor",
+  "item.kuayue.ticket": "ticket",
+  "item.kuayue.red_ticket": "red ticket",
+  "tooltip.kuayue.ticket.valid": "Valid",
+  "tooltip.kuayue.ticket.exited": "Used",
+  "tooltip.kuayue.ticket.in_valid": "Invalid",
+  "tooltip.kuayue.ticket.station_in": "Station in : ",
+  "tooltip.kuayue.ticket.station_out": "Station out : "
+}

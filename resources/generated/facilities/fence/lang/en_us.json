@@ -1,0 +1,7 @@
+{
+  "block.kuayue.green_fence": "Green Fence",
+  "block.kuayue.green_fence_45": "Green Fence 45°",
+  "item.kuayue.electric_fence_door_block": "Electric Railing Door",
+  "block.kuayue.electric_fence_wall_block": "Electric Railing Wall",
+  "item.kuayue.electric_fence_wall_tooltip": "Use wrench to change type"
+}

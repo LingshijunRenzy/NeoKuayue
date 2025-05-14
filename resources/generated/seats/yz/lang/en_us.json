@@ -1,0 +1,12 @@
+{
+  "block.kuayue.yz_seat_blue": "blue hard seat",
+  "block.kuayue.yz_seat_black": "black hard seat",
+  "block.kuayue.yz_seat_green": "green hard seat",
+  "block.kuayue.yz_seat_red": "red hard seat",
+  "block.kuayue.yz_seat_yellow": "yellow hard seat",
+  "block.kuayue.yz_seat_cyan": "cyan hard seat",
+  "block.kuayue.yz_seat_gray": "gray hard seat",
+  "block.kuayue.yz_seat_22": "hard seat (cart type 22)",
+  "block.kuayue.yz_table": "Hard seat cart small table board",
+  "container.kuayue.carriage_type_sign_edit_menu.random_tooltip_yz": "YZ -> hard seat cart -> 300000 - 399999"
+}
