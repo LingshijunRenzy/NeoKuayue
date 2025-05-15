@@ -57,6 +57,9 @@
   "block.kuayue.station_entrance_signal": "Inbound Signal",
   "item.kuayue.general_catenary": "Catenary Coil",
   "item.kuayue.catenary_scissors": "Catenary Scissors",
+  "block.kuayue.ky_semaphore.tooltip1": "放置在机械动力列车信号机上使用",
+  "block.kuayue.ky_semaphore.tooltip2": "闭塞区间显示蓝灯",
+  "block.kuayue.ky_semaphore.tooltip3": "开放区间显示白灯",
   "block.kuayue.new_catenary.tooltip": "Use wrench to move and rotate this grid.",
   "entity.kuayue.catenary_base": "catenary monocase",
   "entity.kuayue.small_catenary_base": "catenary monocase(small)",
@@ -80,5 +83,6 @@
   "container.kuayue.catenary_edit_menu.z_offset": "Z offset",
   "container.kuayue.catenary_edit_menu.rot": "Rotation",
   "container.kuayue.catenary_edit_menu.cascade": "Cascade Mode",
-  "item.kuayue.insulator": "Insulator"
+  "item.kuayue.insulator": "Insulator",
+  "block.kuayue.gantry_cast_pole_base": "龙门架接触网挂架"
 }

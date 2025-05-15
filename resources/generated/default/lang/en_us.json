@@ -17,13 +17,11 @@
   "block.kuayue.signal_pole_light": "Signal(in column)",
   "block.kuayue.tactile_paving_straight": "typhlosole(Line)",
   "block.kuayue.tactile_paving_pin": "Typhlosole(Point)",
-
   "block.kuayue.train_bottom_panel_block": "Train Type Sign",
   "block.kuayue.train_no_block": "Train No Sticker",
   "block.kuayue.train_speed_block": "Train speed Sticker",
   "block.kuayue.turns_a_block": "Turnstile",
   "block.kuayue.turns_b_block": "Turnstile (cr)",
-
   "block.kuayue.internal_combustion_drive_controller": "Common Drive Controller of Internal Combustion Trains",
   "item.kuayue.general_straight": "Straight Line Coil",
   "item.kuayue.general_hyperbolic": "Hyperbolic Line Coil",
@@ -172,9 +170,7 @@
   "clip_board.type": "Carriage Type Sign",
   "clip_board.speed": "Carriage Speed Sign",
   "clip_board.num": "Carriage No Sign",
-
   "item.kuayue.colored_brush.tooltip_5": "durability",
-
   "item.kuayue.carriage_marshalled_mould": "Carriage Marshalled Mould",
   "item.kuayue.carriage_marshalled_mould_constructing": "Carriage Marshalled Mould (Assembling)",
   "item.kuayue.color_masterbatch": "Color Masterbatch",
@@ -184,5 +180,7 @@
   "item.kuayue.zinc_dust": "Zinc Dust",
   "item.kuayue.research_report_thinking": "Research Report (Researching)",
   "item.kuayue.research_report": "Research Report",
-  "item.kuayue.solidify_slime_ball": "Solidify Slime Ball"
+  "item.kuayue.solidify_slime_ball": "Solidify Slime Ball",
+  "easter.eggs.topaz": "由topaz命名，感谢",
+  "easter.eggs.l99": "L99被管理员禁言29天23小时59分钟"
 }
