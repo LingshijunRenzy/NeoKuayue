@@ -1,11 +1,11 @@
-<div style="text-align: center; padding-top:30px;padding-bottom: 0;">
+<div style="text-align: center; padding-top:30px;padding-bottom: 0;" align="center">
 <img alt="logo.png" src="assets/logo.png" style="width: 300px"/>
 </div>
 
-<div style="text-align: center;">
+<div style="text-align: center;"  align="center">
 
 ![MIT License](https://img.shields.io/badge/License-MIT-blue)
-![Minecraft Version](https://img.shields.io/badge/Minecraft%20°æ±¾-1.19.2%7C1.20.1-success)
+![Minecraft Version](https://img.shields.io/badge/Minecraft%20ç‰ˆæœ¬-1.19.2%7C1.20.1-success)
 ![Mod Loader Forge](https://img.shields.io/badge/Loader-Forge-red)
 <!---
 WIP, When the mod is released, please uncomment the following lines
@@ -24,18 +24,18 @@ WIP, When the mod is released, please uncomment the following lines
 
 </div>
 
-ÆäËûÓïÑÔ | Other languages : <a href="README.en.md">English</a>
+å…¶ä»–è¯­è¨€ | Other languages : <a href="README.en.md">English</a>
 
-## ½éÉÜ
+## ä»‹ç»
 
-¿çÔ½ÊÇÒ»¸ö¹úÌú·ç¸ñµÄ»úĞµ¶¯Á¦¸½ÊôÌúÂ·Ä£×é¡£
+è·¨è¶Šæ˜¯ä¸€ä¸ªå›½é“é£æ ¼çš„æœºæ¢°åŠ¨åŠ›é™„å±é“è·¯æ¨¡ç»„ã€‚
 
-×÷Îª×°ÊÎĞÔÄ£×éºÍ¹¦ÄÜĞÔÄ£×é£¬¿çÔ½Îª»úĞµ¶¯Á¦µÄÌúÂ·ÏµÍ³Ìí¼ÓÁË¹úÌúÕıÔÚÊ¹ÓÃ»òÒÑ±»ÌÔÌ­µÄ»ú³µ¡¢¿Í³µ¡¢»õ³µ¡¢³µÔØºÍµØÃæÉè±¸£¬²¢¼Æ»®¸ù¾İ¹úÌú¹æ·¶ÊµÏÖÒ»Ì×¹¦ÄÜÍæ·¨£¨Èçµ÷¶È£¬¼İÊ»µÈ£©¡£
+ä½œä¸ºè£…é¥°æ€§æ¨¡ç»„å’ŒåŠŸèƒ½æ€§æ¨¡ç»„ï¼Œè·¨è¶Šä¸ºæœºæ¢°åŠ¨åŠ›çš„é“è·¯ç³»ç»Ÿæ·»åŠ äº†å›½é“æ­£åœ¨ä½¿ç”¨æˆ–å·²è¢«æ·˜æ±°çš„æœºè½¦ã€å®¢è½¦ã€è´§è½¦ã€è½¦è½½å’Œåœ°é¢è®¾å¤‡ï¼Œå¹¶è®¡åˆ’æ ¹æ®å›½é“è§„èŒƒå®ç°ä¸€å¥—åŠŸèƒ½ç©æ³•ï¼ˆå¦‚è°ƒåº¦ï¼Œé©¾é©¶ç­‰ï¼‰ã€‚
 
-## ½ØÍ¼
+## æˆªå›¾
 
-## ½ø¶È
+## è¿›åº¦
 
-## ¿ª·¢×é
+## å¼€å‘ç»„
 
-## ÌØ±ğÃùĞ»
+## ç‰¹åˆ«é¸£è°¢
