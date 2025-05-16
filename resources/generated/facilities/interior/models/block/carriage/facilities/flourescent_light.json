@@ -2,11 +2,11 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "kuayue:block/floursecent_light_base",
-		"1": "kuayue:block/floursecent_light_skirt",
-		"2": "kuayue:block/floursecent_light_bulb_head",
-		"3": "kuayue:block/floursecent_light_bulb",
-		"particle": "kuayue:block/floursecent_light_base"
+		"0": "kuayue:block/carriage_facilities/floursecent_light_base",
+		"1": "kuayue:block/carriage_facilities/floursecent_light_skirt",
+		"2": "kuayue:block/carriage_facilities/floursecent_light_bulb_head",
+		"3": "kuayue:block/carriage_facilities/floursecent_light_bulb",
+		"particle": "kuayue:block/carriage_facilities/floursecent_light_base"
 	},
 	"elements": [
 		{
