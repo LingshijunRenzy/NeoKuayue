@@ -10,6 +10,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.SkirtBlock;
 import willow.train.kuayue.block.panels.deco.ACOutdoorUnitBlock;
+import willow.train.kuayue.block.panels.deco.FlourescentLightBlock;
 import willow.train.kuayue.block.panels.deco.TeaBoilerBlock;
 import willow.train.kuayue.block.panels.deco.YZTableBlock;
 import willow.train.kuayue.block.panels.slab.CeilinShelfBlock;
@@ -263,14 +264,16 @@ public class AllDecoBlocks {
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<TrainSlabBlock> FLOURESCENT_LIGHT =
-            new BlockReg<TrainSlabBlock>("flourescent_light")
-                    .blockType(p -> new TrainSlabBlock(p, false))
+    public static final BlockReg<FlourescentLightBlock> FLOURESCENT_LIGHT =
+            new BlockReg<FlourescentLightBlock>("flourescent_light")
+                    .blockType(p -> new FlourescentLightBlock(p, false))
                     .material(Material.METAL)
                     .materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .addProperty(properties -> properties.strength(1.0f, 2.0f))
+                    .addProperty(properties -> properties.lightLevel(
+                                    state -> state.getValue(FlourescentLightBlock.OPEN) ? 15 : 0))
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);

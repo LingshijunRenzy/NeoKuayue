@@ -1,18 +1,34 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,open=false": {
       "model": "kuayue:block/carriage/facilities/flourescent_light",
       "y": 270
     },
-    "facing=north": {
+    "facing=north,open=false": {
       "model": "kuayue:block/carriage/facilities/flourescent_light",
       "y": 180
     },
-    "facing=south": {
+    "facing=south,open=false": {
       "model": "kuayue:block/carriage/facilities/flourescent_light",
       "y": 0
     },
-    "facing=west": {
+    "facing=west,open=false": {
+      "model": "kuayue:block/carriage/facilities/flourescent_light",
+      "y": 90
+    },
+    "facing=east,open=true": {
+      "model": "kuayue:block/carriage/facilities/flourescent_light",
+      "y": 270
+    },
+    "facing=north,open=true": {
+      "model": "kuayue:block/carriage/facilities/flourescent_light",
+      "y": 180
+    },
+    "facing=south,open=true": {
+      "model": "kuayue:block/carriage/facilities/flourescent_light",
+      "y": 0
+    },
+    "facing=west,open=true": {
       "model": "kuayue:block/carriage/facilities/flourescent_light",
       "y": 90
     }
