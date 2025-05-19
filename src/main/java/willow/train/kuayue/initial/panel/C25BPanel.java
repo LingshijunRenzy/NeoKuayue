@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.panels.*;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
@@ -112,7 +113,7 @@ public class C25BPanel {
                             ), Couple.create(
                                     AllElements.testRegistry.asResource("door/original_25b_door_bottom"),
                                     AllElements.testRegistry.asResource("door/original_25b_door_top")
-                            ), RenderShape.ENTITYBLOCK_ANIMATED, false
+                    ), new Vec3(0, 0, 0), new Vec3(0, 0, -.124),RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
