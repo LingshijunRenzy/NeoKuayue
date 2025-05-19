@@ -154,7 +154,7 @@ public class ISS3Panel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("ss3/ss3_door_bottom"),
                             AllElements.testRegistry.asResource("ss3/ss3_door_upper")
-                    ), new Vec3(-.1875, 0, 0), RenderShape.MODEL, false
+                    ), new Vec3(-.1875, 0, 0),new Vec3(0, 0, 0), RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
