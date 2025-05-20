@@ -34,7 +34,7 @@ public class I11GPanel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("df11g/door/door_cabin_bottom_df11g_left"),
                             AllElements.testRegistry.asResource("df11g/door/door_cabin_upper_df11g_left")
-                    ), new Vec3(0, 0, 0), RenderShape.ENTITYBLOCK_ANIMATED, false
+                    ), new Vec3(0, 0, 0),new Vec3(0, 0, 0), RenderShape.ENTITYBLOCK_ANIMATED, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
@@ -50,7 +50,7 @@ public class I11GPanel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("df11g/door/door_equip_room_bottom_df11g_left"),
                             AllElements.testRegistry.asResource("df11g/door/door_equip_room_upper_df11g_left")
-                    ), new Vec3(-.1875, 0, 0), RenderShape.MODEL, false
+                    ), new Vec3(-.1875, 0, 0),new Vec3(0, 0, 0), RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)

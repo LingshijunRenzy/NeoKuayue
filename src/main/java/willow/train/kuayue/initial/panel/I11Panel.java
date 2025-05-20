@@ -119,7 +119,7 @@ public class I11Panel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("df11/door/df11_door_bottom_right"),
                             AllElements.testRegistry.asResource("df11/door/df11_door_upper_right")
-                    ), new Vec3(0, 0, 0), RenderShape.ENTITYBLOCK_ANIMATED, false
+                    ), new Vec3(0, 0, 0), new Vec3(0, 0, 0),RenderShape.ENTITYBLOCK_ANIMATED, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)

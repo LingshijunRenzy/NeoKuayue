@@ -31,7 +31,7 @@ public class I3DPanel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("hxd3d/door/door_bottom_hxd3d_right"),
                             AllElements.testRegistry.asResource("hxd3d/door/door_upper_hxd3d_right")
-                    ), new Vec3(-.3125, .25, 0), RenderShape.MODEL, false
+                    ), new Vec3(-.3125, .25, 0), new Vec3(0, 0, 0),RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
