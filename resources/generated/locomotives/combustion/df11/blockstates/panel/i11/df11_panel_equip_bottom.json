@@ -29,7 +29,7 @@
       "y": 180
     },
     "facing=west,hinge=left": {
-      "model": "kuayue:block/df11/carport/df11_panel_equip_bottom_lh",
+      "model": "kuayue:block/df11/df11_panel_equip_bottom_lh",
       "y": 270
     }
   }
