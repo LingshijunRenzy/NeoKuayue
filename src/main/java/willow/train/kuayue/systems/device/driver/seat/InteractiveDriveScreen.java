@@ -16,6 +16,7 @@ import kasuga.lib.core.util.data_type.Vec2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.world.phys.Vec2;
+import org.lwjgl.glfw.GLFW;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.c2s.OnSeatActionPacket;
 import willow.train.kuayue.network.c2s.SeatDismountPacket;
@@ -95,7 +96,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
             this.onClose();
             return true;
         }
-        if(pKeyCode == 65 || pKeyCode == 66){
+        if(pKeyCode == 65 || pKeyCode == 68){
             AllPackets.INTERACTION.sendToServer(new OnSeatActionPacket(DriverSeatActionType.WATCHING_DOOR));
             return true;
         }
@@ -108,7 +109,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
 
     @Override
     public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
-        if(pKeyCode == 30 || pKeyCode == 32) {
+        if(pKeyCode == 65 || pKeyCode == 68 || pKeyCode == 32) {
             AllPackets.INTERACTION.sendToServer(new OnSeatActionPacket(DriverSeatActionType.SIT_DOWN));
         }
         return super.keyReleased(pKeyCode, pScanCode, pModifiers);
@@ -121,11 +122,18 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         screenTarget.setPoseStack(pPoseStack);
         screenTarget.pushLight(LightTexture.FULL_BRIGHT);
         screenTarget.setSource(InteractiveScreenTarget.class);
+        
+        int screenWidth = this.width;
+        int screenHeight = this.height;
+        
         for(InteractiveBehaviour.MenuEntry entry : interactiveSet) {
+            if(!entry.isAvailable().get()) continue;
+            
+            Vec2 position = calculatePosition(entry, screenWidth, screenHeight);
             screenTarget.pushPose();
             screenTarget.pose().translate(
-                    entry.getPosition().x,
-                    entry.getPosition().y,
+                    position.x,
+                    position.y,
                     0
             );
             screenTarget.pose().scale(
@@ -133,17 +141,42 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
                     entry.getScale().y,
                     1
             );
-            if(entry.isAvailable().get()){
-                this.interactiveTargets.get(entry).render(screenTarget);
-            }
+            this.interactiveTargets.get(entry).render(screenTarget);
             screenTarget.popPose();
         }
     }
 
+    private Vec2 calculatePosition(InteractiveBehaviour.MenuEntry entry, int screenWidth, int screenHeight) {
+        Vec2 size = entry.getSize();
+        Vec2 scale = entry.getScale();
+        float scaledWidth = size.x * scale.x;
+        float scaledHeight = size.y * scale.y;
+        
+        float screenAnchorX = screenWidth * entry.getScreenAnchor().getXFactor();
+        float screenAnchorY = screenHeight * entry.getScreenAnchor().getYFactor();
+        
+        float selfAnchorX = scaledWidth * entry.getSelfAnchor().getXFactor();
+        float selfAnchorY = scaledHeight * entry.getSelfAnchor().getYFactor();
+        
+        return new Vec2(
+            screenAnchorX - selfAnchorX + entry.getPosition().x,
+            screenAnchorY - selfAnchorY + entry.getPosition().y
+        );
+    }
+
     public Optional<InteractiveBehaviour.MenuEntry> getMouseAtInteractiveItem(double x, double y) {
-        return interactiveSet.stream().filter(v->{
-            return x >= v.getPosition().x && x <= v.getPosition().x + v.getSize().x * v.getScale().x &&
-                   y>= v.getPosition().y && y <= v.getPosition().y + v.getSize().y * v.getScale().y;
+        int screenWidth = this.width;
+        int screenHeight = this.height;
+        
+        return interactiveSet.stream().filter(entry -> {
+            Vec2 position = calculatePosition(entry, screenWidth, screenHeight);
+            Vec2 size = entry.getSize();
+            Vec2 scale = entry.getScale();
+            float scaledWidth = size.x * scale.x;
+            float scaledHeight = size.y * scale.y;
+            
+            return x >= position.x && x <= position.x + scaledWidth &&
+                   y >= position.y && y <= position.y + scaledHeight;
         }).findFirst();
     }
 
@@ -152,6 +185,8 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         Optional<InteractiveBehaviour.MenuEntry> interactive = getMouseAtInteractiveItem(pMouseX, pMouseY);
         if(interactive.isPresent()){
             InteractiveBehaviour.MenuEntry menu = interactive.get();
+            if(menu.isFixed()) return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+            
             Vec2 size = menu.getScale();
             menu.setScale(
                     new Vec2(
@@ -168,14 +203,15 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         Optional<InteractiveBehaviour.MenuEntry> interactive = getMouseAtInteractiveItem(pMouseX, pMouseY);
         if(interactive.isPresent()) {
-            if(pButton == 1){
-                interactive.get().setDragging(true);
+            InteractiveBehaviour.MenuEntry entry = interactive.get();
+            if(pButton == 1 && !entry.isFixed()){
+                entry.setDragging(true);
                 this.freshDraggingState();
                 return true;
             }
 
             dispatchInteractive(
-                    interactive.get(),
+                    entry,
                     new Vec2((float) pMouseX, (float) pMouseY),
                     (localPosition)->
                         MouseDownEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), pButton)
@@ -218,10 +254,16 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
         if(pButton == 1){
+            boolean hasDragging = false;
             for (InteractiveBehaviour.MenuEntry menuEntry : interactiveSet) {
+                if(menuEntry.isDragging())
+                    hasDragging = true;
                 menuEntry.setDragging(false);
             }
             this.freshDraggingState();
+            if(!hasDragging && lastClickedPos == null){
+                super.mouseReleased(pMouseX, pMouseY, pButton);
+            }
             return true;
         }
         Optional<InteractiveBehaviour.MenuEntry> interactive = getMouseAtInteractiveItem(pMouseX, pMouseY);
@@ -246,6 +288,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
             return true;
         }
         lastClickedPos = null;
+        freshDraggingState();
         return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
 
@@ -278,7 +321,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        if(!this.dragging.isEmpty())
+        if(!this.dragging.isEmpty() || lastClickedPos != null)
             return true;
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
     }

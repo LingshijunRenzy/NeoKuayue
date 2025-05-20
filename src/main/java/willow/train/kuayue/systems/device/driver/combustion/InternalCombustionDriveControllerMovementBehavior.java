@@ -26,6 +26,7 @@ import net.minecraftforge.fml.DistExecutor;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.AllDevicesMenus;
 import willow.train.kuayue.systems.device.IEntityTrackingMovementBehavior;
+import willow.train.kuayue.systems.device.driver.seat.AnchorPoint;
 import willow.train.kuayue.systems.device.driver.seat.GuiTargets;
 import willow.train.kuayue.systems.device.driver.seat.InteractiveBehaviour;
 import willow.train.kuayue.systems.device.driver.seat.WorldTrainSoundManager;
@@ -119,28 +120,38 @@ public class InternalCombustionDriveControllerMovementBehavior
                         AllElements.testRegistry.asResource("lkj2000"),
                         ()->MENUS.containsKey(context),
                         ()->MENUS.get(context).getMenu(0).orElseThrow(),
-                        new Vec2(100,100),
+                        new Vec2(-1, 1),
                         new Vec2(0.3f,0.3f),
                         new Vec2(256,252)
-                ),
+                ) {{
+                    setScreenAnchor(AnchorPoint.TOP_RIGHT);
+                    setSelfAnchor(AnchorPoint.TOP_RIGHT);
+                }},
                 new MenuEntry(
                         Component.literal("CIR"),
                         AllElements.testRegistry.asResource("cir"),
                         ()->MENUS.containsKey(context),
                         ()->MENUS.get(context).getMenu(1).orElseThrow(),
-                        new Vec2(100,100),
+                        new Vec2(-1, 256 * 0.3f + 2),
                         new Vec2(0.3f,0.3f),
-                        new Vec2(256,252)
-                ),
+                        new Vec2(328,252)
+                ) {{
+                    setScreenAnchor(AnchorPoint.TOP_RIGHT);
+                    setSelfAnchor(AnchorPoint.TOP_RIGHT);
+                }},
                 new MenuEntry(
                         Component.literal("Train Control"),
                         AllElements.testRegistry.asResource("control"),
                         ()->MENUS.containsKey(context),
                         ()->MENUS.get(context).getMenu(2).orElseThrow(),
-                        new Vec2(100,100),
-                        new Vec2(1f,1f),
+                        new Vec2(0, -4),
+                        new Vec2(0.75f,0.75f),
                         new Vec2(508,68)
-                )
+                ) {{
+                    setScreenAnchor(AnchorPoint.BOTTOM_CENTER);
+                    setSelfAnchor(AnchorPoint.BOTTOM_CENTER);
+                    setFixed(true);
+                }}
         );
     }
 }
