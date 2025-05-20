@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.DebugLevelSource;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import willow.train.kuayue.block.panels.pantograph.IPantographBlockEntity;
 import willow.train.kuayue.block.panels.pantograph.PantographProps;
 import willow.train.kuayue.block.panels.pantograph.SingleArmPantographBlock;
 import willow.train.kuayue.initial.AllBlocks;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class SingleArmPantographBlockEntity extends SmartBlockEntity implements IContraptionMovementBlockEntity {
+public class SingleArmPantographBlockEntity extends SmartBlockEntity implements IContraptionMovementBlockEntity, IPantographBlockEntity {
 
     private boolean isRisen = true;
     private PantographProps pantographType;
@@ -66,6 +67,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         this.transPosY = tag.getDouble("trans_y");
     }
 
+    @Override
     public void setRisen(boolean risen) {
         isRisen = risen;
     }

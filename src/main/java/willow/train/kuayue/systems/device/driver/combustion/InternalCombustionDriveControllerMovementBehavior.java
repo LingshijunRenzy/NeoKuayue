@@ -12,9 +12,12 @@ import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
 import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import com.simibubi.create.foundation.render.BlockEntityRenderHelper;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import kasuga.lib.core.create.device.TrainDeviceLocation;
+import kasuga.lib.core.create.device.TrainDeviceManager;
 import kasuga.lib.core.menu.base.GuiMenu;
 import kasuga.lib.core.menu.locator.ContraptionBlockMenuLocator;
 import kasuga.lib.core.menu.locator.GuiMenuHolder;
+import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -27,18 +30,27 @@ import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.AllDevicesMenus;
 import willow.train.kuayue.systems.device.IEntityTrackingMovementBehavior;
 import willow.train.kuayue.systems.device.driver.seat.AnchorPoint;
-import willow.train.kuayue.systems.device.driver.seat.GuiTargets;
 import willow.train.kuayue.systems.device.driver.seat.InteractiveBehaviour;
-import willow.train.kuayue.systems.device.driver.seat.WorldTrainSoundManager;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 public class InternalCombustionDriveControllerMovementBehavior
         implements MovementBehaviour, IEntityTrackingMovementBehavior, InteractiveBehaviour {
     protected HashMap<MovementContext, GuiMenuHolder> MENUS = new HashMap<>();
+
+    @Override
+    public void startMoving(MovementContext context) {
+        MovementBehaviour.super.startMoving(context);
+        if(context.world.isClientSide()) {
+            return;
+        }
+        Pair<TrainDeviceManager, TrainDeviceLocation> location = TrainDeviceManager.getManager(context);
+        if(location == null || location.getSecond() == null)
+            return;
+        // location.getFirst().getOrCreateSystem();
+    }
 
     @Override
     public void tick(MovementContext context) {

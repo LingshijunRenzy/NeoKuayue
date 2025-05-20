@@ -2,6 +2,7 @@ package willow.train.kuayue.initial.panel;
 
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.registrations.common.BlockReg;
+import kasuga.lib.registrations.create.MovementReg;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -12,6 +13,7 @@ import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
+import willow.train.kuayue.block.panels.pantograph.PantographMovementBehaviour;
 import willow.train.kuayue.block.panels.pantograph.PantographProps;
 import willow.train.kuayue.block.panels.pantograph.SingleArmPantographBlock;
 import willow.train.kuayue.block.panels.slab.HeightSlabBlock;
@@ -187,6 +189,12 @@ public class I3DPanel {
                     .defaultBlockItem()
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .tabTo(AllElements.neoKuayueLocoTab)
+                    .submit(AllElements.testRegistry);
+
+    public static MovementReg<PantographMovementBehaviour> PANTOGRAPH_MOVEMENT =
+            new MovementReg<PantographMovementBehaviour>("pantograph_movement")
+                    .behaviour(new PantographMovementBehaviour())
+                    .sortByBlocks(HXD3D_PANTOGRAPH)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
