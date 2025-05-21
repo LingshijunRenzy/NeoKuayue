@@ -243,7 +243,6 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                     CompoundTag connectionTag = connectionTags.getCompound(i);
                     BlockPos absolutePos = NbtUtils.readBlockPos(connectionTag.getCompound("absolutePos"));
                     BlockPos relativePos = NbtUtils.readBlockPos(connectionTag.getCompound("relativePos"));
-                    // If the relative position is not the same as the absolute position, then follow the relative position
                     if(!absolutePos.subtract(this.getBlockPos()).equals(relativePos)) {
                         absolutePos = relativePos.offset(this.getBlockPos());
                     }
