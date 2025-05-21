@@ -136,7 +136,7 @@ public class DoubleDriverSeatBlock extends M1SeatBlock implements IContraptionSe
 
     @Override
     public boolean isSitDown(BlockState state, int i) {
-        var status = i ==0 ? state.getValue(LEFT_STATE) : state.getValue(RIGHT_STATE);
+        var status = i == 0 ? state.getValue(LEFT_STATE) : state.getValue(RIGHT_STATE);
         return status == DriverSeatActionType.SIT_DOWN;
     }
 

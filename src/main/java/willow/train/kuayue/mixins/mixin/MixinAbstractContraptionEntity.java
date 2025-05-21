@@ -46,6 +46,8 @@ public abstract class MixinAbstractContraptionEntity {
     @Shadow(remap = false)
     public abstract Vec3 toGlobalVector(Vec3 localVec, float partialTicks);
 
+    @Shadow public abstract float getYawOffset();
+
     @Redirect(method = "handlePlayerInteraction", at = @At(value = "INVOKE", target = "Ljava/util/List;indexOf(Ljava/lang/Object;)I"), remap = false)
     public int doIndexOf(List instance, Object o) {
         BlockPos pos = (BlockPos) o;
@@ -133,7 +135,7 @@ public abstract class MixinAbstractContraptionEntity {
         }
         if (index == -1) return transformedVector;
         Vec3 offset = seatBlock.getOffset(info.state, index);
-        offset = offset.yRot((float) - Math.toRadians(getStalledAngle() - 90));
+        offset = offset.yRot((float) - Math.toRadians(getStalledAngle() + getYawOffset()));
         return transformedVector.add(offset);
     }
 }

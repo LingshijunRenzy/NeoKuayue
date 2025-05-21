@@ -120,7 +120,7 @@ public class AllOverheadLineSupportBlocks {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineInsulatorRenderer.ARenderer::new)
-                    .withConnectionPointBuilder(OverheadLineInsulatorRenderer.ARenderer::getConnectionPointIf)
+                    .withConnectionPointBuilder(OverheadLineConnectionPoints::getInsulatorAConnectionPointIf)
                     .addAllowedWireType(
                             AllWires.ELECTRONIC_WIRE
                     )
@@ -132,7 +132,7 @@ public class AllOverheadLineSupportBlocks {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueOverheadLineTab)
                     .withRenderer(()-> OverheadLineInsulatorRenderer.BRenderer::new)
-                    .withConnectionPointBuilder(OverheadLineInsulatorRenderer.BRenderer::getConnectionPointIf)
+                    .withConnectionPointBuilder(OverheadLineConnectionPoints::getInsulatorBConnectionPointIf)
                     .addAllowedWireType(
                             AllWires.ELECTRONIC_WIRE
                     )
@@ -149,7 +149,7 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
-                    .withConnectionPointBuilder(OverheadLineEndCounterWeightRenderer::getConnectionPointIf)
+                    .withConnectionPointBuilder(OverheadLineConnectionPoints::getEndCounterWeightConnectionPointIf)
                     .submit(AllElements.testRegistry);
     public static void invoke(){
 

@@ -2,6 +2,7 @@ package willow.train.kuayue.initial.panel;
 
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.registrations.common.BlockReg;
+import kasuga.lib.registrations.create.MovementReg;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -12,6 +13,7 @@ import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
+import willow.train.kuayue.block.panels.pantograph.PantographMovementBehaviour;
 import willow.train.kuayue.block.panels.pantograph.PantographProps;
 import willow.train.kuayue.block.panels.pantograph.SingleArmPantographBlock;
 import willow.train.kuayue.block.panels.slab.HeightSlabBlock;
@@ -31,7 +33,7 @@ public class I3DPanel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("hxd3d/door/door_bottom_hxd3d_right"),
                             AllElements.testRegistry.asResource("hxd3d/door/door_upper_hxd3d_right")
-                    ), new Vec3(-.3125, .25, 0), RenderShape.MODEL, false
+                    ), new Vec3(-.3125, .25, 0), new Vec3(0, 0, 0),RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
@@ -187,6 +189,12 @@ public class I3DPanel {
                     .defaultBlockItem()
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .tabTo(AllElements.neoKuayueLocoTab)
+                    .submit(AllElements.testRegistry);
+
+    public static MovementReg<PantographMovementBehaviour> PANTOGRAPH_MOVEMENT =
+            new MovementReg<PantographMovementBehaviour>("pantograph_movement")
+                    .behaviour(new PantographMovementBehaviour())
+                    .sortByBlocks(HXD3D_PANTOGRAPH)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}

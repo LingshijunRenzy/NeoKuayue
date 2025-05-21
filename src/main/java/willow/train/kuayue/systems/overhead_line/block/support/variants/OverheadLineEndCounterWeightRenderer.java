@@ -180,9 +180,4 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
                 pPackedOverlay
         );
     }
-
-    public static List<Vec3> getConnectionPointIf(Level level, BlockPos blockPos, BlockState blockState) {
-        return List.of(new Vec3(2.5,0.075,0));
-    }
-
 }

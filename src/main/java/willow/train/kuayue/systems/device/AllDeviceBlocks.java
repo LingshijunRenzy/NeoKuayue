@@ -45,5 +45,6 @@ public class AllDeviceBlocks {
         AllDeviceBlockEntities.invoke();
         AllDeviceEdgePoints.invoke();
         AllDevicesMovementBehaviors.invoke();
+        AllDeviceSystems.invoke();
     }
 }

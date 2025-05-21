@@ -1,5 +1,6 @@
 package willow.train.kuayue.systems.overhead_line.block.support;
 
+import kasuga.lib.registrations.BlockEntityRendererBuilder;
 import kasuga.lib.registrations.builders.SelfReferenceItemBuilder;
 import kasuga.lib.registrations.common.BlockEntityReg;
 import kasuga.lib.registrations.common.BlockReg;
@@ -26,7 +27,7 @@ import java.util.function.Supplier;
 public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, V extends OverheadLineSupportBlockEntity> extends BlockReg<T> {
     private Predicate<OverheadLineType> allowedWireTypePredictor = null;
     private final List<WireReg> allowedWireTypes = new ArrayList<>();
-    private Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer = null;
+    private Supplier<BlockEntityRendererBuilder<OverheadLineSupportBlockEntity>> renderer = null;
     private List<ResourceLocation> lineRenderModes = List.of();
     private List<Vec3> connectionPoints = List.of();
 
@@ -114,7 +115,7 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
         return this;
     }
 
-    public OverheadLineSupportBlockReg<T, V> withRenderer(Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer) {
+    public OverheadLineSupportBlockReg<T, V> withRenderer(Supplier<BlockEntityRendererBuilder<OverheadLineSupportBlockEntity>> renderer) {
         this.renderer = renderer;
         return this;
     }

@@ -1,0 +1,6 @@
+{
+  "model": [
+    "kuayue:block/drive/drive_internal_combustion",
+    "kuayue:block/seats/double_driver_seat"
+  ]
+}

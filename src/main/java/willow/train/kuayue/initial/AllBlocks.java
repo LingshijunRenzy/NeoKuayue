@@ -136,6 +136,7 @@ public class AllBlocks {
                     .addBlock(CR200JPanel.DOOR_CABIN_MARSHALLED_CR200J.block)
                     .addBlock(C25BPanel.DOOR_25B.block)
                     .addBlock(C25GPanel.DOOR_25G.block)
+                    .addBlock(C25GPanel.DOOR_SLIDING_25G.block)
                     .addBlock(C25KPanel.DOOR_25K.block)
                     .addBlock(C25KPanel.DOOR_SLIDING_25K.block)
                     .addBlock(C25TPanel.DOOR_25T.block)

@@ -1,11 +1,22 @@
 package willow.train.kuayue.mixins.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
+import com.simibubi.create.content.trains.track.ITrackBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.bogey.ISingleSideBogey;
 import willow.train.kuayue.utils.StationMixinCache;
 
@@ -74,5 +85,22 @@ public class MixinStationBlockEntity {
             StationMixinCache.instance = null;
         }
         return instance.getWheelPointSpacing();
+    }
+
+    @Inject(method = "trackClicked",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lcom/simibubi/create/content/trains/bogey/AbstractBogeyBlockEntity;setBogeyData(Lnet/minecraft/nbt/CompoundTag;)V"),
+            remap = false)
+    public void addBogeyChangeText(Player player, InteractionHand hand, ITrackBlock track, BlockState state,
+                                   BlockPos pos, CallbackInfoReturnable<Boolean> cir,
+                                   @Local(ordinal = 2) BlockState newBlock) {
+
+        Level level = ((StationBlockEntity)(Object) this).getLevel();
+        if(level != null) {
+            player.displayClientMessage(
+                    Component.translatable("msg.bogey.style.changed." +
+                            newBlock.getBlock().getDescriptionId()), true);
+        }
     }
 }

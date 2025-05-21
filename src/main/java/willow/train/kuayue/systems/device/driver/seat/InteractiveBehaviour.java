@@ -22,6 +22,9 @@ public interface InteractiveBehaviour {
         protected final Vec2 size;
         private Vec2 position;
         private Vec2 scale;
+        private AnchorPoint screenAnchor = AnchorPoint.TOP_LEFT;
+        private AnchorPoint selfAnchor = AnchorPoint.TOP_LEFT;
+        private boolean fixed = false;
 
         public MenuEntry(
                 Component displayName,
@@ -69,6 +72,23 @@ public interface InteractiveBehaviour {
             return size;
         }
 
+        public void setScreenAnchor(AnchorPoint anchor) {
+            this.screenAnchor = anchor;
+            this.selfAnchor = anchor;
+        }
+
+        public void setSelfAnchor(AnchorPoint anchor) {
+            this.selfAnchor = anchor;
+        }
+
+        public AnchorPoint getScreenAnchor() {
+            return screenAnchor;
+        }
+
+        public AnchorPoint getSelfAnchor() {
+            return selfAnchor;
+        }
+
         protected boolean dragging;
         public void setDragging(boolean b) {
             dragging = b;
@@ -76,6 +96,14 @@ public interface InteractiveBehaviour {
 
         public boolean isDragging() {
             return dragging;
+        }
+
+        public void setFixed(boolean fixed) {
+            this.fixed = fixed;
+        }
+
+        public boolean isFixed() {
+            return fixed;
         }
     }
 }

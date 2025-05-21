@@ -30,6 +30,6 @@ public class CarriageBogeyEntity extends AbstractBogeyBlockEntity implements ISi
 
     @Override
     public boolean isBogeyStyleValid(BogeyStyle style) {
-        return getDefaultStyle().equals(style);
+        return getDefaultStyle().equals(style) || style.equals(AllCarriageBogeys.freightCarriageBogeyGroup.getStyle());
     }
 }

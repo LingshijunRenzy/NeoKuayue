@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import kasuga.lib.core.client.model.BedrockModelLoader;
 import kasuga.lib.core.client.model.anim_model.AnimModel;
+import kasuga.lib.registrations.BlockEntityRendererBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -29,7 +30,7 @@ import java.util.function.Supplier;
 
 public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEntity> extends SmartBlockEntityRenderer<T> implements BlockEntityRenderer<T> {
 
-    private static final HashMap<Supplier<Block>, BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> RENDERER_SUPPLIERS = new HashMap<>();
+    private static final HashMap<Supplier<Block>, BlockEntityRendererBuilder<OverheadLineSupportBlockEntity>> RENDERER_SUPPLIERS = new HashMap<>();
     private final HashMap<Block, BlockEntityRenderer<OverheadLineSupportBlockEntity>> RENDERERS = new HashMap<>();
 
     private final WeakHashMap<OverheadLineSupportBlockEntity.Connection, RenderCurve> curveRenderCache = new WeakHashMap<>();
@@ -97,7 +98,7 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
          */
     }
 
-    public static void register(Supplier<Block> block, Supplier<BlockEntityRendererProvider<OverheadLineSupportBlockEntity>> renderer) {
+    public static void register(Supplier<Block> block, Supplier<BlockEntityRendererBuilder<OverheadLineSupportBlockEntity>> renderer) {
         RENDERER_SUPPLIERS.put(block, renderer.get());
     }
 
@@ -105,7 +106,7 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
         for (var entry : RENDERER_SUPPLIERS.entrySet()) {
             var block = entry.getKey();
             var renderer = entry.getValue();
-            RENDERERS.put(block.get(), renderer.create(pContext));
+            RENDERERS.put(block.get(), renderer.build(pContext));
         }
     }
 }

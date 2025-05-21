@@ -173,7 +173,7 @@ public class ISS8Panel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("ss8/ss8_door_bottom"),
                             AllElements.testRegistry.asResource("ss8/ss8_door_upper")
-                    ), new Vec3(0, 0, 0), RenderShape.MODEL, false
+                    ), new Vec3(0, 0, 0), new Vec3(0, 0, 0),RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)

@@ -95,7 +95,7 @@ public class I21Panel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("df21/door/df21_cabin_door_bottom_right"),
                             AllElements.testRegistry.asResource("df21/door/df21_cabin_door_upper_right")
-                    ), new Vec3(0, 0, 0), RenderShape.ENTITYBLOCK_ANIMATED, false
+                    ), new Vec3(0, 0, 0),new Vec3(0, 0, 0), RenderShape.ENTITYBLOCK_ANIMATED, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
@@ -111,7 +111,7 @@ public class I21Panel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("df21/door/df21_equip_door_bottom_right"),
                             AllElements.testRegistry.asResource("df21/door/df21_equip_door_upper_right")
-                    ), new Vec3(0, 0, 0), RenderShape.MODEL, false
+                    ), new Vec3(0, 0, 0),new Vec3(0, 0, 0), RenderShape.MODEL, false
                     ))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
