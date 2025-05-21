@@ -25,6 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.network.c2s.tech_tree.CanUnlockGroupPacket;
@@ -564,13 +565,13 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         });
         if (!prevGrids.isEmpty()) {
             LabelGrid grid = prevGrids.get(0);
-            gridBtnUpLeft.setPos(grid.x + grid.getWidth() / 2 - 8, grid.y + grid.getHeight() / 2 - 35);
-            gridBtnDownLeft.setPos(grid.x + grid.getWidth() / 2 - 8, grid.y + grid.getHeight() / 2 + 35);
+            gridBtnUpLeft.setPos(grid.getX() + grid.getWidth() / 2 - 8, grid.getY() + grid.getHeight() / 2 - 35);
+            gridBtnDownLeft.setPos(grid.getX() + grid.getWidth() / 2 - 8, grid.getY() + grid.getHeight() / 2 + 35);
         }
         if (!nextGrids.isEmpty()) {
             LabelGrid grid = nextGrids.get(0);
-            gridBtnUpRight.setPos(grid.x + grid.getWidth() / 2 - 8, grid.y + grid.getHeight() / 2 - 35);
-            gridBtnDownRight.setPos(grid.x + grid.getWidth() / 2 - 8, grid.y + grid.getHeight() / 2 + 35);
+            gridBtnUpRight.setPos(grid.getX() + grid.getWidth() / 2 - 8, grid.getY() + grid.getHeight() / 2 - 35);
+            gridBtnDownRight.setPos(grid.getX() + grid.getWidth() / 2 - 8, grid.getY() + grid.getHeight() / 2 + 35);
         }
         autoGridBtnVisible();
     }
@@ -958,7 +959,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         index -= windowTop;
         if (index >= windowCapacity) return;
         ImageMask frame = groupChosenFrame.get();
-        frame.rectangle(new Vector3f(chosenButton.x + 2, chosenButton.y + 2, 0),
+        frame.rectangle(new Vector3f(chosenButton.getX() + 2, chosenButton.getY() + 2, 0),
                 ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                 16, 18);
     }
@@ -1020,9 +1021,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             } else if (!tooltip.is(group)) {
                 tooltip = Tooltip.fromGroup(group);
             }
-            tooltipX = grpBtn.x + grpBtn.getWidth();
-            tooltipY = grpBtn.y;
-            smallerX = grpBtn.x;
+            tooltipX = grpBtn.getX() + grpBtn.getWidth();
+            tooltipY = grpBtn.getY();
+            smallerX = grpBtn.getX();
         } else {
             ClientTechTreeNode node = label.getNode();
             if (tooltip == null) {
@@ -1030,9 +1031,9 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             } else if (!tooltip.is(node)) {
                 tooltip = Tooltip.fromNode(node);
             }
-            tooltipX = label.x + label.getWidth();
-            tooltipY = label.y;
-            smallerX = label.x;
+            tooltipX = label.getX() + label.getWidth();
+            tooltipY = label.getY();
+            smallerX = label.getX();
         }
         if (tooltipX + 1 + tooltip.getWidth() <= windowWidth)
             tooltip.setPosition(tooltipX + 1, tooltipY);

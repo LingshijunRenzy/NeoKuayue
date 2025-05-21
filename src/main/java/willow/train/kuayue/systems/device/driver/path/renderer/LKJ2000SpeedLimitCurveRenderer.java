@@ -6,7 +6,10 @@ import com.mojang.blaze3d.vertex.*;
 import kasuga.lib.core.client.render.texture.StaticImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import willow.train.kuayue.initial.AllElements;
@@ -177,15 +180,27 @@ public class LKJ2000SpeedLimitCurveRenderer {
                 System.out.println("Line: " + startLinePositionX + " - " + stopLinePositionX);
             }
 
+            Tesselator tesselator = Tesselator.getInstance();
+            tesselator.getBuilder().discard();
+            MultiBufferSource.BufferSource bufferSource = MultiBufferSource.immediate(tesselator.getBuilder());
+
             if(nextPositionX + generator.backwardDistance > 0 && nextSpeedLimit != speed){
-                Minecraft.getInstance().font.draw(
-                        pose,
+                Minecraft.getInstance().font.drawInBatch(
                         String.format("%.0f", nextSpeedLimit),
                         nextPositionX * yScale,
                         tHeight - nextSpeedLimit * xScale - Minecraft.getInstance().font.lineHeight,
-                        0xFFFF80
+                        0xFFFF80,
+                        false,
+                        pose.last().pose(),
+                        bufferSource,
+                        Font.DisplayMode.NORMAL,
+                        0x00000000,
+                        LightTexture.FULL_BRIGHT
                 );
             }
+
+            bufferSource.endBatch();
+
             nextPositionX = thisPositionX;
             nextSpeedLimit = speed;
         }
