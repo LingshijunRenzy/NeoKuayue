@@ -2,14 +2,14 @@ package willow.train.kuayue.systems.overhead_line.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Transformation;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.Matrix;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.nio.FloatBuffer;
 import java.util.Iterator;
@@ -29,7 +29,7 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public void write(int needle, Matrix4f matrix) {
-        matrix.store(buffer.slice(needle * 16,16));
+        matrix.set(buffer.slice(needle * 16,16));
     }
 
     public Matrix4f getHandler(){
@@ -37,7 +37,7 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public void load(int needle){
-        handler.load(buffer.slice(needle * 16, 16));
+        handler.get(buffer.slice(needle * 16, 16));
     }
 
     @NotNull
@@ -52,7 +52,7 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
             }
             @Override
             public Matrix4f next() {
-                matrix4f.load(buffer.slice(index * 16, 16));
+                matrix4f.set(buffer.slice(index * 16, 16));
                 index++;
                 return matrix4f;
             }
@@ -87,14 +87,16 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public static AABB getBoundingBoxOf(Matrix4f matrix4f, Vector3f identify){
-        Pair<Matrix3f, Vector3f> affine = Transformation.toAffine(matrix4f);
-        Vector3f position = affine.getSecond();
+        Matrix3f rotation = new Matrix3f(matrix4f);
+        rotation.scale(1.0F / matrix4f.m33());
+        Transformation transformation = new Transformation(matrix4f);
+        Vector3f position = transformation.getTranslation();
         AABB outBoundingBox = null;
         for(int i=0;i<=1;i++){
             for(int j=0;j<=1;j++){
                 for(int k=0;k<=1;k++){
                     identify.set(i,j,k);
-                    identify.transform(affine.getFirst());
+                    identify.mul(rotation);
                     AABB vertexAABB = new AABB(
                             position.x(),
                             position.y(),
@@ -112,7 +114,7 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public Matrix4f get(Matrix4f matrixHandle, int i) {
-        matrixHandle.load(buffer.slice(i * 16, 16));
+        matrixHandle.set(buffer.slice(i * 16, 16));
         return matrixHandle;
     }
 }

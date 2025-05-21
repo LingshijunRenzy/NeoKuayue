@@ -1,8 +1,7 @@
 package willow.train.kuayue.systems.overhead_line.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
@@ -28,7 +27,7 @@ public class OverheadLineCurveGenerator {
     public static void prepareLine(RenderCurve.Builder builder, Vec3 a, Vec3 dir, float r){
         PoseStack pose = builder.getPoseStack();
         pose.translate(a.x - 0.5 * r, a.y  - 0.5 * r, a.z  - 0.5 * r);
-        pose.mulPose(Vector3f.YP.rotation((float) Math.atan2(dir.x, dir.z)));
+        pose.mulPose(Axis.YP.rotation((float) Math.atan2(dir.x, dir.z)));
     }
 
     public static void straightLine(RenderCurve.Builder builder, Vec3 a, Vec3 b, float r) {
@@ -36,7 +35,7 @@ public class OverheadLineCurveGenerator {
 
 
         PoseStack pose = builder.getPoseStack();
-        pose.mulPose(Vector3f.XP.rotation( - (float) Math.atan2(dir.y, Math.sqrt(dir.x * dir.x + dir.z * dir.z))));
+        pose.mulPose(Axis.XP.rotation( - (float) Math.atan2(dir.y, Math.sqrt(dir.x * dir.x + dir.z * dir.z))));
         pose.scale(r, r, (float) a.distanceTo(b));
         pose.translate(-0.5, - 0.5, 0);
 
@@ -102,7 +101,7 @@ public class OverheadLineCurveGenerator {
             float length = (float) Math.sqrt(Math.pow(thisPoint.x - previousPoint.x, 2) + Math.pow(thisPoint.y - previousPoint.y, 2));
             pose.pushPose();
             pose.translate(0, thisPoint.y + currentOffset, -thisPoint.x);
-            pose.mulPose(Vector3f.XP.rotation(zRot));
+            pose.mulPose(Axis.XP.rotation(zRot));
             pose.scale(r, r, length);
             builder.store();
             pose.popPose();
@@ -204,7 +203,7 @@ public class OverheadLineCurveGenerator {
 
             pose.pushPose();
             pose.translate(0, actualLastY, actualLastX);
-            pose.mulPose(Vector3f.XP.rotation(-zRot));
+            pose.mulPose(Axis.XP.rotation(-zRot));
 
             actualLastY += (float) (segmentLength * Math.sin(zRot));
             actualLastX += (float) (segmentLength * Math.cos(zRot));

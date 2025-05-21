@@ -3,12 +3,12 @@ package willow.train.kuayue.systems.tech_tree.json;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.StaticImageHolder;
 import kasuga.lib.core.util.LazyRecomputable;
 import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Vector3f;
 
 @Getter
 public class ImageJsonDefine {

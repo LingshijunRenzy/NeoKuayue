@@ -1,7 +1,6 @@
 package willow.train.kuayue.systems.device.driver.combustion;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import kasuga.lib.core.client.frontend.rendering.RenderContext;
 import kasuga.lib.core.client.model.BedrockModelLoader;
@@ -15,6 +14,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.TransformationHelper;
 import willow.train.kuayue.initial.AllElements;
 
 public class InternalCombustionDriveControllerBlockEntityRenderer extends SmartBlockEntityRenderer<InternalCombustionDriveControllerBlockEntity> {
@@ -56,7 +56,7 @@ public class InternalCombustionDriveControllerBlockEntityRenderer extends SmartB
         Direction facing = blockState.getValue(InternalCombustionDriveControllerBlock.FACING);
         int offset = blockState.getValue(InternalCombustionDriveControllerBlock.OFFSET);
         poseStack.translate(0.5,0,0.5);
-        poseStack.mulPose(Quaternion.fromXYZ(0, facing.toYRot() * 3.141f / 180, 0));
+        poseStack.mulPose(TransformationHelper.quatFromXYZ(0, facing.toYRot() * 3.141f / 180, 0, false));
         poseStack.translate(-0.5, 0, -0.5-(offset*(1/16F)));
         bedrockModel.render(poseStack, bufferSource, packedLight, overlay);
 
@@ -82,7 +82,7 @@ public class InternalCombustionDriveControllerBlockEntityRenderer extends SmartB
         poseStack.pushPose();
 
         poseStack.translate(0.725,1.1,0.925);
-        poseStack.mulPose(Quaternion.fromXYZ((float) (22.5 * (Math.PI) / 180),(float) (Math.PI),0));
+        poseStack.mulPose(TransformationHelper.quatFromXYZ((float) (22.5 * (Math.PI) / 180),(float) (Math.PI),0, false));
         poseStack.scale(0.0025f * 0.35f, 0.0025f * 0.35f, 0.0025f);
 
         (holder.getMenu(1)).ifPresent(menu -> {

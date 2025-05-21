@@ -8,8 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import willow.train.kuayue.initial.AllElements;
 
 public class AllOres {
@@ -18,8 +17,7 @@ public class AllOres {
             new BlockReg<DropExperienceBlock>("salt_ore")
                     .blockType(props ->
                             new DropExperienceBlock(props, UniformInt.of(3, 7)))
-                    .material(Material.STONE)
-                    .materialColor(MaterialColor.STONE)
+                    .materialColor(MapColor.STONE)
                     .addProperty(properties -> properties.strength(1.5f, 6.0F))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .defaultBlockItem()
@@ -30,8 +28,7 @@ public class AllOres {
             new BlockReg<DropExperienceBlock>("deepslate_salt_ore")
                     .blockType(props ->
                             new DropExperienceBlock(props, UniformInt.of(3, 7)))
-                    .material(Material.STONE)
-                    .materialColor(MaterialColor.STONE)
+                    .materialColor(MapColor.STONE)
                     .addProperty(properties -> properties.strength(1.5f, 6.0F))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .defaultBlockItem()
@@ -41,8 +38,7 @@ public class AllOres {
     public static final BlockReg<Block> SALT_BLOCK =
             new BlockReg<Block>("salt_block")
                     .blockType(Block::new)
-                    .material(Material.STONE)
-                    .materialColor(MaterialColor.STONE)
+                    .materialColor(MapColor.STONE)
                     .addProperty(properties -> properties.sound(SoundType.TUFF))
                     .addProperty(properties -> properties.strength(1.0f, 3.0F))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)

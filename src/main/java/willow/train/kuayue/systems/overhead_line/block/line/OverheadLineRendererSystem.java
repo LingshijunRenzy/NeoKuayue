@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
-import org.mozilla.javascript.ast.Block;
 import willow.train.kuayue.mixins.mixin.LevelRendererAccessor;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 import willow.train.kuayue.systems.overhead_line.render.CachedCurveRenderer;

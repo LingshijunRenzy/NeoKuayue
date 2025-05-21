@@ -2,8 +2,8 @@ package willow.train.kuayue.systems.device.driver.combustion;
 
 import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector4f;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
@@ -96,8 +96,8 @@ public class InternalCombustionDriveControllerMovementBehavior
         // Copied from Create mod
         if (lightTransform != null) {
             Vector4f lightVec = new Vector4f((float)contraptionPos.getX() + 0.5F, (float)contraptionPos.getY() + 0.5F, (float)contraptionPos.getZ() + 0.5F, 1.0F);
-            lightVec.transform(lightTransform);
-            return new BlockPos((double)lightVec.x(), (double)lightVec.y(), (double)lightVec.z());
+            lightVec.mul(lightTransform);
+            return new BlockPos((int)lightVec.x(), (int)lightVec.y(), (int)lightVec.z());
         } else {
             return contraptionPos;
         }

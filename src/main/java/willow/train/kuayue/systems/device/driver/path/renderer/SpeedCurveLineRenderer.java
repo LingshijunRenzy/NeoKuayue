@@ -3,10 +3,10 @@ package willow.train.kuayue.systems.device.driver.path.renderer;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
+import org.joml.Matrix4f;
 import willow.train.kuayue.event.client.ClientRenderTickManager;
 import willow.train.kuayue.initial.AllElements;
 
@@ -41,8 +41,8 @@ public class SpeedCurveLineRenderer {
 
     private void renderCurve() {
 
-        Matrix4f matrix4f = Matrix4f.orthographic(256,-256, -1000, 1000);
-        RenderSystem.setProjectionMatrix(matrix4f);
+        Matrix4f matrix4f = new Matrix4f().ortho(0,256,0,-256, -1000, 1000);
+        RenderSystem.setProjectionMatrix(matrix4f, VertexSorting.ORTHOGRAPHIC_Z);
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.setIdentity();
         ArrayList<Float> list = generator.baked;

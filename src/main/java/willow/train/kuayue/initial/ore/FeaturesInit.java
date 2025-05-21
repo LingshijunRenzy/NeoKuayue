@@ -16,8 +16,6 @@ import willow.train.kuayue.Kuayue;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static net.minecraft.core.Registry.CONFIGURED_FEATURE_REGISTRY;
-
 public class FeaturesInit {
 
 //    public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES =

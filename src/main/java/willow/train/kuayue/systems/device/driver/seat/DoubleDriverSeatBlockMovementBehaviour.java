@@ -2,8 +2,6 @@ package willow.train.kuayue.systems.device.driver.seat;
 
 import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector4f;
 import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
@@ -11,6 +9,8 @@ import com.simibubi.create.foundation.render.BlockEntityRenderHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 import javax.annotation.Nullable;
 
@@ -23,8 +23,8 @@ public class DoubleDriverSeatBlockMovementBehaviour implements MovementBehaviour
                 (float)contraptionPos.getZ() + 0.5F, 
                 1.0F
             );
-            lightVec.transform(lightTransform);
-            return new BlockPos((double)lightVec.x(), (double)lightVec.y(), (double)lightVec.z());
+            lightVec.mul(lightTransform);
+            return new BlockPos((int)lightVec.x(), (int)lightVec.y(), (int)lightVec.z());
         } else {
             return contraptionPos;
         }

@@ -393,7 +393,7 @@ public class EditableTypeConstants {
         poseStack.scale(0.098f, 0.098f, 1.0f);
 //        Label testPosadd = new Label(Component.literal("北京"));
         leftTop.setColor(BLACK);
-        leftTop.renderToGui(poseStack, font);
+        //leftTop.renderToGui(poseStack, font);
         poseStack.popPose();
 
         poseStack.pushPose();
@@ -401,7 +401,7 @@ public class EditableTypeConstants {
         poseStack.scale(0.098f, 0.098f, 1.0f);
 //        Label testPosoffset = new Label(Component.literal("上海"));
         rightTop.setColor(BLACK);
-        rightTop.renderToGui(poseStack, font);
+        //rightTop.renderToGui(poseStack, font);
         poseStack.popPose();
 
         // 英文区域，始发地
@@ -410,7 +410,7 @@ public class EditableTypeConstants {
         poseStack.scale(0.048f, 0.048f, 1.0f);
 //        Label eng1 = new Label(Component.literal("BEIJING"));
         leftBottom.setColor(WHITE);
-        leftBottom.renderToGui(poseStack, font);
+        //leftBottom.renderToGui(poseStack, font);
         poseStack.popPose();
 
         // 英文区域，目的地
@@ -419,7 +419,7 @@ public class EditableTypeConstants {
         poseStack.scale(0.048f, 0.048f, 1.0f);
 //        Label eng2 = new Label(Component.literal("SHANGHAI"));
         rightBottom.setColor(WHITE);
-        rightBottom.renderToGui(poseStack, font);
+        //rightBottom.renderToGui(poseStack, font);
         poseStack.popPose();
         // 结束渲染
         poseStack.popPose();

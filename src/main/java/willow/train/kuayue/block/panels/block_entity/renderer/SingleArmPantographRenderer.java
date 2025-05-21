@@ -2,7 +2,7 @@ package willow.train.kuayue.block.panels.block_entity.renderer;
 
 import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -74,7 +74,7 @@ public class SingleArmPantographRenderer implements
             pose.translate(0, 0, 1f);
         if (facing == Direction.WEST)
             pose.translate(1f, 0, 1f);
-        pose.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot() + 90f));
+        pose.mulPose(Axis.YP.rotationDegrees(facing.toYRot() + 90f));
 
         // 升降弓拉杆角度变化
         if(risen && pBlockEntity.pullRodAngle > 135) {

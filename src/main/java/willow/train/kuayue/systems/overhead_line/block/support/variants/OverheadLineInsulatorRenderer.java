@@ -1,7 +1,6 @@
 package willow.train.kuayue.systems.overhead_line.block.support.variants;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
 import kasuga.lib.core.client.model.BedrockModelLoader;
 import kasuga.lib.core.client.model.anim_model.AnimModel;
 import net.minecraft.client.renderer.MultiBufferSource;

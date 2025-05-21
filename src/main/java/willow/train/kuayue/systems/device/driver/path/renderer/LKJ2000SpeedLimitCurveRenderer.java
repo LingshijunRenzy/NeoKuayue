@@ -3,12 +3,12 @@ package willow.train.kuayue.systems.device.driver.path.renderer;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import kasuga.lib.core.client.render.texture.StaticImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.GameRenderer;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.driver.path.SpeedCurveGenerator;
 import willow.train.kuayue.systems.device.driver.path.list.EdgePathPoint;
@@ -85,9 +85,9 @@ public class LKJ2000SpeedLimitCurveRenderer {
     private void renderCurve() {
         float tWidth = this.textureTarget.width * scale;
         float tHeight = this.textureTarget.height * scale;
-        Matrix4f matrix4f = Matrix4f.orthographic(tWidth,-tHeight, -1000, 1000);
+        Matrix4f matrix4f = new Matrix4f().ortho(0,256,0,-256, -1000, 1000);
         tHeight = tHeight - 1;
-        RenderSystem.setProjectionMatrix(matrix4f);
+        RenderSystem.setProjectionMatrix(matrix4f, VertexSorting.ORTHOGRAPHIC_Z);
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.setIdentity();
         float left = 0;

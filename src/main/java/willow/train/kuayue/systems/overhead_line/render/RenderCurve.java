@@ -1,13 +1,12 @@
 package willow.train.kuayue.systems.overhead_line.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class RenderCurve implements Iterable<Pair<Matrix4f, Integer>> {
 
         protected void buildLightLevel(RenderCurve curve, Level level){
             for (int i = 0; i < curve.matrix.getAllBoundingBox().length; i++) {
-                curve.lightStore[i] = getLightAt(level, new BlockPos(curve.matrix.getAllBoundingBox()[i].getCenter()));
+                curve.lightStore[i] = getLightAt(level, BlockPos.containing(curve.matrix.getAllBoundingBox()[i].getCenter()));
             }
         }
 

@@ -1,7 +1,6 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import net.minecraft.client.Minecraft;
@@ -13,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.tech_tree.json.TextJsonDefine;
 
@@ -194,7 +194,7 @@ public class JsonTextComponent extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(@NotNull NarrationElementOutput output) {
+    public void updateWidgetNarration(@NotNull NarrationElementOutput output) {
         output.add(NarratedElementType.HINT, textJson.getComponent());
     }
 }

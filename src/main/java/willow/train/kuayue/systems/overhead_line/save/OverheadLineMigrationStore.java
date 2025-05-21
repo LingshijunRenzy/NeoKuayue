@@ -12,9 +12,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.joml.Vector3f;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
-import com.mojang.math.Vector3f;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 import willow.train.kuayue.systems.overhead_line.wire.WireReg;
 
