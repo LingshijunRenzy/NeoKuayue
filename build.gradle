@@ -175,7 +175,7 @@ repositories {
 
     mavenLocal()
 
-    if(project.findProperty("nightly") || true){
+    if(project.findProperty("nightly")){
         flatDir {dir 'libs'}
     } else {
         maven {

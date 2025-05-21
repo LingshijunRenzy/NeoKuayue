@@ -1,7 +1,6 @@
 package willow.train.kuayue.block.panels.pantograph;
 
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
-import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
@@ -12,11 +11,9 @@ import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.network.PacketDistributor;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.ContraptionNbtUpdatePacket;
@@ -73,7 +70,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
         PantographState state = pantographSystem.getOrRegisterPantographState(
                 locator.getSecond(),
-                carriageContraption.getAssemblyDirection() == context.state.getValue(DirectionalBlock.FACING) ?
+                carriageContraption.getAssemblyDirection() == context.state.getValue(BlockStateProperties.HORIZONTAL_FACING) ?
                         Direction.AxisDirection.POSITIVE : Direction.AxisDirection.NEGATIVE
         );
 
