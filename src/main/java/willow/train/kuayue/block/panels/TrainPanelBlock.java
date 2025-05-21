@@ -94,10 +94,17 @@ public class TrainPanelBlock extends Block implements IWrenchable, EntityBlock {
         BlockState neoState = pState;
         ItemStack item = pPlayer.getItemInHand(pHand);
         // 手持剪贴板
-        // 手持带颜色刷子
         TrainPanelProperties.EditType orgType = pState.getValue(EDIT_TYPE);
         boolean changed = false;
-        if (item.is(EditablePanelItem.COLORED_BRUSH.getItem())) {
+        // 手持水牌
+        if ((item.is(EditablePanelItem.LAQUERED_BOARD.getItem()) || (item.is(EditablePanelItem.COLORED_BRUSH.getItem()) && TrainPanelProperties.EditType.LAQUERED.equals(orgType))) && pState.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag()))) {
+            neoState = pState.setValue(EDIT_TYPE, TrainPanelProperties.EditType.LAQUERED);
+            changed = orgType != TrainPanelProperties.EditType.LAQUERED;
+            return openScreen(pLevel, pPos, pPlayer, neoState, changed);
+        }
+        // 创建速度文字的唯一途径
+        // 手持带颜色刷子
+        if ((item.is(EditablePanelItem.COLORED_BRUSH.getItem())  || TrainPanelProperties.EditType.SPEED.equals(orgType))) {
             // 带有下厢板标签
             if (pState.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag()))) {
                 neoState = pState.setValue(EDIT_TYPE, TrainPanelProperties.EditType.TYPE);
@@ -109,12 +116,6 @@ public class TrainPanelBlock extends Block implements IWrenchable, EntityBlock {
                 changed = orgType != TrainPanelProperties.EditType.SPEED;
             }
 
-            return openScreen(pLevel, pPos, pPlayer, neoState, changed);
-        }
-        // 手持水牌
-        if (item.is(EditablePanelItem.LAQUERED_BOARD.getItem()) && pState.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag()))) {
-             neoState = pState.setValue(EDIT_TYPE, TrainPanelProperties.EditType.LAQUERED);
-             changed = orgType != TrainPanelProperties.EditType.LAQUERED;
             return openScreen(pLevel, pPos, pPlayer, neoState, changed);
         }
         // 手持贴纸
