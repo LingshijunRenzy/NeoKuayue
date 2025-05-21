@@ -30,6 +30,9 @@ public class TechTreeNodeData {
     private final NodeLocation[] nextNodes;
 
     @Getter
+    private final UnlockCondition unlockCondition;
+
+    @Getter
     private final ResourceLocation[] nextGroups;
 
     @Getter
@@ -39,8 +42,6 @@ public class TechTreeNodeData {
     @Getter
     private final int exp, level;
     private final ItemContext[] itemConsume, blueprints, itemReward;
-    @Getter
-    private final ResourceLocation[] advancements;
     public TechTreeNodeData(TechTreeGroupData group, String identifier, JsonObject jsonObject) {
         this.group = group;
         this.identifier = identifier;
@@ -57,6 +58,12 @@ public class TechTreeNodeData {
             unlock = null;
         } else {
             unlock = new OnUnlockContext(group, jsonObject.getAsJsonObject("on_unlock"));
+        }
+
+        if (jsonObject.has("unlock_condition")) {
+            unlockCondition = new UnlockCondition(jsonObject.get("unlock_condition"));
+        } else {
+            unlockCondition = null;
         }
 
         JsonArray nextNodeArray = jsonObject.getAsJsonArray("next_nodes");
@@ -93,15 +100,6 @@ public class TechTreeNodeData {
         for (Map.Entry<String, JsonElement> entry : consumption.entrySet()) {
             itemConsume[consumeCounter] = new ItemContext(entry);
             consumeCounter++;
-        }
-
-        if (jsonObject.has("advancements") && jsonObject.get("advancements").isJsonArray()) {
-            JsonArray array = jsonObject.getAsJsonArray("advancements");
-            advancements = new ResourceLocation[array.size()];
-            for (int i = 0; i < array.size(); i++)
-                advancements[i] = new ResourceLocation(array.get(i).getAsString());
-        } else {
-            advancements = new ResourceLocation[0];
         }
 
         if (jsonObject.has("blueprint") && jsonObject.get("blueprint").isJsonObject()) {

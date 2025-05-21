@@ -1,0 +1,423 @@
+{
+  "version": "1.0.0",
+  "id": "kuayue:circuit_blueprint_group",
+  "name": "tech_tree.kuayue.group.circuit_blueprint.name",
+  "description": "tech_tree.kuayue.group.circuit_blueprint.description",
+  "icon":"kuayue:carriage_cr200j_circuit_blueprint",
+  "on_unlock": {
+    "description": "tech_tree.kuayue.group.circuit_blueprint.unlock"
+  },
+  "initial_visibility": true,
+  "root_node": "node_solidify_slime_ball",
+
+  "nodes": {
+    "node_solidify_slime_ball": {
+      "next_nodes": [
+        "node_plastic_nugget"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.solidify_slime_ball.name",
+      "description": "tech_tree.kuayue.group.solidify_slime_ball.description",
+      "type": "plain",
+      "logo": "kuayue:solidify_slime_ball",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:solidify_slime_ball": 1
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "minecraft:slime_ball": 16,
+        "create:experience_nugget": 32
+      }
+    },
+
+    "node_plastic_nugget": {
+      "next_nodes": [
+        "node_plastic_ingot"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.plastic_nugget.name",
+      "description": "tech_tree.kuayue.group.plastic_nugget.description",
+      "type": "plain",
+      "logo": "kuayue:plastic_nugget",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:plastic_nugget": 1
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "minecraft:slime_ball": 16,
+        "create:experience_nugget": 32
+      }
+    },
+
+    "node_plastic_ingot": {
+      "next_nodes": [
+        "node_plastic_board"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.plastic_ingot.name",
+      "description": "tech_tree.kuayue.group.plastic_ingot.description",
+      "type": "plain",
+      "logo": "kuayue:plastic_ingot",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:plastic_ingot": 1
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "minecraft:slime_ball": 16,
+        "create:experience_nugget": 32
+      }
+    },
+
+    "node_plastic_board": {
+      "next_nodes": [
+        "node_circuit_motherboard"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.plastic_board.name",
+      "description": "tech_tree.kuayue.group.plastic_board.description",
+      "type": "plain",
+      "logo": "kuayue:plastic_board",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:plastic_board": 1
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "minecraft:slime_ball": 16,
+        "create:experience_nugget": 32
+      }
+    },
+
+    "node_circuit_motherboard": {
+      "next_nodes": [
+        "node_carriage_25b_circuit_blueprint",
+        "node_carriage_25g_circuit_blueprint",
+        "node_head_df21_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.circuit_motherboard.name",
+      "description": "tech_tree.kuayue.group.circuit_motherboard.description",
+      "type": "plain",
+      "logo": "kuayue:circuit_motherboard",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 1
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "minecraft:slime_ball": 16,
+        "create:experience_nugget": 32
+      }
+    },
+
+    "node_carriage_25b_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_25k_circuit_blueprint",
+        "node_carriage_25z_circuit_blueprint",
+        "node_head_ss8_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.carriage_25b_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.carriage_25b_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:end_face_25b_2",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 8,
+        "minecraft:redstone": 8,
+        "kuayue:research_report": 8,
+        "create:electron_tube": 2,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:carriage_25b_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_carriage_25g_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_25k_circuit_blueprint",
+        "node_carriage_25z_circuit_blueprint",
+        "node_head_ss8_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.carriage_25g_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.carriage_25g_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:end_face_25g_2",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 8,
+        "minecraft:redstone": 8,
+        "kuayue:research_report": 8,
+        "create:electron_tube": 2,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:carriage_25g_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_head_df21_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_25k_circuit_blueprint",
+        "node_carriage_25z_circuit_blueprint",
+        "node_head_ss8_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.head_df21_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_df21_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:head_df21",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 8,
+        "minecraft:redstone": 8,
+        "kuayue:research_report": 8,
+        "create:electron_tube": 2,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:head_df21_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_carriage_25k_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_25t_circuit_blueprint",
+        "node_head_df11g_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.carriage_25k_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.carriage_25k_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:end_face_25k_2",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 8,
+        "minecraft:redstone": 8,
+        "kuayue:research_report": 8,
+        "create:electron_tube": 2,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:carriage_25k_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_carriage_25z_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_25t_circuit_blueprint",
+        "node_head_df11g_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.carriage_25z_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.carriage_25z_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:end_face_25z_2",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 8,
+        "minecraft:redstone": 8,
+        "kuayue:research_report": 8,
+        "create:electron_tube": 2,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:carriage_25z_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_head_ss8_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_25t_circuit_blueprint",
+        "node_head_df11g_circuit_blueprint"
+      ],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.head_ss8_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_ss8_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:ss8_head",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 8,
+        "minecraft:redstone": 8,
+        "kuayue:research_report": 8,
+        "create:electron_tube": 2,
+        "create:precision_mechanism": 2
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:head_ss8_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_carriage_25t_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_cr200j_circuit_blueprint",
+        "node_head_hxd3d_circuit_blueprint"
+      ],
+      "unlock_condition": "any",
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.carriage_25t_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.carriage_25t_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:end_face_25t_2",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 16,
+        "minecraft:redstone": 16,
+        "kuayue:research_report": 16,
+        "create:electron_tube": 4,
+        "create:precision_mechanism": 4
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:carriage_25t_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_head_df11g_circuit_blueprint": {
+      "next_nodes": [
+        "node_carriage_cr200j_circuit_blueprint",
+        "node_head_hxd3d_circuit_blueprint"
+      ],
+      "unlock_condition": "any",
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.head_df11g_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_df11g_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:head_df11g_2",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 16,
+        "minecraft:redstone": 16,
+        "kuayue:research_report": 16,
+        "create:electron_tube": 4,
+        "create:precision_mechanism": 4
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:head_df11g_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_carriage_cr200j_circuit_blueprint": {
+      "next_nodes": [
+        "node_head_cr200j_circuit_blueprint"
+      ],
+      "unlock_condition": "any",
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.carriage_cr200j_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.carriage_cr200j_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:end_face_marshalled_cr200j",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 32,
+        "minecraft:redstone": 32,
+        "kuayue:research_report": 32,
+        "create:electron_tube": 8,
+        "create:precision_mechanism": 8
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:carriage_cr200j_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_head_hxd3d_circuit_blueprint": {
+      "next_nodes": [],
+      "unlock_condition": "any",
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.head_hxd3d_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_hxd3d_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:head_hxd3d",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 32,
+        "minecraft:redstone": 32,
+        "kuayue:research_report": 32,
+        "create:electron_tube": 8,
+        "create:precision_mechanism": 8
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:head_hxd3d_circuit_blueprint": 1,
+        "create:experience_nugget": 64
+      }
+    },
+
+    "node_head_cr200j_circuit_blueprint": {
+      "next_nodes": [],
+      "next_groups": [],
+      "name": "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.name",
+      "description": "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.description",
+      "type": "plain",
+      "logo": "kuayue:head_cr200j",
+      "exp": 0,
+      "level": 0,
+      "item_consume": {
+        "kuayue:circuit_motherboard": 64,
+        "minecraft:redstone": 64,
+        "kuayue:research_report": 64,
+        "create:electron_tube": 32,
+        "create:precision_mechanism": 32
+      },
+      "advancements": [],
+      "blueprint": {},
+      "item": {
+        "kuayue:head_cr200j_circuit_blueprint": 1,
+        "create:experience_nugget": 128
+      }
+    }
+  }
+}

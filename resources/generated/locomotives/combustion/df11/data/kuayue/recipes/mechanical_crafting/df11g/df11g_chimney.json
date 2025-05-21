@@ -1,0 +1,26 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": false,
+  "key": {
+    "A": {
+      "item": "create:fluid_pipe"
+    },
+    "B": {
+      "item": "kuayue:df11g_carport_center"
+    },
+    "C": {
+      "item": "kuayue:weathering_resistant_steel_board"
+    },
+    "D": {
+      "item": "kuayue:weathering_resistant_steel_pole"
+    }
+  },
+  "pattern": [
+    "AACCC",
+    "BBDDD"
+  ],
+  "result": {
+    "count": 1,
+    "item": "kuayue:df11g_chimney"
+  }
+}

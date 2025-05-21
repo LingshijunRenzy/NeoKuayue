@@ -11,6 +11,8 @@ import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.AllItems;
 import willow.train.kuayue.initial.registration.PlacementFoodRegistration;
 
+import static willow.train.kuayue.initial.AllItems.EMPTY_CAN;
+import static willow.train.kuayue.initial.AllItems.EMPTY_CAN_BLUE;
 import static willow.train.kuayue.initial.food.AllFoodProperties.*;
 
 public class AllFoods {
@@ -42,7 +44,25 @@ public class AllFoods {
                     .strength(0.5F)
                     .noOcclusion()
                     .foodProperties(KUA_COLA_PROPS)
-                    .stackSize(64)
+                    .craftReminder(EMPTY_CAN::getItem)
+                    .stackSize(16)
+                    .tab(AllElements.neoKuayueDietTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final PlacementFoodRegistration<ParticlesDrinkBlock, PlacementDrinkBlockItem> BLUE_BULL =
+            new PlacementFoodRegistration<ParticlesDrinkBlock, PlacementDrinkBlockItem>
+                    ("blue_bull", true, true)
+                    .block(properties ->
+                            new ParticlesDrinkBlock(properties, PlacementFoodBlock.FoodType.BOTTLE, false))
+                    .item((reg, properties, hasEffect, hasTooltip) ->
+                            new PlacementDrinkBlockItem(reg.getBlock(), properties, hasEffect, hasTooltip))
+                    .material(Material.METAL, MaterialColor.COLOR_BLACK)
+                    .soundType(SoundType.METAL)
+                    .strength(0.5F)
+                    .noOcclusion()
+                    .foodProperties(BLUE_BULL_PROPS)
+                    .craftReminder(EMPTY_CAN_BLUE::getItem)
+                    .stackSize(16)
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 
@@ -79,42 +99,42 @@ public class AllFoods {
     public static final ItemReg<HandHeldFoodItem> HAM_SAUSAGE =
             new ItemReg<HandHeldFoodItem>("ham_sausage")
                     .itemType(HandHeldFoodItem::new)
-                    .withProperty(properties -> properties.food(SMALL_SNACKS_PROPS))
+                    .withProperty(properties -> properties.food(HAM_SAUSAGE_PROPS))
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 
     public static final ItemReg<HandHeldFoodItem> MARINATED_EGG =
             new ItemReg<HandHeldFoodItem>("marinated_egg")
                     .itemType(HandHeldFoodItem::new)
-                    .withProperty(properties -> properties.food(SMALL_SNACKS_PROPS))
+                    .withProperty(properties -> properties.food(MARINATED_EGG_PROPS))
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 
     public static final ItemReg<HandHeldFoodItem> HALF_MARINATED_EGG =
             new ItemReg<HandHeldFoodItem>("half_marinated_egg")
                     .itemType(HandHeldFoodItem::new)
-                    .withProperty(properties -> properties.food(TINY_SNACKS_PROPS))
+                    .withProperty(properties -> properties.food(HALF_MARINATED_EGG_PROPS))
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 
     public static final ItemReg<HandHeldFoodItem> CALCIUM_MILK_BISCUITS =
             new ItemReg<HandHeldFoodItem>("calcium_milk_biscuits")
                     .itemType(HandHeldFoodItem::new)
-                    .withProperty(properties -> properties.food(SMALL_SNACKS_PROPS))
+                    .withProperty(properties -> properties.food(CALCIUM_MILK_PROPS))
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 
     public static final ItemReg<HandHeldFoodItem> SPICY_FISH_TOFU =
             new ItemReg<HandHeldFoodItem>("spicy_fish_tofu")
                     .itemType(HandHeldFoodItem::new)
-                    .withProperty(properties -> properties.food(SMALL_SNACKS_PROPS))
+                    .withProperty(properties -> properties.food(SPICY_FISH_TOFU_PROPS))
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 
     public static final ItemReg<HandHeldFoodItem> SALT_BAKED_DRUMSTICKS =
             new ItemReg<HandHeldFoodItem>("salt_baked_drumsticks")
                     .itemType(HandHeldFoodItem::new)
-                    .withProperty(properties -> properties.food(SMALL_SNACKS_PROPS))
+                    .withProperty(properties -> properties.food(SALT_BAKED_DRUMSTICKS_PROPS))
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 

@@ -13,6 +13,8 @@ import willow.train.kuayue.block.bogey.carriage.CarriageBogeyBlock;
 import willow.train.kuayue.block.bogey.carriage.CarriageBogeyEntity;
 import willow.train.kuayue.block.bogey.carriage.MeterCarriageBogeyBlock;
 import willow.train.kuayue.block.bogey.carriage.MeterCarriageBogeyEntity;
+import willow.train.kuayue.block.bogey.carriage.AndesiteCarriageBogeyBlock;
+import willow.train.kuayue.block.bogey.carriage.AndesiteCarriageBogeyEntity;
 import willow.train.kuayue.block.bogey.carriage.renderer.*;
 import willow.train.kuayue.initial.AllElements;
 
@@ -71,6 +73,40 @@ public class AllCarriageBogeys {
             .size(0.915F/2F)
             .submit(testRegistry);
 
+    public static final BogeySizeReg pk209p_a = new BogeySizeReg("pk209p_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg pk209pNoMotor_a = new BogeySizeReg("pk209p_no_motor_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg pk209pBackward_a = new BogeySizeReg("pk209p_backward_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+    public static final BogeySizeReg cw2_a = new BogeySizeReg("cw2_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg sw220k_a = new BogeySizeReg("sw220k_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg sw220kBackward_a = new BogeySizeReg("sw220k_backward_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg sw160_a = new BogeySizeReg("sw160_a")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg zk6_a = new BogeySizeReg("zk6_a")
+            .size(0.915F/2F)
+            .submit(testRegistry);
+
+
+
+
     public static final BogeyGroupReg carriageBogeyGroup = new BogeyGroupReg("carriage", "kuayue_bogey")
             .bogey(pk209p.getSize(), PK209PRenderer::new, testRegistry.asResource("pk209p_bogey"))
             .bogey(pk209pNoMotor.getSize(), PK209PRenderer.NoMotor::new, testRegistry.asResource("pk209p_no_motor_bogey"))
@@ -96,6 +132,17 @@ public class AllCarriageBogeys {
             .translationKey("meter_carriage_group")
             .submit(testRegistry);
 
+    public static final BogeyGroupReg AndesiteCarriageBogeyGroup = new BogeyGroupReg("andesite_carriage", "standard")
+            .translationKey("andesite_carriage_group")
+            .bogey(pk209p_a.getSize(), PK209PRenderer.Andesite::new, testRegistry.asResource("pk209p_bogey_a"))
+            .bogey(pk209pNoMotor_a.getSize(), PK209PRenderer.Andesite.NoMotor::new, testRegistry.asResource("pk209p_no_motor_bogey_a"))
+            .bogey(pk209pBackward_a.getSize(), PK209PRenderer.Andesite.Backward::new, testRegistry.asResource("pk209p_backward_bogey_a"))
+            .bogey(cw2_a.getSize(), CW2BogeyRenderer.Andesite::new, testRegistry.asResource("cw2_bogey_a"))
+            .bogey(sw220k_a.getSize(), SW220KRenderer.Andesite::new, testRegistry.asResource("sw220k_bogey_a"))
+            .bogey(sw220kBackward_a.getSize(), SW220KRenderer.Andesite.Backward::new, testRegistry.asResource("sw220k_backward_bogey_a"))
+            .bogey(sw160_a.getSize(), SW160Renderer.Andesite::new, testRegistry.asResource("sw160_bogey_a"))
+            .bogey(zk6_a.getSize(), ZK6Renderer.Andesite::new, testRegistry.asResource("zk6_bogey_a"))
+            .submit(AllElements.createRegistry);
     public static final BundledReg<BogeyBlockReg<CarriageBogeyBlock>> carriageBlockBundle =
             new BundledReg<BogeyBlockReg<CarriageBogeyBlock>>("carriage_bundle")
             .factory(BogeyBlockReg::new)
@@ -154,6 +201,31 @@ public class AllCarriageBogeys {
             .element("tkz2_motor_backward_bogey")
             .submit(testRegistry);
 
+    public static final BundledReg<BogeyBlockReg<AndesiteCarriageBogeyBlock>> AndesiteCarriageBlockBundle =
+            new BundledReg<BogeyBlockReg<AndesiteCarriageBogeyBlock>>("andesite_carriage_bundle")
+                    .factory(BogeyBlockReg::new)
+                    .action(reg -> reg.block(AndesiteCarriageBogeyBlock::new))
+                    .action(reg -> reg.material(Material.METAL))
+                    .action(reg -> reg.materialColor(MaterialColor.PODZOL))
+                    .action(reg -> reg.property(BlockBehaviour.Properties::requiresCorrectToolForDrops))
+                    .action(reg -> reg.property(properties -> properties.strength(1.5f, 3.0f)))
+                    .action(BogeyBlockReg::noOcclusion)
+                    .drive((key, reg) -> switch (key) {
+                        case "sw220k_bogey_a" -> reg.size(sw220k_a).translationKey("sw220k_bogey_a");
+                        case "sw220k_backward_bogey_a" -> reg.size(sw220kBackward_a).translationKey("sw220k_bogey_a");
+                        case "pk209p_bogey_a" -> reg.size(pk209p_a).translationKey("pk209p_bogey_a");
+                        case "pk209p_no_motor_bogey_a" -> reg.size(pk209pNoMotor_a).translationKey("pk209p_no_motor_bogey_a");
+                        case "pk209p_backward_bogey_a" -> reg.size(pk209pBackward_a).translationKey("pk209p_bogey_a");
+                        case "zk6_bogey_a" -> reg.size(zk6_a).translationKey("zk6_bogey_a");
+                        case "sw160_bogey_a" -> reg.size(sw160_a).translationKey("sw160_bogey_a");
+                        case "cw2_bogey_a" -> reg.size(cw2_a).translationKey("cw2_bogey_a");
+                        default -> reg.size(sw220k_a).translationKey("sw220k_bogey_a");
+                    })
+                    .element("sw220k_bogey_a").element("sw220k_backward_bogey_a").element("cw2_bogey_a")
+                    .element("pk209p_bogey_a").element("pk209p_no_motor_bogey_a").element("pk209p_backward_bogey_a")
+                    .element("sw160_bogey_a").element("zk6_bogey_a")
+                    .submit(testRegistry);
+
     public static final BlockEntityReg<CarriageBogeyEntity> carriageBogeyEntity =
             new BlockEntityReg<CarriageBogeyEntity>("carriage_bogey_entity")
                     .blockEntityType(CarriageBogeyEntity::new)
@@ -179,5 +251,19 @@ public class AllCarriageBogeys {
                     .withRenderer(() -> BogeyBlockEntityRenderer::new)
                     .submit(testRegistry);
 
+
+    public static final BlockEntityReg<AndesiteCarriageBogeyEntity> andesiteCarriageBogeyEntity =
+            new BlockEntityReg<AndesiteCarriageBogeyEntity>("andesite_carriage_bogey_entity")
+                    .blockEntityType(AndesiteCarriageBogeyEntity::new)
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("pk209p_bogey_a").getEntry().get())
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("pk209p_no_motor_bogey_a").getEntry().get())
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("pk209p_backward_bogey_a").getEntry().get())
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("cw2_bogey_a").getEntry().get())
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("sw220k_bogey_a").getEntry().get())
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("sw220k_backward_bogey_a").getEntry().get())
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("sw160_bogey_a").getEntry().get())
+                    .addBlock(() -> AndesiteCarriageBlockBundle.getElement("zk6_bogey_a").getEntry().get())
+                    .withRenderer(() -> BogeyBlockEntityRenderer::new)
+                    .submit(testRegistry);
     public static void invoke() {}
 }

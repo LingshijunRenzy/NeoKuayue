@@ -78,7 +78,7 @@ public class CM1Panel {
                             ), Couple.create(
                             AllElements.testRegistry.asResource("carriage/carriage_m1/door/m1_door_bottom"),
                             AllElements.testRegistry.asResource("carriage/carriage_m1/door/m1_door_upper")
-                    ), new Vec3(0, 0, 0), RenderShape.MODEL, false
+                    ), new Vec3(0, 0, 0),new Vec3(0, 0, 0), RenderShape.MODEL, false
                     ))
                     .materialAndColor(MapColor.COLOR_GREEN)
                     .noOcclusion().strengthAndTool(1.5f, 3f)

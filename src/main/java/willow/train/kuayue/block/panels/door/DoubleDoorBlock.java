@@ -3,13 +3,25 @@ package willow.train.kuayue.block.panels.door;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.Couple;
+import kasuga.lib.core.base.UnModeledBlockProperty;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -26,10 +38,12 @@ public class DoubleDoorBlock extends TrainEndfaceBlock implements IBE<DoubleDoor
 
     public final Couple<PartialModel> models;
     public final PartialModel frameModel;
+    public static final UnModeledBlockProperty<Boolean, BooleanProperty> POWERED = new UnModeledBlockProperty<>(BooleanProperty.create("powered"));
 
     public DoubleDoorBlock(Properties pProperties, Vec2 beginPos, Vec2 endPos, TrainPanelProperties.DoorType doorType,
                            String frameModel, String leftModel, String rightModel) {
         super(pProperties, beginPos, endPos, doorType);
+        this.registerDefaultState(getStateDefinition().any().setValue(POWERED, false));
         this.models = Couple.create(
                 leftModel == null ? null : new PartialModel(new ResourceLocation(Kuayue.MODID,"block/" + leftModel)),
                 rightModel == null ? null : new PartialModel(new ResourceLocation(Kuayue.MODID,"block/" + rightModel)));
@@ -37,8 +51,20 @@ public class DoubleDoorBlock extends TrainEndfaceBlock implements IBE<DoubleDoor
     }
 
     @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        super.createBlockStateDefinition(pBuilder.add(POWERED));
+    }
+
+    @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pPos, BlockState pState) {
         return getBlockEntityType().create(pPos, pState);
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        Level level = pContext.getLevel();
+        boolean flag = level.hasNeighborSignal(pContext.getClickedPos());
+        return super.getStateForPlacement(pContext).setValue(OPEN, flag).setValue(POWERED, flag);
     }
 
     @Override
@@ -49,6 +75,27 @@ public class DoubleDoorBlock extends TrainEndfaceBlock implements IBE<DoubleDoor
     @Override
     public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return TrainPanelShapes.getDoubleDoorShape(pState.getValue(FACING).getOpposite(), pState.getValue(OPEN));
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        boolean flag = level.hasNeighborSignal(pos);
+        if (flag != state.getValue(POWERED)) {
+            if (flag != state.getValue(OPEN)) {
+                level.levelEvent((Player) null,
+                        flag ? TrainDoorBlock.getOpenSound(this.material) :
+                                TrainDoorBlock.getCloseSound(this.material),
+                        pos, 0);
+                level.gameEvent((Entity) null,
+                        flag ? GameEvent.BLOCK_OPEN :
+                                GameEvent.BLOCK_CLOSE,
+                        pos);
+            }
+            level.setBlock(pos, state
+                    .setValue(POWERED, Boolean.valueOf(flag))
+                    .setValue(OPEN, Boolean.valueOf(flag)),
+                    2);
+        }
     }
 
     @Override

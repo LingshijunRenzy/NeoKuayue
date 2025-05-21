@@ -9,8 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Player;
 import org.checkerframework.checker.units.qual.C;
 import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
@@ -31,6 +34,8 @@ public class OffsetEditor extends AbstractWidget {
                    throw new RuntimeException(e);
                }
             });
+
+    double cacheX = -1, cacheY = -1;
 
     public static final LazyRecomputable<ImageMask> largeBg =
             new LazyRecomputable<>(() -> editor.get().copyWithOp(imageMask -> imageMask));
@@ -178,8 +183,8 @@ public class OffsetEditor extends AbstractWidget {
     private void posToCursor(double mouseX, double mouseY) {
         double px = mouseX, py = mouseY;
         float a = touchPanelA - 8;
-        px -= 4 + touchPanelX + this.getX();
         py -= 4 + touchPanelY + this.getY();
+        px -= 4 + touchPanelX + this.getX();
         px /= a;
         py /= a;
         px *= Math.abs(this.maxX - this.minX);
@@ -230,6 +235,20 @@ public class OffsetEditor extends AbstractWidget {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        if (Screen.hasShiftDown()) {
+            if (cacheX < 0 || cacheY < 0) {
+                cacheX = pMouseX;
+                cacheY = pMouseY;
+            }
+            if (Math.abs(pDragX) > Math.abs(pDragY))
+                posToCursor(pMouseX + pDragX, cacheY);
+            else
+                posToCursor(cacheX, pMouseY + pDragY);
+            return true;
+        } else {
+            cacheX = -1;
+            cacheY = -1;
+        }
         if (inCursorPanelRange(pMouseX, pMouseY)) {
             posToCursor(pMouseX + pDragX, pMouseY + pDragY);
             return true;
@@ -255,6 +274,13 @@ public class OffsetEditor extends AbstractWidget {
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+    }
+
+    @Override
+    public void onRelease(double pMouseX, double pMouseY) {
+        super.onRelease(pMouseX, pMouseY);
+        cacheX = -1;
+        cacheY = -1;
     }
 
     @Override

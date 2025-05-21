@@ -1,0 +1,8 @@
+{
+  "loader": "kasuga_lib:bedrock_animated",
+  "model": "kuayue:block/signal/track/station/station",
+  "texture": "kuayue:block/signal/track/station/texture",
+  "geometry": "geometry.unknown",
+  "render_type": "translucent",
+  "identifier": "kuayue:block/signal/track/station/station"
+}

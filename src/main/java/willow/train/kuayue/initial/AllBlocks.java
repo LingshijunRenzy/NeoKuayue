@@ -11,14 +11,13 @@ import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.*;
 import willow.train.kuayue.block.panels.block_entity.*;
 import willow.train.kuayue.block.panels.block_entity.renderer.*;
-import willow.train.kuayue.block.panels.cr200j.CR200jFrontBlock;
 import willow.train.kuayue.block.panels.door.DoubleDoorBlock;
-import willow.train.kuayue.block.panels.door.DoubleRotateDoorBlock;
 import willow.train.kuayue.block.seat.SeatBlockEntity;
 import willow.train.kuayue.block.structure.platform.PlatformWallBlock;
 import willow.train.kuayue.initial.panel.*;
 import willow.train.kuayue.initial.recipe.AllRecipeBlock;
 import willow.train.kuayue.initial.registration.PanelRegistration;
+import willow.train.kuayue.systems.device.AllDeviceBlocks;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -129,6 +128,7 @@ public class AllBlocks {
                     .addBlock(CR200JPanel.DOOR_CABIN_MARSHALLED_CR200J.block)
                     .addBlock(C25BPanel.DOOR_25B.block)
                     .addBlock(C25GPanel.DOOR_25G.block)
+                    .addBlock(C25GPanel.DOOR_SLIDING_25G.block)
                     .addBlock(C25KPanel.DOOR_25K.block)
                     .addBlock(C25KPanel.DOOR_SLIDING_25K.block)
                     .addBlock(C25TPanel.DOOR_25T.block)
@@ -139,7 +139,10 @@ public class AllBlocks {
                     .addBlock(I3DPanel.DOOR_CABIN_HXD3D.block)
                     .addBlock(I21Panel.DOOR_CABIN_DF21.block)
                     .addBlock(I21Panel.DOOR_EQUIP_DF21.block)
+                    .addBlock(ISS8Panel.SS8_DOOR.block)
+                    .addBlock(ISS3Panel.SS3_DOOR.block)
                     .addBlock(CM1Panel.DOOR_M1.block)
+                    .addBlock(I11Panel.DF11_DOOR.block)
                     .submit(AllElements.testRegistry);
 
     public static final BlockEntityReg<CustomRenderedEndfaceEntity> CUSTOM_RENDERED_ENDFACE_ENTITY =
@@ -214,11 +217,24 @@ public class AllBlocks {
                     .blockPredicates((location, block) -> block instanceof TrainPanelBlock)
                     .submit(AllElements.testRegistry);
 
+    public static final BlockEntityReg<DF11GChimneyEntity> DF11G_CHIMNEY_ENTITY =
+            new BlockEntityReg<DF11GChimneyEntity>("df11g_chimney_entity")
+                    .blockEntityType(DF11GChimneyEntity::new)
+                    .addBlock(I11GPanel.DF11G_CHIMNEY.block)
+                    .addBlock(I11Panel.DF11_CHIMNEY.block)
+                    .submit(AllElements.testRegistry);
 
 //    public static final MenuReg<EditablePanelEditMenu, EditablePanelEditScreen, EditablePanelEditScreen> EDITABLE_PANEL_EDIT_MENU =
 //            new MenuReg<EditablePanelEditMenu, EditablePanelEditScreen, EditablePanelEditScreen>("editable_panel_edit_menu")
 //                    .withMenuAndScreen(EditablePanelEditMenu::new, (component) -> new EditablePanelEditScreen())
 //                    .submit(AllElements.testRegistry);
+
+    public static final BlockEntityReg<SingleArmPantographBlockEntity> HXD3D_PANTOGRAPH_ENTITY =
+            new BlockEntityReg<SingleArmPantographBlockEntity>("hxd3d_pantograph_entity")
+                    .blockEntityType(SingleArmPantographBlockEntity::new)
+                    .withRenderer(() -> SingleArmPantographRenderer::new)
+                    .addBlock(I3DPanel.HXD3D_PANTOGRAPH)
+                    .submit(AllElements.testRegistry);
 
     public static void invoke() {
         C25GPanel.invoke();
@@ -234,7 +250,11 @@ public class AllBlocks {
         I21Panel.invoke();
         AllDecoBlocks.invoke();
         CR200JPanel.invoke();
+        AllDeviceBlocks.invoke();
+        ISS3Panel.invoke();
+        ISS8Panel.invoke();
         AllRecipeBlock.invoke();
+        I11Panel.invoke();
     }
 
     public static void generateDrops(String name) {

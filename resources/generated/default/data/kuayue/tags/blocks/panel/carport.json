@@ -1,0 +1,47 @@
+{
+  "values": [
+    "kuayue:carport_center_marshalled_cr200j",
+    "kuayue:carport_marshalled_cr200j",
+    "kuayue:carport_25t",
+    "kuayue:carport_center_bsp25t",
+    "kuayue:carport_toilet_25t",
+    "kuayue:carport_ac_25z",
+    "kuayue:carport_center_25z",
+    "kuayue:carport_side_ac_25z",
+    "kuayue:carport_25z",
+    "kuayue:carport_25bgzk",
+    "kuayue:carport_air_condition_25bgzk",
+    "kuayue:carport_air_condition_side_25bgzk",
+    "kuayue:carport_center_25bgzkt",
+
+    "kuayue:exhaust_fan_df21",
+    "kuayue:dynamic_carport_df21",
+    "kuayue:dynamic_transition_carport_df21",
+    "kuayue:dynamic_radiator_df21",
+    "kuayue:general_carport_df21",
+
+    "kuayue:df11g_carport_kua",
+    "kuayue:df11g_carport_yue",
+    "kuayue:df11g_carport",
+    "kuayue:df11g_carport_center",
+    "kuayue:df11g_carport_center_cooling_blind",
+    "kuayue:df11g_carport_center_fan_blind",
+    "kuayue:df11g_carport_eh",
+    "kuayue:df11g_carport_eh_ad",
+    "kuayue:df11g_carport_eh_blind",
+    "kuayue:df11g_carport_filter_blind",
+
+    "kuayue:hxd3d_carport",
+    "kuayue:hxd3d_carport_center",
+    "kuayue:ss8_carport",
+    "kuayue:ss8_carport_center",
+    "kuayue:ss8_carport_ad",
+    "kuayue:ss8_carport_fan",
+    "kuayue:ss8_carport_link",
+    "kuayue:ss8_roof",
+
+    "kuayue:ss3_roof",
+    "kuayue:ss3_carport",
+    "kuayue:ss3_carport_ad"
+  ]
+}

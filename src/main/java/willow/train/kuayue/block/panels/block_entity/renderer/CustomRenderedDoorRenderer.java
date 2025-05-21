@@ -29,7 +29,7 @@ public class CustomRenderedDoorRenderer implements BlockEntityRenderer<CustomRen
             int light,
             int overlay) {
 
-        light *= 0.8;
+        light *= 1;
         BlockState state = entity.getBlockState();
 
         Couple<PartialModel> models = entity.getModels(state);
@@ -48,6 +48,7 @@ public class CustomRenderedDoorRenderer implements BlockEntityRenderer<CustomRen
         pose.mulPose(Axis.YP.rotationDegrees(f));
         pose.translate(leftSide ? .5 : -.5, 0, -.5);
         Vec3 offset = entity.getOffset();
+        Vec3 openoffset = entity.getOpenOffset();
         if (!offset.equals(Vec3.ZERO))
             pose.translate((leftSide ? offset.x() : - offset.x()), offset.y(), offset.z());
         upper.translate(0, 1, 0);
@@ -77,6 +78,13 @@ public class CustomRenderedDoorRenderer implements BlockEntityRenderer<CustomRen
         } else {
             lower.rotateY(counter * (leftSide ? 90 : -90));
             upper.rotateY(counter * (leftSide ? 90 : -90));
+
+            // 新增：仅旋转门添加开门偏移
+            double openX = openoffset.x() * counter * (leftSide ? 1 : -1);
+            double openY = openoffset.y() * counter;
+            double openZ = openoffset.z() * counter;
+            lower.translate(openX, openY, openZ);
+            upper.translate(openX, openY, openZ);
         }
         lower.renderInto(pose, consumer);
         upper.renderInto(pose, consumer);

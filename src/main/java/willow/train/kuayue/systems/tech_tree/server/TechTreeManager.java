@@ -2,35 +2,25 @@ package willow.train.kuayue.systems.tech_tree.server;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import io.netty.buffer.ByteBuf;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.*;
 import org.jetbrains.annotations.NotNull;
 import willow.train.kuayue.Kuayue;
-import willow.train.kuayue.initial.AllPackets;
-import willow.train.kuayue.network.s2c.DistributeTechTreePayloadPacket;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.json.TechTreeData;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class TechTreeManager implements ResourceManagerReloadListener {
     private final HashMap<String, TechTree> trees;
     @Getter
     private final Set<String> namespaces;
     public static final TechTreeManager MANAGER = new TechTreeManager();
-    public static final HashSet<DistributeTechTreePayloadPacket> networkPayloads = new HashSet<>();
 
     protected TechTreeManager() {
         trees = new HashMap<>();
@@ -79,26 +69,37 @@ public class TechTreeManager implements ResourceManagerReloadListener {
     public void loadData(@NotNull ResourceManager manager) {
         namespaces.clear();
         namespaces.addAll(manager.getNamespaces());
+        Map<ResourceLocation, Resource> resources =
+                manager.listResources("tech_tree", (rl) -> rl.getPath().endsWith(".json"));
         for (String namespace : namespaces) {
-            Optional<Resource> resource = manager.getResource(
-                    new ResourceLocation(namespace, "tech_tree/tech_tree.json")
-            );
-            if (resource.isEmpty()) continue;
-            try {
-                JsonElement element = JsonParser.parseReader(resource.get().openAsReader());
-                if (!element.isJsonObject()) continue;
-                JsonObject object = element.getAsJsonObject();
-                TechTreeData data = new TechTreeData(namespace, object);
-                TechTree tree = new TechTree(data);
-                tree.grepNbt(manager);
-                this.trees.put(namespace, tree);
-            } catch (IOException e) {
-                Kuayue.LOGGER.error("Failed to read tech tree json: " + namespace, e);
-            } catch (NullPointerException e) {
-                Kuayue.LOGGER.error("Failed to parse tech tree json: " + namespace, e);
-            } catch (Exception e) {
-                Kuayue.LOGGER.error("Why? Failed to read tech tree json: " + namespace, e);
-            }
+            JsonObject treeObject = new JsonObject();
+            treeObject.addProperty("version", Kuayue.TECH_TREE_VERSION);
+            JsonObject groupsObject = new JsonObject();
+            treeObject.add("groups", groupsObject);
+            resources.forEach((rl, techTreeResource) -> {
+                try {
+                    JsonElement element = JsonParser.parseReader(techTreeResource.openAsReader());
+                    if (!element.isJsonObject()) return;
+                    JsonObject groupObject = element.getAsJsonObject();
+                    String version = groupObject.get("version").getAsString();
+                    if (version == null || !version.equals(Kuayue.TECH_TREE_VERSION)) {
+                        Kuayue.LOGGER.error("Incompatible tech tree group: {}, need version {}, found version {}",
+                                rl, Kuayue.TECH_TREE_VERSION, version == null ? "null" : version);
+                        return;
+                    }
+                    ResourceLocation id = new ResourceLocation(groupObject.get("id").getAsString());
+                    if (!id.getNamespace().equals(namespace)) return;
+                    groupsObject.add(id.getPath(), element);
+                } catch (JsonParseException e) {
+                    Kuayue.LOGGER.error("Failed to parse tech tree json: {}", rl, e);
+                } catch (Exception e) {
+                    Kuayue.LOGGER.error("Failed to read tech tree json: {}", rl, e);
+                }
+            });
+            TechTreeData data = new TechTreeData(namespace, treeObject);
+            TechTree tree = new TechTree(data);
+            tree.grepNbt(manager);
+            this.trees.put(namespace, tree);
         }
         connectNodes();
     }
@@ -108,16 +109,4 @@ public class TechTreeManager implements ResourceManagerReloadListener {
             tree.compileConnections();
         });
     }
-
-    public static void addPayload(DistributeTechTreePayloadPacket payload) {
-        networkPayloads.add(payload);
-    }
-
-    public static void sendAllPayloads(ServerPlayer player) {
-        networkPayloads.forEach(payload -> {
-            AllPackets.TECH_TREE_CHANNEL.sendToClient(payload, player);
-        });
-        networkPayloads.clear();
-    }
-
 }

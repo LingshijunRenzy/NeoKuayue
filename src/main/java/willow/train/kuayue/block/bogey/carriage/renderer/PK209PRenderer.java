@@ -28,6 +28,7 @@ public class PK209PRenderer extends BogeyRenderer {
     public static final PartialModel PK209P_WHEEL2 = new PartialModel(asBlockModelResource("bogey/pk209p/pk209p_wheel2"));
     public static final PartialModel PK209P_MOTORWHEEL = new PartialModel(asBlockModelResource("bogey/pk209p/pk209_motorwheel"));
     public static final PartialModel PK209P_NO_MOTOR = new PartialModel(asBlockModelResource("bogey/pk209p/pk209_nomotor"));
+
     @Override
     public void initialiseContraptionModelData(
             MaterialManager materialManager, CarriageBogey carriageBogey) {
@@ -42,7 +43,7 @@ public class PK209PRenderer extends BogeyRenderer {
 
     @Override
     public void render(CompoundTag bogeyData, float wheelAngle, PoseStack ms,
-            int light, VertexConsumer vb, boolean inContraption) {
+                       int light, VertexConsumer vb, boolean inContraption) {
 
         Direction direction =
                 bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
@@ -221,6 +222,36 @@ public class PK209PRenderer extends BogeyRenderer {
                 wheel.translate(0, 0.8, ((double) side) * 1.2d).rotateX(wheelAngle);
                 wheel.render(ms, light, vb);
                 if (!inInstancedContraption) ms.popPose();
+            }
+        }
+    }
+
+    public static class Andesite extends PK209PRenderer {
+        @Override
+        public void render(CompoundTag bogeyData, float wheelAngle, PoseStack ms, int light, VertexConsumer vb, boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+
+        public static class Backward extends PK209PRenderer.Backward {
+            @Override
+            public void render(CompoundTag bogeyData, float wheelAngle, PoseStack ms, int light, VertexConsumer vb, boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
+            }
+        }
+
+        public static class NoMotor extends PK209PRenderer.NoMotor {
+            @Override
+            public void render(CompoundTag bogeyData, float wheelAngle, PoseStack ms, int light, VertexConsumer vb, boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
             }
         }
     }

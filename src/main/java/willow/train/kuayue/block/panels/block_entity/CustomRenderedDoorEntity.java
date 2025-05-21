@@ -25,6 +25,7 @@ import java.util.List;
 public class CustomRenderedDoorEntity extends SmartBlockEntity implements IContraptionMovementBlockEntity {
     boolean isSlideDoor = false, open = false;
     Vec3 offset;
+    Vec3 openoffset;
     public float animation_controller;
 
     public CustomRenderedDoorEntity(BlockPos pPos, BlockState pBlockState) {
@@ -32,6 +33,7 @@ public class CustomRenderedDoorEntity extends SmartBlockEntity implements IContr
         if(pBlockState.getBlock() instanceof CustomRenderedDoorBlock block) {
             this.isSlideDoor = block.isSlideDoor();
             this.offset = block.getOffset();
+            this.openoffset = block.getOpenOffset();
         }
     }
 
@@ -73,7 +75,9 @@ public class CustomRenderedDoorEntity extends SmartBlockEntity implements IContr
     public Vec3 getOffset() {
         return offset;
     }
-
+    public Vec3 getOpenOffset() {
+        return openoffset;
+    }
     public void setOpen(boolean open) {
         this.open = open;
     }

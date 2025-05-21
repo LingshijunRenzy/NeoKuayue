@@ -5,6 +5,8 @@ import kasuga.lib.core.client.render.SimpleColor;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.Vec2f;
 import kasuga.lib.core.util.LazyRecomputable;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -22,6 +24,11 @@ public class ImageButton extends Button {
     private int showTooltip = 0;
     private OnClick<ImageButton> clk;
     private boolean isMouseDown;
+
+    @Getter
+    @Setter
+    private boolean renderMask;
+
     public static final ImageButton.ImageAction baseAction = (img, btn) -> img.rectangle(new Vector3f(btn.getX(), btn.getY(), 0),
             ImageMask.Axis.X, ImageMask.Axis.Y, true, true, btn.getWidth(), btn.getHeight());
 
@@ -38,6 +45,7 @@ public class ImageButton extends Button {
         controlImage(baseAction);
         controlBg(baseAction);
         this.clk = (a, b, c) -> {};
+        renderMask = true;
     }
 
     public ImageButton(LazyRecomputable<ImageMask> mask, int x, int y, int width, int height, Component tooltip, OnPress press) {
@@ -50,6 +58,7 @@ public class ImageButton extends Button {
         this.setY(y);
         this.tooltip = new TooltipLabel(new Vec2f(this.getX(), this.getY() + this.height + 2), tooltip);
         controlImage(baseAction);
+        renderMask = true;
     }
 
     public void setX(int x) {
@@ -104,10 +113,10 @@ public class ImageButton extends Button {
     }
     public void setBgColor(SimpleColor color) {this.mask.get().setColor(color);}
     public void controlImage(ImageAction action) {
-        action.act(this.mask.get(), this);
+        if (mask != null && mask.get() != null) action.act(this.mask.get(), this);
     }
     public void controlBg(ImageAction action) {
-        action.act(this.bg.get(), this);
+        if (bg != null && bg.get() != null) action.act(this.bg.get(), this);
     }
 
     public void setTooltipLabelWidth(int width) {
@@ -134,7 +143,8 @@ public class ImageButton extends Button {
             if (showTooltip > 40) tooltip.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
             else showTooltip ++;
         } else if (showTooltip > 0) showTooltip --;
-        this.mask.get().renderToGui();
+        if (renderMask && mask != null)
+            this.mask.get().renderToGui();
     }
 
     public void renderOnlyOnClicked(GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {

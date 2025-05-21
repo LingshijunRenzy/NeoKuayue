@@ -5,6 +5,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.panels.SkirtBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
@@ -34,7 +36,7 @@ public class C25TPanel {
                             ), Couple.create(
                                     new ResourceLocation(Kuayue.MODID, "door/original_25t_door_bottom"),
                                     new ResourceLocation(Kuayue.MODID, "door/original_25t_door_top")
-                    ), RenderShape.ENTITYBLOCK_ANIMATED, false))
+                    ), new Vec3(0, 0, 0), new Vec3(0, 0, -.124), RenderShape.ENTITYBLOCK_ANIMATED, false))
                     .materialAndColor(MapColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueCarriageTab )
                     .noOcclusion().strengthAndTool(1.5f, 3f)

@@ -1,7 +1,6 @@
 package willow.train.kuayue.initial;
 
 import kasuga.lib.registrations.common.EntityReg;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import willow.train.kuayue.block.seat.M1SeatEntity;

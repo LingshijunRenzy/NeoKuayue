@@ -9,10 +9,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
+import willow.train.kuayue.initial.AllPackets;
+import willow.train.kuayue.network.s2c.tech_tree.UpdateUnlockedS2CPacket;
+import willow.train.kuayue.systems.tech_tree.server.TechTreeGroup;
+import willow.train.kuayue.systems.tech_tree.server.TechTreeManager;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -47,7 +52,8 @@ public class PlayerDataManager extends SavedData implements NbtSerializable {
 
     public PlayerData getOrCreatePlayerData(UUID id) {
         PlayerData result = playerData.getOrDefault(id, null);
-        if (result == null) result = new PlayerData(id);
+        if (result == null) result = createPlayerData(id);
+        result.checkAllDefaults();
         return result;
     }
 
@@ -98,6 +104,13 @@ public class PlayerDataManager extends SavedData implements NbtSerializable {
             playerData.read(data);
             this.playerData.put(id, playerData);
         }
+    }
+
+    public void updateDataToClient(ServerPlayer player) {
+        AllPackets.TECH_TREE_CHANNEL.sendToClient(
+                new UpdateUnlockedS2CPacket(player),
+                player
+        );
     }
 
 }

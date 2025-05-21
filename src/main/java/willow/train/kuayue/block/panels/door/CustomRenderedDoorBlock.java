@@ -33,8 +33,8 @@ public class CustomRenderedDoorBlock extends TrainDoorBlock implements IBE<Custo
     final Couple<PartialModel> leftDoorModels;
     final Couple<PartialModel> rightDoorModels;
     final Vec3 offset;
+    final Vec3 openoffset;
     final RenderShape renderShape;
-
     public CustomRenderedDoorBlock(BlockBehaviour.Properties pProperties,
                                    Couple<ResourceLocation> leftDoorModels,
                                    Couple<ResourceLocation> rightDoorModels,
@@ -44,6 +44,7 @@ public class CustomRenderedDoorBlock extends TrainDoorBlock implements IBE<Custo
         this.rightDoorModels = Couple.create(block(rightDoorModels.get(true).getPath()), block(rightDoorModels.get(false).getPath()));
         this.renderShape = renderShape;
         this.offset = Vec3.ZERO;
+        this.openoffset = Vec3.ZERO;
         this.isSlideDoor = isSlideDoor;
     }
 
@@ -55,6 +56,7 @@ public class CustomRenderedDoorBlock extends TrainDoorBlock implements IBE<Custo
         this.rightDoorModels = modelFrom.rightDoorModels;
         this.renderShape = renderShape;
         this.offset = modelFrom.offset;
+        this.openoffset = modelFrom.offset;
         this.isSlideDoor = isSlideDoor;
     }
 
@@ -62,12 +64,14 @@ public class CustomRenderedDoorBlock extends TrainDoorBlock implements IBE<Custo
                                    Couple<ResourceLocation> leftDoorModels,
                                    Couple<ResourceLocation> rightDoorModels,
                                    Vec3 offset,
+                                   Vec3 openoffset,
                                    RenderShape renderShape, boolean isSlideDoor) {
         super(properties);
         this.leftDoorModels = Couple.create(block(leftDoorModels.get(true).getPath()), block(leftDoorModels.get(false).getPath()));
         this.rightDoorModels = Couple.create(block(rightDoorModels.get(true).getPath()), block(rightDoorModels.get(false).getPath()));
         this.renderShape = renderShape;
         this.offset = offset;
+        this.openoffset = openoffset;
         this.isSlideDoor = isSlideDoor;
     }
 
@@ -93,6 +97,10 @@ public class CustomRenderedDoorBlock extends TrainDoorBlock implements IBE<Custo
 
     public Vec3 getOffset() {
         return offset;
+    }
+
+    public Vec3 getOpenOffset() {
+        return openoffset;
     }
 
     private static PartialModel block(String path) {

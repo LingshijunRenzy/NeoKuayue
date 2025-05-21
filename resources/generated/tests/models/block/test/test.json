@@ -1,0 +1,8 @@
+{
+  "render_type":  "translucent",
+  "loader":  "kasuga_lib:bedrock_animated",
+  "geometry":  "geometry.unknown",
+  "identifier":  "kuayue:block/test/test",
+  "model":  "kuayue:block/test/test",
+  "texture":  "kuayue:block/test/test"
+}

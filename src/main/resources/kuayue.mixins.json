@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "priority": 1300,
+  "package": "willow.train.kuayue.mixins.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "kuayue.refmap.json",
+  "mixins": [
+    "AccessorExternalRemainderBlockItem",
+    "AccessorPlayerAdvancement",
+    "MixinAbstractContraptionEntity",
+    "MixinSimpleBlockMovingInteraction",
+    "MixinStationBlockEntity",
+    "MixinTrackTargetingBlockItem",
+    "SnrCompatibilityMixinStationBlockEntity",
+    "client.MixinBlockReg"
+  ],
+  "client": [
+    "client.AccessorCreativeTabScreen",
+    "LevelRendererAccessor",
+    "client.AccessorEditBox",
+    "client.MixinCarriageContraptionEntityRenderer",
+    "client.MixinLivingEntityRenderer",
+    "client.TextureManagerAccessor"
+  ],
+  "minVersion": "0.8"
+}

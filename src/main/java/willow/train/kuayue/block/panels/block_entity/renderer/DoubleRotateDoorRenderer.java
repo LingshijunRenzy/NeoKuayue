@@ -27,7 +27,7 @@ public class DoubleRotateDoorRenderer implements BlockEntityRenderer<DoubleRotat
     public void render(DoubleRotateDoorEntity pBlockEntity, float pPartialTick,
                        PoseStack pose, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
 
-        pPackedLight *= 0.9;
+        pPackedLight *= 1;
         BlockState blockState = pBlockEntity.getBlockState();
         // 获取门是否开闭的布尔值
         boolean isOpened = pBlockEntity.isOpen();

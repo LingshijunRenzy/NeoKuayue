@@ -52,4 +52,19 @@ public class ZK6Renderer extends BogeyRenderer {
         this.createModelInstance(materialManager, ZK6_FRAME);
         this.createModelInstance(materialManager, ZK6_WHEEL, 2);
     }
+    public static class Andesite extends ZK6Renderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+    }
 }

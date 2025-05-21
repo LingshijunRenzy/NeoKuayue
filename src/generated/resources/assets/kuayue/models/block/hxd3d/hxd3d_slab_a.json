@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "kuayue:block/hxd3d/hxd3d_slab"
-  }
-}

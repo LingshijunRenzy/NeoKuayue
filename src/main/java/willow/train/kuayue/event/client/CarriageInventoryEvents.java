@@ -32,16 +32,24 @@ import java.util.Set;
 public class CarriageInventoryEvents {
 
     private static final int CARRIAGE_TYPE_COUNTS = 10;
+    private static final int LOCO_TYPE_COUNTS = 7;
     private static int carriageType = 0;
+    private static int locoType = 0;
     ItemIconButton[] imgBtn = new ItemIconButton[CARRIAGE_TYPE_COUNTS];
+    ItemIconButton[] locoImgBtn = new ItemIconButton[LOCO_TYPE_COUNTS];
     ImageButton[] upAndDownBtn = new ImageButton[2];
+    ImageButton[] locoUpAndDownBtn = new ImageButton[2];
     ArrayList<List<ItemStack>> itemList = new ArrayList<>();
+    ArrayList<List<ItemStack>> locoItemList = new ArrayList<>();
     List<ItemStack> schematicItemList = new ArrayList<>();
     int btn_location = 0;
+    int loco_btn_location = 0;
     int showBtnNumber = 5;
     int guiLeft = 0, guiTop = 0;
     boolean onChanged = true;
+    boolean onLocoChanged = true;
     int bx = 0;
+    int loco_bx = 0;
 
     // String playerName = "";
 
@@ -67,7 +75,9 @@ public class CarriageInventoryEvents {
     public void onPlayerLogout(ClientPlayerNetworkEvent.LoggingOut event) {
         // 玩家登出时将列车类型置为0
         carriageType = 0;
+        locoType = 0;
         this.bx = 0;
+        this.loco_bx = 0;
     }
 
     @SubscribeEvent
@@ -109,6 +119,15 @@ public class CarriageInventoryEvents {
         icons[8] = new ItemStack(CM1Panel.BOTTOM_SLAB_M1.block.getBlock());
         icons[9] = new ItemStack(CFreightPanel.FREIGHT_C70_END_FACE.block.getBlock());
 
+        ItemStack[] locoIcons = new ItemStack[LOCO_TYPE_COUNTS];
+        locoIcons[0] = new ItemStack(AllBlocks.CR_LOGO.getBlock());
+        locoIcons[1] = new ItemStack(I11GPanel.HEAD_DF11G_2.getBlock());
+        locoIcons[2] = new ItemStack(I3DPanel.HEAD_HXD3D.getBlock());
+        locoIcons[3] = new ItemStack(I21Panel.HEAD_DF21.getBlock());
+        locoIcons[4] = new ItemStack(ISS8Panel.SS8_HEAD.getBlock());
+        locoIcons[5] = new ItemStack(ISS3Panel.SS3_HEAD.getBlock());
+        locoIcons[6] = new ItemStack(I11Panel.DF11_HEAD.getBlock());
+
         // 定义左侧向上箭头按钮
         upAndDownBtn[0] = new ImageButton(upRegex, this.guiLeft - 22, this.guiTop - 8, 20, 20, Component.empty(),
                 b -> {
@@ -128,6 +147,27 @@ public class CarriageInventoryEvents {
                         btn_location = Math.min(btn_location, imgBtn.length - showBtnNumber);
                         refreshBtn(tab);
                         onDown();
+                    }
+                });
+
+        locoUpAndDownBtn[0] = new ImageButton(upRegex, this.guiLeft - 22, this.guiTop - 8, 20, 20, Component.empty(),
+                b -> {
+                    // 按下按钮后触发事件
+                    if(loco_btn_location > 0){
+                        loco_btn_location --;
+                        loco_btn_location = Math.max(loco_btn_location, 0);
+                        refreshLocoBtn(tab);
+                        onLocoUp();
+                    }
+                });
+
+        locoUpAndDownBtn[1] = new ImageButton(downRegex, this.guiLeft - 22, this.guiTop - 8 + (showBtnNumber + 1) * 22, 20, 20, Component.empty(),
+                b -> {
+                    if(loco_btn_location < locoImgBtn.length - showBtnNumber){
+                        loco_btn_location++;
+                        loco_btn_location = Math.min(loco_btn_location, locoImgBtn.length - showBtnNumber);
+                        refreshLocoBtn(tab);
+                        onLocoDown();
                     }
                 });
 
@@ -158,6 +198,23 @@ public class CarriageInventoryEvents {
         components[9] =
                 Component.translatable("container." + Kuayue.MODID + ".inventory.button.freight");
 
+        Component[] locoComponents = new Component[LOCO_TYPE_COUNTS];
+        locoComponents[0] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.all");
+        locoComponents[1] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.df11g");
+        locoComponents[2] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.hxd3d");
+        locoComponents[3] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.df21");
+        locoComponents[4] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.ss8");
+        locoComponents[5] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.ss3");
+        locoComponents[6] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.df11");
+
+
         // 定义所有列车车厢板类型按钮
         for (int i = 0; i < imgBtn.length; i++) {
             imgBtn[i] =
@@ -183,21 +240,54 @@ public class CarriageInventoryEvents {
                             i == 0 ? 0 : 2);
         }
 
+        for (int i = 0; i < locoImgBtn.length; i++) {
+            locoImgBtn[i] =
+                    new ItemIconButton(
+                            this.guiLeft - 22,
+                            this.guiTop  + 14 + (i - loco_btn_location) * 22,
+                            locoComponents[i],
+                            locoIcons[i],
+                            b -> {
+                                for (int loco_bx = 0; loco_bx < locoImgBtn.length; loco_bx++) {
+                                    if (b.equals(locoImgBtn[loco_bx])) {
+                                        locoType = loco_bx;
+                                        ((ItemIconButton) b).toggle();
+                                        this.loco_bx = loco_bx;
+                                        onLocoChanged = true;
+                                        menu.scrollTo(0.0f);
+                                    } else {
+                                        (locoImgBtn[loco_bx]).reset();
+                                    }
+                                }
+                            },
+                            i == 0 ? -2 : 1,
+                            i == 0 ? 0 : 2);
+        }
+
         for (ItemIconButton b : imgBtn) {
             // 给列车车厢板类型按钮添加监听器
             event.addListener(b);
         }
+        for (ItemIconButton b : locoImgBtn) {
+            event.addListener(b);
+        }
         // 刷新列车车厢板类型按钮显示状态
         refreshBtn(tab);
+        refreshLocoBtn(tab);
         for(ImageButton b : upAndDownBtn) {
             // 给两个箭头按钮添加监听器
             event.addListener(b);
             // 当前标签为跨越列车物品栏时显示上下箭头按钮，反之隐藏。
             b.visible = tab.equals(AllElements.neoKuayueCarriageTab.getTab());
         }
+        for (ImageButton b : locoUpAndDownBtn) {
+            event.addListener(b);
+            b.visible = tab.equals(AllElements.neoKuayueLocoTab.getTab());
+        }
 
         // 默认显示所有的车厢板类型
         imgBtn[0].toggle();
+        locoImgBtn[0].toggle();
         // imgBtn[bx].toggle();
 
         // 更新列车车厢板类型按钮状态与物品栏中物品
@@ -218,6 +308,17 @@ public class CarriageInventoryEvents {
         }
     }
 
+    private void refreshLocoBtn(CreativeModeTab tab) {
+        int right_edge = loco_btn_location + showBtnNumber - 1;
+        for(int i = 0; i < locoImgBtn.length; i++) {
+            if(i < loco_btn_location || i > right_edge) {
+                locoImgBtn[i].visible = false;
+            } else {
+                locoImgBtn[i].visible = tab.equals(AllElements.neoKuayueLocoTab.getTab());
+            }
+        }
+    }
+
     // 点击向上箭头按钮触发
     private void onUp() {
         // 列车车厢板类型按钮整体向上滚动
@@ -230,6 +331,18 @@ public class CarriageInventoryEvents {
     private void onDown() {
         // 列车车厢板类型按钮整体向下滚动
         for(ItemIconButton b : imgBtn) {
+            b.setY(b.getY() - 22);
+        }
+    }
+
+    private void onLocoUp() {
+        for(ItemIconButton b : locoImgBtn) {
+            b.setY(b.getY() + 22);
+        }
+    }
+
+    private void onLocoDown() {
+        for(ItemIconButton b : locoImgBtn) {
             b.setY(b.getY() - 22);
         }
     }
@@ -250,8 +363,12 @@ public class CarriageInventoryEvents {
             for(ImageButton b : upAndDownBtn) {
                 b.visible = tab.equals(AllElements.neoKuayueCarriageTab.getTab());
             }
+            for(ImageButton b : locoUpAndDownBtn) {
+                b.visible = tab.equals(AllElements.neoKuayueLocoTab.getTab());
+            }
             // 刷新列车车厢板类型按钮显示状态
             refreshBtn(tab);
+            refreshLocoBtn(tab);
             // 若当前物品栏标签为跨越主标签
             if (tab.equals(AllElements.neoKuayueMainTab.getTab())) {
                 // 向当前标签的菜单中添加物品列表schematicItemList
@@ -275,10 +392,14 @@ public class CarriageInventoryEvents {
         // 是否为创造模式物品栏的screen
         if (screen instanceof CreativeModeInventoryScreen) {
             // 是否为跨越列车物品栏
+            boolean locoVis = tab.equals(AllElements.neoKuayueLocoTab.getTab());
             boolean vis = tab.equals(AllElements.neoKuayueCarriageTab.getTab());
             // 根据vis的值显示或隐藏列车车厢板类型按钮
             for (ItemIconButton b : imgBtn) {
                 b.visible = vis;
+            }
+            for (ItemIconButton b : locoImgBtn) {
+                b.visible = locoVis;
             }
             // 如果vis为True，更新物品栏中物品，并重置滚动条。
             if (vis) {
@@ -289,8 +410,16 @@ public class CarriageInventoryEvents {
                     menu.scrollTo(0.0f);
                     onChanged = false;
                 }
+            } else if (locoVis) {
+                if (onLocoChanged) {
+                    menu.scrollTo(0.0f);
+                    updateLocoMenuItem(menu);
+                    menu.scrollTo(0.0f);
+                    onLocoChanged = false;
+                }
             } else {
                 onChanged = true;
+                onLocoChanged = true;
             }
         }
     }
@@ -360,6 +489,46 @@ public class CarriageInventoryEvents {
         }
     }
 
+    public void updateLocoMenuItem(CreativeModeInventoryScreen.ItemPickerMenu menu) {
+        switch (locoType) {
+            case 1: // DF11G
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(0));
+                break;
+            case 2: // HXD3D
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(1));
+                break;
+            case 3: // DF21
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(2));
+                break;
+            case 4: // SS8
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(3));
+                break;
+
+            case 5: // SS3
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(4));
+                break;
+
+            case 6: // DF11
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(5));
+                break;
+            default: // locoType为0时添加所有类型
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(0)); // DF11G
+                menu.items.addAll(locoItemList.get(1)); // HXD3D
+                menu.items.addAll(locoItemList.get(2)); // DF21
+                menu.items.addAll(locoItemList.get(3)); // SS8
+                menu.items.addAll(locoItemList.get(4)); // SS3
+                menu.items.addAll(locoItemList.get(5)); // DF11
+
+        }
+    }
+
     public void initMapping() {
         itemList =
                 new ArrayList<>() {
@@ -375,6 +544,19 @@ public class CarriageInventoryEvents {
                         add(getListByTag(AllTags.C25BGKZT.tag())); // BGKZT 8
                         add(getListByTag(AllTags.CM1.tag()));   // M1 9
                         add(getListByTag(AllTags.C_FREIGHT.tag())); // Freight 10
+                    }
+                };
+
+        locoItemList =
+                new ArrayList<>() {
+                    {
+                        add(getListByTag(AllTags.I11G.tag())); // DF11G 0
+                        add(getListByTag(AllTags.I3D.tag())); // HXD3D 1
+                        add(getListByTag(AllTags.I21.tag())); // DF21 2
+                        add(getListByTag(AllTags.ISS8.tag())); // SS8 3
+                        add(getListByTag(AllTags.ISS3.tag())); // SS3 4
+                        add(getListByTag(AllTags.I11.tag())); // I11 5
+
                     }
                 };
     }

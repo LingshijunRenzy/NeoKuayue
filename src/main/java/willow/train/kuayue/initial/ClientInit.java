@@ -7,6 +7,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.systems.device.driver.devices.components.LKJ2000CurveRenderNode;
+import willow.train.kuayue.systems.device.driver.seat.InteractiveScreenTarget;
+import willow.train.kuayue.systems.device.driver.seat.WorldTrainSoundManager;
 import willow.train.kuayue.systems.editable_panel.AllColorTemplates;
 import willow.train.kuayue.systems.editable_panel.overlay.GetShareOverlay;
 
@@ -26,6 +29,11 @@ public class ClientInit {
                     , 0, 16, 16, 16);
 
      */
+    public static final StaticImageHolder laqueredBoardLogo =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/laquered_board/laquered_board_logo.png"));
+
+    public static final StaticImageHolder laqueredBoardWhiteBg =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/laquered_board/1px_1px_white_bg.png"));
 
     public static final StaticImageHolder arrow =
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/overlay/arrows.png"));
@@ -57,6 +65,22 @@ public class ClientInit {
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/editable/offset_editor_bg.png"));
     public static final StaticImageHolder noSignTexture =
             new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/editable/carriage_no_sign_texture.png"));
+
+    public static final StaticImageHolder blueprintTableBg =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_table.png"));
+
+    public static final StaticImageHolder blueprintTableNoSub =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_table_no_sub.png"));
+
+    public static final StaticImageHolder blueprintTableCompleted =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_table_completed.png"));
+
+    public static final StaticImageHolder blueprintButtons =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/blueprint_buttons.png"));
+
+    public static final StaticImageHolder groupUnlockBoard =
+            new StaticImageHolder(AllElements.testRegistry.asResource("textures/gui/blueprint_table/group_unlock_board.png"));
+
     public static final ModelReg testModel =
             new ModelReg("test_model", AllElements.testRegistry.asResource("block/test_block"))
                     .submit(AllElements.testRegistry);
@@ -75,6 +99,9 @@ public class ClientInit {
 
     public static void invoke() {
         AllKeys.invoke();
+        LKJ2000CurveRenderNode.init();
+        InteractiveScreenTarget.init();
+        WorldTrainSoundManager.init();
     }
 
     private static PartialModel block(String key) {

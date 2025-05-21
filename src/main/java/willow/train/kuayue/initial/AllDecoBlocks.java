@@ -2,13 +2,14 @@ package willow.train.kuayue.initial;
 
 import kasuga.lib.registrations.common.BlockReg;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import willow.train.kuayue.block.panels.TrainPanelBlock;
+import willow.train.kuayue.block.panels.SkirtBlock;
+import willow.train.kuayue.block.panels.deco.ACOutdoorUnitBlock;
+import willow.train.kuayue.block.panels.deco.FlourescentLightBlock;
 import willow.train.kuayue.block.panels.deco.TeaBoilerBlock;
 import willow.train.kuayue.block.panels.deco.YZTableBlock;
 import willow.train.kuayue.block.panels.slab.CeilinShelfBlock;
@@ -16,6 +17,8 @@ import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
 import willow.train.kuayue.block.seat.M1SeatBlock;
 import willow.train.kuayue.block.seat.RZSeatBlock;
 import willow.train.kuayue.block.seat.YZSeatBlock;
+import willow.train.kuayue.initial.registration.SkirtRegistration;
+import willow.train.kuayue.initial.registration.SlabRegistration;
 
 public class AllDecoBlocks {
 
@@ -251,8 +254,42 @@ public class AllDecoBlocks {
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .addProperty(properties -> properties.strength(1.0f, 2.0f))
+                    .addProperty(properties -> properties.lightLevel(
+                            state -> state.getValue(FlourescentLightBlock.OPEN) ? 15 : 0))
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueMainTab)
+                    .submit(AllElements.testRegistry);
+    
+    public static final SkirtRegistration<SkirtBlock> AUXILIARY_RESERVOIR =
+            new SkirtRegistration<SkirtBlock>("auxiliary_reservoir")
+                    .block(SkirtBlock::new)
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab )
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SkirtRegistration<SkirtBlock> AUXILIARY_RESERVOIR_LONGITUDINAL =
+            new SkirtRegistration<SkirtBlock>("auxiliary_reservoir_longitudinal")
+                    .block(SkirtBlock::new)
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab )
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SkirtRegistration<SkirtBlock> CARRIAGE_BATTERY =
+            new SkirtRegistration<SkirtBlock>("carriage_battery")
+                    .block(SkirtBlock::new)
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab )
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> CARRIAGE_BRAKE_CYLINDER =
+            new SlabRegistration<TrainSlabBlock>("carriage_brake_cylinder")
+                    .block(p -> new TrainSlabBlock(p, false))
+                    .materialAndColor(MapColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueCarriageTab )
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
     public static void invoke(){}
 }

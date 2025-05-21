@@ -23,6 +23,7 @@ public class DF11GRenderer extends BogeyRenderer {
     public static final PartialModel
             DF11G_FRAME = new PartialModel(asBlockModelResource("bogey/df11g/df11g_bogey_temple")),
             DF11G_WHEEL = new PartialModel(asBlockModelResource("bogey/df11g/df11g_wheel"));
+
     @Override
     public void initialiseContraptionModelData(
             MaterialManager materialManager, CarriageBogey carriageBogey) {
@@ -44,12 +45,7 @@ public class DF11GRenderer extends BogeyRenderer {
             VertexConsumer vb,
             boolean inContraption) {
 
-            /*if (yaw != null){
-                double tickYaw = yaw.getValue();
-                //System.out.println("tickYaw:"+tickYaw);
-            }*/
-
-        boolean forwards = BogeyDataConstants.isForwards(bogeyData, inContraption);
+        light *= 1.1;
 
         Direction direction =
                 bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
@@ -58,8 +54,6 @@ public class DF11GRenderer extends BogeyRenderer {
                         BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY,
                         Direction.class)
                         : Direction.NORTH;
-
-        //LOGGER.info(bogeyData + "DF11G direction:" + direction + ";DF11G forwards:" + forwards);
 
         boolean inInstancedContraption = vb == null;
 
@@ -91,7 +85,7 @@ public class DF11GRenderer extends BogeyRenderer {
                 }
             }
         } else {
-            frame.translate(0, 0.375, 0).render(ms, light, vb);
+            frame.rotateY(180).translate(0, 0.375, 0).render(ms, light, vb);
 
             for (int side = -1; side < 2; side++) {
                 if (!inInstancedContraption) ms.pushPose();
@@ -115,7 +109,7 @@ public class DF11GRenderer extends BogeyRenderer {
                 VertexConsumer vb,
                 boolean inContraption) {
 
-            boolean forwards = BogeyDataConstants.isForwards(bogeyData, inContraption);
+            light *= 1.1;
 
             Direction direction =
                     bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
@@ -124,8 +118,6 @@ public class DF11GRenderer extends BogeyRenderer {
                             BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY,
                             Direction.class)
                             : Direction.NORTH;
-
-            //LOGGER.info(bogeyData + "backward DF11G direction:" + direction + ";backward DF11G forwards:" + forwards);
 
             wheelAngle = -wheelAngle;
             boolean inInstancedContraption = vb == null;
@@ -158,7 +150,7 @@ public class DF11GRenderer extends BogeyRenderer {
                     }
                 }
             } else {
-                frame.rotateY(180).translate(0, 0.375, 0).render(ms, light, vb);
+                frame.translate(0, 0.375, 0).render(ms, light, vb);
 
                 for (int side = -1; side < 2; side++) {
                     if (!inInstancedContraption) ms.pushPose();
@@ -181,6 +173,38 @@ public class DF11GRenderer extends BogeyRenderer {
                 MaterialManager materialManager, CarriageBogey carriageBogey) {
             this.createModelInstance(materialManager, DF11G_FRAME);
             this.createModelInstance(materialManager, DF11G_WHEEL, 3);
+        }
+    }
+
+    public static class Andesite extends DF11GRenderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+
+        public static class Backward extends DF11GRenderer.Backward {
+            @Override
+            public void render(
+                    CompoundTag bogeyData,
+                    float wheelAngle,
+                    PoseStack ms,
+                    int light,
+                    VertexConsumer vb,
+                    boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
+            }
         }
     }
 }

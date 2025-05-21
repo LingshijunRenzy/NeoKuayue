@@ -1,7 +1,9 @@
 package willow.train.kuayue.initial;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import kasuga.lib.registrations.Reg;
 import kasuga.lib.registrations.common.BlockTagReg;
+import kasuga.lib.registrations.common.FluidTagReg;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -31,6 +33,12 @@ public class AllTags {
             .submit(AllElements.testRegistry);
 
     public static final BlockTagReg CARPORT = new BlockTagReg("carport", "panel/carport")
+            .submit(AllElements.testRegistry);
+
+    public static final BlockTagReg LOCO_CARPORT = new BlockTagReg("loco_carport", "panel/loco_carport")
+            .submit(AllElements.testRegistry);
+
+    public static final BlockTagReg LOCO_CARPORT_10 = new BlockTagReg("loco_carport_10", "panel/loco_carport_10")
             .submit(AllElements.testRegistry);
 
     public static final BlockTagReg FLOOR = new BlockTagReg("floor", "panel/floor")
@@ -64,7 +72,16 @@ public class AllTags {
     public static final BlockTagReg I11G = new BlockTagReg("i11g", "panel/i11g")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg ISS3 = new BlockTagReg("iss3", "panel/iss3")
+            .submit(AllElements.testRegistry);
+
     public static final BlockTagReg I21 = new BlockTagReg("i21", "panel/i21")
+            .submit(AllElements.testRegistry);
+
+    public static final BlockTagReg ISS8 = new BlockTagReg("iss8", "panel/iss8")
+            .submit(AllElements.testRegistry);
+
+    public static final BlockTagReg I11 = new BlockTagReg("i11", "panel/i11")
             .submit(AllElements.testRegistry);
 
     public static final BlockTagReg MULTI_SEAT_BLOCK = new BlockTagReg("multi_seat_block", "multi_seat_block")
@@ -72,6 +89,10 @@ public class AllTags {
 
     public static final BlockTagReg END_FACES = new BlockTagReg("end_face", "panel/end_face")
             .submit(AllElements.testRegistry);
+
+    public static final Reg COLA_FLUID =
+            new FluidTagReg("forge", "cola_fluid", "fluids/cola_fluid")
+                    .submit(AllElements.testRegistry);
 
     public static void invoke() {}
 

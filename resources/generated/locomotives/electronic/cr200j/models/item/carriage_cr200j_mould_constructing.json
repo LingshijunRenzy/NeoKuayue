@@ -1,0 +1,6 @@
+{
+ "parent": "item/generated",
+ "textures": {
+  "layer0": "kuayue:item/crafting/mould/constructing/carriage_cr200j_mould_constructing"
+ }
+}

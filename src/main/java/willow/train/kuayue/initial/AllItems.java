@@ -1,10 +1,9 @@
 package willow.train.kuayue.initial;
 
-import com.simibubi.create.AllRecipeTypes;
 import kasuga.lib.registrations.BundledReg;
 import kasuga.lib.registrations.common.ItemReg;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import willow.train.kuayue.systems.device.AllDeviceItems;
 import net.minecraft.world.item.crafting.RecipeType;
 import willow.train.kuayue.item.FuelItem;
 
@@ -92,6 +91,30 @@ public class AllItems {
                     .tab(AllElements.neoKuayueDietTab)
                     .submit(AllElements.testRegistry);
 
+    public static final ItemReg<Item> EMPTY_CAN =
+            new ItemReg<Item>("empty_can")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueDietTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final ItemReg<Item> EMPTY_CAN_BLUE =
+            new ItemReg<Item>("empty_can_blue")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueDietTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final ItemReg<Item> MONOSODIUM_GLUTAMATE =
+            new ItemReg<Item>("monosodium_glutamate")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueDietTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final ItemReg<Item> SALT =
+            new ItemReg<Item>("salt")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueDietTab)
+                    .submit(AllElements.testRegistry);
+
     public static final ItemReg<Item> SOLIDIFY_SLIME_BALL =
             new ItemReg<>("solidify_slime_ball")
                     .itemType(Item::new)
@@ -151,6 +174,12 @@ public class AllItems {
                     .tab(AllElements.neoKuayueMaterialTab)
                     .submit(AllElements.testRegistry);
 
+    public static final ItemReg<Item> INSULATOR =
+            new ItemReg<>("insulator")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueMaterialTab)
+                    .submit(AllElements.testRegistry);
+
     public static final BundledReg<ItemReg<Item>> INCOMPLETE_TRACKS =
             new BundledReg<ItemReg<Item>>("incomplete_tracks")
                     .factory(ItemReg::new)
@@ -160,6 +189,7 @@ public class AllItems {
                     .element("incomplete_ballastless_track")
                     .element("incomplete_tieless_track")
                     .element("incomplete_meter_track")
+                    .element("incomplete_guard_track")
                     .submit(AllElements.testRegistry);
 
     public static final BundledReg<ItemReg<Item>> CIRCUIT_BLUEPRINTS =
@@ -177,6 +207,7 @@ public class AllItems {
                     .element("carriage_25z_circuit_blueprint")
                     .element("carriage_25t_circuit_blueprint")
                     .element("carriage_cr200j_circuit_blueprint")
+                    .element("head_ss8_circuit_blueprint")
                     .submit(AllElements.testRegistry);
 
 
@@ -197,6 +228,9 @@ public class AllItems {
                     .element("carriage_cr200j_blueprint")
                     .element("carriage_m1_blueprint")
                     .element("carriage_marshalled_blueprint")
+                    .element("freight_c70_blueprint")
+                    .element("freight_nx70_blueprint")
+                    .element("head_ss8_blueprint")
                     .submit(AllElements.testRegistry);
 
 
@@ -215,6 +249,7 @@ public class AllItems {
                     .element("carriage_25z_circuit")
                     .element("carriage_25t_circuit")
                     .element("carriage_cr200j_circuit")
+                    .element("head_ss8_circuit")
                     .submit(AllElements.testRegistry);
 
     public static final BundledReg<ItemReg<Item>> CIRCUITS_CONSTRUCTING =
@@ -232,6 +267,7 @@ public class AllItems {
                     .element("carriage_25z_circuit_constructing")
                     .element("carriage_25t_circuit_constructing")
                     .element("carriage_cr200j_circuit_constructing")
+                    .element("head_ss8_circuit_constructing")
                     .submit(AllElements.testRegistry);
 
 
@@ -252,6 +288,9 @@ public class AllItems {
                     .element("carriage_cr200j_mould")
                     .element("carriage_m1_mould")
                     .element("carriage_marshalled_mould")
+                    .element("freight_c70_mould")
+                    .element("freight_nx70_mould")
+                    .element("head_ss8_mould")
                     .submit(AllElements.testRegistry);
 
     public static final BundledReg<ItemReg<Item>> MOULDS_CONSTRUCTING =
@@ -271,7 +310,12 @@ public class AllItems {
                     .element("carriage_cr200j_mould_constructing")
                     .element("carriage_m1_mould_constructing")
                     .element("carriage_marshalled_mould_constructing")
+                    .element("freight_c70_mould_constructing")
+                    .element("freight_nx70_mould_constructing")
+                    .element("head_ss8_mould_constructing")
                     .submit(AllElements.testRegistry);
 
-    public static void invoke() {}
+    public static void invoke() {
+        AllDeviceItems.invoke();
+    }
 }

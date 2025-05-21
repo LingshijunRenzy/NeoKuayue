@@ -3,6 +3,7 @@ package willow.train.kuayue.systems.tech_tree.server;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.packs.resources.ResourceManager;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.json.TechTreeData;
 
@@ -35,12 +36,20 @@ public class TechTree {
         nodes.forEach((loc, node) -> {
             node.compileConnections();
         });
+        HashSet<String> groupsToRemove = new HashSet<>();
         groups.forEach((str, grp) -> {
+            if (grp.hasRing()) {
+                Kuayue.LOGGER.error("Found cycle(s) in Tech Tree Group <" + grp.tree.getNamespace() +
+                        ":" + str + ">, that group would not be applied.");
+                groupsToRemove.add(str);
+                return;
+            }
             nodes.values().forEach(n -> {
                 if (!n.getNextGroups().contains(grp)) return;
                 grp.addPrev(n);
             });
         });
+        groupsToRemove.forEach(groups::remove);
     }
 
     protected void grepNbt(ResourceManager manager) {
@@ -61,6 +70,8 @@ public class TechTree {
         buf.writeUtf(getNamespace());
 
         buf.writeInt(groups.size());
-        groups.forEach((location, grp) -> grp.toNetwork(buf));
+        buf.writeInt(nodes.size());
+        groups.forEach((loc, grp) -> buf.writeUtf(loc));
+        // groups.forEach((location, grp) -> grp.toNetwork(buf));
     }
 }

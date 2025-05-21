@@ -7,13 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.NodeType;
-import willow.train.kuayue.systems.tech_tree.json.HideContext;
-import willow.train.kuayue.systems.tech_tree.json.OnUnlockContext;
-import willow.train.kuayue.systems.tech_tree.json.TechTreeData;
-import willow.train.kuayue.systems.tech_tree.json.TechTreeNodeData;
+import willow.train.kuayue.systems.tech_tree.json.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -108,13 +106,39 @@ public class TechTreeNode {
         return new NodeLocation(group.getNamespace(), group.getIdentifier(), location).equals(data.getLocation());
     }
 
+    public int getDegree() {
+        return next.size() + prev.size();
+    }
+
+    public int getInDegree() {
+        return prev.size();
+    }
+
+    public int getOutDegree() {
+        return next.size();
+    }
+
+    public Set<TechTreeNode> getNearBys() {
+        HashSet<TechTreeNode> near = new HashSet<>();
+        near.addAll(next);
+        near.addAll(prev);
+        return near;
+    }
+
     public void toNetwork(FriendlyByteBuf buf) {
         // meta data
         getLocation().writeToByteBuf(buf);
         getType().writeToByteBuf(buf);
-        buf.writeResourceLocation(group.getId());
         buf.writeUtf(getData().getName());
         buf.writeUtf(getData().getDescription());
+        if (getData().getUnlock() == null)
+            buf.writeUtf("");
+        else
+            buf.writeUtf(getData().getUnlock().description);
+
+        buf.writeInt(getData().getLevel());
+        buf.writeInt(getData().getExp());
+        buf.writeItemStack(data.getLogo(), false);
 
         // item consume
         Set<ItemStack> consume = getItemConsume();
@@ -128,5 +152,13 @@ public class TechTreeNode {
         // next groups
         buf.writeInt(nextGroups.size());
         nextGroups.forEach(grp -> buf.writeResourceLocation(grp.getId()));
+
+        // prev nodes
+        buf.writeInt(prev.size());
+        prev.forEach(node -> node.getLocation().writeToByteBuf(buf));
+    }
+
+    public @Nullable UnlockCondition getUnlockCondition() {
+        return getData().getUnlockCondition();
     }
 }

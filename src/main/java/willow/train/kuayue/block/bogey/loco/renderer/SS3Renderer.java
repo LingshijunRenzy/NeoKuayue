@@ -20,14 +20,31 @@ public class SS3Renderer extends BogeyRenderer {
     private static ResourceLocation asBlockModelResource(String path) {
         return AllElements.testRegistry.asResource("block/" + path);
     }
-
     public static final PartialModel
             SS3_FRAME = new PartialModel(asBlockModelResource("bogey/ss3/ss3_frame")),
             SS3_WHEEL = new PartialModel(asBlockModelResource("bogey/ss3/ss3_wheel"));
+    @Override
+    public void initialiseContraptionModelData(
+            MaterialManager materialManager, CarriageBogey carriageBogey) {
+        this.createModelInstance(materialManager, SS3_FRAME);
+        this.createModelInstance(materialManager, SS3_WHEEL, 3);
+    }
 
     @Override
-    public void render(CompoundTag bogeyData, float wheelAngle, PoseStack ms, int light, VertexConsumer vb, boolean inContraption) {
-        boolean forwards = BogeyDataConstants.isForwards(bogeyData, inContraption);
+    public BogeySizes.BogeySize getSize() {
+        return AllLocoBogeys.ss3.getSize();
+    }
+
+    @Override
+    public void render(
+            CompoundTag bogeyData,
+            float wheelAngle,
+            PoseStack ms,
+            int light,
+            VertexConsumer vb,
+            boolean inContraption) {
+
+        light *= 1;
 
         Direction direction =
                 bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
@@ -38,83 +55,66 @@ public class SS3Renderer extends BogeyRenderer {
                         : Direction.NORTH;
 
         boolean inInstancedContraption = vb == null;
-
+        double[] offsets = {-2.11, 1.96, -0.01};//单个轮对偏移
         BogeyModelData frame = getTransform(SS3_FRAME, ms, inInstancedContraption);
         BogeyModelData[] wheels = getTransform(SS3_WHEEL, ms, inInstancedContraption, 3);
 
-        if (!inContraption) {
-            // 正向转向架未组装架体
+        if (direction == Direction.SOUTH || direction == Direction.EAST) {
+            if (inContraption) {
+                frame.translate(0, 0.012, 0).render(ms, light, vb);
+                for (int side = -1; side < 2; side++) {
+                    if (!inInstancedContraption) ms.pushPose();
+                    BogeyModelData wheel = wheels[side + 1];
+                    int index = side + 1;
+                    double zOffset =  offsets[index];
+                    wheel.translate(0, 0.88, zOffset)
+                            .rotateX(wheelAngle)
+                            .render(ms, light, vb);
+                    if (!inInstancedContraption) ms.popPose();
+                }
+            } else {
+                frame.rotateY(180).translate(0, 0.012, 0).render(ms, light, vb);
+
+                for (int side = -1; side < 2; side++) {
+                    if (!inInstancedContraption) ms.pushPose();
+                    BogeyModelData wheel = wheels[side + 1];
+                    int index = side + 1;
+                    double zOffset =  offsets[index];
+                    wheel.translate(0, 0.88, zOffset)
+                            .rotateX(wheelAngle)
+                            .render(ms, light, vb);
+                    if (!inInstancedContraption) ms.popPose();
+                }
+            }
+        } else {
             frame.rotateY(180).translate(0, 0.012, 0).render(ms, light, vb);
 
-            // 正向转向架未组装轮对
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[0].translate(0, 0.905, -0.01).rotateY(180).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
+            for (int side = -1; side < 2; side++) {
+                if (!inInstancedContraption) ms.pushPose();
+                BogeyModelData wheel = wheels[side + 1];
+                int index = side + 1;
+                double zOffset =  offsets[index];
+                wheel.translate(0, 0.88, zOffset)
+                        .rotateX(wheelAngle)
+                        .render(ms, light, vb);
+                if (!inInstancedContraption) ms.popPose();
+            }
 
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[1].translate(0, 0.905, 1.96).rotateY(180).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
-
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[2].translate(0, 0.905, -2.11).rotateY(180).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
-
-            return;
         }
-
-        if (direction == Direction.NORTH || direction == Direction.WEST) {
-            // 正向转向架北西方向架体
-            frame.rotateY(180).translate(0, 0.012, 0).render(ms, light, vb);
-
-            // 正向转向架北西方向轮对
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[0].translate(0, 0.905, -0.01).rotateY(180).rotateX(-wheelAngle).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
-
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[1].translate(0, 0.905, 1.96).rotateY(180).rotateX(-wheelAngle).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
-
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[2].translate(0, 0.905, -2.11).rotateY(180).rotateX(-wheelAngle).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
-
-            return;
-        }
-
-        // 正向转向架南东方向架体
-        frame.translate(0, 0.012, 0).render(ms, light, vb);
-
-        // 正向转向架南东方向轮对
-        if (!inInstancedContraption) ms.pushPose();
-        wheels[0].translate(0, 0.905, 0.01).rotateX(wheelAngle).render(ms, light, vb);
-        if (!inInstancedContraption) ms.popPose();
-
-        if (!inInstancedContraption) ms.pushPose();
-        wheels[1].translate(0, 0.905, 2.11).rotateX(wheelAngle).render(ms, light, vb);
-        if (!inInstancedContraption) ms.popPose();
-
-        if (!inInstancedContraption) ms.pushPose();
-        wheels[2].translate(0, 0.905, -1.96).rotateX(wheelAngle).render(ms, light, vb);
-        if (!inInstancedContraption) ms.popPose();
-    }
-
-    @Override
-    public BogeySizes.BogeySize getSize() {
-        return AllLocoBogeys.ss3.getSize();
-    }
-
-    @Override
-    public void initialiseContraptionModelData(MaterialManager materialManager, CarriageBogey carriageBogey) {
-        this.createModelInstance(materialManager, SS3_FRAME);
-        this.createModelInstance(materialManager, SS3_WHEEL, 3);
     }
 
     public static class Backward extends BogeyRenderer {
 
         @Override
-        public void render(CompoundTag bogeyData, float wheelAngle, PoseStack ms, int light, VertexConsumer vb, boolean inContraption) {
-            boolean forwards = BogeyDataConstants.isForwards(bogeyData, inContraption);
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+
+            light *= 1.1;
 
             Direction direction =
                     bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
@@ -126,78 +126,96 @@ public class SS3Renderer extends BogeyRenderer {
 
             wheelAngle = -wheelAngle;
             boolean inInstancedContraption = vb == null;
+            double[] offsets = {-0.01, 1.96, -2.11};//单个轮对偏移
 
             BogeyModelData frame = getTransform(SS3_FRAME, ms, inInstancedContraption);
             BogeyModelData[] wheels = getTransform(SS3_WHEEL, ms, inInstancedContraption, 3);
 
-            // 反向转向架未组装
-            if (!inContraption) {
-                // 未组装架体
+            if (direction == Direction.SOUTH || direction == Direction.EAST) {
+                if (inContraption) {
+                    frame.rotateY(180).translate(0, 0.012, 0).render(ms, light, vb);
+
+                    for (int side = -1; side < 2; side++) {
+                        if (!inInstancedContraption) ms.pushPose();
+                        BogeyModelData wheel = wheels[side + 1];
+                        int index = side + 1;
+                        double zOffset =  offsets[index];
+                        wheel.translate(0, 0.88, zOffset)
+                                .rotateX(wheelAngle)
+                                .render(ms, light, vb);
+                        if (!inInstancedContraption) ms.popPose();
+                    }
+                } else {
+                    frame.translate(0, 0.012, 0).render(ms, light, vb);
+
+                    for (int side = -1; side < 2; side++) {
+                        if (!inInstancedContraption) ms.pushPose();
+                        BogeyModelData wheel = wheels[side + 1];
+                        int index = side + 1;
+                        double zOffset =  offsets[index];
+                        wheel.translate(0, 0.88, zOffset)
+                                .rotateX(wheelAngle)
+                                .render(ms, light, vb);
+                        if (!inInstancedContraption) ms.popPose();
+                    }
+                }
+            } else {
                 frame.translate(0, 0.012, 0).render(ms, light, vb);
 
-                // 未组装轮对
-                if (!inInstancedContraption) ms.pushPose();
-                wheels[0].translate(0, 0.905, 0.01).render(ms, light, vb);
-                if (!inInstancedContraption) ms.popPose();
-
-                if (!inInstancedContraption) ms.pushPose();
-                wheels[1].translate(0, 0.905, -1.96).render(ms, light, vb);
-                if (!inInstancedContraption) ms.popPose();
-
-                if (!inInstancedContraption) ms.pushPose();
-                wheels[2].translate(0, 0.905, 2.115).render(ms, light, vb);
-                if (!inInstancedContraption) ms.popPose();
-                return;
+                for (int side = -1; side < 2; side++) {
+                    if (!inInstancedContraption) ms.pushPose();
+                    BogeyModelData wheel = wheels[side + 1];
+                    int index = side + 1;
+                    double zOffset =  offsets[index];
+                    wheel.translate(0, 0.88, zOffset)
+                            .rotateX(wheelAngle)
+                            .render(ms, light, vb);
+                    if (!inInstancedContraption) ms.popPose();
+                }
             }
-
-            // 反向转向架北西方向已组装
-            if (direction == Direction.NORTH || direction == Direction.WEST) {
-                // 北西方向已组装架体
-                frame.translate(0, 0.012, 0).render(ms, light, vb);
-
-                // 北西方向已组装轮对
-                if (!inInstancedContraption) ms.pushPose();
-                wheels[0].translate(0, 0.905, 0.01).rotateX(-wheelAngle).render(ms, light, vb);
-                if (!inInstancedContraption) ms.popPose();
-
-                if (!inInstancedContraption) ms.pushPose();
-                wheels[1].translate(0, 0.905, -1.96).rotateX(-wheelAngle).render(ms, light, vb);
-                if (!inInstancedContraption) ms.popPose();
-
-                if (!inInstancedContraption) ms.pushPose();
-                wheels[2].translate(0, 0.905, 2.115).rotateX(-wheelAngle).render(ms, light, vb);
-                if (!inInstancedContraption) ms.popPose();
-
-                return;
-            }
-
-            // 反向转向架南东方向已组装
-            // 南东方向已组装架体
-            frame.rotateY(180).translate(0, 0.012, 0).render(ms, light, vb);
-
-            // 南东方向已组装轮对
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[0].translate(0, 0.905, -0.01).rotateX(-wheelAngle).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
-
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[1].translate(0, 0.905, -2.115).rotateX(-wheelAngle).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
-
-            if (!inInstancedContraption) ms.pushPose();
-            wheels[2].translate(0, 0.905, 1.955).rotateX(-wheelAngle).render(ms, light, vb);
-            if (!inInstancedContraption) ms.popPose();
         }
 
         @Override
         public BogeySizes.BogeySize getSize() {
-            return AllLocoBogeys.ss3Backward.getSize();
+            return AllLocoBogeys.ss3BackwardAndesite.getSize();
         }
 
         @Override
-        public void initialiseContraptionModelData(MaterialManager materialManager, CarriageBogey carriageBogey) {
+        public void initialiseContraptionModelData(
+                MaterialManager materialManager, CarriageBogey carriageBogey) {
             this.createModelInstance(materialManager, SS3_FRAME);
             this.createModelInstance(materialManager, SS3_WHEEL, 3);
+        }
+    }
+    public static class Andesite extends SS3Renderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
+        }
+
+        public static class Backward extends SS3Renderer.Backward {
+            @Override
+            public void render(
+                    CompoundTag bogeyData,
+                    float wheelAngle,
+                    PoseStack ms,
+                    int light,
+                    VertexConsumer vb,
+                    boolean inContraption) {
+                ms.pushPose();
+                ms.scale(1.2F, 1, 1);
+                super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+                ms.popPose();
+            }
         }
     }
 }

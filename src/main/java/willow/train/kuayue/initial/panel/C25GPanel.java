@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.panels.*;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
@@ -20,6 +21,8 @@ import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.registration.PanelRegistration;
 import willow.train.kuayue.initial.registration.SlabRegistration;
 
+import static willow.train.kuayue.initial.panel.CR200JPanel.registry;
+
 public class C25GPanel {
 
     public static final PanelRegistration<CustomRenderedDoorBlock> DOOR_25G =
@@ -31,11 +34,26 @@ public class C25GPanel {
                             ), Couple.create(
                                     new ResourceLocation(Kuayue.MODID, "door/original_25g_door_bottom"),
                                     new ResourceLocation(Kuayue.MODID, "door/original_25g_door_top")
-                            ), RenderShape.ENTITYBLOCK_ANIMATED, false))
+                            ), new Vec3(0, 0, 0), new Vec3(0, 0, -.124), RenderShape.ENTITYBLOCK_ANIMATED, false))
                     .materialAndColor(MapColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueCarriageTab )
                     .noOcclusion()
                     .strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<CustomRenderedDoorBlock> DOOR_SLIDING_25G =
+            new PanelRegistration<CustomRenderedDoorBlock>("door_sliding_25g")
+                    .block(properties ->
+                            new CustomRenderedDoorBlock(properties, Couple.create(
+                                    registry.asResource("door/sliding_door_25g_bottom"),
+                                    registry.asResource("door/sliding_door_25g_upper"))
+                                    , Couple.create(
+                                    registry.asResource("door/sliding_door_25g_bottom_lh"),
+                                    registry.asResource("door/sliding_door_25g_upper_lh")),
+                                    RenderShape.ENTITYBLOCK_ANIMATED, true))
+                    .materialAndColor(MapColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueCarriageTab )
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
     public static final PanelRegistration<CustomRenderedEndfaceBlock> END_FACE_25G_1 =

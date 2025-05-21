@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.utility.Iterate;
 import kasuga.lib.example_env.AllExampleElements;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import willow.train.kuayue.block.bogey.loco.renderer.HXD3DRenderer;
 import willow.train.kuayue.initial.AllElements;
 
 public class CW2BogeyRenderer extends BogeyRenderer {
@@ -61,9 +62,24 @@ public class CW2BogeyRenderer extends BogeyRenderer {
         for (int side : Iterate.positiveAndNegative) {
             if (!inInstancedContraption) ms.pushPose();
             BogeyModelData wheel = wheels[(side + 1) / 2];
-            wheel.translate(0, 0.805, ((double) side) * 1.2d).rotateX(wheelAngle);
+            wheel.translate(0, 0.805, ((double) side) * 1.18d).rotateX(wheelAngle);
             wheel.render(ms, light, vb);
             if (!inInstancedContraption) ms.popPose();
+        }
+    }
+    public static class Andesite extends CW2BogeyRenderer {
+        @Override
+        public void render(
+                CompoundTag bogeyData,
+                float wheelAngle,
+                PoseStack ms,
+                int light,
+                VertexConsumer vb,
+                boolean inContraption) {
+            ms.pushPose();
+            ms.scale(1.2F, 1, 1);
+            super.render(bogeyData, wheelAngle, ms, light, vb, inContraption);
+            ms.popPose();
         }
     }
 }

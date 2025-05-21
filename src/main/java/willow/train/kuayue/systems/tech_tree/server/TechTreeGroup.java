@@ -4,11 +4,11 @@ import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 import willow.train.kuayue.systems.tech_tree.json.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 @Getter
 public class TechTreeGroup {
@@ -78,6 +78,10 @@ public class TechTreeGroup {
 
     public void toNetwork(FriendlyByteBuf buf) {
         buf.writeResourceLocation(getId());
+        if (data.getCoverId() == null)
+            buf.writeUtf("null");
+        else
+            buf.writeResourceLocation(data.getCoverId());
         buf.writeUtf(data.getTitle());
         buf.writeUtf(data.getDescription());
         buf.writeItemStack(icon(), false);
@@ -87,6 +91,31 @@ public class TechTreeGroup {
         prev.forEach(node -> node.getLocation().writeToByteBuf(buf));
 
         buf.writeInt(nodes.size());
-        nodes.forEach((location, node) -> node.toNetwork(buf));
+        nodes.forEach((location, node) -> location.writeToByteBuf(buf));
+    }
+
+    public boolean hasRing() {
+        Queue<TechTreeNode> queue = new LinkedList<>();
+        HashMap<TechTreeNode, Integer> degrees = new HashMap<>();
+        for (TechTreeNode n : nodes.values()) {
+            degrees.put(n, n.getInDegree());
+            if (n.getInDegree() == 0) queue.add(n);
+        }
+        int counter = 0;
+        while (!queue.isEmpty()) {
+            TechTreeNode node = queue.poll();
+            counter++;
+            for (TechTreeNode nextNode : node.getNext()) {
+                int deg = degrees.get(nextNode);
+                deg -= 1;
+                if (deg == 0) queue.add(nextNode);
+                degrees.put(nextNode, deg);
+            }
+        }
+        return counter != nodes.size();
+    }
+
+    public @Nullable UnlockCondition getUnlockCondition() {
+        return getData().getUnlockCondition();
     }
 }

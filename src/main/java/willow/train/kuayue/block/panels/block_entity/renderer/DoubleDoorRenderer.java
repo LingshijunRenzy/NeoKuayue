@@ -26,7 +26,7 @@ public class DoubleDoorRenderer implements BlockEntityRenderer<DoubleDoorEntity>
                        MultiBufferSource pBufferSource,
                        int pPackedLight, int pPackedOverlay) {
 
-        pPackedLight *= 0.8;
+        pPackedLight *= 1;
         //获取方块实体状态
         BlockState blockState = pBlockEntity.getBlockState();
         //获取门是否开闭的布尔值
