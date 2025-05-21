@@ -42,14 +42,6 @@ public abstract class OverheadLineInsulatorRenderer {
                         );
             pPoseStack.popPose();
         }
-
-        public static List<Vec3> getConnectionPointIf(Level level, BlockPos blockPos, BlockState blockState) {
-            if(blockState.getValue(OverheadLineSupportInsulatorBlock.WALL)) {
-                return List.of();
-            } else {
-                return List.of();
-            }
-        }
     }
 
     public static class BRenderer extends OverheadLineInsulatorRenderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
@@ -72,13 +64,6 @@ public abstract class OverheadLineInsulatorRenderer {
                             pPackedOverlay
                     );
             pPoseStack.popPose();
-        }
-        public static List<Vec3> getConnectionPointIf(Level level, BlockPos blockPos, BlockState blockState) {
-            if(blockState.getValue(OverheadLineSupportInsulatorBlock.WALL)) {
-                return List.of();
-            } else {
-                return List.of();
-            }
         }
     }
 }
