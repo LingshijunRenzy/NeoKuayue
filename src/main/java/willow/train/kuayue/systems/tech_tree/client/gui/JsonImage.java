@@ -4,10 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.Getter;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import willow.train.kuayue.systems.tech_tree.json.ImageJsonDefine;
 
 import java.util.function.Function;
@@ -37,8 +39,8 @@ public class JsonImage extends AbstractWidget {
         Pair<Integer, Integer> xAndy = getPosition(offsetX, offsetY,
                 centerX, centerY, bgJson, mapFunc);
         int imageZ = Math.round(bgJson.getPos().z());
-        this.x = xAndy.getFirst();
-        this.y = xAndy.getSecond();
+        this.setX(xAndy.getFirst());
+        this.setY(xAndy.getSecond());
         this.width = mapFunc.apply(bgJson.getWidth());
         this.height = mapFunc.apply(bgJson.getHeight());
         return bgJson.getMaskWithUV().rectangle(
@@ -89,7 +91,7 @@ public class JsonImage extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partial) {
         if (mask != null) mask.renderToGui();
     }
 

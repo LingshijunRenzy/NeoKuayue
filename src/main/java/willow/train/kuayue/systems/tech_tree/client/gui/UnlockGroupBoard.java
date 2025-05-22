@@ -6,6 +6,7 @@ import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -85,35 +86,35 @@ public class UnlockGroupBoard extends AbstractWidget {
     }
 
     public void setX(int x) {
-        this.x = x;
+        super.setX(x);
         updateAllWidgetsPos();
     }
 
     public void setY(int y) {
-        this.y = y;
+        super.setY(y);
         updateAllWidgetsPos();
     }
 
     public void setPos(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.setX(x);
+        this.setY(y);
         updateAllWidgetsPos();
     }
 
     @Override
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void rendeWidget(GuiGraphics graphics, int mouseX, int mouseY, float partial) {
         unlockGroupBoardBg.get().renderToGui();
         confirmBtn.visible = this.visible & renderConfirmBtn;
         confirmBtn.setRenderMask(!confirmBtn.isMouseOver(mouseX, mouseY));
         for (LabelGrid grid : grids) {
             if (!grid.visible) continue;
-            grid.render(poseStack, mouseX, mouseY, partial);
+            grid.render(graphics, mouseX, mouseY, partial);
         }
-        confirmBtn.render(poseStack, mouseX, mouseY, partial);
+        confirmBtn.render(graphics, mouseX, mouseY, partial);
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+    public void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
 
     }
 }

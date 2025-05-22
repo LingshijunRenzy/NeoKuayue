@@ -5,6 +5,7 @@ import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -53,8 +54,7 @@ public class JsonTextComponent extends AbstractWidget {
     }
 
     private void setPos(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.setPosition(x, y);
     }
 
     public void updatePositions(int xOffset, int yOffset, int centerX, int centerY,
@@ -104,8 +104,8 @@ public class JsonTextComponent extends AbstractWidget {
     private void updateScrollBarButton(float percentage) {
         if (!renderScrollBar) return;
         scrollBarBtn.get().rectangle(
-                new Vector3f(this.x + this.width - 1,
-                        this.y + percentage * (this.height - 12),
+                new Vector3f(this.getX() + this.width - 1,
+                        this.getY() + percentage * (this.height - 12),
                         0),
                 ImageMask.Axis.X, ImageMask.Axis.Y,
                 true, true, 6, 6
@@ -114,12 +114,12 @@ public class JsonTextComponent extends AbstractWidget {
 
     private void updateScrollBarArrowsPosition() {
         scrollBarUp.get().rectangle(
-                new Vector3f(this.x + this.width, this.y, 0),
+                new Vector3f(this.getX() + this.width, this.getY(), 0),
                 ImageMask.Axis.X, ImageMask.Axis.Y,
                 true, true, 4, 5
         );
         scrollBarDown.get().rectangle(
-                new Vector3f(this.x + this.width, this.y + this.height - 5, 0),
+                new Vector3f(this.getX() + this.width, this.getY() + this.height - 5, 0),
                 ImageMask.Axis.X, ImageMask.Axis.Y,
                 true, true, 4, 5
         );
@@ -144,9 +144,9 @@ public class JsonTextComponent extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX,
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX,
                              int mouseY, float partialTick) {
-        if (renderScrollBar) renderScrollBar(poseStack);
+        if (renderScrollBar) renderScrollBar(graphics);
         Font font = Minecraft.getInstance().font;
         for (int i = textIndex;
              i < Math.min(components.size(), textIndex + renderCapacity);
@@ -156,18 +156,18 @@ public class JsonTextComponent extends AbstractWidget {
         }
     }
 
-    private void renderScrollBar(PoseStack poseStack) {
+    private void renderScrollBar(GuiGraphics graphics) {
         scrollBarUp.get().renderToGui();
         scrollBarDown.get().renderToGui();
-        fill(poseStack, this.x + this.width + 2, this.y + 6,
-                this.x + this.width + 4, this.y + this.height - 6,
+        graphics.fill(this.getX() + this.width + 2, this.getY() + 6,
+                this.getX() + this.width + 4, this.getY() + this.height - 6,
                 0xffffffff);
         scrollBarBtn.get().renderToGui();
     }
 
     public boolean isMouseOverScrollBar(double mouseX, double mouseY) {
-        return mouseX >= this.x + this.width && mouseX <= this.x + this.width + 4 &&
-                mouseY >= this.y + 6 && mouseY <= this.y + this.height - 6;
+        return mouseX >= this.getX() + this.width && mouseX <= this.getX() + this.width + 4 &&
+                mouseY >= this.getY() + 6 && mouseY <= this.getY() + this.height - 6;
     }
 
     @Override
@@ -188,7 +188,7 @@ public class JsonTextComponent extends AbstractWidget {
     @Override
     public void onClick(double pMouseX, double pMouseY) {
         if (!isMouseOverScrollBar(pMouseX, pMouseY)) return;
-        float percentage = (float) (pMouseY - (float) (this.y + 6)) /
+        float percentage = (float) (pMouseY - (float) (this.getY() + 6)) /
                 (float) (this.height - 12);
         updateScrollBarButton(percentage);
     }

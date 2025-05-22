@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.TransformationHelper;
 import org.joml.Matrix4f;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
@@ -55,7 +56,7 @@ public class AllOverheadLineSupportModels {
 
         compiler.translate(0.5,0.5,0.5);
         compiler.mulPose(d.getRotation());
-        compiler.mulPose(new Quaternion(-90, -90, 0, true));
+        compiler.mulPose(TransformationHelper.quatFromXYZ(-90, -90, 0, true));
         compiler.translate((b - 1)/3f, (b - 1)/2f, 0);
         compiler.scale(b, b, b);
         compiler.translate(-0.5,-0.5,-0.5);

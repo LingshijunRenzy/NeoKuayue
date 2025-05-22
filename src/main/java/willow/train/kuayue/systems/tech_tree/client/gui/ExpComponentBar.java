@@ -1,7 +1,6 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import lombok.Setter;
@@ -13,6 +12,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
 
 import java.awt.*;
@@ -47,8 +47,7 @@ public class ExpComponentBar extends AbstractWidget {
     }
 
     public void setPos(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.setPosition(x, y);
         setImagePos();
     }
 

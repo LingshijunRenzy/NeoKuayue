@@ -2,10 +2,10 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Matrix4f;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
 
@@ -72,11 +73,11 @@ public class Tooltip extends AbstractWidget {
     }
 
     public void setX(int x) {
-        this.x = x;
+        super.setX(x);
     }
 
     public void setY(int y) {
-        this.y = y;
+        super.setY(y);
     }
 
     public void setPosition(int x, int y) {
@@ -102,21 +103,21 @@ public class Tooltip extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partial) {
         Font font = Minecraft.getInstance().font;
-        renderRectangle(poseStack);
-        int baseX = this.x + 5;
-        int baseY = this.y + 2 * boarderWidth + 16;
-        poseStack.pushPose();
-        poseStack.translate(0.0D, 0.0D, 400.0D);
-        fill(poseStack, baseX, baseY,
-                this.x + this.width - 5, baseY + boarderWidth, boarderColor);
+        renderRectangle(graphics);
+        int baseX = this.getX() + 5;
+        int baseY = this.getY() + 2 * boarderWidth + 16;
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0D, 0.0D, 400.0D);
+        graphics.fill(baseX, baseY,
+                this.getX() + this.width - 5, baseY + boarderWidth, boarderColor);
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-        renderer.renderAndDecorateItem(icon, this.x + boarderWidth + 1, this.y + boarderWidth + 1);
-        Matrix4f matrix4f = poseStack.last().pose();
+        renderer.renderAndDecorateItem(icon, this.getX() + boarderWidth + 1, this.getY() + boarderWidth + 1);
+        Matrix4f matrix4f = graphics.pose().last().pose();
         MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-        font.drawInBatch(title, this.x + 16 + 2 * boarderWidth + 1,
-                this.y + boarderWidth + (16f - font.lineHeight) / 2, fontColor,
+        font.drawInBatch(title, this.getX() + 16 + 2 * boarderWidth + 1,
+                this.getY() + boarderWidth + (16f - font.lineHeight) / 2, fontColor,
                 false, matrix4f, buffer, false,
                 0, 15728880);
         for (int i = 0; i < descriptions.size(); i++) {
@@ -127,16 +128,17 @@ public class Tooltip extends AbstractWidget {
                     0, 15728880);
         }
         buffer.endBatch();
-        poseStack.popPose();
+        graphics.pose().popPose();
     }
 
-    private void renderRectangle(PoseStack poseStack) {
-        fill(poseStack, x, y, x + width, y + boarderWidth, boarderColor);
-        fill(poseStack, x, y, x + boarderWidth, y + height - boarderWidth, boarderColor);
-        fill(poseStack, x + width - boarderWidth, y, x + width, y + height - boarderWidth, boarderColor);
-        fill(poseStack, x, y + height - boarderWidth, x + width, y + height, boarderColor);
-        fill(poseStack, x + boarderWidth, y + boarderWidth, x + width - boarderWidth,
-                y + height - boarderWidth, backgroundColor);
+    private void renderRectangle(GuiGraphics graphics) {
+
+        graphics.fill(this.getX(), this.getY(), this.getX() + width, this.getY() + boarderWidth, boarderColor);
+        graphics.fill(this.getX(), this.getY(), this.getX() + boarderWidth, this.getY() + height - boarderWidth, boarderColor);
+        graphics.fill(this.getX() + width - boarderWidth, this.getY(), this.getX() + width, this.getY() + height - boarderWidth, boarderColor);
+        graphics.fill(this.getX(), this.getY() + height - boarderWidth, this.getX() + width, this.getY() + height, boarderColor);
+        graphics.fill(this.getX() + boarderWidth, this.getY() + boarderWidth, this.getX() + width - boarderWidth,
+                this.getY() + height - boarderWidth, backgroundColor);
     }
 
     @Override
@@ -156,7 +158,7 @@ public class Tooltip extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    public void updateWidgetNarration(NarrationElementOutput output) {
 
     }
 }

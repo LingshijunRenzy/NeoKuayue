@@ -184,7 +184,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                         WireReg.get(itemType),
                         thisConnectionIndex,
                         targetConnectionIndex,
-                        new Vector3f(targetBlockEntity.getConnectionPointByIndex(targetConnectionIndex))
+                        new Vector3f(targetBlockEntity.getConnectionPointByIndex(targetConnectionIndex).toVector3f())
                 )
         );
         this.notifyUpdate();

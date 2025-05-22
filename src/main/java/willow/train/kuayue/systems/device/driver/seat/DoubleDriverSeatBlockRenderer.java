@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.TransformationHelper;
 import willow.train.kuayue.initial.AllElements;
 import kasuga.lib.core.client.model.BedrockModelLoader;
 import kasuga.lib.core.client.model.anim_model.AnimModel;
@@ -38,7 +39,7 @@ public class DoubleDriverSeatBlockRenderer implements BlockEntityRenderer<Double
         
         // 设置模型位置和旋转
         poseStack.translate(0.5, 0, 0.5);
-        poseStack.mulPose(Quaternion.fromXYZ(0, facing.toYRot() * 3.141f / 180, 0));
+        poseStack.mulPose(TransformationHelper.quatFromXYZ(0, facing.toYRot() * 3.141f / 180, 0, false));
         poseStack.translate(-0.5, 0, -0.5);
         
         // 渲染模型

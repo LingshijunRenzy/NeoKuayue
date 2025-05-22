@@ -1,16 +1,17 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.SimpleColor;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import kasuga.lib.core.util.data_type.Vec2i;
 import lombok.Getter;
 import lombok.NonNull;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
 
 import java.lang.reflect.Array;
@@ -86,8 +87,8 @@ public class TechTreeLine extends AbstractWidget {
     }
 
     public Vec2i getCenter() {
-        return new Vec2i(this.x + this.width / 2,
-                this.y + this.height / 2);
+        return new Vec2i(this.getX() + this.width / 2,
+                this.getY() + this.height / 2);
     }
 
     public void setColor(SimpleColor color) {
@@ -109,27 +110,25 @@ public class TechTreeLine extends AbstractWidget {
     }
 
     public void setX(int x) {
-        this.x = x;
+        super.setX(x);
         updateMasks();
         updateArrows();
     }
 
     public void setY(int y) {
-        this.y = y;
+        super.setY(y);
         updateMasks();
         updateArrows();
     }
 
     public void setPos(Vec2i pos) {
-        this.x = pos.x;
-        this.y = pos.y;
+        this.setPosition(pos.x, pos.y);
         updateMasks();
         updateArrows();
     }
 
     public void setPos(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.setPosition(x, y);
         updateMasks();
         updateArrows();
     }
@@ -282,7 +281,7 @@ public class TechTreeLine extends AbstractWidget {
         Vec2i center = getCenter();
         // up
         masks[0] = pixelMask.get().copyWithOp(
-                o -> o.rectangle(new Vector3f(center.x - 1, this.y + (tail[0] ? 2 : 0), 0),
+                o -> o.rectangle(new Vector3f(center.x - 1, this.getY() + (tail[0] ? 2 : 0), 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                         2, (float) this.height / 2 - (tail[0] ? 2 : 0))
         );
@@ -294,7 +293,7 @@ public class TechTreeLine extends AbstractWidget {
         );
         // left
         masks[1] = pixelMask.get().copyWithOp(
-                o -> o.rectangle(new Vector3f(this.x + (tail[1] ? 2 : 0), center.y - 1, 0),
+                o -> o.rectangle(new Vector3f(this.getX() + (tail[1] ? 2 : 0), center.y - 1, 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                         (float) this.width / 2 - (tail[1] ? 2 : 0), 2)
         );
@@ -310,22 +309,22 @@ public class TechTreeLine extends AbstractWidget {
     public void updateArrows() {
         Vec2i center = getCenter();
         arrows[0] = lineUpArrowMask.get().copyWithOp(
-                o -> o.rectangle(new Vector3f(center.x - 4, y, 0),
+                o -> o.rectangle(new Vector3f(center.x - 4, getY(), 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                         8, 4)
         );
         arrows[1] = lineLeftArrowMask.get().copyWithOp(
-                o -> o.rectangle(new Vector3f(x, center.y - 4, 0),
+                o -> o.rectangle(new Vector3f(getX(), center.y - 4, 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                         4, 8)
         );
         arrows[2] = lineDownArrowMask.get().copyWithOp(
-                o -> o.rectangle(new Vector3f(center.x - 4, y + height - 4, 0),
+                o -> o.rectangle(new Vector3f(center.x - 4, getY() + height - 4, 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                         8, 4)
         );
         arrows[3] = lineRightArrowMask.get().copyWithOp(
-                o -> o.rectangle(new Vector3f(x + width - 4, center.y - 4, 0),
+                o -> o.rectangle(new Vector3f(getX() + width - 4, center.y - 4, 0),
                         ImageMask.Axis.X, ImageMask.Axis.Y, true, true,
                         4, 8)
         );
@@ -345,7 +344,7 @@ public class TechTreeLine extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@NonNull PoseStack poseStack, int mouseX,
+    public void renderWidget(@NonNull GuiGraphics graphics, int mouseX,
                              int mouseY, float partialTick) {
         render(masks, shouldRender, (obj) -> {
             updateMasks();
@@ -358,7 +357,7 @@ public class TechTreeLine extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {}
+    public void updateWidgetNarration(NarrationElementOutput output) {}
 
     @Getter
     public static enum Side {

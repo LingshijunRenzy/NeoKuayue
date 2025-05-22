@@ -2,8 +2,6 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import kasuga.lib.core.util.data_type.Pair;
@@ -11,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,6 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeGroup;
 import willow.train.kuayue.systems.tech_tree.client.ClientTechTreeNode;
@@ -75,14 +76,6 @@ public class FinishedTooltip extends AbstractWidget {
         setImagePositions();
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public void setPosition(int x, int y) {
         this.setX(x);
         this.setY(y);
@@ -90,14 +83,14 @@ public class FinishedTooltip extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partial) {
         Font font = Minecraft.getInstance().font;
-        int baseX = this.x + 5;
-        poseStack.pushPose();
-        poseStack.translate(0.0D, 0.0D, 400.0D);
-        Matrix4f matrix4f = poseStack.last().pose();
+        int baseX = this.getX() + 5;
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0D, 0.0D, 400.0D);
+        Matrix4f matrix4f = graphics.pose().last().pose();
         MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-        font.drawInBatch(title, baseX, this.y, fontColor,
+        font.drawInBatch(title, baseX, this.getY(), fontColor,
                 false, matrix4f, buffer, false,
                 0, 15728880);
         int counter = 0;
@@ -106,7 +99,7 @@ public class FinishedTooltip extends AbstractWidget {
             if (by + font.lineHeight >= this.getHeight()) break;
             Component component = descriptions.get(i);
             font.drawInBatch(component, baseX,
-                    this.y + by, fontColor,
+                    this.getY() + by, fontColor,
                     false, matrix4f, buffer, false,
                     0, 15728880);
             counter++;
@@ -117,23 +110,23 @@ public class FinishedTooltip extends AbstractWidget {
             slidingBar.get().renderToGui();
             slidingBarButton.get().renderToGui();
         }
-        poseStack.popPose();
+        graphics.pose().popPose();
     }
 
     private void setImagePositions() {
-        completedStamp.get().rectangle(new Vector3f(this.x + this.getWidth() - 30, this.y + (float) this.getHeight() / 2 - 14, 0),
+        completedStamp.get().rectangle(new Vector3f(this.getX() + this.getWidth() - 30, this.getY() + (float) this.getHeight() / 2 - 14, 0),
                 ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 28, 28);
-        slidingBar.get().rectangle(new Vector3f(this.x + this.getWidth() - 37, this.y + (float) this.getHeight() / 2 - 17, 0),
+        slidingBar.get().rectangle(new Vector3f(this.getX() + this.getWidth() - 37, this.getY() + (float) this.getHeight() / 2 - 17, 0),
                 ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 4, 34);
-        slidingBarButton.get().rectangle(new Vector3f(this.x + this.getWidth() - 38, this.y + (float) this.getHeight() / 2 - 13, 0),
+        slidingBarButton.get().rectangle(new Vector3f(this.getX() + this.getWidth() - 38, this.getY() + (float) this.getHeight() / 2 - 13, 0),
                 ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 6, 6);
     }
 
     private void updateSlidingButtonPosition() {
         if (this.descriptions.size() > 1) {
             this.index = Math.max(Math.min(index, descriptions.size() - 1), 0);
-            slidingBarButton.get().rectangle(new Vector3f(this.x + this.getWidth() - 38,
-                            this.y + (float) this.height / 2 - 13 + ((float) index / this.descriptions.size()) * 22, 0),
+            slidingBarButton.get().rectangle(new Vector3f(this.getX() + this.getWidth() - 38,
+                            this.getY() + (float) this.height / 2 - 13 + ((float) index / this.descriptions.size()) * 22, 0),
                     ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 6, 6);
         }
     }
@@ -152,12 +145,12 @@ public class FinishedTooltip extends AbstractWidget {
 
     public boolean clickedOnSlideBar(double pMouseX, double pMouseY) {
         if (!isHasBar()) return false;
-        return  (pMouseX >= this.x + this.getWidth() - 38 && pMouseX <= this.x + this.getWidth() - 32 &&
-        pMouseY >= this.y + (float) this.getHeight() / 2 - 13 && pMouseY <= this.y + (float) this.getHeight() / 2 + 13);
+        return  (pMouseX >= this.getX() + this.getWidth() - 38 && pMouseX <= this.getX() + this.getWidth() - 32 &&
+        pMouseY >= this.getY() + (float) this.getHeight() / 2 - 13 && pMouseY <= this.getY() + (float) this.getHeight() / 2 + 13);
     }
 
     private Pair<Float, Float> getYBorders() {
-        return Pair.of(this.y + (float) this.getHeight() / 2 - 13, this.y + (float) this.getHeight() / 2 + 13);
+        return Pair.of(this.getY() + (float) this.getHeight() / 2 - 13, this.getY() + (float) this.getHeight() / 2 + 13);
     }
 
     private float getBarHeight() {
@@ -212,7 +205,7 @@ public class FinishedTooltip extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    public void updateWidgetNarration(NarrationElementOutput output) {
 
     }
 }

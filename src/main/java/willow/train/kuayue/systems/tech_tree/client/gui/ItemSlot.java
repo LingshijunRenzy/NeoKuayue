@@ -4,13 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.royawesome.jlibnoise.module.combiner.Min;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -37,8 +37,7 @@ public class ItemSlot extends AbstractWidget {
     }
 
     public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super.setPosition(x, y);
     }
 
     public ItemStack shrink(int count) {
@@ -93,28 +92,28 @@ public class ItemSlot extends AbstractWidget {
 
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack,
+    public void renderWidget(@NotNull GuiGraphics graphics,
                              int mouseX, int mouseY, float partial) {
         if (itemStack != null && itemStack != ItemStack.EMPTY) {
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-            renderer.renderAndDecorateItem(itemStack, this.x, this.y);
-            renderer.renderGuiItemDecorations(Minecraft.getInstance().font, itemStack, x, y);
+            renderer.renderAndDecorateItem(itemStack, this.getX(), this.getY());
+            renderer.renderGuiItemDecorations(Minecraft.getInstance().font, itemStack, this.getX(), this.getY());
         }
-        renderItemMask(poseStack, renderRedMask, permanentRedMask, mouseX, mouseY, getRed());
-        renderItemMask(poseStack, renderGreenMask, permanentGreenMask, mouseX, mouseY, getGreen());
-        renderItemMask(poseStack, renderMouseOverMask, false, mouseX, mouseY, getWhite());
+        renderItemMask(graphics, renderRedMask, permanentRedMask, mouseX, mouseY, getRed());
+        renderItemMask(graphics, renderGreenMask, permanentGreenMask, mouseX, mouseY, getGreen());
+        renderItemMask(graphics, renderMouseOverMask, false, mouseX, mouseY, getWhite());
     }
 
-    private void renderItemMask(PoseStack pose, boolean renderMask, boolean permanentMask,
+    private void renderItemMask(GuiGraphics graphics, boolean renderMask, boolean permanentMask,
                                 double mouseX, double mouseY, int color) {
         if (!renderMask) return;
         if (permanentMask || (renderMouseOverMask && isMouseOver(mouseX, mouseY))) {
-            fill(pose, this.x, this.y, this.x + this.width, this.y + this.height, color);
+            graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, color);
         }
     }
 
     @Override
-    public void updateNarration(@NotNull NarrationElementOutput output) {
+    public void updateWidgetNarration(@NotNull NarrationElementOutput output) {
         output.add(NarratedElementType.HINT, itemStack.getDisplayName());
     }
 }

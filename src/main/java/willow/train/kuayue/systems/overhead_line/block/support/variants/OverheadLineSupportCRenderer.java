@@ -11,8 +11,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.TransformationHelper;
+import org.joml.Vector3f;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 
@@ -86,10 +88,10 @@ public abstract class OverheadLineSupportCRenderer {
         public void onResourceManagerReload(ResourceManager pResourceManager) {}
 
         @Override
-        public void renderByItem(ItemStack pStack, ItemTransforms.TransformType pTransformType, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
+        public void renderByItem(ItemStack pStack, ItemDisplayContext pDisplayContext, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
 
-            applySupportCTransform(pPoseStack, pTransformType);
+            applySupportCTransform(pPoseStack, pDisplayContext);
 
             pPoseStack.translate(0,0,-0.4);
             AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_A2_MODEL.render(
@@ -109,13 +111,13 @@ public abstract class OverheadLineSupportCRenderer {
         }
     }
 
-    public static void applySupportCTransform(PoseStack poseStack, ItemTransforms.TransformType type){
+    public static void applySupportCTransform(PoseStack poseStack, ItemDisplayContext type){
         switch (type) {
             case GUI:
                 poseStack.scale(0.35f, 0.35f, 0.35f);
                 poseStack.translate(1.45, 1.125, 0);
                 poseStack.mulPose(
-                        Quaternion.fromXYZDegrees(new Vector3f(30,45,0))
+                        TransformationHelper.quatFromXYZ(new Vector3f(30,45,0), true)
                 );
                 break;
             case FIRST_PERSON_LEFT_HAND:
@@ -127,14 +129,14 @@ public abstract class OverheadLineSupportCRenderer {
                 poseStack.scale(0.75f, 0.75f, 0.75f);
                 poseStack.translate(1, 0.75, 0);
                 poseStack.mulPose(
-                        Quaternion.fromXYZDegrees(new Vector3f(90,-180,0))
+                        TransformationHelper.quatFromXYZ(new Vector3f(90,-180,0), true)
                 );
                 break;
             case THIRD_PERSON_RIGHT_HAND:
                 poseStack.scale(0.75f, 0.75f, 0.75f);
                 poseStack.translate(0, 1.75, 0);
                 poseStack.mulPose(
-                        Quaternion.fromXYZDegrees(new Vector3f(90,0,0))
+                        TransformationHelper.quatFromXYZ(new Vector3f(90,0,0), true)
                 );
                 break;
             case GROUND:
@@ -154,7 +156,7 @@ public abstract class OverheadLineSupportCRenderer {
         public void onResourceManagerReload(ResourceManager pResourceManager) {}
 
         @Override
-        public void renderByItem(ItemStack pStack, ItemTransforms.TransformType pTransformType, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
+        public void renderByItem(ItemStack pStack, ItemDisplayContext pTransformType, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
 
             applySupportCTransform(pPoseStack, pTransformType);

@@ -62,7 +62,7 @@ public class InternalCombustionDriveControllerBlockEntityRenderer extends SmartB
 
         poseStack.pushPose();
         poseStack.translate(1.125,1.1,0.925);
-        poseStack.mulPose(Quaternion.fromXYZ((float) (22.5 * (Math.PI) / 180),(float) (Math.PI),0));
+        poseStack.mulPose(TransformationHelper.quatFromXYZ((float) (22.5 * (Math.PI) / 180),(float) (Math.PI),0, false));
         poseStack.scale(0.0025f * 0.35f, 0.0025f * 0.35f, 0.0025f);
 
         RenderContext worldContext = new RenderContext(RenderContext.RenderContextType.WORLD);

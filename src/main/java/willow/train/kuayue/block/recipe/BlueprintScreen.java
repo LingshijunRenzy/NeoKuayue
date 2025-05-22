@@ -1,7 +1,6 @@
 package willow.train.kuayue.block.recipe;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import lombok.Getter;
@@ -9,6 +8,7 @@ import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -826,15 +826,15 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float partialTick,
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTick,
                             int mouseX, int mouseY) {
-        renderBackground(poseStack);
+        renderBackground(graphics);
         Minecraft mc = Minecraft.getInstance();
         ImageMask mask = setParams(mc);
         if (mask == null) return;
-        poseStack.pushPose();
-        mask.renderToGui(poseStack.last());
-        poseStack.popPose();
+        graphics.pose().pushPose();
+        mask.renderToGui(graphics.pose().last());
+        graphics.pose().popPose();
     }
 
     private void onPositionChanged(float neoBgx, float neoBgy) {
@@ -1009,7 +1009,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         titleLabel.visible = true;
     }
 
-    private void renderTooltip(PoseStack poseStack, TechTreeLabel label,
+    private void renderTooltip(GuiGraphics graphics, TechTreeLabel label,
                                TechTreeItemButton grpBtn,
                                int mouseX, int mouseY, float partial) {
         if (label == null && grpBtn == null) return;
@@ -1039,7 +1039,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             tooltip.setPosition(tooltipX + 1, tooltipY);
         else
             tooltip.setPosition(smallerX - tooltip.getWidth() - 1, tooltipY);
-        tooltip.render(poseStack, mouseX, mouseY, partial);
+        tooltip.render(graphics, mouseX, mouseY, partial);
     }
 
     private int getBgX() {
@@ -1051,8 +1051,8 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        super.render(poseStack, mouseX, mouseY, partialTick);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
         this.confirmButton.setRenderMask(this.confirmButton.isMouseOver(mouseX, mouseY));
         if (chosenGroup != null) {
             int groupIndex = groups.indexOf(chosenGroup);
@@ -1071,13 +1071,13 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             if (mainPercentage > 0) {
                 this.mainArrow.get().renderToGui();
             }
-            renderSlotItemTooltip(poseStack, mouseX, mouseY);
+            renderSlotItemTooltip(graphics, mouseX, mouseY);
         }
         if (titleLabel.visible && !renderCover) {
-            poseStack.pushPose();
-            poseStack.translate(0, 0, 800);
-            titleLabel.render(poseStack, mouseX, mouseY, partialTick);
-            poseStack.popPose();
+            graphics.pose().pushPose();
+            graphics.pose().translate(0, 0, 800);
+            titleLabel.render(graphics, mouseX, mouseY, partialTick);
+            graphics.pose().popPose();
         }
         TechTreeItemButton button = null;
         for (TechTreeItemButton btn : groupButtons) {
@@ -1087,28 +1087,28 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             }
         }
         TechTreeLabel label = getChosenLabel(mouseX, mouseY);
-        renderTooltip(poseStack, label, button, mouseX, mouseY, partialTick);
+        renderTooltip(graphics, label, button, mouseX, mouseY, partialTick);
     }
 
-    public void renderSlotItemTooltip(PoseStack poseStack, int mouseX, int mouseY) {
+    public void renderSlotItemTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         for (ItemSlot slot : consumptionSlots) {
             if (slot.getItemStack() != null &&
                     !slot.getItemStack().equals(ItemStack.EMPTY) &&
                     slot.isMouseOver(mouseX, mouseY)) {
-                renderItemTooltip(poseStack, slot.getItemStack(), mouseX, mouseY);
+                renderItemTooltip(graphics, slot.getItemStack(), mouseX, mouseY);
             }
         }
         for (ItemSlot slot : resultSlots) {
             if (slot.getItemStack() != null &&
                     !slot.getItemStack().equals(ItemStack.EMPTY) &&
                     slot.isMouseOver(mouseX, mouseY)) {
-                renderItemTooltip(poseStack, slot.getItemStack(), mouseX, mouseY);
+                renderItemTooltip(graphics, slot.getItemStack(), mouseX, mouseY);
             }
         }
     }
 
-    public void renderItemTooltip(PoseStack poseStack, ItemStack item, int mouseX, int mouseY) {
-        this.renderTooltip(poseStack, this.getTooltipFromItem(item), item.getTooltipImage(), mouseX, mouseY);
+    public void renderItemTooltip(GuiGraphics graphics, ItemStack item, int mouseX, int mouseY) {
+        this.renderTooltip(graphics, getTooltipFromItem(Minecraft.getInstance(), item), item.getTooltipImage(), mouseX, mouseY);
     }
 
     public @Nullable TechTreeLabel getChosenLabel(double mouseX, double mouseY) {

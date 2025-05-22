@@ -1,17 +1,18 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.NineSlicedImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
 
 public class TechTreeTitleLabel extends AbstractWidget {
@@ -38,8 +39,7 @@ public class TechTreeTitleLabel extends AbstractWidget {
     }
 
     public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super.setPosition(x, y);
     }
 
     private void getTitleWidth() {
@@ -55,20 +55,20 @@ public class TechTreeTitleLabel extends AbstractWidget {
 
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX,
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX,
                              int mouseY, float partialTick) {
         if (length < 0) getTitleWidth();
         if (length <= 0) return;
         NineSlicedImageMask mask = bgMask.get();
-        mask.rectangle(new Vector3f(this.x, this.y, 0), ImageMask.Axis.X,
+        mask.rectangle(new Vector3f(this.getX(), this.getY(), 0), ImageMask.Axis.X,
                 ImageMask.Axis.Y, true, true, width, height);
         mask.renderToGui();
         Font font = Minecraft.getInstance().font;
-        font.draw(poseStack, title, x + 10, y + 8, 0xffffffff);
+        font.draw(poseStack, title, getX() + 10, getY() + 8, 0xffffffff);
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    public void updateWidgetNarration(NarrationElementOutput output) {
         output.add(NarratedElementType.TITLE, this.getMessage());
     }
 }

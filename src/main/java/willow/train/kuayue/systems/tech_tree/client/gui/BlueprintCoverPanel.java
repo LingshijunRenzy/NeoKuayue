@@ -1,11 +1,11 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.Getter;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -44,8 +44,7 @@ public class BlueprintCoverPanel extends AbstractWidget {
 
     private void updateSelfParams() {
         if (background != null) {
-            this.x = background.x;
-            this.y = background.y;
+            this.setPosition(background.getX(), background.getY());
             this.width = background.getWidth();
             this.height = background.getHeight();
         }
@@ -67,7 +66,7 @@ public class BlueprintCoverPanel extends AbstractWidget {
 
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX,
+    public void renderWidget(@NotNull GuiGraphics poseStack, int mouseX,
                              int mouseY, float partial) {
         if (background != null) background.render(poseStack, mouseX, mouseY, partial);
         if (title != null) title.render(poseStack, mouseX, mouseY, partial);
@@ -105,7 +104,7 @@ public class BlueprintCoverPanel extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+    public void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
         if (description != null) description.updateNarration(pNarrationElementOutput);
     }
 }

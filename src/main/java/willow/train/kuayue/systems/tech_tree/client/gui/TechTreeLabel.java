@@ -1,7 +1,6 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.SimpleColor;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
@@ -9,9 +8,11 @@ import kasuga.lib.core.util.data_type.Vec2i;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
 import willow.train.kuayue.systems.tech_tree.NodeType;
@@ -58,8 +59,8 @@ public class TechTreeLabel extends ImageButton {
     }
 
     public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.setX(x);
+        this.setY(y);
     }
 
     public void setFinished(boolean finished) {
@@ -86,24 +87,24 @@ public class TechTreeLabel extends ImageButton {
     }
 
     public Vec2i getCenterPos() {
-        return new Vec2i(x + 10, y + 10);
+        return new Vec2i(getX() + 10, getY() + 10);
     }
 
     @Override
-    public void renderButton(PoseStack pPoseStack, int mouseX, int mouseY, float partialTicks) {
-        super.renderButton(pPoseStack, mouseX, mouseY, partialTicks);
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.renderWidget(graphics, mouseX, mouseY, partialTicks);
 
         // render item
         ItemStack logo = node.getLogo();
         Minecraft mc = Minecraft.getInstance();
         ItemRenderer renderer = mc.getItemRenderer();
         renderer.blitOffset = 100.0F;
-        renderer.renderAndDecorateItem(logo, x + (this.width - 16) / 2, y + (this.height - 16) / 2);
-        renderer.renderGuiItemDecorations(mc.font, logo, x + (this.width - 16) / 2, y + (this.height - 16) / 2);
+        renderer.renderAndDecorateItem(logo, getX() + (this.width - 16) / 2, getY() + (this.height - 16) / 2);
+        renderer.renderGuiItemDecorations(mc.font, logo, getX() + (this.width - 16) / 2, getY() + (this.height - 16) / 2);
         renderer.blitOffset = 0.0F;
 
         if (finished || required) {
-            finishDotMask.get().rectangle(new Vector3f(this.x + this.width - 7, this.y + this.height - 7, 0),
+            finishDotMask.get().rectangle(new Vector3f(this.getX() + this.width - 7, this.getY() + this.height - 7, 0),
                     ImageMask.Axis.X, ImageMask.Axis.Y, true, true, 7, 7);
             if (required) {
                 finishDotMask.get().setColor(SimpleColor.fromRGBInt(0xff0000));
