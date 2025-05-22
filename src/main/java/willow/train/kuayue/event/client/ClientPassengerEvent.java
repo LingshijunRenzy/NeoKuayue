@@ -26,7 +26,7 @@ public class ClientPassengerEvent {
         if(entityMountEvent.isMounting()){
             ClientTickScheduler.onNextTick(()->{
                 BlockPos pos = contraptionEntity.getContraption().getSeatOf(localPlayer.getUUID());
-                Block targetBlock = contraptionEntity.getContraption().getBlocks().get(pos).state.getBlock();
+                Block targetBlock = contraptionEntity.getContraption().getBlocks().get(pos).state().getBlock();
                 if(!(targetBlock instanceof IContraptionSeatListenerBlock listenerBlock))
                     return;
                 listenerBlock.onCurrentPlayerSitDownOnContraption(localPlayer, contraptionEntity);

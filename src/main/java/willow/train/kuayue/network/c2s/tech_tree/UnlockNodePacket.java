@@ -29,7 +29,7 @@ public class UnlockNodePacket extends C2SPacket {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
             if (player == null) return;
-            ServerLevel level = player.getLevel();
+            ServerLevel level = (ServerLevel) player.level();
             PlayerData data = PlayerDataManager.MANAGER.getPlayerData(player);
             if (data == null) {
                 sendReply(player, PlayerData.UnlockResult.failedEmpty());

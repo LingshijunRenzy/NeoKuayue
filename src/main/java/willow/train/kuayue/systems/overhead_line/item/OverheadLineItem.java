@@ -33,7 +33,7 @@ public class OverheadLineItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if (!pPlayer.level.isClientSide()) {
+        if (!pPlayer.level().isClientSide()) {
             if (pPlayer.isShiftKeyDown()) {
                 ComponentTranslationTool.showWarning(pPlayer, "overhead_line_target_remove", true);
                 return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand));

@@ -56,7 +56,7 @@ public class AllFoods {
                             new ParticlesDrinkBlock(properties, PlacementFoodBlock.FoodType.BOTTLE, false))
                     .item((reg, properties, hasEffect, hasTooltip) ->
                             new PlacementDrinkBlockItem(reg.getBlock(), properties, hasEffect, hasTooltip))
-                    .material(Material.METAL, MaterialColor.COLOR_BLACK)
+                    .material(MapColor.COLOR_BLUE)
                     .soundType(SoundType.METAL)
                     .strength(0.5F)
                     .noOcclusion()

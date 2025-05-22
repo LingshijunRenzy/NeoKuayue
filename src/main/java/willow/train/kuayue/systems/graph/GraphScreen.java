@@ -5,6 +5,7 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.graph.TrackGraph;
 import com.simibubi.create.content.trains.graph.TrackNodeLocation;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
@@ -18,25 +19,22 @@ public class GraphScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+    public void render(GuiGraphics guiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        super.render(guiGraphics, pMouseX, pMouseY, pPartialTick);
 
         Create.RAILWAYS.sided(null)
                 .trackNetworks
-                .forEach((key, value) -> renderGraph(value, pPoseStack));
+                .forEach((key, value) -> renderGraph(value, guiGraphics));
     }
 
-    public void renderGraph(TrackGraph value, PoseStack pPoseStack){
+    public void renderGraph(TrackGraph value, GuiGraphics guiGraphics){
         for (TrackNodeLocation node : value.getNodes()) {
 
             Vec3 pos = node.getLocation().add(position.reverse());
-            Minecraft.getInstance().font.draw(
-                    pPoseStack,
-                    "·",
-                    (float) pos.x,
-                    (float) pos.z,
-                    0xFFFFFF
-            );
+            guiGraphics.drawString(font, ".",
+                    (int) Math.round(pos.x),
+                    (int) Math.round(pos.z),
+                    0xffffff);
         }
     }
 

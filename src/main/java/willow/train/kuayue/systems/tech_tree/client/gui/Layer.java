@@ -3,6 +3,7 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import lombok.NonNull;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ public class Layer extends AbstractWidget {
 
     public void onDrag(int dx, int dy) {
         Vec2iE lT = windowLeftTop, rD = windowRightDown;
-        setPos(this.x + dx, this.y + dy);
+        setPos(this.getX() + dx, this.getY() + dy);
         windowLeftTop = lT;
         windowRightDown = rD;
     }
@@ -53,19 +54,19 @@ public class Layer extends AbstractWidget {
     }
 
     public void setX(int x) {
-        int offset = x - this.x;
+        int offset = x - this.getX();
         widgets.forEach(widget -> {
-            widget.x += offset;
+            widget.setX(widget.getX() + offset);
         });
-        this.x = x;
+        super.setX(x);
     }
 
     public void setY(int y) {
-        int offset = y - this.y;
+        int offset = y - this.getY();
         widgets.forEach(widget -> {
-            widget.y += offset;
+            widget.setY(widget.getY() + offset);
         });
-        this.y = y;
+        super.setY(y);
     }
 
     public void setPos(int x, int y) {
@@ -88,17 +89,17 @@ public class Layer extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@NonNull PoseStack poseStack, int mouseX,
+    public void renderWidget(@NonNull GuiGraphics guiGraphics, int mouseX,
                              int mouseY, float partialTick) {
         renderableWidgets.forEach(
                 widget -> {
                     if (windowLeftTop != null && windowRightDown != null) {
-                        int centerX = widget.x + widget.getWidth() / 2;
-                        int centerY = widget.y + widget.getHeight() / 2;
+                        int centerX = widget.getX() + widget.getWidth() / 2;
+                        int centerY = widget.getY() + widget.getHeight() / 2;
                         if (centerX < windowLeftTop.x || centerX >= windowRightDown.x) return;
                         if (centerY < windowLeftTop.y || centerY >= windowRightDown.y) return;
                     }
-                    widget.render(poseStack, mouseX, mouseY, partialTick);
+                    widget.render(guiGraphics, mouseX, mouseY, partialTick);
                 }
         );
     }
@@ -171,7 +172,7 @@ public class Layer extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(@NonNull NarrationElementOutput output) {
+    public void updateWidgetNarration(@NonNull NarrationElementOutput output) {
         for (AbstractWidget widget : widgets) {
             if (widget.isHoveredOrFocused()) widget.updateNarration(output);
         }

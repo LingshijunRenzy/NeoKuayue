@@ -459,7 +459,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             if (stack == null || stack.equals(ItemStack.EMPTY))
                 continue;
             for (ItemStack item : itemRequired) {
-                if (item.sameItem(stack)) {
+                if (item.equals(stack, false)) {
                     slot.setPermanentRedMask(true);
                     break;
                 } else {
@@ -1064,9 +1064,10 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             panels.forEach((g, p) -> p.visible = false);
             renderSubArrows(scale);
             if (nodeTitleComponent != null) {
-                font.draw(poseStack, nodeTitleComponent,
-                        bgX + map(39, scale),
-                        bgY + map(16, scale), 0xffffff);
+                graphics.drawString(font, nodeTitleComponent,
+                        Math.round(bgX + map(39, scale)),
+                        Math.round(bgY + map(16, scale)),
+                        0xffffff);
             }
             if (mainPercentage > 0) {
                 this.mainArrow.get().renderToGui();
@@ -1095,20 +1096,20 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             if (slot.getItemStack() != null &&
                     !slot.getItemStack().equals(ItemStack.EMPTY) &&
                     slot.isMouseOver(mouseX, mouseY)) {
-                renderItemTooltip(graphics, slot.getItemStack(), mouseX, mouseY);
+                renderItemTooltip(font, graphics, slot.getItemStack(), mouseX, mouseY);
             }
         }
         for (ItemSlot slot : resultSlots) {
             if (slot.getItemStack() != null &&
                     !slot.getItemStack().equals(ItemStack.EMPTY) &&
                     slot.isMouseOver(mouseX, mouseY)) {
-                renderItemTooltip(graphics, slot.getItemStack(), mouseX, mouseY);
+                renderItemTooltip(font, graphics, slot.getItemStack(), mouseX, mouseY);
             }
         }
     }
 
-    public void renderItemTooltip(GuiGraphics graphics, ItemStack item, int mouseX, int mouseY) {
-        this.renderTooltip(graphics, getTooltipFromItem(Minecraft.getInstance(), item), item.getTooltipImage(), mouseX, mouseY);
+    public void renderItemTooltip(Font font, GuiGraphics graphics, ItemStack item, int mouseX, int mouseY) {
+        graphics.renderTooltip(font, getTooltipFromItem(Minecraft.getInstance(), item), item.getTooltipImage(), mouseX, mouseY);
     }
 
     public @Nullable TechTreeLabel getChosenLabel(double mouseX, double mouseY) {
@@ -1130,11 +1131,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
             }
         }
         return null;
-    }
-
-    @Override
-    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
-        // super.renderLabels(pPoseStack, pMouseX, pMouseY);
     }
 
     @Override

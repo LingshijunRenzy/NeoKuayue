@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.StaticImage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.driver.path.PathMarkRenderTexture;
@@ -40,6 +41,12 @@ public class StationMarkRenderer implements EdgePathPointRenderer<StationMark> {
         tesselator.end();
 
         RenderSystem.disableBlend();
-        Minecraft.getInstance().font.draw(new PoseStack(), stationMark.getStationName(), left + 8, 1, 0xFFFFFF);
+        GuiGraphics guiGraphics = new GuiGraphics(
+                Minecraft.getInstance(),
+                Minecraft.getInstance().renderBuffers().bufferSource()
+        );
+        guiGraphics.drawString(Minecraft.getInstance().font, stationMark.getStationName(),
+                Math.round(left + 8), 1, 0xffffff);
+        // Minecraft.getInstance().font.draw(new PoseStack(), stationMark.getStationName(), left + 8, 1, 0xFFFFFF);
     }
 }

@@ -8,6 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import willow.train.kuayue.initial.AllElements;
 
+import static willow.train.kuayue.initial.create.AllLocoBogeys.testRegistry;
+
 public class AllTrackMaterial {
 
     public static final SimpleTrackBlock.Builder builder =

@@ -32,13 +32,13 @@ public class MixinLivingEntityRenderer {
             return instance.isPassenger();
         }
         StructureTemplate.StructureBlockInfo info = contraption.getBlocks().get(seat);
-        if(!(info.state.getBlock() instanceof YZSeatBlock seatBlock) || !(info.state.getBlock() instanceof IDynamicSitBlock dynamicSitBlock)){
+        if(!(info.state().getBlock() instanceof YZSeatBlock seatBlock) || !(info.state().getBlock() instanceof IDynamicSitBlock dynamicSitBlock)){
             return instance.isPassenger();
         }
         int size = seatBlock.getSeatSize();
         for(int i=0;i<size;i++){
-            if(info.nbt.getBoolean("hasSeat"+i) && info.nbt.getUUID("seat"+i).equals(player.getUUID())){
-                return dynamicSitBlock.isSitDown(info.state, i);
+            if(info.nbt().getBoolean("hasSeat"+i) && info.nbt().getUUID("seat"+i).equals(player.getUUID())){
+                return dynamicSitBlock.isSitDown(info.state(), i);
             }
         }
         return instance.isPassenger();

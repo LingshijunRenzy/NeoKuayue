@@ -1,6 +1,7 @@
 package willow.train.kuayue.systems.device.track.train_station.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,13 +26,15 @@ public class TrainStationScreen extends AbstractContainerScreen<AbstractContaine
     protected void init() {
         this.addRenderableWidget(nameBox);
         this.addRenderableWidget(shortenCodeBox);
-        this.addRenderableWidget(new Button(0, 0, 100, 20, Component.literal("Save"), button -> {
-
-        }));
+        Button.Builder builder = new Button.Builder(
+                Component.literal("Save"),
+                button -> {}
+        ).bounds(0, 0, 100, 20);
+        this.addRenderableWidget(builder.build());
     }
 
     @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(GuiGraphics guiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 
     }
 }

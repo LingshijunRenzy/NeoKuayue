@@ -22,8 +22,8 @@ public class BoardLayer<T extends AbstractWidget> extends Layer {
     public void setWidget(int x, int y, T widget) {
         if (!isValidLocation(x, y)) return;
         Vec2iE pos = getLocation(x, y);
-        widget.x = pos.x;
-        widget.y = pos.y;
+        widget.setX(pos.x);
+        widget.setY(pos.y);
         board[y][x] = widget;
         this.addRenderableWidget(widget);
     }
@@ -85,7 +85,7 @@ public class BoardLayer<T extends AbstractWidget> extends Layer {
     }
 
     public Vec2iE getLocation(int x, int y) {
-        return new Vec2iE(this.x + x * squareSide, this.y + y * squareSide);
+        return new Vec2iE(this.getX() + x * squareSide, this.getY() + y * squareSide);
     }
 
     public interface BoardIterator<T extends AbstractWidget> {

@@ -6,6 +6,7 @@ import kasuga.lib.core.client.model.BedrockModelLoader;
 import kasuga.lib.core.client.model.anim_model.AnimModel;
 import kasuga.lib.registrations.BlockEntityRendererBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -50,21 +51,31 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
         ms.pushPose();
         List<OverheadLineSupportBlockEntity.Connection> connections = blockEntity.getConnections();
         ms.scale(-0.01f,-0.01f,-0.01f);
-        Minecraft.getInstance().font.draw(
-                ms,
+        Minecraft.getInstance().font.drawInBatch(
                 String.format("OverHeadLine (%d, %d, %d)", blockEntity.getBlockPos().getX(), blockEntity.getBlockPos().getY(), blockEntity.getBlockPos().getZ()),
                 0,
                 0,
-                0xffffff
+                0xffffff,
+                false,
+                ms.last().pose(),
+                buffer,
+                Font.DisplayMode.NORMAL,
+                0,
+                light
         );
         ms.translate(0, 10, 0);
         for (int i = 0; i < connections.size(); i++) {
-            Minecraft.getInstance().font.draw(
-                    ms,
+            Minecraft.getInstance().font.drawInBatch(
                     String.format("#%d Absolute WorldPos: (%d, %d, %d) Type %s", i, connections.get(i).absolutePos().getX(), connections.get(i).absolutePos().getY(), connections.get(i).absolutePos().getZ(), WireReg.getName(connections.get(i).type()).toString()),
                     0,
                     0,
-                    0xffffff
+                    0xffffff,
+                    false,
+                    ms.last().pose(),
+                    buffer,
+                    Font.DisplayMode.NORMAL,
+                    0,
+                    light
             );
             ms.translate(0, 10, 0);
         }

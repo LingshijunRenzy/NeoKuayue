@@ -27,7 +27,7 @@ public class BlueprintCoverManager implements ResourceManagerReloadListener {
 
     public static final BlueprintCoverManager INSTANCE = new BlueprintCoverManager();
 
-    public static final String PATH = "blueprint_cover/";
+    public static final String PATH = "blueprint_cover";
 
     @Getter
     private final HashMap<ResourceLocation, BlueprintCover> covers;

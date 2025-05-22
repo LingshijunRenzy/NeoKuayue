@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -40,8 +41,8 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
     }
 
     @Override
-    public ItemStack assemble(RecipeWrapper inv) {
-        return super.assemble(inv);
+    public ItemStack assemble(RecipeWrapper inv, RegistryAccess registryAccess) {
+        return super.assemble(inv, registryAccess);
     }
 
     @Override

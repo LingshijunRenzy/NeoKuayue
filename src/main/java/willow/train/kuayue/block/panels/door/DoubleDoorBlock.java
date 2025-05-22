@@ -7,6 +7,8 @@ import kasuga.lib.core.base.UnModeledBlockProperty;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -82,10 +84,8 @@ public class DoubleDoorBlock extends TrainEndfaceBlock implements IBE<DoubleDoor
         boolean flag = level.hasNeighborSignal(pos);
         if (flag != state.getValue(POWERED)) {
             if (flag != state.getValue(OPEN)) {
-                level.levelEvent((Player) null,
-                        flag ? TrainDoorBlock.getOpenSound(this.material) :
-                                TrainDoorBlock.getCloseSound(this.material),
-                        pos, 0);
+                level.playSound(null, pos, flag ? SoundEvents.IRON_DOOR_OPEN :
+                        SoundEvents.IRON_DOOR_CLOSE, SoundSource.BLOCKS);
                 level.gameEvent((Entity) null,
                         flag ? GameEvent.BLOCK_OPEN :
                                 GameEvent.BLOCK_CLOSE,

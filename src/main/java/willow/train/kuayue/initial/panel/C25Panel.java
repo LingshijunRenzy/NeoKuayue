@@ -111,7 +111,7 @@ public class C25Panel {
     public static final SlabRegistration<TrainSlabBlock> PANEL_SLAB_UNIVERSAL_25 =
             new SlabRegistration<TrainSlabBlock>("panel_slab_universal_25")
                     .block(p -> new TrainSlabBlock(p, false))
-                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .materialAndColor(MapColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueCarriageTab )
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);

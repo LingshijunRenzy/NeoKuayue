@@ -88,23 +88,17 @@ public class FinishedTooltip extends AbstractWidget {
         int baseX = this.getX() + 5;
         graphics.pose().pushPose();
         graphics.pose().translate(0.0D, 0.0D, 400.0D);
-        Matrix4f matrix4f = graphics.pose().last().pose();
-        MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-        font.drawInBatch(title, baseX, this.getY(), fontColor,
-                false, matrix4f, buffer, false,
-                0, 15728880);
+        graphics.drawString(font, title, baseX, this.getY(), fontColor, false);
         int counter = 0;
         for (int i = index; i < descriptions.size(); i++) {
             int by = 5 + (counter + 1) * font.lineHeight;
             if (by + font.lineHeight >= this.getHeight()) break;
             Component component = descriptions.get(i);
-            font.drawInBatch(component, baseX,
+            graphics.drawString(font, component, baseX,
                     this.getY() + by, fontColor,
-                    false, matrix4f, buffer, false,
-                    0, 15728880);
+                    false);
             counter++;
         }
-        buffer.endBatch();
         completedStamp.get().renderToGui();
         if (hasBar) {
             slidingBar.get().renderToGui();

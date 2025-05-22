@@ -144,20 +144,20 @@ public class DoubleDriverSeatBlock extends M1SeatBlock implements IContraptionSe
     public void onAction(ServerPlayer player, Contraption contraption, BlockPos blockPos, StructureTemplate.StructureBlockInfo info, DriverSeatActionType actionType) {
         int index = -1;
         for(int i=0;i<2;i++){
-            if(info.nbt.getBoolean("hasSeat"+i)){
+            if(info.nbt().getBoolean("hasSeat"+i)){
                 index = i;
                 break;
             }
         }
         if(index == -1)
             return;
-        BlockState state = info.state;
+        BlockState state = info.state();
         if(index == 0){
             state = state.setValue(LEFT_STATE, actionType);
         } else {
             state = state.setValue(RIGHT_STATE, actionType);
         }
-        info = new StructureTemplate.StructureBlockInfo(blockPos, state, info.nbt);
+        info = new StructureTemplate.StructureBlockInfo(blockPos, state, info.nbt());
         contraption.entity.setBlock(blockPos, info);
     }
 }

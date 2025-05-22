@@ -230,8 +230,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<LocoBogeyBlock> hxd3dBogey =
             new BogeyBlockReg<LocoBogeyBlock>("hxd3d_bogey")
                     .block(LocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("hxd3d_bogey")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -241,8 +240,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<LocoBogeyBlock> hxd3dBackwardBogey =
             new BogeyBlockReg<LocoBogeyBlock>("hxd3d_backward_bogey")
                     .block(LocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("hxd3d_backward_bogey")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -251,8 +249,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<LocoBogeyBlock> ss8Bogey =
             new BogeyBlockReg<LocoBogeyBlock>("ss8_bogey")
                     .block(LocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("ss8_bogey")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -262,8 +259,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<LocoBogeyBlock> ss8BackwardBogey =
             new BogeyBlockReg<LocoBogeyBlock>("ss8_backward_bogey")
                     .block(LocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("ss8_backward_bogey")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -273,8 +269,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<LocoBogeyBlock> dfh21BogeyStandard =
             new BogeyBlockReg<LocoBogeyBlock>("dfh21_bogey_s")
                     .block(LocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("dfh21_bogey_s")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -284,8 +279,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<LocoBogeyBlock> dfh21BackwardBogeyStandard =
             new BogeyBlockReg<LocoBogeyBlock>("dfh21_backward_bogey_s")
                     .block(LocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("dfh21_backward_bogey_s")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -310,8 +304,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AsymmetryLocoBogeyBlock> qjGuideBogey =
             new BogeyBlockReg<AsymmetryLocoBogeyBlock>("qj_guide_bogey")
                     .block(AsymmetryLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("qj_guide_bogey")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -347,8 +340,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<MeterLocoBogeyBlock> dfh21Bogey =
             new BogeyBlockReg<MeterLocoBogeyBlock>("dfh21_bogey")
                     .block(MeterLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("dfh21_bogey")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -358,8 +350,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<MeterLocoBogeyBlock> dfh21BackwardBogey =
             new BogeyBlockReg<MeterLocoBogeyBlock>("dfh21_backward_bogey")
                     .block(MeterLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("dfh21_backward_bogey")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -379,8 +370,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> ss8BogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("ss8_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("ss8_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -390,8 +380,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> ss8BackwardBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("ss8_backward_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("ss8_backward_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -401,8 +390,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> ss3BogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("ss3_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("ss3_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -412,8 +400,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> ss3BackwardBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("ss3_backward_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("ss3_backward_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -423,8 +410,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> hxd3dBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("hxd3d_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("hxd3d_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -434,8 +420,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> hxd3dBackwardBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("hxd3d_backward_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("hxd3d_backward_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -445,8 +430,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> df11gBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("df11g_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("df11g_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -456,8 +440,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> df11gBackwardBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("df11g_backward_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("df11g_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -467,8 +450,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> qjMainBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("qj_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("qj_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -478,8 +460,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> qjGuideBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("qj_guide_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("qj_guide_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -488,8 +469,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> dfh21BogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("dfh21_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("dfh21_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))
@@ -499,8 +479,7 @@ public class AllLocoBogeys {
     public static final BogeyBlockReg<AndesiteLocoBogeyBlock> dfh21BackwardBogeyAndesite =
             new BogeyBlockReg<AndesiteLocoBogeyBlock>("dfh21_backward_bogey_a")
                     .block(AndesiteLocoBogeyBlock::new)
-                    .material(Material.METAL)
-                    .materialColor(MaterialColor.PODZOL)
+                    .materialColor(MapColor.PODZOL)
                     .translationKey("dfh21_backward_bogey_a")
                     .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
                     .property(properties -> properties.strength(2.0f, 3.0f))

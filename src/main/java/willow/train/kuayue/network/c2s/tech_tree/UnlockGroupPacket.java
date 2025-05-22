@@ -31,7 +31,7 @@ public class UnlockGroupPacket extends C2SPacket {
             if (player == null) return;
             PlayerData data = PlayerDataManager.MANAGER.getOrCreatePlayerData(player);
             TechTreeGroup grp = TechTreeManager.MANAGER.getGroup(group);
-            ServerLevel world = player.getLevel();
+            ServerLevel world = (ServerLevel) player.level();
             if (grp == null) {
                 sendReply(player, PlayerData.UnlockResult.failedEmpty());
                 return;

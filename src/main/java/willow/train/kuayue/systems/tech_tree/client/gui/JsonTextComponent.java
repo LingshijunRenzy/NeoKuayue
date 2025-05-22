@@ -152,7 +152,8 @@ public class JsonTextComponent extends AbstractWidget {
              i < Math.min(components.size(), textIndex + renderCapacity);
              i++) {
             MutableComponent component = components.get(i);
-            font.draw(poseStack, component, x, y + i * font.lineHeight, 0xffffffff);
+            graphics.drawString(font, component, getX(),
+                    getY() + i * font.lineHeight, 0xffffffff);
         }
     }
 

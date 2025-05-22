@@ -36,7 +36,8 @@ public class WorldTrainSoundManager {
 
         @HostAccess.Export
         public void dispatchSound(String name){
-            SoundEvent soundEvent = new SoundEvent(new ResourceLocation(name));
+            // todo: need to check the range of this sound.
+            SoundEvent soundEvent = SoundEvent.createFixedRangeEvent(new ResourceLocation(name), 7.0f);
             SoundInstance instance = new TrackingContextSound(soundEvent, movementContext);
             Minecraft.getInstance().submit(()->Minecraft.getInstance().getSoundManager().play(instance));
         }

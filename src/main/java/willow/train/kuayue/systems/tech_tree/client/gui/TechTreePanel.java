@@ -6,6 +6,7 @@ import kasuga.lib.core.util.data_type.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.sounds.SoundManager;
@@ -54,8 +55,8 @@ public class TechTreePanel extends AbstractWidget {
     }
 
     private void setWindowForLayer(Layer layer) {
-        windowLeftTop = new Vec2iE(x + 10, y + 10);
-        windowRightDown = new Vec2iE(x + width - 10, y + height - 10);
+        windowLeftTop = new Vec2iE(getX() + 10, getY() + 10);
+        windowRightDown = new Vec2iE(getX() + width - 10, getY() + height - 10);
         layer.setWindow(windowLeftTop.x, windowLeftTop.y,
                 windowRightDown.x, windowRightDown.y);
     }
@@ -192,35 +193,35 @@ public class TechTreePanel extends AbstractWidget {
 
     private void getPathBetween(List<Vec2iE> from, Vec2iE to, @Nullable SimpleColor color) {
         if (from.isEmpty()) return;
-        LineLayer layer = LineLayer.getLine(from, to, new Vec2iE(this.x, this.y),
+        LineLayer layer = LineLayer.getLine(from, to, new Vec2iE(this.getX(), this.getY()),
                 20, color, v -> !labels.hasWidget(v.x, v.y));
         lines.add(layer);
         setWindowForLayer(layer);
     }
 
     public void setX(int x) {
-        int offsetX = x - this.x;
-        this.x = x;
+        int offsetX = x - this.getX();
+        super.setX(x);
         labels.setX(x);
-        lines.forEach(l -> l.setX(l.x + offsetX));
+        lines.forEach(l -> l.setX(l.getX() + offsetX));
         updateWindows();
     }
 
     public void setY(int y) {
-        int offsetY = y - this.y;
-        this.y = y;
+        int offsetY = y - this.getY();
+        super.setY(y);
         labels.setY(y);
-        lines.forEach(l -> l.setY(l.y + offsetY));
+        lines.forEach(l -> l.setY(l.getY() + offsetY));
         updateWindows();
     }
 
     public void setPosition(int x, int y) {
-        int offsetX = x - this.x;
-        int offsetY = y - this.y;
-        this.x = x;
-        this.y = y;
+        int offsetX = x - this.getX();
+        int offsetY = y - this.getY();
+        super.setX(x);
+        super.setY(y);
         labels.setPos(x, y);
-        lines.forEach(l -> l.setPos(l.x + offsetX, l.y + offsetY));
+        lines.forEach(l -> l.setPos(l.getX() + offsetX, l.getY() + offsetY));
         updateWindows();
     }
 
@@ -242,12 +243,12 @@ public class TechTreePanel extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
         for (LineLayer layer : lines) {
-            layer.render(poseStack, mouseX, mouseY, partial);
+            layer.render(guiGraphics, mouseX, mouseY, partial);
         }
         if (labels == null) return;
-        labels.render(poseStack, mouseX, mouseY, partial);
+        labels.render(guiGraphics, mouseX, mouseY, partial);
     }
 
     public boolean forceCheckDraggable() {
@@ -268,8 +269,8 @@ public class TechTreePanel extends AbstractWidget {
         for (AbstractWidget widget : labels.getWidgets()) {
             TechTreeLabel label = (TechTreeLabel) widget;
             if (!label.visible) return null;
-            if (label.x < windowLeftTop.x || label.y < windowLeftTop.y ||
-            label.x >= windowRightDown.x || label.y >= windowRightDown.y)
+            if (label.getX() < windowLeftTop.x || label.getY() < windowLeftTop.y ||
+            label.getX() >= windowRightDown.x || label.getY() >= windowRightDown.y)
                 continue;
             if (label.isMouseOver(mouseX, mouseY)) return label;
         }
@@ -287,7 +288,7 @@ public class TechTreePanel extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
 
     }
 }

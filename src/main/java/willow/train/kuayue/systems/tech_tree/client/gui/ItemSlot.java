@@ -95,9 +95,8 @@ public class ItemSlot extends AbstractWidget {
     public void renderWidget(@NotNull GuiGraphics graphics,
                              int mouseX, int mouseY, float partial) {
         if (itemStack != null && itemStack != ItemStack.EMPTY) {
-            ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-            renderer.renderAndDecorateItem(itemStack, this.getX(), this.getY());
-            renderer.renderGuiItemDecorations(Minecraft.getInstance().font, itemStack, this.getX(), this.getY());
+            graphics.renderItem(itemStack, this.getX(), this.getY());
+            graphics.renderItemDecorations(Minecraft.getInstance().font, itemStack, this.getX(), this.getY());
         }
         renderItemMask(graphics, renderRedMask, permanentRedMask, mouseX, mouseY, getRed());
         renderItemMask(graphics, renderGreenMask, permanentGreenMask, mouseX, mouseY, getGreen());

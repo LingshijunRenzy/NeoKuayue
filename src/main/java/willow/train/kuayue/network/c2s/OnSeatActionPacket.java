@@ -33,7 +33,7 @@ public class OnSeatActionPacket extends C2SPacket {
         BlockPos pos = contraptionEntity.getContraption().getSeatOf(player.getUUID());
         if(pos == null)
             return;
-        Block block = contraptionEntity.getContraption().getBlocks().get(pos).state.getBlock();
+        Block block = contraptionEntity.getContraption().getBlocks().get(pos).state().getBlock();
         if(!(block instanceof IContraptionActionSeatBlock seatActionBlock) || (!(block instanceof YZSeatBlock)))
             return;
 

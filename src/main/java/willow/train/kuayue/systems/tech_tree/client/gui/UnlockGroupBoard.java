@@ -1,7 +1,6 @@
 package willow.train.kuayue.systems.tech_tree.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.util.LazyRecomputable;
 import lombok.Getter;
@@ -11,6 +10,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import org.joml.Vector3f;
 import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
 
@@ -50,11 +50,11 @@ public class UnlockGroupBoard extends AbstractWidget {
         grids = new ArrayList<>();
         int labelSize = labels.size();
         for (int i = 0; i < labelSize; i += 9) {
-            grids.add(new LabelGrid(this.x + 15, this.y + 9,
+            grids.add(new LabelGrid(this.getX() + 15, this.getY() + 9,
                     labels.subList(i, Math.min(i + 9, labelSize))
             ));
         }
-        confirmBtn = new ImageButton(confirmBtnLight, confirmBtnDark, this.x, this.y,
+        confirmBtn = new ImageButton(confirmBtnLight, confirmBtnDark, this.getX(), this.getY(),
                 16, 32, Component.empty(), onPress);
         updateAllWidgetsPos();
         renderConfirmBtn = true;
@@ -69,18 +69,18 @@ public class UnlockGroupBoard extends AbstractWidget {
     // (30, 5)
     private void updateSlotPos() {
         for (LabelGrid grid : grids) {
-            grid.setPos(this.x + 15, this.y + 9);
+            grid.setPos(this.getX() + 15, this.getY() + 9);
         }
     }
 
     private void updateConfirmBtnPos() {
-        confirmBtn.setPos(this.x + 83,
-                this.y + 16);
+        confirmBtn.setPos(this.getX() + 83,
+                this.getY() + 16);
     }
 
     private void updateBgPos() {
         unlockGroupBoardBg.get().rectangle(
-                new Vector3f(this.x, this.y, 0), ImageMask.Axis.X, ImageMask.Axis.Y,
+                new Vector3f(this.getX(), this.getY(), 0), ImageMask.Axis.X, ImageMask.Axis.Y,
                 true, true, 120, 80
         );
     }
@@ -102,7 +102,7 @@ public class UnlockGroupBoard extends AbstractWidget {
     }
 
     @Override
-    public void rendeWidget(GuiGraphics graphics, int mouseX, int mouseY, float partial) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partial) {
         unlockGroupBoardBg.get().renderToGui();
         confirmBtn.visible = this.visible & renderConfirmBtn;
         confirmBtn.setRenderMask(!confirmBtn.isMouseOver(mouseX, mouseY));

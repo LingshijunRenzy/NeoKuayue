@@ -112,22 +112,17 @@ public class Tooltip extends AbstractWidget {
         graphics.pose().translate(0.0D, 0.0D, 400.0D);
         graphics.fill(baseX, baseY,
                 this.getX() + this.width - 5, baseY + boarderWidth, boarderColor);
-        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-        renderer.renderAndDecorateItem(icon, this.getX() + boarderWidth + 1, this.getY() + boarderWidth + 1);
-        Matrix4f matrix4f = graphics.pose().last().pose();
-        MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-        font.drawInBatch(title, this.getX() + 16 + 2 * boarderWidth + 1,
-                this.getY() + boarderWidth + (16f - font.lineHeight) / 2, fontColor,
-                false, matrix4f, buffer, false,
-                0, 15728880);
+        graphics.renderItem(icon, this.getX() + boarderWidth + 1, this.getY() + boarderWidth + 1);
+        graphics.drawString(font, title,
+                (this.getX() + 16 + 2 * boarderWidth + 1),
+                Math.round(this.getY() + boarderWidth + (16f - font.lineHeight) / 2),
+                fontColor, false);
         for (int i = 0; i < descriptions.size(); i++) {
             Component component = descriptions.get(i);
-            font.drawInBatch(component, baseX,
-                    baseY + boarderWidth + 1 + i * font.lineHeight, fontColor,
-                    false, matrix4f, buffer, false,
-                    0, 15728880);
+            graphics.drawString(font, component,
+                    baseX, baseY + boarderWidth + 1 + i * font.lineHeight,
+                    fontColor, false);
         }
-        buffer.endBatch();
         graphics.pose().popPose();
     }
 

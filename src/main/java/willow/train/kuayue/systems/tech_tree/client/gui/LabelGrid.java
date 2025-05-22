@@ -3,6 +3,7 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -39,10 +40,10 @@ public class LabelGrid extends AbstractWidget {
     }
 
     public void setPos(int x, int y) {
-        int offsetX = x - this.x;
-        int offsetY = y - this.y;
-        this.x = x;
-        this.y = y;
+        int offsetX = x - this.getX();
+        int offsetY = y - this.getY();
+        super.setX(x);
+        super.setY(y);
         labels.forEach(label -> label.setPos(label.getX() + offsetX, label.getY() + offsetY));
     }
 
@@ -51,14 +52,14 @@ public class LabelGrid extends AbstractWidget {
             setWidth(20);
             setHeight(20);
             for (TechTreeLabel label : labels) {
-                label.setPos(this.x, this.y);
+                label.setPos(this.getX(), this.getY());
             }
         } else if (labels.size() == 2) {
             setWidth(41);
             setHeight(20);
             int counter = 0;
             for (TechTreeLabel label : labels) {
-                label.setPos(this.x + (counter == 0 ? 0 : 21), this.y);
+                label.setPos(this.getX() + (counter == 0 ? 0 : 21), this.getY());
                 counter++;
             }
         } else if (labels.size() < 5) {
@@ -68,11 +69,11 @@ public class LabelGrid extends AbstractWidget {
             for (TechTreeLabel label : labels) {
                 int labelX;
                 if (labels.size() == 3 && counter == 2) {
-                    labelX = this.x + 21 / 2;
+                    labelX = this.getX() + 21 / 2;
                 } else {
-                    labelX = this.x + (counter % 2 == 0 ? 0 : 21);
+                    labelX = this.getX() + (counter % 2 == 0 ? 0 : 21);
                 }
-                label.setPos(this.x + labelX, this.y + (counter / 2 == 0 ? 0 : 21));
+                label.setPos(this.getX() + labelX, this.getY() + (counter / 2 == 0 ? 0 : 21));
                 counter++;
             }
         } else if (labels.size() < 7) {
@@ -82,15 +83,15 @@ public class LabelGrid extends AbstractWidget {
             for (TechTreeLabel label : labels) {
                 int labelX;
                 if (counter < 3) {
-                    labelX = this.x + 21 * counter;
+                    labelX = this.getX() + 21 * counter;
                 } else {
                     if (labels.size() < 6) {
-                        labelX = this.x + 11 + 21 * (counter - 3);
+                        labelX = this.getX() + 11 + 21 * (counter - 3);
                     } else {
-                        labelX = this.x + 21 * (counter - 3);
+                        labelX = this.getX() + 21 * (counter - 3);
                     }
                 }
-                label.setPos(labelX, this.y + 21 * (counter / 3));
+                label.setPos(labelX, this.getY() + 21 * (counter / 3));
                 counter++;
             }
         } else {
@@ -101,19 +102,19 @@ public class LabelGrid extends AbstractWidget {
                 int labelX;
                 if (labels.size() == 7) {
                     if (counter < 2 || counter > 4) {
-                        labelX = ((counter % 2 == 0) ? 0 : 21) + 11 + this.x;
-                        label.setPos(labelX, (counter < 2 ? 0 : 42) + this.y);
+                        labelX = ((counter % 2 == 0) ? 0 : 21) + 11 + this.getX();
+                        label.setPos(labelX, (counter < 2 ? 0 : 42) + this.getY());
                     } else {
-                        labelX = (counter - 2) * 21 + this.x;
-                        label.setPos(labelX, this.y + 21);
+                        labelX = (counter - 2) * 21 + this.getX();
+                        label.setPos(labelX, this.getY() + 21);
                     }
                 } else {
                     if (labels.size() == 8 && (counter > 5)) {
-                        labelX = ((counter % 2 == 1) ? 0 : 21) + 11 + this.x;
+                        labelX = ((counter % 2 == 1) ? 0 : 21) + 11 + this.getX();
                     } else {
-                        labelX = (counter % 3) * 21 + this.x;
+                        labelX = (counter % 3) * 21 + this.getX();
                     }
-                    label.setPos(labelX, this.y + (counter / 3) * 21);
+                    label.setPos(labelX, this.getY() + (counter / 3) * 21);
                 }
                 counter++;
             }
@@ -121,10 +122,10 @@ public class LabelGrid extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
         labels.forEach(label -> {
             label.visible = this.visible;
-            label.render(poseStack, mouseX, mouseY, partial);
+            label.render(guiGraphics, mouseX, mouseY, partial);
         });
     }
 
@@ -146,7 +147,7 @@ public class LabelGrid extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
 
     }
 }

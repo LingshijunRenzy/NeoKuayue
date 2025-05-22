@@ -51,9 +51,10 @@ public class ImageJsonDefine {
             u1 = 1;
             v1 = 1;
         }
+        Vector3f ZERO = new Vector3f();
         JsonElement positionElement = json.get("pos");
         if (!positionElement.isJsonObject()) {
-            pos = Vector3f.ZERO;
+            pos = ZERO;
             horizontalCentered = false;
             verticalCentered = false;
             positionIsCenter = false;
@@ -66,15 +67,15 @@ public class ImageJsonDefine {
             positionIsCenter = posObject.has("position_is_center") &&
                     posObject.get("position_is_center").getAsBoolean();
             if (!posObject.has("vec")) {
-                pos = Vector3f.ZERO;
+                pos = ZERO;
             } else {
                 JsonElement vecElement = posObject.get("vec");
                 if (!vecElement.isJsonArray()) {
-                    pos = Vector3f.ZERO;
+                    pos = ZERO;
                 } else {
                     JsonArray vecArray = vecElement.getAsJsonArray();
                     if (vecArray.size() < 3)
-                        pos = Vector3f.ZERO;
+                        pos = ZERO;
                     else {
                         pos = new Vector3f(vecArray.get(0).getAsFloat(),
                                 vecArray.get(1).getAsFloat(),

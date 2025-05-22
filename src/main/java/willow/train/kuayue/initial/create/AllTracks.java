@@ -6,6 +6,7 @@ import kasuga.lib.core.create.SimpleTrackBlock;
 import kasuga.lib.core.create.TrackStateGenerator;
 import kasuga.lib.registrations.create.TrackReg;
 import kasuga.lib.registrations.registry.CreateRegistry;
+import net.minecraft.world.level.material.MapColor;
 import willow.train.kuayue.initial.AllElements;
 
 public class AllTracks {
@@ -74,7 +75,6 @@ public class AllTracks {
             new TrackReg<SimpleTrackBlock>("guard_track")
                     .trackState(stateBuilder)
                     .trackNameSuffix("guard Track")
-                    .material(Material.STONE)
                     .trackMaterial(AllTrackMaterial.guardMaterial::getMaterial)
                     .pickaxeOnly()
                     .addTags(AllTags.AllBlockTags.TRACKS.tag)

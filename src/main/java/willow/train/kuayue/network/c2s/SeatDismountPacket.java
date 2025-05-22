@@ -16,7 +16,7 @@ public class SeatDismountPacket extends C2SPacket {
         ServerPlayer player = context.getSender();
         if(player == null)
             return;
-        ServerLevel level = player.getLevel();
+        ServerLevel level = (ServerLevel) player.level();
         if(player.getVehicle() instanceof AbstractContraptionEntity){
             player.stopRiding();
         }

@@ -3,10 +3,12 @@ package willow.train.kuayue.systems.tech_tree.client.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import willow.train.kuayue.systems.editable_panel.widget.ImageButton;
@@ -35,11 +37,11 @@ public class TechTreeItemButton extends AbstractButton {
     }
 
     public void setX(int x) {
-        this.x = x;
+        super.setX(x);
     }
 
     public void setY(int y) {
-        this.y = y;
+        super.setY(y);
     }
 
     public void setPosition(int x, int y) {
@@ -56,15 +58,18 @@ public class TechTreeItemButton extends AbstractButton {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {}
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+
+    }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX,
+    public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX,
                              int mouseY, float partialTick) {
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-        int iX = this.x + (this.width - 16) / 2;
-        int iY = this.y + (this.height - 16) / 2;
-        renderer.renderGuiItem(stack, iX, iY);
+        int iX = this.getX() + (this.width - 16) / 2;
+        int iY = this.getY() + (this.height - 16) / 2;
+        ItemDisplayContext context = ItemDisplayContext.GUI;
+        guiGraphics.renderFakeItem(stack, iX, iY);
     }
 
     public void setVisible(boolean visible) {

@@ -97,11 +97,8 @@ public class TechTreeLabel extends ImageButton {
         // render item
         ItemStack logo = node.getLogo();
         Minecraft mc = Minecraft.getInstance();
-        ItemRenderer renderer = mc.getItemRenderer();
-        renderer.blitOffset = 100.0F;
-        renderer.renderAndDecorateItem(logo, getX() + (this.width - 16) / 2, getY() + (this.height - 16) / 2);
-        renderer.renderGuiItemDecorations(mc.font, logo, getX() + (this.width - 16) / 2, getY() + (this.height - 16) / 2);
-        renderer.blitOffset = 0.0F;
+        graphics.renderItem(logo, getX() + (this.width - 16) / 2, getY() + (this.height - 16) / 2);
+        graphics.renderItemDecorations(mc.font, logo, getX() + (this.width - 16) / 2, getY() + (this.height - 16) / 2);
 
         if (finished || required) {
             finishDotMask.get().rectangle(new Vector3f(this.getX() + this.width - 7, this.getY() + this.height - 7, 0),

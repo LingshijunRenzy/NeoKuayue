@@ -14,6 +14,7 @@ import kasuga.lib.core.menu.targets.Target;
 import kasuga.lib.core.menu.targets.WorldRendererTarget;
 import kasuga.lib.core.util.data_type.Vec2i;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.world.phys.Vec2;
 import org.lwjgl.glfw.GLFW;
@@ -44,7 +45,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         super();
         this.contraption = contraption;
         this.entity = entity;
-        contraption.forEachActor(contraption.entity.level, (behaviour, context) -> {
+        contraption.forEachActor(contraption.entity.level(), (behaviour, context) -> {
             if(behaviour instanceof InteractiveBehaviour interactiveBehaviour){
                 interactiveSet.addAll(interactiveBehaviour.getMenusOf(context));
             }
@@ -116,10 +117,10 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+    public void render(GuiGraphics guiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        super.render(guiGraphics, pMouseX, pMouseY, pPartialTick);
         RenderContext screenTarget = new RenderContext(RenderContext.RenderContextType.SCREEN);
-        screenTarget.setPoseStack(pPoseStack);
+        screenTarget.setPoseStack(guiGraphics.pose());
         screenTarget.pushLight(LightTexture.FULL_BRIGHT);
         screenTarget.setSource(InteractiveScreenTarget.class);
         

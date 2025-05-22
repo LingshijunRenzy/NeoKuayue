@@ -247,9 +247,9 @@ public class AllDecoBlocks {
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<TrainSlabBlock> FLOURESCENT_LIGHT =
-            new BlockReg<TrainSlabBlock>("flourescent_light")
-                    .blockType(p -> new TrainSlabBlock(p, false))
+    public static final BlockReg<FlourescentLightBlock> FLOURESCENT_LIGHT =
+            new BlockReg<FlourescentLightBlock>("flourescent_light")
+                    .blockType(p -> new FlourescentLightBlock(p, false))
                     .materialColor(MapColor.COLOR_BLACK)
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
@@ -291,5 +291,6 @@ public class AllDecoBlocks {
                     .tab(AllElements.neoKuayueCarriageTab )
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
+
     public static void invoke(){}
 }

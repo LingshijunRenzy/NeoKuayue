@@ -2,7 +2,6 @@ package willow.train.kuayue.systems.editable_panel.screens;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.SimpleColor;
 import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.Vec2f;
@@ -10,15 +9,16 @@ import kasuga.lib.core.util.LazyRecomputable;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.ModList;
+import org.joml.Vector3f;
 import willow.train.kuayue.block.panels.block_entity.EditablePanelEntity;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.initial.ClientInit;
@@ -186,7 +186,7 @@ public class LaqueredScreen
             nbt.putFloat("offset_y", offset.getSecond());
             TransparentEditBox[] boxes = new TransparentEditBox[5];
             int counter = 0;
-            for (Widget widget : getWidgets()) {
+            for (Renderable widget : getCustomWidgets()) {
                 if (widget instanceof TransparentEditBox box) {
                     boxes[counter] = box;
                     counter++;
@@ -482,7 +482,7 @@ public class LaqueredScreen
         int counter = 0;
         int focus = -1;
         int focusIndex = -1;
-        for (Widget w : getWidgets()) {
+        for (Renderable w : getCustomWidgets()) {
             if (!(w instanceof TransparentEditBox box)) continue;
             values[counter] = box.getValue();
             if (box.isFocused()) {
@@ -510,9 +510,9 @@ public class LaqueredScreen
         int color = getScreen().getMenu().getEditablePanelEntity().getColor();
         innerInit(values, color, font, revert);
         if (focus > -1 && focusIndex > -1) {
-            Widget w = getWidgets().get(focus);
+            Renderable w = getCustomWidgets().get(focus);
             if (!(w instanceof TransparentEditBox box)) return;
-            box.setFocus(true);
+            box.setFocused(true);
             box.setCursorPosition(focusIndex);
         }
     }
@@ -546,18 +546,18 @@ public class LaqueredScreen
      * 渲染背景
      * (一般来说，是GUI从开始显示到最终关闭都会存在的静态渲染对象)
      *
-     * @param pose
+     * @param guiGraphics
      * @param mouseX
      * @param mouseY
      * @param partialTick
      **/
     @Override
-    public void renderBackGround(PoseStack pose, int mouseX, int mouseY, float partialTick) {
+    public void renderBackGround(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         Minecraft instance = Minecraft.getInstance();
         if (instance.screen == null) return;
         int sW = instance.screen.width;
         int sH = instance.screen.height;
-// 获取窗口的 GUI 缩放尺寸（更准确，考虑 UI 缩放）
+        // 获取窗口的 GUI 缩放尺寸（更准确，考虑 UI 缩放）
         Window window = instance.getWindow();
         int guiScaledWidth = window.getGuiScaledWidth();
         int guiScaledHeight = window.getGuiScaledHeight();
@@ -657,20 +657,25 @@ public class LaqueredScreen
         rightColorBoard.renderToGui();
         logoIm.renderToGui();
         // 添加半透明黑色背景覆盖整个屏幕
-        GuiComponent.fill(pose, 0, 0, sW, sH, 0x80000000);
+        guiGraphics.fill(0, 0, sW, sH, 0x80000000);
+    }
+
+    @Override
+    public void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+
     }
 
     /**
      * Screen的核心渲染方法，用于控制其他所有渲染方法的工作
      *
-     * @param pose
+     * @param guiGraphics
      * @param mouseX
      * @param mouseY
      * @param partial
      */
     @Override
-    public void render(PoseStack pose, int mouseX, int mouseY, float partial) {
-        super.render(pose, mouseX, mouseY, partial);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
+        super.render(guiGraphics, mouseX, mouseY, partial);
 
         if (offsetEditor == null) return;
     }
@@ -683,16 +688,16 @@ public class LaqueredScreen
 
 
     @Override
-    public void mouseClicked(double mouseX, double mouseY, int btn) {
-        for (Widget widget : getWidgets()) {
+    public boolean mouseClicked(double mouseX, double mouseY, int btn) {
+        for (Renderable widget : getCustomWidgets()) {
             if (!(widget instanceof GuiEventListener listener)) continue;
             if (!listener.isMouseOver(mouseX, mouseY)) continue;
             if (listener instanceof AbstractWidget widget1 && !widget1.visible) continue;
             if (listener instanceof ColorScreen cs && !cs.getVisible()) continue;
             if (listener instanceof GetShareTemplateScreen screen && !screen.isVisible()) continue;
             if (widget instanceof TransparentEditBox box) {
-                editBar.setPosition(box.x + ((int) ((float) box.getWidth() * box.getScaleX()) - 200) / 2,
-                        box.y + (int) ((float) box.getHeight() * box.getScaleY()) + 2);
+                editBar.setPosition(box.getX() + ((int) ((float) box.getWidth() * box.getScaleX()) - 200) / 2,
+                        box.getY() + (int) ((float) box.getHeight() * box.getScaleY()) + 2);
                 editBar.setText(box.getValue());
                 editBar.onAcceptClick(
                         (w, x, y) -> {
@@ -704,16 +709,17 @@ public class LaqueredScreen
                 );
                 editBar.visible = true;
                 editBar.setFocused(true);
-                return;
+                return true;
             }
             listener.mouseClicked(mouseX, mouseY, btn);
-            return;
+            return true;
         }
+        return false;
     }
 
-    @Override
-    public void renderTooltip(PoseStack pose, int mouseX, int mouseY) {
-    }
+//    @Override
+//    public void renderTooltip(PoseStack pose, int mouseX, int mouseY) {
+//    }
 
     /**
      * 该screen 关闭时调用
@@ -723,13 +729,13 @@ public class LaqueredScreen
 //        super.onClose();
 //    }
     @Override
-    public void charTyped(char code, int modifier) {
-        super.charTyped(code, modifier);
+    public boolean charTyped(char code, int modifier) {
+        return super.charTyped(code, modifier);
     }
 
     @Override
-    public void keyPressed(int keyCode, int scanCode, int modifiers) {
-        super.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     /**
@@ -744,6 +750,7 @@ public class LaqueredScreen
 //    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
 ////        super.renderLabels(pPoseStack, pMouseX, pMouseY);
 //    }
+
     public void setButtonsVisible(boolean visible) {
         colorEditor.getTemplateBtn().visible = visible;
         colorEditor.getColorBtn().visible = visible;
@@ -757,14 +764,14 @@ public class LaqueredScreen
     }
 
     public void setBoardWidgetVisible(boolean visible) {
-        getWidgets().forEach(w -> {
+        getCustomWidgets().forEach(w -> {
             if (w instanceof TransparentEditBox box) box.visible = visible;
         });
         setButtonsVisible(visible);
     }
 
     public void setTextColor(int color) {
-        getWidgets().forEach(w -> {
+        getCustomWidgets().forEach(w -> {
             if (w instanceof TransparentEditBox box) box.setTextColor(color);
         });
     }

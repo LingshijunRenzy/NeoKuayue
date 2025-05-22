@@ -64,7 +64,7 @@ public class TechTreeTitleLabel extends AbstractWidget {
                 ImageMask.Axis.Y, true, true, width, height);
         mask.renderToGui();
         Font font = Minecraft.getInstance().font;
-        font.draw(poseStack, title, getX() + 10, getY() + 8, 0xffffffff);
+        graphics.drawString(font, title, getX() + 10, getY() + 8, -1);
     }
 
     @Override

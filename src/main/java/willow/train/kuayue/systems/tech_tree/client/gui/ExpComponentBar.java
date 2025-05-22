@@ -6,6 +6,7 @@ import kasuga.lib.core.util.LazyRecomputable;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -58,23 +59,24 @@ public class ExpComponentBar extends AbstractWidget {
     }
 
     private void setImagePos() {
-        this.yesBg.get().rectangle(new Vector3f(this.x, this.y, 0), ImageMask.Axis.X, ImageMask.Axis.Y,
+        this.yesBg.get().rectangle(new Vector3f(this.getX(), this.getY(), 0), ImageMask.Axis.X, ImageMask.Axis.Y,
                 true, true, 9, 11);
-        this.noBg.get().rectangle(new Vector3f(this.x, this.y, 0), ImageMask.Axis.X, ImageMask.Axis.Y,
+        this.noBg.get().rectangle(new Vector3f(this.getX(), this.getY(), 0), ImageMask.Axis.X, ImageMask.Axis.Y,
                 true, true, 9, 11);
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
         Font font = Minecraft.getInstance().font;
         if (canUnlock) yesBg.get().renderToGui();
         else noBg.get().renderToGui();
-        font.draw(poseStack, component, this.x + 12,
-                this.y + (float) (12 - font.lineHeight) / 2f, canUnlock ? GREEN : RED);
+        guiGraphics.drawString(font, component, this.getX() + 12,
+                Math.round(this.getY() + (float) (12 - font.lineHeight) / 2f),
+                canUnlock ? GREEN : RED);
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    public void updateWidgetNarration(NarrationElementOutput output) {
         output.add(NarratedElementType.HINT, component);
     }
 }

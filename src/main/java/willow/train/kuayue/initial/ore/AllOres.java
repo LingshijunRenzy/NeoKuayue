@@ -46,13 +46,15 @@ public class AllOres {
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
 
-    public static final OreReg<DropExperienceBlock> SALT_ORE_REG = new OreReg<DropExperienceBlock>("salt_ore")
+    // todo: ore reg need to be fixed(ksglib?).
+    public static final OreReg<DropExperienceBlock> SALT_ORE_REG =
+            new OreReg<DropExperienceBlock>("salt_ore")
             .addOreReplaceTarget(SALT_ORE)
             .addDeepSlateReplaceTarget(DEEPSLATE_SALT_ORE)
             .setOreCountPerChunk(90)
             .setOreQuantityPerGroup(9)
             .setOreDistributionType(PlacedFeatureReg.DistributionType.TRIANGLE)
-            .setOreAnchorAbsolute(80, -80)
+            .setOreAnchorAbsolute(80, -64)
             .submit(AllElements.testRegistry);
 
     public static void invoke() {}
