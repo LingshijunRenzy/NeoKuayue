@@ -9,12 +9,13 @@ import willow.train.kuayue.systems.device.track.train_station.TrainStationBlock;
 import willow.train.kuayue.systems.device.driver.combustion.InternalCombustionDriveControllerBlock;
 
 public class AllDeviceBlocks {
+
     public static BlockReg<TrainStationBlock> TRAIN_STATION_BLOCK =
             new BlockReg<TrainStationBlock>("train_station")
                 .blockType(TrainStationBlock::new)
                 .material(Material.METAL)
                 .withItem(AllDeviceEdgePoints.TRAIN_STATION.getBlockItemFactory(), null)
-                .tabTo(AllElements.neoKuayueDeviceTab)
+                // .tabTo(AllElements.neoKuayueDeviceTab)
                 .submit(AllElements.testRegistry);
 
     public static BlockReg<StationEntryBlock> STATION_ENTRY =
@@ -22,8 +23,9 @@ public class AllDeviceBlocks {
                     .blockType(StationEntryBlock::new)
                     .material(Material.METAL)
                     .withItem(AllDeviceEdgePoints.STATION_ENTRY.getBlockItemFactory(), null)
-                    .tabTo(AllElements.neoKuayueDeviceTab)
+                    // .tabTo(AllElements.neoKuayueDeviceTab)
                     .submit(AllElements.testRegistry);
+
 
     public static BlockReg<InternalCombustionDriveControllerBlock> INTERNAL_COMBUSTION_DRIVE_CONTROLLER =
             new BlockReg<InternalCombustionDriveControllerBlock>("internal_combustion_drive_controller")
