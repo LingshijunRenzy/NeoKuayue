@@ -1,23 +1,23 @@
 {
-  "itemGroup.kuayue_grid": "¿çÔ½¡¤µçÍø",
+  "itemGroup.kuayue_grid": "è·¨è¶ŠÂ·ç”µç½‘",
 
-  "block.kuayue.overhead_line_support_a": "½Ó´¥ÍøÖ§¼ÜAĞÍÄÚ²àÖ§¼Ü",
-  "block.kuayue.new_catenary_grid_a2": "½Ó´¥ÍøÖ§¼ÜAĞÍÄÚ²àÖ§¼Ü",
-  "block.kuayue.overhead_line_support_c": "½Ó´¥ÍøÖ§¼ÜCĞÍ1ºÅÖ§¼Ü",
-  "block.kuayue.overhead_line_support_c2": "½Ó´¥ÍøÖ§¼ÜCĞÍ2ºÅÖ§¼Ü",
-  "block.kuayue.overhead_line_support_b": "½Ó´¥Íø¹Ò¼ÜDĞÍÍâ²àÖ§¼Ü",
-  "block.kuayue.overhead_line_support_b2": "½Ó´¥Íø¹Ò¼ÜDĞÍÄÚ²àÖ§¼Ü",
-  "block.kuayue.overhead_line_insulator_a": "¾øÔµ×Ó",
-  "block.kuayue.overhead_line_insulator_b": "¾øÔµ×ÓĞü¼Ü",
-  "block.kuayue.overhead_line_end_weight": "½Ó´¥ÍøÂ·¶ËÅäÖØ",
+  "block.kuayue.overhead_line_support_a1": "æ¥è§¦ç½‘æ”¯æ¶Aå‹å†…ä¾§æ”¯æ¶",
+  "block.kuayue.overhead_line_support_a2": "æ¥è§¦ç½‘æ”¯æ¶Aå‹å†…ä¾§æ”¯æ¶",
+  "block.kuayue.overhead_line_support_c": "æ¥è§¦ç½‘æ”¯æ¶Cå‹1å·æ”¯æ¶",
+  "block.kuayue.overhead_line_support_c2": "æ¥è§¦ç½‘æ”¯æ¶Cå‹2å·æ”¯æ¶",
+  "block.kuayue.overhead_line_support_b": "æ¥è§¦ç½‘æŒ‚æ¶Då‹å¤–ä¾§æ”¯æ¶",
+  "block.kuayue.overhead_line_support_b2": "æ¥è§¦ç½‘æŒ‚æ¶Då‹å†…ä¾§æ”¯æ¶",
+  "block.kuayue.overhead_line_insulator_a": "ç»ç¼˜å­",
+  "block.kuayue.overhead_line_insulator_b": "ç»ç¼˜å­æ‚¬æ¶",
+  "block.kuayue.overhead_line_end_weight": "æ¥è§¦ç½‘è·¯ç«¯é…é‡",
 
-  "item.kuayue.overhead_line_wire": "½Ó´¥Íø¹ÒÏß",
-  "item.kuayue.electronic_wire": "µçÏß",
+  "item.kuayue.overhead_line_wire": "æ¥è§¦ç½‘æŒ‚çº¿",
+  "item.kuayue.electronic_wire": "ç”µçº¿",
 
-  "msg.kuayue.overhead_line_target_remove": "È¡ÏûÁ¬½Ó",
-  "msg.kuayue.overhead_line_target_connected": "Á¬½Ó³É¹¦",
-  "msg.kuayue.overhead_line_target_unavailable": "ÎŞ·¨Á¬½Óµ½Ñ¡ÖĞµÄ½Ó´¥Íø¼Ü",
-  "msg.kuayue.overhead_line_target_set": "ÒÑÑ¡ÖĞµ±Ç°½Ó´¥Íø¼Ü£¬Çëµã»÷ÁíÒ»½Ó´¥Íø¼Ü½¨Á¢Á¬½Ó",
-  "msg.kuayue.overhead_line_same_support": "²»ÄÜÁ¬½ÓÍ¬Ò»¸ö½Ó´¥Íø¼Ü",
-  "msg.kuayue.overhead_line_incompatible_block": "²»Ö§³ÖµÄ·½¿é"
+  "msg.kuayue.overhead_line_target_remove": "å–æ¶ˆè¿æ¥",
+  "msg.kuayue.overhead_line_target_connected": "è¿æ¥æˆåŠŸ",
+  "msg.kuayue.overhead_line_target_unavailable": "æ— æ³•è¿æ¥åˆ°é€‰ä¸­çš„æ¥è§¦ç½‘æ¶",
+  "msg.kuayue.overhead_line_target_set": "å·²é€‰ä¸­å½“å‰æ¥è§¦ç½‘æ¶ï¼Œè¯·ç‚¹å‡»å¦ä¸€æ¥è§¦ç½‘æ¶å»ºç«‹è¿æ¥",
+  "msg.kuayue.overhead_line_same_support": "ä¸èƒ½è¿æ¥åŒä¸€ä¸ªæ¥è§¦ç½‘æ¶",
+  "msg.kuayue.overhead_line_incompatible_block": "ä¸æ”¯æŒçš„æ–¹å—"
 }
