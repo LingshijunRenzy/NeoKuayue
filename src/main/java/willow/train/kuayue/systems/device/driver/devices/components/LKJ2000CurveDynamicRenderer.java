@@ -12,7 +12,7 @@ import kasuga.lib.core.client.render.texture.ImageMask;
 import kasuga.lib.core.client.render.texture.StaticImage;
 import kasuga.lib.core.client.render.texture.StaticImageHolder;
 import kasuga.lib.core.client.render.texture.Vec2f;
-import kasuga.lib.core.util.Resources;
+import kasuga.lib.core.resource.Resources;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
