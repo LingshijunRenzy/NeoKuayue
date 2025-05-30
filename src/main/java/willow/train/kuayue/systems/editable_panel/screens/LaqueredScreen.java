@@ -48,7 +48,7 @@ public class LaqueredScreen
     public ColorScreenBundles colorEditor;
     private OffsetEditor offsetEditor;
     private float bgX = 0, bgY = 0, scale = 1.0f;
-    private boolean showSub, hasJei;
+    private boolean showSub, hasJei, showBg;
 
     private final LazyRecomputable<ImageMask> cancelBtnImage =
             new LazyRecomputable<>(() -> GetShareTemplateScreen.cancelImage.get().copyWithOp(p -> p));
@@ -114,6 +114,7 @@ public class LaqueredScreen
      */
     @Override
     public void init() {
+        showBg = true;
         Minecraft instance = Minecraft.getInstance();
         if (instance.screen == null) return;
         int sW = instance.screen.width;
@@ -263,26 +264,26 @@ public class LaqueredScreen
         if (v0TextCount <= 2) { // 0.5 一个字？  font.width(values[0]) 4中文 36float 一个字9f
             // 左边距中文计算公式
 //            leftMoJiMargin = (float) Math.max (允许的最小值, ((最大字符数 - 当前字符数 ) / 除以2即留白的一半) * (画面缩放宽度 * 的百分之25));
-            leftMoJiMargin = (float) Math.max (0, ((2 - v0TextCount ) / 2) * (guiScaledWidth * 0.15));
+            leftMoJiMargin = (float) Math.max(0, ((2 - v0TextCount) / 2) * (guiScaledWidth * 0.15));
         }
 
         float leftEngMoJiMargin = 0f;
         if (v1TextCount <= 13) { // 0.5 一个字？  font.width(values[0]) 4中文 36float 一个字9f
 //            leftMoJiMargin = (float) Math.max (允许的最小值, ((最大字符数 - 当前字符数 ) / 除以2即留白的一半) * (画面缩放宽度 * 的百分之25));
             // todo 2025-05-20 英文文字的边距计算 目前左边距计算扔有偏差（在多字和少字均仍有瑕疵），超出13字后不可自动缩放
-            leftEngMoJiMargin = (float) Math.max (0, ((13 - v1TextCount*2 ) / 2) * (guiScaledWidth * 0.02));
+            leftEngMoJiMargin = (float) Math.max(0, ((13 - v1TextCount * 2) / 2) * (guiScaledWidth * 0.02));
         }
         float rightMoJiMargin = 0f;
         if (v2TextCount <= 2) { // 0.5 一个字？  font.width(values[0]) 4中文 36float 一个字9f
             // 左边距中文计算公式
 //            leftMoJiMargin = (float) Math.max (允许的最小值, ((最大字符数 - 当前字符数 ) / 除以2即留白的一半) * (画面缩放宽度 * 的百分之25));
-            rightMoJiMargin = (float) Math.max (0, ((2 - v2TextCount ) / 2) * (guiScaledWidth * 0.15));
+            rightMoJiMargin = (float) Math.max(0, ((2 - v2TextCount) / 2) * (guiScaledWidth * 0.15));
         }
         float rightEngMoJiMargin = 0f;
         if (v3TextCount <= 13) { // 0.5 一个字？  font.width(values[0]) 4中文 36float 一个字9f
 //            leftMoJiMargin = (float) Math.max (允许的最小值, ((最大字符数 - 当前字符数 ) / 除以2即留白的一半) * (画面缩放宽度 * 的百分之25));
             // todo 2025-05-20 英文文字的边距计算 目前左边距计算扔有偏差（在多字和少字均仍有瑕疵），超出13字后不可自动缩放
-            rightEngMoJiMargin = (float) Math.max (0, ((13 - v3TextCount*2 ) / 2) * (guiScaledWidth * 0.02));
+            rightEngMoJiMargin = (float) Math.max(0, ((13 - v3TextCount * 2) / 2) * (guiScaledWidth * 0.02));
         }
 //        if (width1 <= 13 *4) {
 ////            leftMoJiMargin = (float)
@@ -446,6 +447,7 @@ public class LaqueredScreen
 //    }
     public void buttonsInit() {
         Minecraft minecraft = Minecraft.getInstance();
+        Font font = minecraft.font;
         Window window = minecraft.getWindow();
 // 动态获取当前GUI缩放后的尺寸
         int guiScaledWidth = window.getGuiScaledWidth();
@@ -458,24 +460,28 @@ public class LaqueredScreen
 
         int offsetButtonX = (int) (bgImageXStarter);
         int offsetButtonY = (int) (bgImageYStarter + imageBgHeight + 16);
-        titleLabel = new Label(Component.translatable("tooltip.kuayue.type_screen.title"));
-        titleLabel.setPosition(bgImageXStarter, bgImageYStarter - 20);
+//        titleLabel = new Label(Component.translatable("tooltip.kuayue.type_screen.title"));
+        titleLabel = new Label(Component.translatable("clip_board.laquered"));
+        int width = font.width(titleLabel.getPlainText());
+        titleLabel.setPosition((guiScaledWidth / 2) - (width/2), bgImageYStarter - 20);
         addWidget(titleLabel);
 
-        mirrorBtn = new ImageButton(mirrorBtnImage, offsetButtonX + (16), offsetButtonY, 16, 16, Component.empty(), b -> {
+        mirrorBtn = new ImageButton(mirrorBtnImage,  (16), offsetButtonY, 16, 16, Component.empty(), b -> {
             revert = !revert;
             refresh();
         });
 
-        offsetEditor = new OffsetEditor(offsetButtonX + (16 * 2), offsetButtonY, Component.literal("offset"),
+        offsetEditor = new OffsetEditor((int) (bgImageXStarter + (16 * 2)), offsetButtonY, Component.literal("offset"),
                 -.5f, .5f, -.5f, .5f, 0f, 0f);
         offsetEditor.setPosition((Minecraft.getInstance().screen.width - offsetEditor.getWidth()) / 2,
                 (Minecraft.getInstance().screen.height - offsetEditor.getHeight()) / 2);
         offsetEditor.visible = false;
 
-        cancelBtn = new ImageButton(cancelBtnImage, offsetButtonX + (16 * 3), offsetButtonY, 16, 16, Component.empty(), b -> {
+//        cancelBtn = new ImageButton(cancelBtnImage, imageBgWidth - (16 * 3), offsetButtonY, 16, 16, Component.empty(), b -> {
+        cancelBtn = new ImageButton(cancelBtnImage, (int) (bgImageXStarter + imageBgWidth - (16 )), offsetButtonY, 16, 16, Component.empty(), b -> {
         });
-        confirmBtn = new ImageButton(acceptBtnImage, offsetButtonX + (16 * 4), offsetButtonY, 16, 16, Component.empty(), b -> {
+//        confirmBtn = new ImageButton(acceptBtnImage, (int) (imageBgWidth - (16 * 4)), offsetButtonY, 16, 16, Component.empty(), b -> {
+        confirmBtn = new ImageButton(acceptBtnImage, (int) (bgImageXStarter + imageBgWidth - (16 * 2)), offsetButtonY, 16, 16, Component.empty(), b -> {
         });
 
         editBar.onCancelClick((w, x, y) -> editBar.visible = false);
@@ -483,10 +489,12 @@ public class LaqueredScreen
         offsetEditor.onCancelBtnClick(((widget, mouseX, mouseY) -> {
             setBoardWidgetVisible(true);
             offsetEditor.visible = false;
+            showBg = true;
         }));
         offsetEditor.onEditorBtnClick((widget, mouseX, mouseY) -> {
             setBoardWidgetVisible(false);
             offsetEditor.visible = true;
+            showBg = false;
             offsetEditor.setCursorPosition(getNbt().getFloat("offset_x"), getNbt().getFloat("offset_y"));
         });
         offsetEditor.onAcceptBtnClick((widget, mouseX, mouseY) -> {
@@ -496,22 +504,22 @@ public class LaqueredScreen
             getNbt().putFloat("offset_y", offset.getSecond());
             getBlockEntity().saveNbt(this.getNbt());
             offsetEditor.visible = false;
+            showBg = true;
         });
 
         addWidget(cancelBtn);
-        // todo 2025-05-05 点击提交按钮后会恢复成初始值，且设定的内容没有同步到服务器
         addWidget(confirmBtn);
         addWidget(editBar);
         ImageButton editorBtn = offsetEditor.getEditorBtn();
-        editorBtn.setPos(offsetButtonX + (16 * 5), offsetButtonY);
+        editorBtn.setPos((int) (bgImageXStarter + imageBgWidth - (17 * 3)), offsetButtonY);
         addWidget(editorBtn);
-        addWidget(mirrorBtn);
+//        addWidget(mirrorBtn);
         ImageButton colorBtn = colorEditor.getColorBtn();
-        colorBtn.setPos(offsetButtonX + (16 * 6), offsetButtonY);
+        colorBtn.setPos((int) (bgImageXStarter + (10)), offsetButtonY);
         // todo 2025-05-05 颜色调好后点提交按钮后颜色没有同步到服务器，且只有右键点开编辑界面才会显示改后的颜色
         addWidget(colorBtn);
         ImageButton templateBtn = colorEditor.getTemplateBtn();
-        templateBtn.setPos(offsetButtonX + (16 * 7), offsetButtonY);
+        templateBtn.setPos( (int) (bgImageXStarter + (30)), offsetButtonY);
         addWidget(templateBtn);
         addWidget(offsetEditor);
     }
@@ -563,22 +571,25 @@ public class LaqueredScreen
         colorEditor.setOpen((selector, template, now) -> {
             selector.setRgb(this.color);
             setBoardWidgetVisible(false);
+            showBg = false;
         });
         colorEditor.setCancel((selector, template, now) -> {
             setBoardWidgetVisible(true);
+            showBg = true;
         });
         colorEditor.setSuccess((selector, template, now) -> {
             if (now == template) {
                 this.color = template.getChosenBox().getTemplate().getColor();
-                this.setTextColor(color);
+//                this.setTextColor(color);
                 colorBarColor = SimpleColor.fromRGBAInt(template.getChosenBox().getTemplate().getColor());
                 setBoardWidgetVisible(true);
             } else {
                 this.color = selector.getColor().getRGB();
-                setTextColor(color);
+//                setTextColor(color);
                 colorBarColor = SimpleColor.fromRGBAInt(template.getChosenBox().getTemplate().getColor());
                 setBoardWidgetVisible(true);
             }
+            showBg = true;
         });
         colorEditor.visible = false;
         addWidget(colorEditor);
@@ -678,7 +689,9 @@ public class LaqueredScreen
 //                (float) (imageBgHeigth * 0.15)
                 colorBarHeight
         );
-        leftColorBoard.setColor(SimpleColor.fromRGBAInt(BLUE));
+        leftColorBoard.setColor(
+                SimpleColor.fromRGBAInt(color)
+        );
         ImageMask rightColorBoard = rightLaqueredColorBoard.get();
         rightColorBoard.rectangle(
 //                new Vector3f(bgImageXStarter - 400, bgImageYStarter + 200, 2),  // 使用与 values[0] 相同的原点
@@ -692,12 +705,14 @@ public class LaqueredScreen
 //                (float) (imageBgHeigth * 0.15)
                 colorBarHeight
         );
-        rightColorBoard.setColor(SimpleColor.fromRGBAInt(BLUE));
+        rightColorBoard.setColor(SimpleColor.fromRGBAInt(color));
         // 渲染背景
-        imageMask.renderToGui();
-        rightColorBoard.renderToGui();
-        leftColorBoard.renderToGui();
-        logoIm.renderToGui();
+        if (showBg) {
+            imageMask.renderToGui();
+            rightColorBoard.renderToGui();
+            leftColorBoard.renderToGui();
+            logoIm.renderToGui();
+        }
         // 添加半透明黑色背景覆盖整个屏幕
         GuiComponent.fill(pose, 0, 0, sW, sH, 0x80000000);
     }

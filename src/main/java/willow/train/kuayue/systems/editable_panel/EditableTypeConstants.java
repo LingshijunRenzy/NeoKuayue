@@ -307,6 +307,7 @@ public class EditableTypeConstants {
 
         // 设置文本基础缩放
         float baseScale = 0.4f * 0.3f;
+        MultiBufferSource leftTopBuffer = bufferSource.getBuffer();
         poseStack.scale(baseScale, -baseScale, baseScale);
         // 每个中文 9 字符
         float leftTopTextHalfWidth = (float) (leftTopWidth / 2);
@@ -317,8 +318,10 @@ public class EditableTypeConstants {
 //        poseStack.scale(0.098f, 0.098f, 1.0f);
         leftTop.setColor(BLACK);
         leftTop.renderToGui(poseStack, font);
+//        leftTop.renderToWorld(poseStack, font, leftTopBuffer, false, packedLight);
         poseStack.popPose();
 
+        MultiBufferSource rightTopBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
         float rightTopTextHalfWidth = (float) (rightTopWidth / 2);
         float rightBottomTextHalfWidth = (float) (rightBottomWidth / 2);
@@ -328,11 +331,13 @@ public class EditableTypeConstants {
 //        poseStack.scale(0.098f, 0.098f, 1.0f);
         rightTop.setColor(BLACK);
         rightTop.renderToGui(poseStack, font);
+//        rightTop.renderToWorld(poseStack, font, rightTopBuffer, false, packedLight);
         poseStack.popPose();
 
         // 英文区域，始发地
         // todo if is non ascii char
         // 每个ascii 字符6.0f
+        MultiBufferSource leftBottomBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
         float leftBottomTextHalfWidth = (float) (leftBottomWidth / 2);
 //        poseStack.translate(-3.95f, -4.55f, 0.049f); // z 0.05
@@ -341,14 +346,17 @@ public class EditableTypeConstants {
 //        poseStack.scale(0.048f, 0.048f, 1.0f);
         leftBottom.setColor(WHITE);
         leftBottom.renderToGui(poseStack, font);
+//        rightTop.renderToWorld(poseStack, font, leftBottomBuffer, false, packedLight);
         poseStack.popPose();
 
         // 英文区域，目的地
+        MultiBufferSource rightBottomBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
 //        poseStack.translate(1.85f, -4.55f, 0.049f);
         rightBottomTextAutoCenter(rightTopTextBaseLine, rightBottomEngFontLength, poseStack, rightBottomWidth);
         rightBottom.setColor(WHITE);
         rightBottom.renderToGui(poseStack, font);
+//        rightTop.renderToWorld(poseStack, font, rightBottomBuffer, false, packedLight);
         poseStack.popPose();
         // 结束渲染
         poseStack.popPose();
@@ -515,19 +523,25 @@ public class EditableTypeConstants {
 //            blockEntity.setChanged();  // 没用
             // todo 已有nbt数据的也会因此处的默认文本而覆盖吗？
             // 左侧上方文字 - 如"北京"
-            nbt.putString("left_top", "北京");
+            nbt.putString("left_top", "上海");
             // 左侧下方文字 - 如拼音"BEIJING"
-            nbt.putString("left_bottom", "BEIJING");
+            nbt.putString("left_bottom", "SHANGHAI");
             // 右侧上方文字 - 如"上海"
-            nbt.putString("right_top", "上海");
+            nbt.putString("right_top", "北京");
             // 右侧下方文字 - 如拼音"SHANGHAI"
-            nbt.putString("right_bottom", "SHANGHAI");
+            nbt.putString("right_bottom", "BEIJING");
             // 图片标识(保留字段，可用于不同样式水牌)
             nbt.putString("image_type", "default");
             // X轴偏移量
             nbt.putFloat("offset_x", 0f);
             // Y轴偏移量
             nbt.putFloat("offset_y", 0f);
+            // 车次
+            nbt.putString("train_number", "1462/1");
+            // 等级左
+            nbt.putString("left_train_level", "普");
+            nbt.putString("right_train_level", "快");
+
             // 彩条颜色 默认不设置，因为创建时color nbt会根据下厢板的不同而不同
             nbt.putFloat("alpha", 1.f);
         }
