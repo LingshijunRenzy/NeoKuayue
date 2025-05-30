@@ -234,9 +234,10 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
 
     public Vec2 transformInteractive(InteractiveBehaviour.MenuEntry entry, Vec2 globalPosition) {
         // Transform Global Position into local position
+        Vec2 position = calculatePosition(entry, this.width, this.height);
         return new Vec2(
-                (globalPosition.x - entry.getPosition().x) / entry.getScale().x,
-                (globalPosition.y - entry.getPosition().y) / entry.getScale().y
+                (globalPosition.x - position.x) / entry.getScale().x,
+                (globalPosition.y - position.y) / entry.getScale().y
         );
     }
 

@@ -6,7 +6,7 @@ import kasuga.lib.registrations.registry.SimpleRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import org.apache.http.impl.conn.Wire;
+import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRenderer;
 import willow.train.kuayue.systems.overhead_line.item.OverheadLineItem;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
@@ -32,6 +32,7 @@ public class WireReg extends Reg {
     public WireReg(String registrationKey) {
         super(registrationKey);
         itemReg = new ItemReg<OverheadLineItem>(registrationKey)
+                .tab(AllElements.neoKuayueGridTab)
                 .itemType(OverheadLineItem::new);
     }
 
