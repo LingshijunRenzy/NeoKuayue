@@ -12,10 +12,17 @@ WIP, When the mod is released, please uncomment the following lines
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/[Modrinth MODID]?logo=modrinth&label=Modrinth%20%E4%B8%8B%E8%BD%BD%E9%87%8F)
 ![CurseForge Downloads](https://img.shields.io/curseforge/dt/[CurseForge MODID]?logo=curseforge&label=CurseForge%20%E4%B8%8B%E8%BD%BD%E9%87%8F&color=orange)
 -->
-![QQ Group](https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%BE%A4-QQ-blue?logo=qq)
-![Discord](https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%A4%BE%E5%8C%BA-Discord-blue?logo=discord&color=darkblue)
-![Github Issues](https://img.shields.io/github/issues/KuaYueTeam/NeoKuaYue?label=Issues)
-
+<p align="center">
+  <a href="https://jq.qq.com/?_wv=1027&k=CYUl0h1L">
+    <img src="https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%BE%A4-QQ-blue?logo=qq" alt="QQ Group">
+  </a>
+  <a href="https://discord.gg/dBvjerpsSy">
+    <img src="https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%A4%BE%E5%8C%BA-Discord-blue?logo=discord&color=darkblue" alt="Discord">
+  </a>
+  <a href="https://github.com/KuaYueTeam/NeoKuayue/issues">
+    <img src="https://img.shields.io/github/issues/KuaYueTeam/NeoKuaYue?label=Issues" alt="Github Issues">
+  </a>
+</p>
 
 [![Crowdin Translate](https://img.shields.io/badge/Crowdin-%E6%8F%90%E4%BA%A4%E7%BF%BB%E8%AF%91-blue?logo=crowdin)
 ![Crowdin](https://badges.crowdin.net/kuayue/localized.svg)](https://crowdin.com/project/kuayue)
