@@ -1,0 +1,8 @@
+﻿{
+    "render_type":  "translucent",
+    "loader":  "kasuga_lib:bedrock_animated",
+    "model":  "kuayue:block/overhead_line/overhead_triangle_beam_hanger",
+    "identifier":  "kuayue:block/overhead_line/overhead_triangle_beam_hanger",
+    "geometry":  "geometry.unknown",
+    "texture":  "kuayue:block/overhead_line/overhead_triangle_beam_hanger"
+}

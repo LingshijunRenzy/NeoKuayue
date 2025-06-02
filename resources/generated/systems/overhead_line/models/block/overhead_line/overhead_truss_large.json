@@ -1,0 +1,8 @@
+﻿{
+    "render_type":  "translucent",
+    "loader":  "kasuga_lib:bedrock_animated",
+    "model":  "kuayue:block/overhead_line/overhead_truss_large",
+    "identifier":  "kuayue:block/overhead_line/overhead_truss_large",
+    "geometry":  "geometry.unknown",
+    "texture":  "kuayue:block/overhead_line/overhead_truss_large"
+}

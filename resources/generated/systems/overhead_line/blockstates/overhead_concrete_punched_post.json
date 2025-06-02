@@ -1,0 +1,20 @@
+﻿{
+  "variants": {
+    "facing=east": {
+      "model": "kuayue:block/overhead_line/overhead_concrete_punched_post",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "kuayue:block/overhead_line/overhead_concrete_punched_post",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "kuayue:block/overhead_line/overhead_concrete_punched_post",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "kuayue:block/overhead_line/overhead_concrete_punched_post",
+      "y": 90
+    }
+  }
+}

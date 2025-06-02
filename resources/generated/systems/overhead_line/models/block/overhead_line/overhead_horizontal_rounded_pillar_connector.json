@@ -1,0 +1,8 @@
+﻿{
+    "render_type":  "translucent",
+    "loader":  "kasuga_lib:bedrock_animated",
+    "model":  "kuayue:block/overhead_line/overhead_horizontal_rounded_pillar_connector",
+    "identifier":  "kuayue:block/overhead_line/overhead_horizontal_rounded_pillar_connector",
+    "geometry":  "geometry.unknown",
+    "texture":  "kuayue:block/overhead_line/overhead_horizontal_rounded_pillar_connector"
+}

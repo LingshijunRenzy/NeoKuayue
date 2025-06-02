@@ -68,6 +68,17 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         public int hashCode() {
             return Objects.hash(absolutePos, relativePos, type, connectionIndex);
         }
+
+        public Connection withBlockEntityPosition(BlockPos bePosition){
+            return new Connection(
+                    bePosition.offset(relativePos),
+                    relativePos,
+                    type,
+                    connectionIndex,
+                    targetIndex,
+                    toPosition
+            );
+        }
     };
 
     public static final HashMap<Block, OverheadLineBlockDynamicConfiguration> CONNECTION_POINTS_SUPPLIERS = new HashMap<>();
@@ -243,9 +254,6 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                     CompoundTag connectionTag = connectionTags.getCompound(i);
                     BlockPos absolutePos = NbtUtils.readBlockPos(connectionTag.getCompound("absolutePos"));
                     BlockPos relativePos = NbtUtils.readBlockPos(connectionTag.getCompound("relativePos"));
-                    if(!absolutePos.subtract(this.getBlockPos()).equals(relativePos)) {
-                        absolutePos = relativePos.offset(this.getBlockPos());
-                    }
                     ResourceLocation connectionType = palette.decode(connectionTag.getInt("type"));
                     OverheadLineType overheadLineType = WireReg.get(connectionType);
                     if(overheadLineType == null || !this.configuration.typePredictor().test(overheadLineType)) {
@@ -356,6 +364,23 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     @Override
     public AABB getRenderBoundingBox() {
         return new AABB(getBlockPos().offset(-200000, -200000,-200000), getBlockPos().offset(200000,200000,200000));
+    }
+
+    public void onPlacement() {
+        boolean updated = false;
+        HashMap<Connection, Connection> replacement = new HashMap<>();
+        for (Connection connection : this.connections) {
+            if(!connection.absolutePos.subtract(this.getBlockPos()).equals(connection.relativePos)) {
+                replacement.put(connection, connection.withBlockEntityPosition(getBlockPos()));
+            }
+            updated = true;
+        }
+        this.connections.removeAll(replacement.keySet());
+        this.connections.addAll(replacement.values());
+        if(updated) {
+            onConnectionModification();
+        }
+        this.notifyUpdate();
     }
 
 }
