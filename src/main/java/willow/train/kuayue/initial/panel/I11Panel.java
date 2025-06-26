@@ -19,8 +19,6 @@ import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.registration.PanelRegistration;
 import willow.train.kuayue.initial.registration.SlabRegistration;
 
-
-
 public class I11Panel {
 
     public static final BlockReg<FullShapeDirectionalBlock> DF11_COWCATCHER =
