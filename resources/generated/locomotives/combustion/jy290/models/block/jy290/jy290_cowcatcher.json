@@ -1,6 +1,6 @@
 {
   "loader": "forge:obj",
-  "model": "kuayue:models/block/jy290/jy290_head_2.obj",
+  "model": "kuayue:models/block/jy290/jy290_cowcatcher.obj",
   "render_type": "cutout_mipped",
   "flip_v": true,
   "textures": {
