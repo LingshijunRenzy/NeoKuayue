@@ -1,13 +1,19 @@
 package willow.train.kuayue.block.panels.base;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import willow.train.kuayue.utils.DirectionUtil;
+
+
 
 public class TrainPanelShapes {
 
@@ -238,6 +244,26 @@ public class TrainPanelShapes {
                     Block.box(0, 0, 30, 2, 32, 32),
                     Block.box(0, 32, 0, 2, 32, 32));
 
+
+
+
+    public static final VoxelShape CARRIAGEUNDERGROUND_NORTH =
+            Shapes.or(
+                    Shapes.box(0.4375, -0.25, -1.875, 1.1875, 0.5, 0),
+                    Shapes.box(0.625, 0, 0, 0.75, 0.125, 0.125));
+
+
+    public static final VoxelShape CARRIAGEUNDERGROUND_WEST;
+    public static final VoxelShape CARRIAGEUNDERGROUND_SOUTH;
+    public static final VoxelShape CARRIAGEUNDERGROUND_EAST;
+
+    static {
+        CARRIAGEUNDERGROUND_EAST = rotateShape(Direction.NORTH, Direction.EAST, CARRIAGEUNDERGROUND_NORTH);
+        CARRIAGEUNDERGROUND_SOUTH = rotateShape(Direction.NORTH, Direction.SOUTH, CARRIAGEUNDERGROUND_NORTH);
+        CARRIAGEUNDERGROUND_WEST = rotateShape(Direction.NORTH, Direction.WEST, CARRIAGEUNDERGROUND_NORTH);
+    }
+
+
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {
             case EAST -> EAST_AABB;
@@ -411,4 +437,36 @@ public class TrainPanelShapes {
             default -> JY290_DOOR_CLOSE_NORTH_AABB.move(1, 0, 0);
         };
     }
+
+
+
+    public static VoxelShape getCarriageUndergroundShape(Direction direction) {
+        return switch (direction) {
+            case EAST -> CARRIAGEUNDERGROUND_EAST;
+            case NORTH -> CARRIAGEUNDERGROUND_NORTH;
+            case WEST -> CARRIAGEUNDERGROUND_WEST;
+            case SOUTH -> CARRIAGEUNDERGROUND_SOUTH;
+            default -> Shapes.block();
+        };
+    }
+
+
+//以下为自动旋转碰撞箱方法
+    private static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
+        VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
+
+        int times = (to.get2DDataValue() - from.get2DDataValue() + 4) % 4;
+        for (int i = 0; i < times; i++) {
+            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = Shapes.joinUnoptimized(
+                    buffer[1],
+                    Shapes.box(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX),
+                    BooleanOp.OR
+            ));
+            buffer[0] = buffer[1];
+            buffer[1] = Shapes.empty();
+        }
+
+        return buffer[0];
+    }
+
 }
