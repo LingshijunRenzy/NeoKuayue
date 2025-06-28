@@ -44,7 +44,6 @@ public class SS8Renderer extends BogeyRenderer {
             int light,
             VertexConsumer vb,
             boolean inContraption) {
-        light *= 1.1;
 
         Direction direction =
                 bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
@@ -107,7 +106,6 @@ public class SS8Renderer extends BogeyRenderer {
                 int light,
                 VertexConsumer vb,
                 boolean inContraption) {
-            light *= 1.1;
 
             Direction direction =
                     bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
