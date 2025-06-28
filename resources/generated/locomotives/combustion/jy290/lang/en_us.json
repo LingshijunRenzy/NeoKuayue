@@ -8,5 +8,8 @@
   "block.kuayue.jy290_carport": "JY290 Carport",
   "block.kuayue.jy290_equipment": "JY290 Bottom Equipment",
   "block.kuayue.jy290_panel": "JY290 Panel",
-  "block.kuayue.jy290_ac": "JY290 Air Conditioning"
+  "block.kuayue.jy290_ac": "JY290 Air Conditioning",
+  "block.kuayue.jy290_panel_logo": "JY290 Panel (Logo)",
+  "block.kuayue.jy290_vent": "JY290 Air Vent",
+  "block.kuayue.jy290_door": "JY290 Door"
 }

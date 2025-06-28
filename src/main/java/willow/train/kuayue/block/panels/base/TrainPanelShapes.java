@@ -202,6 +202,42 @@ public class TrainPanelShapes {
                     Block.box(14, 0, 30, 17, 40, 32),
                     Block.box(14, 38, 0, 17, 40, 32));
 
+    protected static final VoxelShape JY290_DOOR_CLOSE_NORTH_AABB =
+            Block.box(0, 0, 14, 32, 32, 16);
+
+    protected static final VoxelShape JY290_DOOR_CLOSE_WEST_AABB =
+            Block.box(14, 0, -16, 16, 32, 16);
+
+    protected static final VoxelShape JY290_DOOR_CLOSE_SOUTH_AABB =
+            Block.box(-16, 0, 0, 16, 32, 2);
+
+    protected static final VoxelShape JY290_DOOR_CLOSE_EAST_AABB =
+            Block.box(0, 0, 0, 2, 32, 32);
+
+    protected static final VoxelShape JY290_DOOR_OPEN_NORTH_AABB =
+            Shapes.or(
+                    Block.box(0, 0, 14, 2, 32, 16),
+                    Block.box(30, 0, 14, 32, 32, 16),
+                    Block.box(0, 32, 14, 32, 32, 16));
+
+    protected static final VoxelShape JY290_DOOR_OPEN_WEST_AABB =
+            Shapes.or(
+                    Block.box(14, 0, -16, 16, 32, -14),
+                    Block.box(14, 0, 14, 16, 32, 16),
+                    Block.box(14, 32, -16, 16, 32, 16));
+
+    protected static final VoxelShape JY290_DOOR_OPEN_SOUTH_AABB =
+            Shapes.or(
+                    Block.box(-16, 0, 0, -14, 32, 2),
+                    Block.box(14, 0, 0, 16, 32, 2),
+                    Block.box(-16, 32, 0, 16, 32, 2));
+
+    protected static final VoxelShape JY290_DOOR_OPEN_EAST_AABB =
+            Shapes.or(
+                    Block.box(0, 0, 0, 2, 32, 2),
+                    Block.box(0, 0, 30, 2, 32, 32),
+                    Block.box(0, 32, 0, 2, 32, 32));
+
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {
             case EAST -> EAST_AABB;
@@ -333,6 +369,46 @@ public class TrainPanelShapes {
             case WEST -> C70_DOOR_CLOSE_WEST_AABB.move(0, 0, 1);
             case EAST -> C70_DOOR_CLOSE_EAST_AABB.move(0, 0, -1);
             default -> C70_DOOR_CLOSE_NORTH_AABB.move(1, 0, 0);
+        };
+    }
+
+    public static VoxelShape getJY290DoorShape(boolean open, DoorHingeSide hinge, Direction direction) {
+        if (!open)
+            return getJY290DoorCloseShape(hinge, direction);
+        if (hinge == DoorHingeSide.RIGHT) {
+            return switch (direction) {
+                case NORTH -> JY290_DOOR_OPEN_NORTH_AABB;
+                case SOUTH -> JY290_DOOR_OPEN_SOUTH_AABB;
+                case WEST -> JY290_DOOR_OPEN_WEST_AABB;
+                case EAST -> JY290_DOOR_OPEN_EAST_AABB;
+                default -> JY290_DOOR_OPEN_NORTH_AABB;
+            };
+        }
+        return switch (direction) {
+            case NORTH -> JY290_DOOR_OPEN_NORTH_AABB.move(-1, 0, 0);
+            case SOUTH -> JY290_DOOR_OPEN_SOUTH_AABB.move(1, 0, 0);
+            case WEST -> JY290_DOOR_OPEN_WEST_AABB.move(0, 0, 1);
+            case EAST -> JY290_DOOR_OPEN_EAST_AABB.move(0, 0, -1);
+            default -> JY290_DOOR_OPEN_NORTH_AABB.move(1, 0, 0);
+        };
+    }
+
+    public static VoxelShape getJY290DoorCloseShape(DoorHingeSide hinge, Direction direction) {
+        if (hinge == DoorHingeSide.RIGHT) {
+            return switch (direction) {
+                case NORTH -> JY290_DOOR_CLOSE_NORTH_AABB;
+                case SOUTH -> JY290_DOOR_CLOSE_SOUTH_AABB;
+                case WEST -> JY290_DOOR_CLOSE_WEST_AABB;
+                case EAST -> JY290_DOOR_CLOSE_EAST_AABB;
+                default -> JY290_DOOR_CLOSE_NORTH_AABB;
+            };
+        }
+        return switch (direction) {
+            case NORTH -> JY290_DOOR_CLOSE_NORTH_AABB.move(-1, 0, 0);
+            case SOUTH -> JY290_DOOR_CLOSE_SOUTH_AABB.move(1, 0, 0);
+            case WEST -> JY290_DOOR_CLOSE_WEST_AABB.move(0, 0, 1);
+            case EAST -> JY290_DOOR_CLOSE_EAST_AABB.move(0, 0, -1);
+            default -> JY290_DOOR_CLOSE_NORTH_AABB.move(1, 0, 0);
         };
     }
 }

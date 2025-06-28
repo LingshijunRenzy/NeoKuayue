@@ -1,13 +1,18 @@
 package willow.train.kuayue.initial.panel;
 
+import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.registrations.common.BlockReg;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.deco.JY290ACBlock;
+import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
+import willow.train.kuayue.block.panels.door.JY290DoorBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.registration.PanelRegistration;
@@ -89,6 +94,14 @@ public class IJY290Panel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<TrainHingePanelBlock> JY290_PANEL_LOGO =
+            new PanelRegistration<TrainHingePanelBlock>("jy290_panel_logo")
+                    .block(p -> new TrainHingePanelBlock(p, new Vec2(-1, 0), new Vec2(1, 2)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_RED)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
     public static final BlockReg<JY290ACBlock> JY290_AC =
             new BlockReg<JY290ACBlock>("jy290_ac")
                     .blockType(JY290ACBlock::new)
@@ -99,6 +112,22 @@ public class IJY290Panel {
                     .addProperty(properties -> properties.strength(1.0f, 2.0f))
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueLocoTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> JY290_VENT =
+            new SlabRegistration<TrainSlabBlock>("jy290_vent")
+                    .block(p -> new TrainSlabBlock(p, true))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<JY290DoorBlock> JY290_DOOR =
+            new PanelRegistration<JY290DoorBlock>("jy290_door")
+                    .block(p -> new JY290DoorBlock(p,new Vec2(0, 0), new Vec2(1, 1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .tab(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
