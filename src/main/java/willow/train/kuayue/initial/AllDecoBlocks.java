@@ -9,6 +9,8 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.SkirtBlock;
+import willow.train.kuayue.block.panels.CarriageUnderground;
+import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.deco.ACOutdoorUnitBlock;
 import willow.train.kuayue.block.panels.deco.FlourescentLightBlock;
 import willow.train.kuayue.block.panels.deco.TeaBoilerBlock;
@@ -18,6 +20,7 @@ import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
 import willow.train.kuayue.block.seat.M1SeatBlock;
 import willow.train.kuayue.block.seat.RZSeatBlock;
 import willow.train.kuayue.block.seat.YZSeatBlock;
+import willow.train.kuayue.initial.registration.PanelRegistration;
 import willow.train.kuayue.initial.registration.SkirtRegistration;
 import willow.train.kuayue.initial.registration.SlabRegistration;
 
@@ -313,6 +316,29 @@ public class AllDecoBlocks {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<CarriageUnderground> VACUUM_TOILET_1 =
+            new PanelRegistration<CarriageUnderground>("vacuum_toilet_1")
+                    .block(CarriageUnderground::new)
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<CarriageUnderground> VACUUM_TOILET_2 =
+            new PanelRegistration<CarriageUnderground>("vacuum_toilet_2")
+                    .block(CarriageUnderground::new)
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<CarriageUnderground> VACUUM_TOILET_3 =
+            new PanelRegistration<CarriageUnderground>("vacuum_toilet_3")
+                    .block(CarriageUnderground::new)
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
     public static final SlabRegistration<TrainSlabBlock> CARRIAGE_BRAKE_CYLINDER =
             new SlabRegistration<TrainSlabBlock>("carriage_brake_cylinder")
                     .block(p -> new TrainSlabBlock(p, false))

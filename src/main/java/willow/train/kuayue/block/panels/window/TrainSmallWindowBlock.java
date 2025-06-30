@@ -29,6 +29,7 @@ public class TrainSmallWindowBlock extends TrainPanelBlock {
         registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.EAST).setValue(OPEN, false));
     }
 
+
     public TrainSmallWindowBlock(Properties properties) {
         super(properties);
         registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.EAST).setValue(OPEN, false));

@@ -1,0 +1,20 @@
+﻿{
+  "variants": {
+    "facing=east": {
+      "model": "kuayue:block/overhead_line/overhead_single_layer_truss_reversal",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "kuayue:block/overhead_line/overhead_single_layer_truss_reversal",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "kuayue:block/overhead_line/overhead_single_layer_truss_reversal",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "kuayue:block/overhead_line/overhead_single_layer_truss_reversal",
+      "y": 90
+    }
+  }
+}
