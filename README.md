@@ -4,7 +4,7 @@
 
 <div style="text-align: center;"  align="center">
 
-![MIT License](https://img.shields.io/badge/License-MIT-blue)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue)](./LICENSE)
 ![Minecraft Version](https://img.shields.io/badge/Minecraft%20版本-1.19.2%7C1.20.1-success)
 ![Mod Loader Forge](https://img.shields.io/badge/Loader-Forge-red)
 <!---
@@ -12,14 +12,13 @@ WIP, When the mod is released, please uncomment the following lines
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/[Modrinth MODID]?logo=modrinth&label=Modrinth%20%E4%B8%8B%E8%BD%BD%E9%87%8F)
 ![CurseForge Downloads](https://img.shields.io/curseforge/dt/[CurseForge MODID]?logo=curseforge&label=CurseForge%20%E4%B8%8B%E8%BD%BD%E9%87%8F&color=orange)
 -->
-![QQ Group](https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%BE%A4-QQ-blue?logo=qq)
-![Discord](https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%A4%BE%E5%8C%BA-Discord-blue?logo=discord&color=darkblue)
-![Github Issues](https://img.shields.io/github/issues/KuaYueTeam/NeoKuaYue?label=Issues)
-
+[![QQ Group](https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%BE%A4-QQ-blue?logo=qq)](https://jq.qq.com/?_wv=1027&k=CYUl0h1L)
+[![Discord](https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%A4%BE%E5%8C%BA-Discord-blue?logo=discord&color=darkblue)](https://discord.gg/dBvjerpsSy)
+[![Github Issues](https://img.shields.io/github/issues/KuaYueTeam/NeoKuaYue?label=Issues)](https://github.com/KuaYueTeam/NeoKuayue/issues)
 
 [![Crowdin Translate](https://img.shields.io/badge/Crowdin-%E6%8F%90%E4%BA%A4%E7%BF%BB%E8%AF%91-blue?logo=crowdin)
 ![Crowdin](https://badges.crowdin.net/kuayue/localized.svg)](https://crowdin.com/project/kuayue)
-![Github CI](https://img.shields.io/github/actions/workflow/status/KuaYueTeam/NeoKuaYue/gradle.yml?label=Github%20Action&logo=githubactions)
+[![Github CI](https://img.shields.io/github/actions/workflow/status/KuaYueTeam/NeoKuaYue/gradle.yml?label=Github%20Action&logo=githubactions)](https://github.com/KuaYueTeam/NeoKuayue/actions)
 <hr/>
 
 </div>
