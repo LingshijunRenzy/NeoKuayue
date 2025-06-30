@@ -1,5 +1,6 @@
 package willow.train.kuayue.systems.editable_panel;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.SimpleColor;
@@ -11,20 +12,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
 import willow.train.kuayue.block.panels.block_entity.EditablePanelEntity;
@@ -37,7 +32,9 @@ import willow.train.kuayue.systems.editable_panel.screens.CustomScreen;
 import willow.train.kuayue.systems.editable_panel.widget.Label;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class EditableTypeConstants {
@@ -74,7 +71,7 @@ public class EditableTypeConstants {
             WHITE = 0xFFFFFF,
             BLACK = 789516;
 
-//    TODO 各Renderer中的render方法lambda
+    //    TODO 各Renderer中的render方法lambda
     public static final SignRenderLambda CARRIAGE_TYPE_RENDER = (blockEntity, partialTick, pose, bufferSource, packedLight, packedOverlay, unicode) -> {
         float factor = unicode ? 1.2f : 1f;
         PoseStack poseStack = pose.getPoseStack();
@@ -188,86 +185,6 @@ public class EditableTypeConstants {
     public static final SignRenderLambda LAQUERED_BOARD_SIGN = (blockEntity, partialTick, pose, bufferSource, packedLight, packedOverlay, unicode) -> {
         // todo 需实现水牌blockentity 渲染方法，并进行关联
         //  这其中不但包括方块在世界的渲染方法，还有在打开的gui中的渲染方法
-        // System.out.println("水牌渲染方法");
-//        BlockState blockState = blockEntity.getBlockState();
-//        PoseStack poseStack = pose.getPoseStack();
-//        CompoundTag nbt = blockEntity.getNbt();
-//        BlockPos blockPos = blockEntity.getBlockPos();
-//        int blockPosZ = blockPos.getZ();
-//        int blockPosX = blockPos.getX();
-//        int blockPosY = blockPos.getY();
-//
-//        String strings = nbt.getString("data0_laquered");
-//
-//        // 在使用PoseStack的实例时，首先应当入栈
-//        poseStack.pushPose();
-//
-//        // todo 这是什么？
-////        MultiBufferSource buffer = bufferSource.getBuffer();
-////        laqueredBoardLogo.get()
-////                .rectangle(new Vector3f(-blockPosX, -blockPosY, -blockPosZ), ImageMask.Axis.X, ImageMask.Axis.Y, true, true, .1f, .1f);
-////        laqueredBoardLogo.get()
-////                .renderToWorld(poseStack, buffer, RenderType.text(laqueredBoardLogo.get().getImage().id), false, packedLight);
-//
-//        Label data0_laquered = new Label(strings);
-//        data0_laquered.setScale(0.1f, 0.1f);
-//
-////        float text_length = Minecraft.getInstance().font.width(str);
-////        float text_height = Minecraft.getInstance().font.lineHeight;
-//
-////        poseStack.translate(0.5d, 0.5d, 0.5d);
-//        // 获取面板朝向，重置他的显示方向？
-//        float f = blockState.getValue(TrainPanelBlock.FACING).getOpposite().toYRot();
-////        poseStack.translate(0.5d, 0.5d, 0.5d);
-//        // 重置他的显示方向？
-////        float f = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot();
-//        // 控制大小？
-////        poseStack.mulPose(Vector3f.YP.rotationDegrees(f));
-////        poseStack.translate(0.0d, -0.3d, -0.42d);
-////        poseStack.translate(blockEntity.getNbt().getFloat("offset_x"),
-////                blockEntity.getNbt().getFloat("offset_y"), 0);
-////        poseStack.mulPose(Vector3f.YP.rotationDegrees(f));
-//
-////        poseStack.translate(0.0d, 0.1d, 0.501d);
-////        poseStack.translate(x_offset, y_offset, 0);
-//        // todo 先固定为零看看效果
-////        poseStack.translate(0, 0, 0.5);
-////        poseStack.scale(1.0f, -1.0f, 1.0f);
-////        poseStack.scale(.2f, .2f, 1.0f); // standard_size
-////        poseStack.scale(.1f, .1f, 1.0f);
-////        poseStack.translate(-text_length / 2, -text_height / 2, 0);
-//
-//
-////        try {
-////            label.setColor(nbt.getInt("color"));
-////        } catch (Exception e) {
-////            label.setColor(SimpleColor.BLACK);
-////        }
-////        data0_laquered.render(poseStack, 1, 1, partialTick);
-////        MultiBufferSource textBuffer = bufferSource.getBuffer();
-////        data0_laquered.renderToWorld(poseStack, Minecraft.getInstance().font, textBuffer, true, true, SimpleColor.BLACK, 15);
-//
-//        // YP.rotationDegrees(180f) 转的是下箱板的前后转，例如刚创的是紧贴着板子的字，你转180，他就到板子面前一个方块身
-//        // 上的紧贴着的字了
-////        poseStack.mulPose(Vector3f.YP.rotationDegrees(180f));
-//        // 那ZP..rotationDegrees(180f) 呢？是绕下箱板的z轴，也就是你面相方块时从左到右的横轴就是z轴，转180就给倒立的字转
-//        // 回来了
-//        poseStack.scale(.15f, .15f, 1.2f);
-//        poseStack.mulPose(Vector3f.ZP.rotationDegrees(180f));
-//        // 从当前点（因为下箱板不是草方块那种方块，他是在原位置上向后偏移的方块，故默认创建的字体会看起来离方块很远
-//        // 这里平移x轴移过去
-////        poseStack.last().pose().
-//        // 尝试将文字左上角对齐方块左上角
-////        poseStack.translate(-1f, -1f, .5f);
-////        poseStack.translate(-5.5f, -5.5f, -10f); // 不显示字体了
-//        poseStack.translate(-2f, -2f, -1f);
-////        data0_laquered.render(poseStack, 0, 0, partialTick);
-//        MultiBufferSource textBuffer = bufferSource.getBuffer();
-//        data0_laquered.renderToWorld(poseStack, Minecraft.getInstance().font, textBuffer, false, false, SimpleColor.fromRGB(0, 0, 0), 11);
-////        label.render(poseStack, 0, 0, partialTick);
-////        label.render(poseStack, 0, -0, partialTick);
-//        // 使用完成后必须出栈以提交最后一次修改的结果
-//        poseStack.popPose();
 
         // 获取方块状态和NBT数据
         BlockState blockstate = blockEntity.getBlockState();
@@ -281,9 +198,10 @@ public class EditableTypeConstants {
         String laqueredType = nbt.getString("image_type");
         float laqueredFloatX = nbt.getFloat("offset_x");
         float laqueredFloatY = nbt.getFloat("offset_y");
-        int boardColorRed = nbt.getInt("red");
-        int boardColorGreen = nbt.getInt("green");
-        int boardColorBlue = nbt.getInt("blue");
+//        int boardColorRed = nbt.getInt("red");
+//        int boardColorGreen = nbt.getInt("green");
+//        int boardColorBlue = nbt.getInt("blue");
+        int boardColor = nbt.getInt("color");
         float boardColorAlpha = nbt.getFloat("alpha");
 
         // 设置文本颜色
@@ -299,9 +217,13 @@ public class EditableTypeConstants {
 
         // 计算各文本宽度(用于居中布局)
         float leftTopWidth = font.width(leftTop.getText());
+        float leftTopFontLength = (float) font.width(leftTop.getText()) / 9;
         float leftBottomWidth = font.width(leftBottom.getText());
+        float leftBottomEngFontLength = (float) font.width(leftBottom.getText()) / 6;
         float rightTopWidth = font.width(rightTop.getText());
+        float rightTopFontLength = (float) font.width(rightTop.getText()) / 9;
         float rightBottomWidth = font.width(rightBottom.getText());
+        float rightBottomEngFontLength = (float) font.width(rightBottom.getText()) / 6;
 
         // 开始渲染
         PoseStack poseStack = pose.getPoseStack();
@@ -365,7 +287,7 @@ public class EditableTypeConstants {
                 0.5f,
                 0.07f
         );
-        laqueredColorBoard.get().setColor(SimpleColor.fromNbt(nbt));
+        laqueredColorBoard.get().setColor(SimpleColor.fromRGBA(boardColor, boardColorAlpha));
         laqueredColorBoard.get().renderToWorld(poseStack, colorBoardLeftBuffer, RenderType.text(laqueredColorBoard.get().getImage().id), false, packedLight);
 //        poseStack.popPose();
 
@@ -380,49 +302,161 @@ public class EditableTypeConstants {
                 0.5f,
                 0.07f
         );
-        laqueredColorBoard.get().setColor(SimpleColor.fromNbt(nbt));
+        laqueredColorBoard.get().setColor(SimpleColor.fromRGBA(boardColor, boardColorAlpha));
         laqueredColorBoard.get().renderToWorld(poseStack, colorBoardRightBuffer, RenderType.text(laqueredColorBoard.get().getImage().id), false, packedLight);
 
         // 设置文本基础缩放
         float baseScale = 0.4f * 0.3f;
+        MultiBufferSource leftTopBuffer = bufferSource.getBuffer();
         poseStack.scale(baseScale, -baseScale, baseScale);
-
+        // 每个中文 9 字符
+        float leftTopTextHalfWidth = (float) (leftTopWidth / 2);
+        // todo if is non ascii char
         poseStack.pushPose();
-        poseStack.translate(-3.9f, -5.6f, 0.0599999f);
-        poseStack.scale(0.098f, 0.098f, 1.0f);
-//        Label testPosadd = new Label(Component.literal("北京"));
+        float leftTopTextBaseLine = -5.2f;
+        leftTopTextAutoCenter(leftTopTextBaseLine, leftTopFontLength, poseStack, leftTopWidth);
+//        poseStack.scale(0.098f, 0.098f, 1.0f);
         leftTop.setColor(BLACK);
         leftTop.renderToGui(poseStack, font);
+//        leftTop.renderToWorld(poseStack, font, leftTopBuffer, false, packedLight);
         poseStack.popPose();
 
+        MultiBufferSource rightTopBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
-        poseStack.translate(2.15f, -5.6f, 0.0599999f);
-        poseStack.scale(0.098f, 0.098f, 1.0f);
-//        Label testPosoffset = new Label(Component.literal("上海"));
+        float rightTopTextHalfWidth = (float) (rightTopWidth / 2);
+        float rightBottomTextHalfWidth = (float) (rightBottomWidth / 2);
+        float rightTopTextBaseLine = 1.5f;
+//        poseStack.translate(2.15f, -5.6f, 0.0599999f);
+        rightTopTextAutoCenter(rightTopTextBaseLine, rightTopFontLength, poseStack, rightTopWidth);
+//        poseStack.scale(0.098f, 0.098f, 1.0f);
         rightTop.setColor(BLACK);
         rightTop.renderToGui(poseStack, font);
+//        rightTop.renderToWorld(poseStack, font, rightTopBuffer, false, packedLight);
         poseStack.popPose();
 
         // 英文区域，始发地
+        // todo if is non ascii char
+        // 每个ascii 字符6.0f
+        MultiBufferSource leftBottomBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
-        poseStack.translate(-3.95f, -4.55f, 0.049f); // z 0.05
-        poseStack.scale(0.048f, 0.048f, 1.0f);
-//        Label eng1 = new Label(Component.literal("BEIJING"));
+        float leftBottomTextHalfWidth = (float) (leftBottomWidth / 2);
+//        poseStack.translate(-3.95f, -4.55f, 0.049f); // z 0.05
+//        poseStack.translate((-3.3f) + ((leftBottomTextHalfWidth / 9) * -1), -4.55f, 0.049f); // z 0.05
+        leftBottomTextAutoCenter(leftTopTextBaseLine, leftBottomEngFontLength, poseStack, leftBottomWidth);
+//        poseStack.scale(0.048f, 0.048f, 1.0f);
         leftBottom.setColor(WHITE);
         leftBottom.renderToGui(poseStack, font);
+//        rightTop.renderToWorld(poseStack, font, leftBottomBuffer, false, packedLight);
         poseStack.popPose();
 
         // 英文区域，目的地
+        MultiBufferSource rightBottomBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
-        poseStack.translate(1.85f, -4.55f, 0.049f);
-        poseStack.scale(0.048f, 0.048f, 1.0f);
-//        Label eng2 = new Label(Component.literal("SHANGHAI"));
+//        poseStack.translate(1.85f, -4.55f, 0.049f);
+        rightBottomTextAutoCenter(rightTopTextBaseLine, rightBottomEngFontLength, poseStack, rightBottomWidth);
         rightBottom.setColor(WHITE);
         rightBottom.renderToGui(poseStack, font);
+//        rightTop.renderToWorld(poseStack, font, rightBottomBuffer, false, packedLight);
         poseStack.popPose();
         // 结束渲染
         poseStack.popPose();
     };
+
+    private static void rightBottomTextAutoCenter(float rightBottomTextBaseLine, float rightBottomEngFontLength, PoseStack poseStack, float tempWidth) {
+
+//        poseStack.translate(1.85f, -4.55f, 0.049f);
+        if (rightBottomEngFontLength < 13) {
+            float missingText = 13 - rightBottomEngFontLength;
+            float v = (missingText * 0.3f) / 2;
+            poseStack.translate(rightBottomTextBaseLine + v, -4.55f, 0.049f);
+            poseStack.scale(0.048f, 0.048f, 1.0f);
+        } else {
+            // 如果13ascii字符及以上
+//            poseStack.translate(leftTopTextBaseLine , -4.55f,0.0599999f);
+//            float redundantText = rightBottomEngFontLength - 13;
+//            float v = ((redundantText * 0.6f) / 2) * -1;
+            poseStack.translate((rightBottomTextBaseLine), -4.55f, 0.049f);
+            float k = 3.8f; // 英文行的可显示文字部分的定长
+            poseStack.scale(k / tempWidth, 0.048f, 1.0f);
+        }
+    }
+
+    /**
+     * 水牌左下英文始发地的自动文字居中计算
+     *
+     * @param leftTopTextBaseLine
+     * @param leftBottomFontLength
+     * @param poseStack
+     * @param leftBottomTextHalfWidth
+     */
+    private static void leftBottomTextAutoCenter(float leftBottomTextBaseLine, float leftBottomFontLength, PoseStack poseStack, float tempWidth) {
+//        poseStack.translate((-3.3f) + ((leftBottomTextHalfWidth / 9) * -1), -4.55f, 0.049f); // z 0.05
+
+        if (leftBottomFontLength < 13) {
+            float missingText = 13 - leftBottomFontLength;
+            float v = (missingText * 0.3f) / 2;
+            poseStack.translate(leftBottomTextBaseLine + v, -4.55f, 0.0599999f);
+            poseStack.scale(0.048f, 0.048f, 1.0f);
+        } else {
+            // 如果13ascii字符及以上
+//            poseStack.translate(leftTopTextBaseLine , -4.55f,0.0599999f);
+//            float redundantText = leftBottomFontLength - 13;
+//            float v = ((redundantText * 0.6f) / 2) * -1;
+            poseStack.translate((leftBottomTextBaseLine) , -4.55f, 0.0599999f);
+            float k = 3.8f; // 英文行的可显示文字部分的定长
+            poseStack.scale(k / tempWidth, 0.048f, 1.0f);
+        }
+    }
+
+    /**
+     *
+     * @param rightTopTextBaseLine
+     * @param rightTopFontLength
+     * @param poseStack
+     * @param tempWidth 文字宽度
+     */
+    private static void rightTopTextAutoCenter(float rightTopTextBaseLine, float rightTopFontLength, PoseStack poseStack, float tempWidth) {
+        // 一个中文0.8f
+        if (rightTopFontLength <= 4) {
+            float missingText = 4 - rightTopFontLength;
+            float v = (missingText * 1.f) / 2;
+            poseStack.translate(rightTopTextBaseLine + v, -5.6f, 0.0599999f);
+            // 文字缩放使用等比
+            poseStack.scale(0.098f, 0.098f, 1.0f);
+        } else {
+            // 如果4中文及以上, 直接使其贴边
+            poseStack.translate(rightTopTextBaseLine, -5.6f, 0.0599999f);
+            float k = 3.8f; // 中文行的可显示文字部分的定长
+            poseStack.scale(k / tempWidth, 0.098f, 1.0f);
+        }
+    }
+
+    /**
+     *
+     * @param baseLine
+     * @param leftTopFontLength 文字数量（通过文字width / 9得出）
+     * @param poseStack
+     * @param leftTopTextHalfWidth
+     */
+    private static void leftTopTextAutoCenter(float baseLine, float leftTopFontLength, PoseStack poseStack, float tempWidth) {
+        // 如果文字数量少于4个
+        if (leftTopFontLength <= 4) {
+            // 计算缺少的文字数量
+            float missingText = 4 - leftTopFontLength;
+            // 将缺失文字数量的宽度除以2来得到单边文字宽度
+            float v = (missingText * 1.1f) / 2;
+            // 应用偏移
+            poseStack.translate(baseLine + v, -5.6f, 0.0599999f);
+            // 文字缩放使用等比
+            poseStack.scale(0.098f, 0.098f, 1.0f);
+        } else {
+            // 如果4中文及以上
+            // 得出多余文字的总宽度
+            poseStack.translate((baseLine), -5.6f, 0.0599999f);
+            float k = 3.8f; // 中文行的可显示文字部分的定长
+            poseStack.scale(k / tempWidth, 0.098f, 1.0f);
+        }
+    }
 
     public static final SignRenderLambda TRAIN_SPEED_SIGN = (blockEntity, partialTick, pose, bufferSource, packedLight, packedOverlay, unicode) -> {
         BlockState blockState = blockEntity.getBlockState();
@@ -486,39 +520,29 @@ public class EditableTypeConstants {
         @Override
         public void defaultTextComponent(BlockEntity blockEntity, BlockState blockState, CompoundTag nbt) {
 //            int type = 0; // 当前处于的种类
-//            int backGroundColor = 15216648;
-//            int forGroundColor = 0x0;
-//            int beltForGroundColor = 0xffffff; // 背景色和前景色
-//            double x_offset = 0;
-//            nbt.putString("data0_laquered", "laquered.");
-//            nbt.putInt("type", type);
-//            for (int i = 0; i < 16; i++) {
-//                nbt.putString("content " + i, "" + i);
-//            }
-//            nbt.putInt("beltColor", backGroundColor);
-//            nbt.putInt("textColor", forGroundColor);
-//            nbt.putInt("pinyinColor", beltForGroundColor);
-//            nbt.putInt("color", beltForGroundColor);
 //            blockEntity.setChanged();  // 没用
             // todo 已有nbt数据的也会因此处的默认文本而覆盖吗？
             // 左侧上方文字 - 如"北京"
-            nbt.putString("left_top", "北京");
+            nbt.putString("left_top", "上海");
             // 左侧下方文字 - 如拼音"BEIJING"
-            nbt.putString("left_bottom", "BEIJING");
+            nbt.putString("left_bottom", "SHANGHAI");
             // 右侧上方文字 - 如"上海"
-            nbt.putString("right_top", "上海");
+            nbt.putString("right_top", "北京");
             // 右侧下方文字 - 如拼音"SHANGHAI"
-            nbt.putString("right_bottom", "SHANGHAI");
+            nbt.putString("right_bottom", "BEIJING");
             // 图片标识(保留字段，可用于不同样式水牌)
             nbt.putString("image_type", "default");
             // X轴偏移量
             nbt.putFloat("offset_x", 0f);
             // Y轴偏移量
             nbt.putFloat("offset_y", 0f);
-            // 文字颜色
-            nbt.putInt("red", 232);
-            nbt.putInt("green", 78);
-            nbt.putInt("blue", 8);
+            // 车次
+            nbt.putString("train_number", "1462/1");
+            // 等级左
+            nbt.putString("left_train_level", "普");
+            nbt.putString("right_train_level", "快");
+
+            // 彩条颜色 默认不设置，因为创建时color nbt会根据下厢板的不同而不同
             nbt.putFloat("alpha", 1.f);
         }
     };
@@ -643,7 +667,7 @@ public class EditableTypeConstants {
     }
 
     // 根据手持的物品与车厢板类型返回自定义类型
-    public static TrainPanelProperties.EditType getPanelEditType (BlockState state, Player player, InteractionHand hand) {
+    public static TrainPanelProperties.EditType getPanelEditType(BlockState state, Player player, InteractionHand hand) {
         if (player.getItemInHand(hand).is(EditablePanelItem.COLORED_BRUSH.getItem())) {
             if (state.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag())))
                 return TrainPanelProperties.EditType.TYPE;
