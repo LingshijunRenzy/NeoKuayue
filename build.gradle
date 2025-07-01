@@ -24,6 +24,8 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: ModuleCompilePlugin
 
+jarJar.enable()
+
 version = "${mod_version}"
 group = 'willow.train.kuayue' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'kuayue'
@@ -261,14 +263,18 @@ processResources.dependsOn("resourceCompileTask")
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file
 // 当需要发布正式版本的时候用下面这个，给开发用的版本则不要用这个，task 跑 jarJar
-jar.finalizedBy('reobfJar')
+// jar.finalizedBy('reobfJar')
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 // publish.dependsOn('reobfJar')
 tasks.named("jar").configure {
-    archiveClassifier = ''
+    archiveClassifier = 'slim'
 
     // finalizedBy 'reobfJar'
+}
+
+tasks.named("jarJar").configure {
+    archiveClassifier = ''
 }
 
 java {
