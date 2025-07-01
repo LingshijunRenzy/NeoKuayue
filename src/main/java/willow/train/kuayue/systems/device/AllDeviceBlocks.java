@@ -15,7 +15,7 @@ public class AllDeviceBlocks {
                 .blockType(TrainStationBlock::new)
                 .material(Material.METAL)
                 .withItem(AllDeviceEdgePoints.TRAIN_STATION.getBlockItemFactory(), null)
-                // .tabTo(AllElements.neoKuayueDeviceTab)
+                .tabTo(AllElements.neoKuayueDeviceTab)
                 .submit(AllElements.testRegistry);
 
     public static BlockReg<StationEntryBlock> STATION_ENTRY =
@@ -23,7 +23,7 @@ public class AllDeviceBlocks {
                     .blockType(StationEntryBlock::new)
                     .material(Material.METAL)
                     .withItem(AllDeviceEdgePoints.STATION_ENTRY.getBlockItemFactory(), null)
-                    // .tabTo(AllElements.neoKuayueDeviceTab)
+                    .tabTo(AllElements.neoKuayueDeviceTab)
                     .submit(AllElements.testRegistry);
 
 
