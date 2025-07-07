@@ -5,13 +5,16 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import kasuga.lib.core.create.boundary.ResourcePattle;
 import kasuga.lib.core.util.Envs;
+import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -27,6 +30,7 @@ import willow.train.kuayue.systems.overhead_line.block.support.variants.Overhead
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 import willow.train.kuayue.systems.overhead_line.wire.WireReg;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -69,7 +73,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
             return Objects.hash(absolutePos, relativePos, type, connectionIndex);
         }
 
-        public Connection withBlockEntityPosition(BlockPos bePosition){
+        public Connection withBlockEntityPosition(BlockPos bePosition, Vector3f toPosition){
             return new Connection(
                     bePosition.offset(relativePos),
                     relativePos,
@@ -200,6 +204,24 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         );
         this.notifyUpdate();
         onConnectionModification();
+    }
+
+    public Pair<Boolean,Optional<Connection>> getFreshConnection(Connection connection) {
+        BlockPos thisPos = this.getBlockPos();
+        Level level = this.getLevel();
+        if(level == null)
+            return Pair.of(false, Optional.empty());
+        BlockPos newAbsolutePos = thisPos.offset(connection.relativePos());
+        BlockEntity targetBlockEntity = level.getBlockEntity(newAbsolutePos);
+
+        if(!(targetBlockEntity instanceof OverheadLineSupportBlockEntity targetOverhead)) {
+            return Pair.of(true, Optional.empty());
+        }
+
+        return Pair.of(true, Optional.of(connection.withBlockEntityPosition(
+                newAbsolutePos,
+                new Vector3f(targetOverhead.getConnectionPointByIndex(connection.targetIndex()))
+        )));
     }
 
     public void removeAllConnections(){
@@ -368,19 +390,35 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
 
     public void onPlacement() {
         boolean updated = false;
-        HashMap<Connection, Connection> replacement = new HashMap<>();
-        for (Connection connection : this.connections) {
+        Iterator<Connection> connectionIterator = this.connections.iterator();
+        ArrayList<Connection> updatedConnections = new ArrayList<>();
+        while(connectionIterator.hasNext()) {
+            Connection connection = connectionIterator.next();
             if(!connection.absolutePos.subtract(this.getBlockPos()).equals(connection.relativePos)) {
-                replacement.put(connection, connection.withBlockEntityPosition(getBlockPos()));
+                updated = true;
+                Pair<Boolean, Optional<Connection>> newConnection = getFreshConnection(connection);
+                if(newConnection.getFirst()) {
+                    connectionIterator.remove();
+                } else continue;
+                if(newConnection.getSecond().isPresent()){
+                    updatedConnections.add(newConnection.getSecond().get());
+                }
             }
-            updated = true;
         }
-        this.connections.removeAll(replacement.keySet());
-        this.connections.addAll(replacement.values());
+        if(updated) {
+            this.connections.addAll(updatedConnections);
+        }
         if(updated) {
             onConnectionModification();
         }
         this.notifyUpdate();
+    }
+
+
+    boolean shouldRecheckTargetPositions = false;
+
+    public void checkTargetPosition(){
+
     }
 
 }
