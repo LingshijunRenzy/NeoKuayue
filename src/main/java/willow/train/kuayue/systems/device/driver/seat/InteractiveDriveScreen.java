@@ -5,10 +5,7 @@ import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
 import kasuga.lib.core.client.frontend.common.layouting.LayoutBox;
 import kasuga.lib.core.client.frontend.gui.SourceInfo;
-import kasuga.lib.core.client.frontend.gui.events.mouse.MouseClickEvent;
-import kasuga.lib.core.client.frontend.gui.events.mouse.MouseDownEvent;
-import kasuga.lib.core.client.frontend.gui.events.mouse.MouseDragEvent;
-import kasuga.lib.core.client.frontend.gui.events.mouse.MouseEvent;
+import kasuga.lib.core.client.frontend.gui.events.mouse.*;
 import kasuga.lib.core.client.frontend.rendering.RenderContext;
 import kasuga.lib.core.client.interaction.GuiOperatingPerspectiveScreen;
 import kasuga.lib.core.menu.targets.Target;
@@ -166,19 +163,20 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     }
 
     public Optional<InteractiveBehaviour.MenuEntry> getMouseAtInteractiveItem(double x, double y) {
-        int screenWidth = this.width;
-        int screenHeight = this.height;
-        
         return interactiveSet.stream().filter(entry -> {
-            Vec2 position = calculatePosition(entry, screenWidth, screenHeight);
-            Vec2 size = entry.getSize();
-            Vec2 scale = entry.getScale();
-            float scaledWidth = size.x * scale.x;
-            float scaledHeight = size.y * scale.y;
-            
-            return x >= position.x && x <= position.x + scaledWidth &&
-                   y >= position.y && y <= position.y + scaledHeight;
+            return this.isMouseAtInteractiveItem(x, y, entry);
         }).findFirst();
+    }
+
+    public boolean isMouseAtInteractiveItem(double pMouseX, double pMouseY, InteractiveBehaviour.MenuEntry entry) {
+        Vec2 position = calculatePosition(entry, this.width, this.height);
+        Vec2 size = entry.getSize();
+        Vec2 scale = entry.getScale();
+        float scaledWidth = size.x * scale.x;
+        float scaledHeight = size.y * scale.y;
+
+        return pMouseX >= position.x && pMouseX <= position.x + scaledWidth &&
+               pMouseY >= position.y && pMouseY <= position.y + scaledHeight;
     }
 
     @Override
@@ -279,7 +277,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
                     interactive.get(),
                     new Vec2((float) pMouseX, (float) pMouseY),
                     (localPosition)->
-                            MouseDownEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), pButton)
+                            MouseUpEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), pButton)
             );
             if(lastClickedPos != null) {
                 if(Math.abs(lastClickedPos.x - pMouseX) + Math.abs(lastClickedPos.y - pMouseY) < 0.1){
@@ -318,6 +316,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
                                 pos.y + (float) (pMouseY - lastMouseY)
                         )
                 );
+
                 hasDragging = true;
             }
         }
@@ -325,6 +324,16 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         lastMouseY = pMouseY;
         // Optional<InteractiveBehaviour.MenuEntry> interactive = getMouseAtInteractiveItem(pMouseX, pMouseY);
         if(currentlyDragging != null) {
+            if(!this.isMouseAtInteractiveItem(pMouseX, pMouseY, currentlyDragging)) {
+                dispatchInteractive(
+                        currentlyDragging,
+                        new Vec2((float) pMouseX, (float) pMouseY),
+                        (localPosition)->
+                                MouseUpEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), 0)
+                );
+                currentlyDragging = null;
+                return;
+            }
             double scaleX = currentlyDragging.getScale().x;
             double scaleY = currentlyDragging.getScale().y;
             double xDeltaD = (pMouseX - lastDragMouseX) / scaleX, yDeltaD = (pMouseY - lastDragMouseY) / scaleY;
@@ -333,7 +342,6 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
                 lastDragMouseX += ((double) xDeltaI) * scaleX;
                 lastDragMouseY += ((double) yDeltaI) * scaleY;
                 Vec2i delta = new Vec2i(xDeltaI, yDeltaI);
-
 
                 Vec2 local = transformInteractive(currentlyDragging, new Vec2((float) pMouseX, (float) pMouseY));
 
@@ -350,7 +358,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     }
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        if(!this.dragging.isEmpty() || lastClickedPos != null)
+        if(!this.dragging.isEmpty() || lastClickedPos != null || currentlyDragging != null)
             return true;
         return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
     }
