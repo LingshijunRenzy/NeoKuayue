@@ -72,20 +72,20 @@ public class DoubleDriverSeatBlock extends M1SeatBlock implements IContraptionSe
         if(action == DriverSeatActionType.SIT_DOWN || action == DriverSeatActionType.STAND){
             offsets = switch (facing) {
                 case NORTH -> List.of(
-                        new Vec3(1, 0, 0),
-                        new Vec3(-1, 0, 0)
+                        new Vec3(0.64, 0, 0),
+                        new Vec3(-0.64, 0, 0)
                 );
                 case SOUTH -> List.of(
-                        new Vec3(-1, 0, 0),
-                        new Vec3(1, 0, 0)
+                        new Vec3(-0.64, 0, 0),
+                        new Vec3(0.64, 0, 0)
                 );
                 case EAST -> List.of(
-                        new Vec3(0, 0, 1),
-                        new Vec3(0, 0, -1)
+                        new Vec3(0, 0, 0.64),
+                        new Vec3(0, 0, -0.64)
                 );
                 case WEST -> List.of(
-                        new Vec3(0, 0, -1),
-                        new Vec3(0, 0, 1)
+                        new Vec3(0, 0, -0.64),
+                        new Vec3(0, 0, 0.64)
                 );
                 default -> List.of();
             };

@@ -157,8 +157,8 @@ public class InternalCombustionDriveControllerMovementBehavior
                         ()->MENUS.containsKey(context),
                         ()->MENUS.get(context).getMenu(2).orElseThrow(),
                         new Vec2(0, -4),
-                        new Vec2(0.75f,0.75f),
-                        new Vec2(508,68)
+                        new Vec2(0.075f,0.075f),
+                        new Vec2(5080,680)
                 ) {{
                     setScreenAnchor(AnchorPoint.BOTTOM_CENTER);
                     setSelfAnchor(AnchorPoint.BOTTOM_CENTER);

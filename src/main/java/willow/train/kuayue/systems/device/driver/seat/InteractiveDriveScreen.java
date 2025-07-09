@@ -7,6 +7,7 @@ import kasuga.lib.core.client.frontend.common.layouting.LayoutBox;
 import kasuga.lib.core.client.frontend.gui.SourceInfo;
 import kasuga.lib.core.client.frontend.gui.events.mouse.MouseClickEvent;
 import kasuga.lib.core.client.frontend.gui.events.mouse.MouseDownEvent;
+import kasuga.lib.core.client.frontend.gui.events.mouse.MouseDragEvent;
 import kasuga.lib.core.client.frontend.gui.events.mouse.MouseEvent;
 import kasuga.lib.core.client.frontend.rendering.RenderContext;
 import kasuga.lib.core.client.interaction.GuiOperatingPerspectiveScreen;
@@ -219,6 +220,10 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
 
             lastClickedPos = new Vec2((float) pMouseX, (float) pMouseY);
 
+            currentlyDragging = entry;
+            lastDragMouseX = pMouseX;
+            lastDragMouseY = pMouseY;
+
             return true;
         }
 
@@ -254,6 +259,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
 
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+        currentlyDragging = null;
         if(pButton == 1){
             boolean hasDragging = false;
             for (InteractiveBehaviour.MenuEntry menuEntry : interactiveSet) {
@@ -295,6 +301,11 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
 
     double lastMouseX = 0.0D;
     double lastMouseY = 0.0D;
+
+    InteractiveBehaviour.MenuEntry currentlyDragging = null;
+    double lastDragMouseX = 0.0D;
+    double lastDragMouseY = 0.0D;
+
     @Override
     public void mouseMoved(double pMouseX, double pMouseY) {
         boolean hasDragging = false;
@@ -312,14 +323,31 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         }
         lastMouseX = pMouseX;
         lastMouseY = pMouseY;
-        Optional<InteractiveBehaviour.MenuEntry> interactive = getMouseAtInteractiveItem(pMouseX, pMouseY);
-        if(interactive.isPresent()) {
+        // Optional<InteractiveBehaviour.MenuEntry> interactive = getMouseAtInteractiveItem(pMouseX, pMouseY);
+        if(currentlyDragging != null) {
+            double scaleX = currentlyDragging.getScale().x;
+            double scaleY = currentlyDragging.getScale().y;
+            double xDeltaD = (pMouseX - lastDragMouseX) / scaleX, yDeltaD = (pMouseY - lastDragMouseY) / scaleY;
+            int xDeltaI = (int) xDeltaD, yDeltaI = (int) yDeltaD;
+            if(xDeltaI != 0 || yDeltaI != 0) {
+                lastDragMouseX += ((double) xDeltaI) * scaleX;
+                lastDragMouseY += ((double) yDeltaI) * scaleY;
+                Vec2i delta = new Vec2i(xDeltaI, yDeltaI);
+
+
+                Vec2 local = transformInteractive(currentlyDragging, new Vec2((float) pMouseX, (float) pMouseY));
+
+                currentlyDragging.menuSupplier().get().getBinding().apply(GuiTargets.INTERACTIVE)
+                        .dispatchEventToActivate(
+                                MouseDragEvent.fromScreen(null, new Vec2i((int)local.x,(int)local.y), 0, delta)
+                        );
+
+            }
             return;
         }
         if(!hasDragging)
             super.mouseMoved(pMouseX, pMouseY);
     }
-
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
         if(!this.dragging.isEmpty() || lastClickedPos != null)
