@@ -216,6 +216,8 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
                         MouseDownEvent.fromScreen(null, new Vec2i((int)localPosition.x,(int)localPosition.y), pButton)
             );
 
+            transparencyDragging.add(entry);
+
             lastClickedPos = new Vec2((float) pMouseX, (float) pMouseY);
 
             currentlyDragging = entry;
@@ -234,6 +236,8 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         dragging.clear();
         dragging.addAll(interactiveSet.parallelStream().filter(t->t.dragging).collect(Collectors.toUnmodifiableSet()));
     }
+
+    HashSet<InteractiveBehaviour.MenuEntry> transparencyDragging = new HashSet<>();
 
     public Vec2 transformInteractive(InteractiveBehaviour.MenuEntry entry, Vec2 globalPosition) {
         // Transform Global Position into local position
@@ -258,6 +262,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
         currentlyDragging = null;
+        transparencyDragging.clear();
         if(pButton == 1){
             boolean hasDragging = false;
             for (InteractiveBehaviour.MenuEntry menuEntry : interactiveSet) {
@@ -296,6 +301,7 @@ public class InteractiveDriveScreen extends GuiOperatingPerspectiveScreen {
         freshDraggingState();
         return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
+
 
     double lastMouseX = 0.0D;
     double lastMouseY = 0.0D;
