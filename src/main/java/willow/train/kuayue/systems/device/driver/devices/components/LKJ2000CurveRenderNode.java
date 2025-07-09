@@ -76,12 +76,12 @@ public class LKJ2000CurveRenderNode extends GuiViewNode implements ClientRenderT
 
         renderer.updateSize(((int) coordinate.width * 4), ((int) coordinate.height * 4));
         context.pose().pushPose();
-        context.pose().translate(0, 0, 0.03F);
+        context.pose().translate(0, 0, 0.006F);
         this.background.render(context, coordinate.x, coordinate.y, coordinate.width, coordinate.height);
-        context.pose().translate(0, 0, 0.03F);
+        context.pose().translate(0, 0, 0.006F);
         renderer.render(context, coordinate);
         context.pose().popPose();
-        return 0.006F;
+        return 0.012F;
     }
 
     @Override
@@ -96,8 +96,8 @@ public class LKJ2000CurveRenderNode extends GuiViewNode implements ClientRenderT
 
     @Override
     public void onRenderTick() {
-
         for (LKJ2000CurveDynamicRenderer renderer : renderers.values()) {
+            renderer.update();
             renderer.renderCurve();
         }
     }
