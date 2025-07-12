@@ -1,6 +1,5 @@
 package willow.train.kuayue.systems.editable_panel;
 
-import com.ibm.icu.text.DecimalFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.render.SimpleColor;
@@ -183,9 +182,6 @@ public class EditableTypeConstants {
     };
 
     public static final SignRenderLambda LAQUERED_BOARD_SIGN = (blockEntity, partialTick, pose, bufferSource, packedLight, packedOverlay, unicode) -> {
-        // todo 需实现水牌blockentity 渲染方法，并进行关联
-        //  这其中不但包括方块在世界的渲染方法，还有在打开的gui中的渲染方法
-
         // 获取方块状态和NBT数据
         BlockState blockstate = blockEntity.getBlockState();
         CompoundTag nbt = blockEntity.getNbt();
@@ -196,16 +192,23 @@ public class EditableTypeConstants {
         Label rightTop = new Label(Component.literal(nbt.getString("right_top")));
         Label rightBottom = new Label(Component.literal(nbt.getString("right_bottom")));
         String laqueredType = nbt.getString("image_type");
+        Label trainNumber = new Label(Component.literal(nbt.getString("train_number")));
+        String leftTrainLevelString = nbt.getString("left_train_level");
+        if (leftTrainLevelString != null && leftTrainLevelString.length() >= 2)
+            leftTrainLevelString = leftTrainLevelString.substring(0, 1);
+        Label leftTrainLevel = new Label(Component.literal(leftTrainLevelString));
+        String rightTrainLevelString = nbt.getString("right_train_level");
+        if (rightTrainLevelString != null && rightTrainLevelString.length() >= 2)
+            rightTrainLevelString = rightTrainLevelString.substring(0, 1);
+        Label rightTrainLevel = new Label(Component.literal(rightTrainLevelString));
+
         float laqueredFloatX = nbt.getFloat("offset_x");
         float laqueredFloatY = nbt.getFloat("offset_y");
-//        int boardColorRed = nbt.getInt("red");
-//        int boardColorGreen = nbt.getInt("green");
-//        int boardColorBlue = nbt.getInt("blue");
+
         int boardColor = nbt.getInt("color");
         float boardColorAlpha = nbt.getFloat("alpha");
 
         // 设置文本颜色
-//        int color = nbt.getInt("color");
         int color = BLACK;
         leftTop.setColor(color);
         leftBottom.setColor(color);
@@ -224,6 +227,9 @@ public class EditableTypeConstants {
         float rightTopFontLength = (float) font.width(rightTop.getText()) / 9;
         float rightBottomWidth = font.width(rightBottom.getText());
         float rightBottomEngFontLength = (float) font.width(rightBottom.getText()) / 6;
+        float trainNumberFontLength = (float) font.width(trainNumber.getText()) / 6;
+        float leftTrainLevelFontLength = (float) font.width(leftTrainLevel.getText()) / 6;
+        float rightTrainLevelFontLength = (float) font.width(rightTrainLevel.getText()) / 6;
 
         // 开始渲染
         PoseStack poseStack = pose.getPoseStack();
@@ -235,7 +241,6 @@ public class EditableTypeConstants {
         poseStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
 
         // 调整到水牌表面位置
-//        poseStack.translate(0.0d, -0.3d, -0.42d);
         poseStack.translate(0.0d, -0.3d, -0.40d);
 
         // 应用自定义偏移
@@ -246,14 +251,13 @@ public class EditableTypeConstants {
         MultiBufferSource buffer = bufferSource.getBuffer();
         laqueredBoardLogo.get().rectangle(
                 // 上一次是-0.5，y   y值越小（负数越大）则越向上.
-//                new Vector3f(-0.60f, -0.691f, -0.49f),
-                new Vector3f(-0.60f, -0.691f, -0.519f),
+                new Vector3f(-0.58f, -0.7025f, -0.519f),
                 ImageMask.Axis.X,
                 ImageMask.Axis.Y,
                 true,
                 true,
-                .2f,
-                .2f
+                .168f,
+                .168f
         );
         laqueredBoardLogo.get().renderToWorld(poseStack, buffer, RenderType.text(laqueredBoardLogo.get().getImage().id), false, packedLight);
 
@@ -271,14 +275,10 @@ public class EditableTypeConstants {
         laqueredBoardWhiteBg.get().renderToWorld(poseStack, bgBuffer, RenderType.text(laqueredBoardWhiteBg.get().getImage().id), false, packedLight);
 
         // 使用PoseStack 调整图片背景的位置
-//        poseStack.pushPose();
-//        poseStack.translate(-3.95f, -4.5f, 0.05f); // 与文本相同的平移
-//        poseStack.scale(0.048f, 0.048f, 1.0f);      // 与文本相同的缩放
         // 渲染水牌上的彩条 左
         MultiBufferSource colorBoardLeftBuffer = bufferSource.getBuffer();
         MultiBufferSource colorBoardRightBuffer = bufferSource.getBuffer();
         laqueredColorBoard.get().rectangle(
-//                new Vector3f(0.1f, -0.42f, -0.48f),
                 new Vector3f(-1.15f, -0.558f, -0.519f),
                 ImageMask.Axis.X,
                 ImageMask.Axis.Y,
@@ -289,11 +289,9 @@ public class EditableTypeConstants {
         );
         laqueredColorBoard.get().setColor(SimpleColor.fromRGBA(boardColor, boardColorAlpha));
         laqueredColorBoard.get().renderToWorld(poseStack, colorBoardLeftBuffer, RenderType.text(laqueredColorBoard.get().getImage().id), false, packedLight);
-//        poseStack.popPose();
 
         // 渲染水牌上的彩条 右
         laqueredColorBoard.get().rectangle(
-//                new Vector3f(0.1f, -0.42f, -0.48f),
                 new Vector3f(-0.35f, -0.558f, -0.519f),
                 ImageMask.Axis.X,
                 ImageMask.Axis.Y,
@@ -307,18 +305,16 @@ public class EditableTypeConstants {
 
         // 设置文本基础缩放
         float baseScale = 0.4f * 0.3f;
+
         MultiBufferSource leftTopBuffer = bufferSource.getBuffer();
         poseStack.scale(baseScale, -baseScale, baseScale);
         // 每个中文 9 字符
         float leftTopTextHalfWidth = (float) (leftTopWidth / 2);
-        // todo if is non ascii char
         poseStack.pushPose();
         float leftTopTextBaseLine = -5.2f;
         leftTopTextAutoCenter(leftTopTextBaseLine, leftTopFontLength, poseStack, leftTopWidth);
-//        poseStack.scale(0.098f, 0.098f, 1.0f);
         leftTop.setColor(BLACK);
         leftTop.renderToGui(poseStack, font);
-//        leftTop.renderToWorld(poseStack, font, leftTopBuffer, false, packedLight);
         poseStack.popPose();
 
         MultiBufferSource rightTopBuffer = bufferSource.getBuffer();
@@ -326,55 +322,79 @@ public class EditableTypeConstants {
         float rightTopTextHalfWidth = (float) (rightTopWidth / 2);
         float rightBottomTextHalfWidth = (float) (rightBottomWidth / 2);
         float rightTopTextBaseLine = 1.5f;
-//        poseStack.translate(2.15f, -5.6f, 0.0599999f);
         rightTopTextAutoCenter(rightTopTextBaseLine, rightTopFontLength, poseStack, rightTopWidth);
-//        poseStack.scale(0.098f, 0.098f, 1.0f);
         rightTop.setColor(BLACK);
         rightTop.renderToGui(poseStack, font);
-//        rightTop.renderToWorld(poseStack, font, rightTopBuffer, false, packedLight);
         poseStack.popPose();
 
         // 英文区域，始发地
-        // todo if is non ascii char
         // 每个ascii 字符6.0f
         MultiBufferSource leftBottomBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
         float leftBottomTextHalfWidth = (float) (leftBottomWidth / 2);
-//        poseStack.translate(-3.95f, -4.55f, 0.049f); // z 0.05
-//        poseStack.translate((-3.3f) + ((leftBottomTextHalfWidth / 9) * -1), -4.55f, 0.049f); // z 0.05
         leftBottomTextAutoCenter(leftTopTextBaseLine, leftBottomEngFontLength, poseStack, leftBottomWidth);
-//        poseStack.scale(0.048f, 0.048f, 1.0f);
         leftBottom.setColor(WHITE);
         leftBottom.renderToGui(poseStack, font);
-//        rightTop.renderToWorld(poseStack, font, leftBottomBuffer, false, packedLight);
         poseStack.popPose();
 
         // 英文区域，目的地
         MultiBufferSource rightBottomBuffer = bufferSource.getBuffer();
         poseStack.pushPose();
-//        poseStack.translate(1.85f, -4.55f, 0.049f);
         rightBottomTextAutoCenter(rightTopTextBaseLine, rightBottomEngFontLength, poseStack, rightBottomWidth);
         rightBottom.setColor(WHITE);
+
         rightBottom.renderToGui(poseStack, font);
-//        rightTop.renderToWorld(poseStack, font, rightBottomBuffer, false, packedLight);
         poseStack.popPose();
+
+
+        MultiBufferSource trainNumberBuffer = bufferSource.getBuffer();
+        float trainNumberBaseLine = -1.0f;
+        poseStack.pushPose();
+        if (trainNumberFontLength < 13) {
+            float missingText = 13 - trainNumberFontLength;
+            float v = (missingText * 0.15f) / 2;
+
+            poseStack.translate((trainNumberBaseLine + v), -4.4f, 0.049f);
+            poseStack.scale(0.038f, 0.038f, 1.0f);
+        } else {
+            poseStack.translate(trainNumberBaseLine, -4.4f, 0.049f);
+            float k = 0.9f; // 英文行的可显示文字部分的定长
+            poseStack.scale(k / (font.width(trainNumber.getText())), 0.038f, 1.0f);
+        }
+        trainNumber.setColor(BLACK);
+        trainNumber.renderToGui(poseStack, font);
+        poseStack.popPose();
+
+//        leftTrainLevel
+        MultiBufferSource leftTrainLevelBuffer = bufferSource.getBuffer();
+        poseStack.pushPose();
+        poseStack.translate(-0.2685 - leftTrainLevelFontLength / 2, -5.75f, 0.049f);
+        poseStack.scale(0.05f, 0.055f, 1.0f);
+        leftTrainLevel.setColor(BLACK);
+        leftTrainLevel.renderToGui(poseStack, font);
+        poseStack.popPose();
+
+//                rightTrainLevel
+        MultiBufferSource rightTrainLevelBuffer = bufferSource.getBuffer();
+        poseStack.pushPose();
+        poseStack.translate(1.5 - rightTrainLevelFontLength / 2, -5.75f, 0.049f);
+        poseStack.scale(0.05f, 0.055f, 1.0f);
+        rightTrainLevel.setColor(BLACK);
+        rightTrainLevel.renderToGui(poseStack, font);
+        poseStack.popPose();
+
         // 结束渲染
         poseStack.popPose();
     };
 
     private static void rightBottomTextAutoCenter(float rightBottomTextBaseLine, float rightBottomEngFontLength, PoseStack poseStack, float tempWidth) {
 
-//        poseStack.translate(1.85f, -4.55f, 0.049f);
         if (rightBottomEngFontLength < 13) {
             float missingText = 13 - rightBottomEngFontLength;
             float v = (missingText * 0.3f) / 2;
             poseStack.translate(rightBottomTextBaseLine + v, -4.55f, 0.049f);
             poseStack.scale(0.048f, 0.048f, 1.0f);
         } else {
-            // 如果13ascii字符及以上
-//            poseStack.translate(leftTopTextBaseLine , -4.55f,0.0599999f);
-//            float redundantText = rightBottomEngFontLength - 13;
-//            float v = ((redundantText * 0.6f) / 2) * -1;
             poseStack.translate((rightBottomTextBaseLine), -4.55f, 0.049f);
             float k = 3.8f; // 英文行的可显示文字部分的定长
             poseStack.scale(k / tempWidth, 0.048f, 1.0f);
@@ -390,7 +410,6 @@ public class EditableTypeConstants {
      * @param leftBottomTextHalfWidth
      */
     private static void leftBottomTextAutoCenter(float leftBottomTextBaseLine, float leftBottomFontLength, PoseStack poseStack, float tempWidth) {
-//        poseStack.translate((-3.3f) + ((leftBottomTextHalfWidth / 9) * -1), -4.55f, 0.049f); // z 0.05
 
         if (leftBottomFontLength < 13) {
             float missingText = 13 - leftBottomFontLength;
@@ -398,22 +417,17 @@ public class EditableTypeConstants {
             poseStack.translate(leftBottomTextBaseLine + v, -4.55f, 0.0599999f);
             poseStack.scale(0.048f, 0.048f, 1.0f);
         } else {
-            // 如果13ascii字符及以上
-//            poseStack.translate(leftTopTextBaseLine , -4.55f,0.0599999f);
-//            float redundantText = leftBottomFontLength - 13;
-//            float v = ((redundantText * 0.6f) / 2) * -1;
-            poseStack.translate((leftBottomTextBaseLine) , -4.55f, 0.0599999f);
+            poseStack.translate((leftBottomTextBaseLine), -4.55f, 0.0599999f);
             float k = 3.8f; // 英文行的可显示文字部分的定长
             poseStack.scale(k / tempWidth, 0.048f, 1.0f);
         }
     }
 
     /**
-     *
      * @param rightTopTextBaseLine
      * @param rightTopFontLength
      * @param poseStack
-     * @param tempWidth 文字宽度
+     * @param tempWidth            文字宽度
      */
     private static void rightTopTextAutoCenter(float rightTopTextBaseLine, float rightTopFontLength, PoseStack poseStack, float tempWidth) {
         // 一个中文0.8f
@@ -432,9 +446,8 @@ public class EditableTypeConstants {
     }
 
     /**
-     *
      * @param baseLine
-     * @param leftTopFontLength 文字数量（通过文字width / 9得出）
+     * @param leftTopFontLength    文字数量（通过文字width / 9得出）
      * @param poseStack
      * @param leftTopTextHalfWidth
      */
@@ -520,7 +533,6 @@ public class EditableTypeConstants {
         @Override
         public void defaultTextComponent(BlockEntity blockEntity, BlockState blockState, CompoundTag nbt) {
 //            int type = 0; // 当前处于的种类
-//            blockEntity.setChanged();  // 没用
             // todo 已有nbt数据的也会因此处的默认文本而覆盖吗？
             // 左侧上方文字 - 如"北京"
             nbt.putString("left_top", "上海");

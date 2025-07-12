@@ -64,6 +64,6 @@ public abstract class OverheadLineSupportBlock<T extends OverheadLineSupportBloc
 
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
-        pLevel.scheduleTick(pPos, pState.getBlock(), 1);
+        pLevel.scheduleTick(pPos, pState.getBlock(), 2);
     }
 }
