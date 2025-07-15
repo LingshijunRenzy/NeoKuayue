@@ -9,7 +9,17 @@ import java.util.*;
 
 public class PowerSystem extends TrainDeviceSystem {
 
-    private int state;// P1~P8 ( 1~8 ); N1~N4( -1 ~ -4  )
+    private double speed;
+    private double targetSpeed;
+
+    private int directionState = 0;
+
+    private int powerState = 0;
+
+    private int breakIState = 0;
+
+    private int breakDState = 0;
+
 
 
     public PowerSystem(TrainDeviceManager manager) {
@@ -17,17 +27,54 @@ public class PowerSystem extends TrainDeviceSystem {
     }
 
     @HostAccess.Export
+    public int getDirectionState() {
+        return directionState;
+    }
+
+    @HostAccess.Export
+    public void setDirectionState(JavascriptValue value) {
+        this.directionState = value.asInt();
+    }
+
+    @HostAccess.Export
     public int getSimplePowerState() {
-        return state;
+        return powerState;
     }
 
     @HostAccess.Export
     public void setSimplePowerState(JavascriptValue value) {
-        this.state = value.asInt();
+        this.powerState = value.asInt();
     }
+
+    @HostAccess.Export
+    public int getSimpleBreakIState() {
+        return breakIState;
+    }
+
+    @HostAccess.Export
+    public void setSimpleBreakIState(JavascriptValue value) {
+        this.breakIState = value.asInt();
+    }
+
+    @HostAccess.Export
+    public int getSimpleBreakDState() {
+        return breakDState;
+    }
+
+    @HostAccess.Export
+    public void setSimpleBreakDState(JavascriptValue value) {
+        this.breakDState = value.asInt();
+    }
+
 
     @Override
     public Optional<Double> beforeSpeed() {
-        return Optional.empty();
+        this.updateSpeed();
+        return Optional.of(speed);
+    }
+
+    private void updateSpeed() {
+        targetSpeed = powerState * 0.2 * directionState;
+        speed = (speed + (targetSpeed - speed) * 0.01) * (0.999 - breakIState * 0.008 - breakDState * 0.01);
     }
 }
