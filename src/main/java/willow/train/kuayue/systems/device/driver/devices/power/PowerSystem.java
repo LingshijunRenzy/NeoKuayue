@@ -70,11 +70,14 @@ public class PowerSystem extends TrainDeviceSystem {
     @Override
     public Optional<Double> beforeSpeed() {
         this.updateSpeed();
-        return Optional.of(speed);
+        return speed == 0 ? Optional.empty() : Optional.of(speed);
     }
 
     private void updateSpeed() {
         targetSpeed = powerState * 0.2 * directionState;
-        speed = (speed + (targetSpeed - speed) * 0.01) * (0.999 - breakIState * 0.008 - breakDState * 0.01);
+        double delta = targetSpeed - speed;
+        speed = (speed + Math.signum(delta) * Math.max(Math.signum(directionState) == Math.signum(speed) ? 0 : Float.MIN_VALUE, Math.abs(delta) * 0.0002)) * (0.9999 - breakIState * 0.0025 - breakDState * 0.005);
+        if(Math.abs(speed) < 0.00001)
+            speed = 0;
     }
 }
