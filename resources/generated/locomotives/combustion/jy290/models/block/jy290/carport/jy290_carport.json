@@ -6,6 +6,7 @@
   "textures": {
     "particle": "kuayue:block/jy290/jy290_carport"
   },
+  "gui_light": "front",
   "display": {
     "thirdperson_righthand": {
       "scale": [0.5, 0.5, 0.5]
@@ -26,7 +27,7 @@
     },
     "gui": {
       "rotation": [30, -35, 0],
-      "translation": [0, -1.25, 0],
+      "translation": [0, 2.5, 0],
       "scale": [0.5, 0.5, 0.5]
     },
     "fixed": {
