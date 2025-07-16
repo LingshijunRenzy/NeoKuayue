@@ -143,6 +143,14 @@ public class AllLocoBogeys {
             .size(0.915F / 2F)
             .submit(testRegistry);
 
+    public static final BogeySizeReg df5 = new BogeySizeReg("df5")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
+    public static final BogeySizeReg df5Backward = new BogeySizeReg("df5_backward")
+            .size(0.915F / 2F)
+            .submit(testRegistry);
+
     public static final BogeyGroupReg locoBogeyGroup = new BogeyGroupReg("loco", "kuayue_bogey")
             .bogey(df11g.getSize(), DF11GRenderer::new, testRegistry.asResource("df11g_bogey"))
             .bogey(df11gBackward.getSize(), DF11GRenderer.Backward::new, testRegistry.asResource("df11g_backward_bogey"))
@@ -157,6 +165,8 @@ public class AllLocoBogeys {
             .bogey(dfh21BackwardStandard.getSize(), DFH21Renderer.Standard.Backward::new, testRegistry.asResource("dfh21_backward_bogey_s"))
             .bogey(jy290.getSize(), JY290Renderer::new, testRegistry.asResource("jy290_bogey"))
             .bogey(jy290Backward.getSize(), JY290Renderer.Backward::new, testRegistry.asResource("jy290_backward_bogey"))
+            .bogey(df5.getSize(), DF5Renderer::new, testRegistry.asResource("df5_bogey"))
+            .bogey(df5Backward.getSize(), DF5Renderer.Backward::new, testRegistry.asResource("df5_backward_bogey"))
             .translationKey("loco_group")
             .submit(testRegistry);
 
@@ -330,6 +340,28 @@ public class AllLocoBogeys {
                     .size(jy290Backward)
                     .submit(testRegistry);
 
+    public static final BogeyBlockReg<LocoBogeyBlock> df5Bogey =
+            new BogeyBlockReg<LocoBogeyBlock>("df5_bogey")
+                    .block(LocoBogeyBlock::new)
+                    .material(Material.METAL)
+                    .materialColor(MaterialColor.PODZOL)
+                    .translationKey("df5_bogey")
+                    .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .property(properties -> properties.strength(2.0f, 3.0f))
+                    .size(df5)
+                    .submit(testRegistry);
+
+    public static final BogeyBlockReg<LocoBogeyBlock> df5BackwardBogey =
+            new BogeyBlockReg<LocoBogeyBlock>("df5_backward_bogey")
+                    .block(LocoBogeyBlock::new)
+                    .material(Material.METAL)
+                    .materialColor(MaterialColor.PODZOL)
+                    .translationKey("df5_backward_bogey")
+                    .property(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .property(properties -> properties.strength(2.0f, 3.0f))
+                    .size(df5Backward)
+                    .submit(testRegistry);
+
     public static final BlockEntityReg<LocoBogeyEntity> locoBogeyEntity =
             new BlockEntityReg<LocoBogeyEntity>("loco_bogey_entity")
                     .blockEntityType(LocoBogeyEntity::new)
@@ -346,6 +378,8 @@ public class AllLocoBogeys {
                     .addBlock(() -> dfh21BackwardBogeyStandard.getEntry().get())
                     .addBlock(() -> jy290Bogey.getEntry().get())
                     .addBlock(() -> jy290BackwardBogey.getEntry().get())
+                    .addBlock(() -> df5Bogey.getEntry().get())
+                    .addBlock(() -> df5BackwardBogey.getEntry().get())
                     .withRenderer(() -> BogeyBlockEntityRenderer::new)
                     .submit(testRegistry);
     public static final BogeyBlockReg<AsymmetryLocoBogeyBlock> qjGuideBogey =
