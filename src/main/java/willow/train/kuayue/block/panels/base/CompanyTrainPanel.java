@@ -30,13 +30,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.utils.DirectionUtil;
+import willow.train.kuayue.block.panels.base.TrainPanelProperties;
 
 public class CompanyTrainPanel extends BaseEntityBlock implements IWrenchable {
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
-
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+    public static final EnumProperty<TrainPanelProperties.ShapeType> SHAPE_TYPE =
+            EnumProperty.create("shape_type", TrainPanelProperties.ShapeType.class);
 
     public CompanyTrainPanel(Properties pProperties) {
         super(pProperties);
@@ -45,7 +47,28 @@ public class CompanyTrainPanel extends BaseEntityBlock implements IWrenchable {
                         .setValue(FACING, Direction.EAST)
                         .setValue(HINGE, DoorHingeSide.LEFT)
                         .setValue(OPEN, false)
+                        .setValue(SHAPE_TYPE, TrainPanelProperties.ShapeType.NORMAL)
         );
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        TrainPanelProperties.ShapeType shapeType = pState.getValue(SHAPE_TYPE);
+        switch (shapeType) {
+            case BIG_TRUSS:
+                return TrainPanelShapes.getOverheadBigTrussShape(pState.getValue(FACING));
+            case SMALL_TRUSS:
+                return TrainPanelShapes.getOverheadSmallTrussShape(pState.getValue(FACING));
+            case PILLAR_TRUSS:
+                return TrainPanelShapes.getOverheadPillarTrussShape(pState.getValue(FACING));
+            default:
+                return TrainPanelShapes.getShape(pState.getValue(FACING));
+        }
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return getShape(pState, pLevel, pPos, pContext);
     }
 
     @Override
@@ -56,16 +79,6 @@ public class CompanyTrainPanel extends BaseEntityBlock implements IWrenchable {
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         super.onNeighborChange(state, level, pos, neighbor);
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return TrainPanelShapes.getShape(pState.getValue(FACING).getOpposite());
-    }
-
-    @Override
-    public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return TrainPanelShapes.getShape(pState.getValue(FACING).getOpposite());
     }
 
     @Override
@@ -85,7 +98,7 @@ public class CompanyTrainPanel extends BaseEntityBlock implements IWrenchable {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING, HINGE, OPEN);
+        pBuilder.add(FACING, HINGE, OPEN, SHAPE_TYPE);
     }
 
     @Override
@@ -93,7 +106,8 @@ public class CompanyTrainPanel extends BaseEntityBlock implements IWrenchable {
         return super.getStateForPlacement(pContext)
                 .setValue(FACING, pContext.getHorizontalDirection().getOpposite())
                 .setValue(HINGE, DoorHingeSide.LEFT)
-                .setValue(OPEN, false);
+                .setValue(OPEN, false)
+                .setValue(SHAPE_TYPE, TrainPanelProperties.ShapeType.NORMAL);
     }
 
     @Override
