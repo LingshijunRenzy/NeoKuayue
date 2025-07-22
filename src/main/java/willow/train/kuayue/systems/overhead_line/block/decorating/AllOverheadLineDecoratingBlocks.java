@@ -2,253 +2,210 @@ package willow.train.kuayue.systems.overhead_line.block.decorating;
 
 import kasuga.lib.registrations.common.BlockReg;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.initial.AllElements;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.resources.ResourceLocation;
+
+import willow.train.kuayue.initial.registration.PanelRegistration;
 
 public class AllOverheadLineDecoratingBlocks {
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_CONCRETE_PUNCHED_POST =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_concrete_punched_post")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
+ public static final BlockReg<SimpleOverheadLinePillarBlock> OVERHEAD_PILLAR_CONCRETE=
+            new BlockReg<SimpleOverheadLinePillarBlock>("overhead_pillar_concrete")
+                    .blockType(SimpleOverheadLinePillarBlock.Builder.create(
+                            SimpleOverheadLinePillarBlock.defaultProperties()
+                    ))
+                    .material(Material.METAL)
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueGridTab)
+                    .submit(AllElements.testRegistry);
+    public static final BlockReg<SimpleOverheadLinePillarBlock> OVERHEAD_PILLAR_STEEL=
+            new BlockReg<SimpleOverheadLinePillarBlock>("overhead_pillar_steel")
+                    .blockType(SimpleOverheadLinePillarBlock.Builder.create(
+                            SimpleOverheadLinePillarBlock.defaultProperties()
+                    ))
+                    .material(Material.METAL)
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueGridTab)
+                    .submit(AllElements.testRegistry);
+    public static final BlockReg<SimpleOverheadLinePillarBlock> OVERHEAD_SQUARE_PILLAR_CONCRETE_PUNCHING=
+            new BlockReg<SimpleOverheadLinePillarBlock>("overhead_square_pillar_concrete_punching")
+                    .blockType(SimpleOverheadLinePillarBlock.Builder.create(
+                            SimpleOverheadLinePillarBlock.defaultProperties()
+                                    .directional()
                     ))
                     .material(Material.METAL)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueGridTab)
                     .submit(AllElements.testRegistry);
 
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_FRAME =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_frame")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
+    public static final BlockReg<SimpleOverheadLinePillarBlock> OVERHEAD_SQUARE_PILLAR_STEEL=
+            new BlockReg<SimpleOverheadLinePillarBlock>("overhead_square_pillar_steel")
+                    .blockType(SimpleOverheadLinePillarBlock.Builder.create(
+                            SimpleOverheadLinePillarBlock.defaultProperties()
+                                    .directional()
                     ))
                     .material(Material.METAL)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueGridTab)
                     .submit(AllElements.testRegistry);
 
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_HORIZONTAL_ROUNDED_PILLAR =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_horizontal_rounded_pillar")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
+    public static final PanelRegistration<OverheadTruss> OVERHEAD_TRUSS_DOUBLE =
+            new PanelRegistration<OverheadTruss>("overhead_truss_double")
+                    .block(p -> new OverheadTruss(p, new Vec3(0,0,1), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<OverheadTruss> OVERHEAD_TRUSS_DOUBLE_AD =
+            new PanelRegistration<OverheadTruss>("overhead_truss_double_ad")
+                    .block(p -> new OverheadTruss(p, new Vec3(0,0,-1), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<OverheadTrussSmall> OVERHEAD_TRUSS_SINGLE_AD =
+            new PanelRegistration<OverheadTrussSmall>("overhead_truss_single_ad")
+                    .block(p -> new OverheadTrussSmall(p, new Vec3(0,0,1), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<OverheadTrussSmall> OVERHEAD_TRUSS_SINGLE_A =
+            new PanelRegistration<OverheadTrussSmall>("overhead_truss_single_a")
+                    .block(p -> new OverheadTrussSmall(p, new Vec3(0,0,1), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<OverheadTrussSmall> OVERHEAD_TRUSS_SINGLE_B =
+            new PanelRegistration<OverheadTrussSmall>("overhead_truss_single_b")
+                    .block(p -> new OverheadTrussSmall(p, new Vec3(0,0,1), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<OverheadTrussSmall> OVERHEAD_TRUSS_SINGLE_C =
+            new PanelRegistration<OverheadTrussSmall>("overhead_truss_single_c")
+                    .block(p -> new OverheadTrussSmall(p, new Vec3(0,0,1), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+
+
+    public static final PanelRegistration<OverheadTrussPillar> OVERHEAD_TRUSS_CONCRETE =
+            new PanelRegistration<OverheadTrussPillar>("overhead_truss_concrete")
+                    .block(p -> new OverheadTrussPillar(p, new Vec3(0,0,1), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+
+    public static final PanelRegistration<OverheadTrussPillar> OVERHEAD_PILLAR_CONCRETE_TRUSS_A =
+            new PanelRegistration<OverheadTrussPillar>("overhead_pillar_concrete_truss_a")
+                    .block(p -> new OverheadTrussPillar(p, new Vec3(0,0,-2), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+
+    public static final PanelRegistration<OverheadTrussPillar> OVERHEAD_PILLAR_CONCRETE_TRUSS_B =
+            new PanelRegistration<OverheadTrussPillar>("overhead_pillar_concrete_truss_b")
+                    .block(p -> new OverheadTrussPillar(p, new Vec3(0,0,-2), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<OverheadTrussPillar> OVERHEAD_TRIANGLE_TRUSS_STEEL =
+            new PanelRegistration<OverheadTrussPillar>("overhead_triangle_truss_steel")
+                    .block(p -> new OverheadTrussPillar(p, new Vec3(0,0,0), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+    public static final PanelRegistration<OverheadTrussPillar> OVERHEAD_TRIANGLE_TRUSS_STEEL_AD =
+            new PanelRegistration<OverheadTrussPillar>("overhead_triangle_truss_steel_ad")
+                    .block(p -> new OverheadTrussPillar(p, new Vec3(0,0,0), new Vec3(1,1,1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueGridTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+
+    public static final BlockReg<LinkedTrussBlock> TRUSS_HANGER_SINGLE =
+            new BlockReg<LinkedTrussBlock>("truss_hanger_single")
+                    .blockType(LinkedTrussBlock.Builder.create(
+                            new LinkedTrussBlock.SpecialBlockConfig()
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_single_a"),
+                                            LinkedTrussBlock.ConnectedType.SINGLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_single_b"),
+                                            LinkedTrussBlock.ConnectedType.SINGLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_single_c"),
+                                            LinkedTrussBlock.ConnectedType.SINGLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_double"),
+                                            LinkedTrussBlock.ConnectedType.DOUBLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_concrete"),
+                                            LinkedTrussBlock.ConnectedType.CONCRETE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_triangle_truss_steel"),
+                                            LinkedTrussBlock.ConnectedType.TRIANGLE
+                                    )
                     ))
                     .material(Material.METAL)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueGridTab)
                     .submit(AllElements.testRegistry);
 
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_HORIZONTAL_ROUNDED_PILLAR_CONNECTOR =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_horizontal_rounded_pillar_connector")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_HORIZONTAL_ROUNDED_PILLAR_HANGER_DOUBLE_TOP =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_horizontal_rounded_pillar_hanger_double_top")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_HORIZONTAL_SLANT_ROUNDED_PILLAR =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_horizontal_slant_rounded_pillar")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_HORIZONTAL_SLANT_ROUNDED_PILLAR_NOSUPPORT =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_horizontal_slant_rounded_pillar_nosupport")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_ROUNDED_PILLAR =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_rounded_pillar")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_SINGLE_LAYER_TRUSS =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_single_layer_truss")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_SINGLE_LAYER_TRUSS_CONNECTOR =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_single_layer_truss_connector")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_SINGLE_LAYER_TRUSS_REVERSAL =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_single_layer_truss_reversal")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_SINGLE_LAYER_TRUSS_Z =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_single_layer_truss_z")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_STEEL_BEAM =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_steel_beam")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_STEEL_FRAME_PILLAR =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_steel_frame_pillar")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRIANGLE_BEAM_HANGER =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_triangle_beam_hanger")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRIANGLE_BEAM_HANGER_DOUBLE =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_triangle_beam_hanger_double")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRIANGLE_BEAM_HANGER_DOUBLE_TOP =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_triangle_beam_hanger_double_top")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRIANGLE_BEAM_HANGER_TOP =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_triangle_beam_hanger_top")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRIANGLE_CROSSBEAM =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_triangle_crossbeam")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRIANGLE_CROSSBEAM_CONNECTOR =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_triangle_crossbeam_connector")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRUSS_COLUMN =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_truss_column")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRUSS_CONNECTOR_LARGE =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_truss_connector_large")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRUSS_HANGER =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_truss_hanger")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRUSS_HANGER_TOP =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_truss_hanger_top")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
-                    ))
-                    .material(Material.METAL)
-                    .defaultBlockItem()
-                    .tabTo(AllElements.neoKuayueGridTab)
-                    .submit(AllElements.testRegistry);
-
-    public static BlockReg<SimpleOverheadLineDecoratingBlock> OVERHEAD_TRUSS_LARGE =
-            new BlockReg<SimpleOverheadLineDecoratingBlock>("overhead_truss_large")
-                    .blockType(SimpleOverheadLineDecoratingBlock.Builder.create(
-                            SimpleOverheadLineDecoratingBlock.defaultProperties().directional()
+    public static final BlockReg<LinkedTrussBlock> TRUSS_HANGER_DOUBLE =
+            new BlockReg<LinkedTrussBlock>("truss_hanger_double")
+                    .blockType(LinkedTrussBlock.Builder.create(
+                            new LinkedTrussBlock.SpecialBlockConfig()
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_single_a"),
+                                            LinkedTrussBlock.ConnectedType.SINGLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_single_b"),
+                                            LinkedTrussBlock.ConnectedType.SINGLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_single_c"),
+                                            LinkedTrussBlock.ConnectedType.SINGLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_double"),
+                                            LinkedTrussBlock.ConnectedType.DOUBLE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_truss_concrete"),
+                                            LinkedTrussBlock.ConnectedType.CONCRETE
+                                    )
+                                    .addSpecialBlock(
+                                            new ResourceLocation("kuayue", "overhead_triangle_truss_steel"),
+                                            LinkedTrussBlock.ConnectedType.TRIANGLE
+                                    )
                     ))
                     .material(Material.METAL)
                     .defaultBlockItem()

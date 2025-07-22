@@ -244,6 +244,9 @@ public class TrainPanelShapes {
                     Block.box(0, 0, 30, 2, 32, 32),
                     Block.box(0, 32, 0, 2, 32, 32));
 
+    protected static final VoxelShape OverheadLinePillar_AABB =
+            Shapes.or(
+                    Shapes.box(0.1875, 0, 0.1875, 0.8125, 1, 0.8125));
 
 
 
@@ -252,16 +255,22 @@ public class TrainPanelShapes {
                     Shapes.box(0.4375, -0.25, -1.875, 1.1875, 0.5, 0),
                     Shapes.box(0.625, 0, 0, 0.75, 0.125, 0.125));
 
+    protected static final VoxelShape OverheadSmallTruss_NS_AABB =
+            Shapes.box(0.4375, 0, 0, 0.5625, 1, 1);
 
-    public static final VoxelShape CARRIAGEUNDERGROUND_WEST;
-    public static final VoxelShape CARRIAGEUNDERGROUND_SOUTH;
-    public static final VoxelShape CARRIAGEUNDERGROUND_EAST;
+    protected static final VoxelShape OverheadSmallTruss_WE_AABB =
+            Shapes.box(0, 0, 0.4375, 1, 1, 0.5625);
+    protected static final VoxelShape OverheadBigTruss_NS_AABB =
+            Shapes.box(0.25, 0, 0, 0.75, 1, 1);
+    protected static final VoxelShape OverheadBigTruss_WE_AABB =
+            Shapes.box(0, 0, 0.25, 1, 1, 0.75);
 
-    static {
-        CARRIAGEUNDERGROUND_EAST = rotateShape(Direction.NORTH, Direction.EAST, CARRIAGEUNDERGROUND_NORTH);
-        CARRIAGEUNDERGROUND_SOUTH = rotateShape(Direction.NORTH, Direction.SOUTH, CARRIAGEUNDERGROUND_NORTH);
-        CARRIAGEUNDERGROUND_WEST = rotateShape(Direction.NORTH, Direction.WEST, CARRIAGEUNDERGROUND_NORTH);
-    }
+    protected static final VoxelShape OverheadPillarTruss_NS_AABB =
+            Shapes.box(0.25, 0.25, 0, 0.75, 0.75, 1);
+
+    protected static final VoxelShape OverheadPillarTruss_WE_AABB =
+            Shapes.box(0, 0.25, 0.25, 1, 0.75, 0.75);
+
 
 
     public static VoxelShape getShape(Direction direction) {
@@ -438,7 +447,15 @@ public class TrainPanelShapes {
         };
     }
 
+    public static final VoxelShape CARRIAGEUNDERGROUND_WEST;
+    public static final VoxelShape CARRIAGEUNDERGROUND_SOUTH;
+    public static final VoxelShape CARRIAGEUNDERGROUND_EAST;
 
+    static {
+        CARRIAGEUNDERGROUND_EAST = rotateShape(Direction.NORTH, Direction.EAST, CARRIAGEUNDERGROUND_NORTH);
+        CARRIAGEUNDERGROUND_SOUTH = rotateShape(Direction.NORTH, Direction.SOUTH, CARRIAGEUNDERGROUND_NORTH);
+        CARRIAGEUNDERGROUND_WEST = rotateShape(Direction.NORTH, Direction.WEST, CARRIAGEUNDERGROUND_NORTH);
+    }
 
     public static VoxelShape getCarriageUndergroundShape(Direction direction) {
         return switch (direction) {
@@ -449,10 +466,42 @@ public class TrainPanelShapes {
             default -> Shapes.block();
         };
     }
+    public static VoxelShape getOverheadLinePillarShape(Direction direction) {
+        // 根据不同朝向返回旋转后的形状
+        return switch (direction) {
+            case NORTH -> rotateShape(Direction.NORTH, direction, OverheadLinePillar_AABB);
+            case SOUTH -> rotateShape(Direction.SOUTH,direction, OverheadLinePillar_AABB);
+            case WEST -> rotateShape(Direction.WEST, direction, OverheadLinePillar_AABB);
+            case EAST -> OverheadLinePillar_AABB;
+            default -> OverheadLinePillar_AABB;
+        };
+    }
 
+    public static VoxelShape getOverheadSmallTrussShape(Direction direction) {
+        return switch (direction) {
+            case EAST, WEST -> OverheadSmallTruss_WE_AABB;
+            case NORTH, SOUTH -> OverheadSmallTruss_NS_AABB;
+            default -> Shapes.block();
+        };
+    }
 
-//以下为自动旋转碰撞箱方法
-    private static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
+    public static VoxelShape getOverheadBigTrussShape(Direction direction) {
+        return switch (direction) {
+            case EAST, WEST -> OverheadBigTruss_WE_AABB;
+            case NORTH, SOUTH -> OverheadBigTruss_NS_AABB;
+            default -> Shapes.block();
+        };
+    }
+
+    public static VoxelShape getOverheadPillarTrussShape(Direction direction) {
+        return switch (direction) {
+            case EAST, WEST -> OverheadPillarTruss_WE_AABB;
+            case NORTH, SOUTH -> OverheadPillarTruss_NS_AABB;
+            default -> Shapes.block();
+        };
+    }
+    //以下为自动旋转碰撞箱方法
+    public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
         VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
 
         int times = (to.get2DDataValue() - from.get2DDataValue() + 4) % 4;
