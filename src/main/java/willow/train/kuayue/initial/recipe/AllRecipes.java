@@ -7,14 +7,17 @@ import willow.train.kuayue.systems.tech_tree.recipes.BlueprintDeployRecipe;
 
 public class AllRecipes {
 
+    public static final ProcessingRecipeSerializer<BlueprintDeployRecipe>
+        blueprintSerializer = new ProcessingRecipeSerializer<BlueprintDeployRecipe>(BlueprintDeployRecipe::new);
     public static final
     RecipeReg<BlueprintDeployRecipe,
             ProcessingRecipeSerializer<BlueprintDeployRecipe>>
-
             blueprintRecipe = new RecipeReg<BlueprintDeployRecipe,
             ProcessingRecipeSerializer<BlueprintDeployRecipe>>("blueprint_deploy")
-            .withSerializer(new ProcessingRecipeSerializer<BlueprintDeployRecipe>(BlueprintDeployRecipe::new))
+            .withSerializer(blueprintSerializer)
             .submit(AllElements.testRegistry);
 
-    public static void invoke(){}
+    public static void invoke(){
+
+    }
 }
