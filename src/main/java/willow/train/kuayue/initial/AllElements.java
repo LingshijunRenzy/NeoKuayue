@@ -83,19 +83,19 @@ public class AllElements {
         if (Envs.isClient()) {
             ClientInit.invoke();
             Kuayue.BUS.addListener(ClientInit::registerHUDOverlays);
-            Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
             MinecraftForge.EVENT_BUS.addListener(RenderArrowEvent::renderBlockBounds);
             MinecraftForge.EVENT_BUS.addListener(OverheadLineRendererSystem::onRenderLevelLast);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::unloadEvent);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::saveEvent);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::loadEvent);
-            MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);
             MinecraftForge.EVENT_BUS.addListener(ClientPassengerEvent::onMountEvent);
             MinecraftForge.EVENT_BUS.addListener(ClientRenderTickManager::renderClientTick);
             MinecraftForge.EVENT_BUS.addListener(ClientTickScheduler::onClientEarlyTick);
             // MinecraftForge.EVENT_BUS.addListener(RenderPrePosedBlockEvent::renderBlock);
             MinecraftForge.EVENT_BUS.register(new CarriageInventoryEvents());
         }
+        Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
+        MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);
         MinecraftForge.EVENT_BUS.addListener(ServerResourceReloadEvent::onServerResourceReload);
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::onPlayerLogin);
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::onPlayerLogout);

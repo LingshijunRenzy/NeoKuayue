@@ -1,6 +1,7 @@
 package willow.train.kuayue.event.server;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -15,9 +16,7 @@ public class PlayerJumpEvents {
 
     @SubscribeEvent
     public static void playerJumpEvent(LivingEvent.LivingJumpEvent event) {
-
-        if (event.getEntity() instanceof Player player) {
-
+        if (event.getEntity() instanceof ServerPlayer player) {
             Item itemInMainHand = player.getItemInHand(InteractionHand.MAIN_HAND).getItem();
             Item itemInOffHand = player.getItemInHand(InteractionHand.OFF_HAND).getItem();
 
