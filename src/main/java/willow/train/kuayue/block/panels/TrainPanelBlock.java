@@ -38,6 +38,7 @@ import willow.train.kuayue.block.panels.block_entity.EditablePanelEntity;
 import willow.train.kuayue.initial.AllBlocks;
 import willow.train.kuayue.initial.AllTags;
 import willow.train.kuayue.initial.item.EditablePanelItem;
+import willow.train.kuayue.initial.panel.I11GPanel;
 import willow.train.kuayue.utils.DirectionUtil;
 
 import java.util.Objects;
@@ -97,7 +98,10 @@ public class TrainPanelBlock extends Block implements IWrenchable, EntityBlock {
         TrainPanelProperties.EditType orgType = pState.getValue(EDIT_TYPE);
         boolean changed = false;
         // 手持水牌
-        if ((item.is(EditablePanelItem.LAQUERED_BOARD.getItem()) || (item.is(EditablePanelItem.COLORED_BRUSH.getItem()) && TrainPanelProperties.EditType.LAQUERED.equals(orgType))) && pState.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag()))) {
+        if ((item.is(EditablePanelItem.LAQUERED_BOARD.getItem()) || (item.is(EditablePanelItem.COLORED_BRUSH.getItem()) && TrainPanelProperties.EditType.LAQUERED.equals(orgType))) && pState.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag()))
+                && neoState.getBlock().getClass().getName().equals(TrainPanelBlock.class.getName())
+                && !neoState.getBlock().builtInRegistryHolder().key().location().toString() .equals(I11GPanel.PANEL_BOTTOM_DF11G.block.getBlock().builtInRegistryHolder().key().location().toString())
+        ) {
             neoState = pState.setValue(EDIT_TYPE, TrainPanelProperties.EditType.LAQUERED);
             changed = orgType != TrainPanelProperties.EditType.LAQUERED;
             return openScreen(pLevel, pPos, pPlayer, neoState, changed);
