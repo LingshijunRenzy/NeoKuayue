@@ -62,7 +62,7 @@ public class CompanyTrainPanel extends BaseEntityBlock implements IWrenchable {
             case PILLAR_TRUSS:
                 return TrainPanelShapes.getOverheadPillarTrussShape(pState.getValue(FACING));
             default:
-                return TrainPanelShapes.getShape(pState.getValue(FACING));
+                return TrainPanelShapes.getShape(pState.getValue(FACING).getOpposite());
         }
     }
 
