@@ -13,6 +13,14 @@ public class TrainPanelProperties {
     public static final EnumProperty<FloorHeight> FLOOR_HEIGHT = EnumProperty.create("floor", FloorHeight.class);
     public static final EnumProperty<ExternalHinge> EXTERNAL_HINGE = EnumProperty.create("hinge", ExternalHinge.class);
 
+
+    public enum ShapeType implements StringRepresentable {
+        NORMAL, BIG_TRUSS,SMALL_TRUSS,PILLAR_TRUSS;
+        @Override
+        public String getSerializedName() {
+            return name().toLowerCase();
+        }
+    }
     public enum DoorType implements StringRepresentable {
         FOLD, SLIDE, SLIDE_2, SLIDE_3, ROTATE, ROTATE_SINGLE_SIDED, NO_DOOR;
 

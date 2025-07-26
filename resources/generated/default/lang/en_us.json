@@ -219,6 +219,10 @@
   "msg.bogey.style.changed.block.kuayue.ss8_backward_bogey": "current bogey: SS8(Backward)",
   "msg.bogey.style.changed.block.kuayue.dfh21_bogey_s": "current bogey: DFH21",
   "msg.bogey.style.changed.block.kuayue.dfh21_backward_bogey_s": "current bogey: DFH21(Backward)",
+  "msg.bogey.style.changed.block.kuayue.jy290_bogey": "current bogey: JY290",
+  "msg.bogey.style.changed.block.kuayue.jy290_backward_bogey": "current bogey: JY290(Backward)",
+  "msg.bogey.style.changed.block.kuayue.df5_bogey": "current bogey: DF5",
+  "msg.bogey.style.changed.block.kuayue.df5_backward_bogey": "current bogey: DF5(Backward)",
 
   "msg.bogey.style.changed.block.kuayue.df21_bogey": "current bogey: DF21",
   "msg.bogey.style.changed.block.kuayue.df21_backward_bogey": "current bogey: DF21(Backward)",

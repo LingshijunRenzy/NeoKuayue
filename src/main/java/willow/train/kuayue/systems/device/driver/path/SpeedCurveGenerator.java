@@ -65,7 +65,7 @@ public class SpeedCurveGenerator {
 
     public double getBreakDistance(double speed, double targetSpeed){
         // v^2 - v_0 ^2 = 2 ax
-        return (speed * speed - targetSpeed * targetSpeed) *0.5 / acceleration;
+        return (speed * speed - targetSpeed * targetSpeed) * 0.5 / acceleration;
     }
 
     protected double getBreakingLimitSpeed(double speed, double targetSpeed, double deltaDistance){

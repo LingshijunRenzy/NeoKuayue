@@ -97,6 +97,8 @@ public class AllTags {
             new FluidTagReg("forge", "cola_fluid", "fluids/cola_fluid")
                     .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg OVERHEAD_PILLAR_MIDDLE = new BlockTagReg("overhead_pillar_middle", "overhead_line/overhead_pillar_middle")
+            .submit(AllElements.testRegistry);
     public static void invoke() {}
 
     @FunctionalInterface
