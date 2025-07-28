@@ -4,7 +4,9 @@
     "kuayue:22_floor_center",
     "kuayue:22_panel_bottom",
     "kuayue:22_ladder",
-    "kuayue:22_small_window",
-    "kuayue:22_large_window"
+    "kuayue:22_window",
+    "kuayue:22_large_window",
+    "kuayue:22_double_small_window",
+    "kuayue:22_small_window"
   ]
 }

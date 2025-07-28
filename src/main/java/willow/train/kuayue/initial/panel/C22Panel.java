@@ -46,8 +46,8 @@ public class C22Panel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<TrainSmallWindowBlock> C22_SMALL_WINDOW =
-            new PanelRegistration<TrainSmallWindowBlock>("22_small_window")
+    public static final PanelRegistration<TrainSmallWindowBlock> C22_WINDOW =
+            new PanelRegistration<TrainSmallWindowBlock>("22_window")
                     .block(p -> new TrainSmallWindowBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueCarriageTab)
@@ -57,6 +57,22 @@ public class C22Panel {
     public static final PanelRegistration<TrainOpenableWindowBlock> C22_LARGE_WINDOW =
             new PanelRegistration<TrainOpenableWindowBlock>("22_large_window")
                     .block(p -> new TrainOpenableWindowBlock(p, 2))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainOpenableWindowBlock> C22_DOUBLE_SMALL_WINDOW =
+            new PanelRegistration<TrainOpenableWindowBlock>("22_double_small_window")
+                    .block(p -> new TrainOpenableWindowBlock(p, 2))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainOpenableWindowBlock> C22_SMALL_WINDOW =
+            new PanelRegistration<TrainOpenableWindowBlock>("22_small_window")
+                    .block(p -> new TrainOpenableWindowBlock(p, 1))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueCarriageTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
