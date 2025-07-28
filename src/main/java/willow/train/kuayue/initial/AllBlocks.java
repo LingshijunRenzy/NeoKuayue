@@ -264,6 +264,7 @@ public class AllBlocks {
         AllRecipeBlock.invoke();
         I11Panel.invoke();
         IJY290Panel.invoke();
+        C22Panel.invoke();
     }
 
     public static void generateDrops(String name) {

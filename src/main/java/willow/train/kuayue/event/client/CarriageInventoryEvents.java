@@ -29,7 +29,7 @@ import java.util.Set;
 @OnlyIn(Dist.CLIENT)
 public class CarriageInventoryEvents {
 
-    private static final int CARRIAGE_TYPE_COUNTS = 10;
+    private static final int CARRIAGE_TYPE_COUNTS = 11;
     private static final int LOCO_TYPE_COUNTS = 8;
     private static int carriageType = 0;
     private static int locoType = 0;
@@ -115,6 +115,7 @@ public class CarriageInventoryEvents {
         icons[7] = new ItemStack(CR200JPanel.PANEL_BOTTOM_MARSHALLED_CR200J.block.getBlock());
         icons[8] = new ItemStack(CM1Panel.BOTTOM_SLAB_M1.block.getBlock());
         icons[9] = new ItemStack(CFreightPanel.FREIGHT_C70_END_FACE.block.getBlock());
+        icons[10] = new ItemStack(C22Panel.C22_PANEL_BOTTOM.block.getBlock());
 
         ItemStack[] locoIcons = new ItemStack[LOCO_TYPE_COUNTS];
         locoIcons[0] = new ItemStack(AllBlocks.CR_LOGO.getBlock());
@@ -195,6 +196,9 @@ public class CarriageInventoryEvents {
                 Component.translatable("container." + Kuayue.MODID + ".inventory.button.m1");
         components[9] =
                 Component.translatable("container." + Kuayue.MODID + ".inventory.button.freight");
+        components[10] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.button.c22");
+
 
         Component[] locoComponents = new Component[LOCO_TYPE_COUNTS];
         locoComponents[0] =
@@ -470,6 +474,10 @@ public class CarriageInventoryEvents {
                 menu.items.clear();
                 menu.items.addAll(itemList.get(10));
                 break;
+            case 10: // 22
+                menu.items.clear();
+                menu.items.addAll(itemList.get(11));
+                break;
             default: // carriageType为0时添加所有类型
                 menu.items.clear();
                 menu.items.addAll(itemList.get(0)); // B
@@ -483,6 +491,7 @@ public class CarriageInventoryEvents {
                 menu.items.addAll(itemList.get(8)); // bgkzt
                 menu.items.addAll(itemList.get(9)); // M1
                 menu.items.addAll(itemList.get(10)); // Freight
+                menu.items.addAll(itemList.get(11)); // 22
         }
     }
 
@@ -546,6 +555,7 @@ public class CarriageInventoryEvents {
                         add(getListByTag(AllTags.C25BGKZT.tag())); // BGKZT 8
                         add(getListByTag(AllTags.CM1.tag()));   // M1 9
                         add(getListByTag(AllTags.C_FREIGHT.tag())); // Freight 10
+                        add(getListByTag(AllTags.C22.tag())); // 22 11
                     }
                 };
 
