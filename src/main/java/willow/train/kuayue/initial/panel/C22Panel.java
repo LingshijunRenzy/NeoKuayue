@@ -6,6 +6,8 @@ import net.minecraft.world.phys.Vec2;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.slab.TrainLadderBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
+import willow.train.kuayue.block.panels.window.TrainOpenableWindowBlock;
+import willow.train.kuayue.block.panels.window.TrainSmallWindowBlock;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.registration.PanelRegistration;
 import willow.train.kuayue.initial.registration.SlabRegistration;
@@ -39,6 +41,22 @@ public class C22Panel {
     public static final SlabRegistration<TrainLadderBlock> C22_LADDER =
             new SlabRegistration<TrainLadderBlock>("22_ladder")
                     .block((properties) -> new TrainLadderBlock(properties, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainSmallWindowBlock> C22_SMALL_WINDOW =
+            new PanelRegistration<TrainSmallWindowBlock>("22_small_window")
+                    .block(p -> new TrainSmallWindowBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainOpenableWindowBlock> C22_LARGE_WINDOW =
+            new PanelRegistration<TrainOpenableWindowBlock>("22_large_window")
+                    .block(p -> new TrainOpenableWindowBlock(p, 2))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueCarriageTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
