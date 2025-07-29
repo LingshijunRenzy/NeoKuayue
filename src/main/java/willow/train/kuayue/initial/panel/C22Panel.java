@@ -1,11 +1,15 @@
 package willow.train.kuayue.initial.panel;
 
+import kasuga.lib.registrations.common.BlockReg;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
+import willow.train.kuayue.block.panels.carport.AirVentBlock;
 import willow.train.kuayue.block.panels.end_face.CustomRenderedEndfaceBlock;
+import willow.train.kuayue.block.panels.slab.CarportHingeSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainLadderBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
 import willow.train.kuayue.block.panels.window.TrainOpenableWindowBlock;
@@ -64,9 +68,9 @@ public class C22Panel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
-    public static final SlabRegistration<TrainSlabBlock> C22_CARPORT_PANEL_TOP =
-            new SlabRegistration<TrainSlabBlock>("22_carport_panel_top")
-                    .block(p -> new TrainSlabBlock(p, true))
+    public static final SlabRegistration<CarportHingeSlabBlock> C22_CARPORT_PANEL_TOP =
+            new SlabRegistration<CarportHingeSlabBlock>("22_carport_panel_top")
+                    .block(p -> new CarportHingeSlabBlock(p, false))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueCarriageTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
@@ -92,6 +96,25 @@ public class C22Panel {
                     ).materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueCarriageTab )
                     .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<CarportHingeSlabBlock> C22_CARPORT_PANEL_TOP_LAMP =
+            new SlabRegistration<CarportHingeSlabBlock>("22_carport_panel_top_lamp")
+                    .block(p -> new CarportHingeSlabBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueCarriageTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final BlockReg<AirVentBlock> C22_AIR_VENT =
+            new BlockReg<AirVentBlock>("22_air_vent")
+                    .blockType(AirVentBlock::new)
+                    .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
+                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+                    .addProperty(properties -> properties.strength(1.5f, 3f))
+                    .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueCarriageTab)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
