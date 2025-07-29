@@ -150,6 +150,7 @@ public class AllBlocks {
                     .addBlock(ISS8Panel.SS8_DOOR.block)
                     .addBlock(ISS3Panel.SS3_DOOR.block)
                     .addBlock(CM1Panel.DOOR_M1.block)
+                    .addBlock(C22Panel.DOOR_22.block)
                     .addBlock(I11Panel.DF11_DOOR.block)
                     .submit(AllElements.testRegistry);
 
