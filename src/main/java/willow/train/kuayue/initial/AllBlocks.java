@@ -181,6 +181,7 @@ public class AllBlocks {
                     .addBlock(C25ZPanel.END_FACE_25Z_2.block)
                     .addBlock(C25ZPanel.END_FACE_25Z_3.block)
                     .addBlock(I11GPanel.END_FACE_DF11G.block)
+                    .addBlock(C22Panel.C22_END_FACE.block)
                     .submit(AllElements.testRegistry);
 
     public static final BlockEntityReg<DoubleDoorEntity> DOUBLE_DOOR_ENTITY =
