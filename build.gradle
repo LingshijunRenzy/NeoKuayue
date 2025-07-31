@@ -1,5 +1,7 @@
 import willow.train.kuayue.builder.ModuleCompilePlugin
 
+import java.text.SimpleDateFormat
+
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
@@ -26,11 +28,55 @@ apply plugin: ModuleCompilePlugin
 
 jarJar.enable()
 
-version = "${mod_version}"
 group = 'willow.train.kuayue' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'kuayue'
 
-println(project.name)
+Properties localProperties = new Properties()
+File localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream ->
+        localProperties.load(stream)
+    }
+}
+
+channel = localProperties.getProperty("channel") ?: channel
+snapshot_serial = localProperties.getProperty("snapshot_serial") ?: snapshot_serial
+internal_code = localProperties.getProperty("internal_code") ?: internal_code
+
+def mod_full_version
+def repository_channel = "releases"
+def repository_version = "${minecraft_version}"
+version = "${minecraft_version}-${mod_version}"
+
+switch (channel) {
+    case "nightly":
+        repository_channel = "nightly"
+        if(!project.findProperty("git_version"))
+            throw new GradleException("You must specify the git_version property by using -Pgit_version=..... for nightly builds.")
+        version = "${version}-nightly-${project.property("git_version")}+" + (new SimpleDateFormat("yyMMddHHmm").format(new Date()))
+        break;
+    case "alpha":
+    case "beta":
+    case "rc":
+        repository_channel = "snapshots"
+        if(!project.findProperty("snapshot_serial"))
+            throw new GradleException("You must specify the snapshot serial in gradle.properties!")
+        version = "${version}-${channel}.${snapshot_serial}"
+        break;
+    case "internal":
+        repository_channel = "internals"
+        if(!project.findProperty("internal_code"))
+            throw new GradleException("You must specify the internal code in gradle.properties!")
+        version = "${version}-internal-${internal_code}-" + (new SimpleDateFormat("yyMMddHHmmss").format(new Date()))
+        break;
+    case "release":
+        break;
+    default:
+        throw new GradleException("Unknown channel: ${channel}. Please use one of the following channels: nightly, alpha, beta, rc, internal, release.");
+}
+
+System.out.println("Building KuaYue for channel: ${repository_channel}, version: ${version} (${minecraft_version})")
+
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -177,13 +223,12 @@ repositories {
 
     mavenLocal()
 
-    if(project.findProperty("nightly")){
+    if(channel == "nightly"){
         flatDir {dir 'libs'}
     } else {
         maven {
-            // GradleCI maven
-            name = "GradleCIMaven"
-            url = uri("https://git.gradle.ci/api/packages/KuaYueTeam/maven")
+            name = "KuaYue Maven"
+            url = uri("https://maven.kuayue.pw/${kasuga_lib_channel}")
         }
     }
 }
@@ -218,10 +263,10 @@ dependencies {
     testAnnotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     // implementation files('libs/Mixed-Arithmetic-Logic-Interpreter-1.0.0.jar')
-    if(project.findProperty("nightly")){
-        implementation fg.deobf("libs:kasuga_lib:${kasuga_lib_version}")
+    if(channel == "nightly"){
+        implementation fg.deobf("libs:kasuga_lib:+")
     } else {
-        implementation fg.deobf("kasuga.lib:kasuga_lib:${kasuga_lib_version}")
+        implementation fg.deobf("kasuga.lib:kasuga_lib-${minecraft_version}-create:${kasuga_lib_version}")
     }
     implementation "org.projectlombok:lombok:1.18.34"
     annotationProcessor "org.projectlombok:lombok:1.18.34"
@@ -289,8 +334,8 @@ publishing {
             artifact sourcesJar
             // artifact javadocJar
             groupId = "willow.train.kuayue"
-            artifactId = "kuayue"
-            version = "${mod_version}"
+            artifactId = "kuayue-${repository_version}"
+            version = "${mod_full_version}"
 
             fg.component(it)
         }
@@ -303,16 +348,14 @@ publishing {
 
     repositories {
         maven {
-            name = "GradleCIMaven"
-            url = uri("https://git.gradle.ci/api/packages/KuaYueTeam/maven")
-
-            credentials(HttpHeaderCredentials) {
-                name = "Authorization"
-                value = "Bearer ${project.findProperty("kuaYueTeamGradleCiToken")}"
+            name = "kuayueMaven"
+            url = uri("https://maven.kuayue.pw/${repository_channel}/")
+            credentials(PasswordCredentials) {
+                username = project.findProperty("kuayueMavenUsername") ?: localProperties.findProperty("repository_username")
+                password = project.findProperty("kuayueMavenPassword") ?: localProperties.findProperty("repository_password")
             }
-
             authentication {
-                header(HttpHeaderAuthentication)
+                basic(BasicAuthentication)
             }
         }
     }
