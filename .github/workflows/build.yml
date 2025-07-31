@@ -28,8 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'KuaYueTeam/NeoKuaYue'
-          ref: ${{ inputs.kuayue_branch }}
-          path: 'kuayue'
+          ref: ${{ inputs.branch }}
           submodules: true
 
       - name: Setup Java
@@ -57,7 +56,6 @@ jobs:
 
       - name: Build KuaYue Javascript Code Pack
         run: |
-          cd ./kuayue
           git submodule update --remote --recursive
           rm ./src/generated/resources/script/ -r -f
           corepack enable
@@ -65,7 +63,6 @@ jobs:
           yarn install
           yarn tsx ./build.ts
           corepack disable
-          cd ..
       
 
       - name: Build and Publish KuaYue
