@@ -223,13 +223,9 @@ repositories {
 
     mavenLocal()
 
-    if(channel == "nightly"){
-        flatDir {dir 'libs'}
-    } else {
-        maven {
-            name = "KuaYue Maven"
-            url = uri("https://maven.kuayue.pw/${kasuga_lib_channel}")
-        }
+    maven {
+        name = "KuaYue Maven"
+        url = uri("https://maven.kuayue.pw/${kasuga_lib_channel}")
     }
 }
 

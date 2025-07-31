@@ -11,6 +11,7 @@ jobs:
       channel: "nightly"
       branch: "master"
       publish: true
+      kasuga_lib_channel: "nightly"
     secrets:
       KUAYUE_MAVEN_USERNAME: ${{ secrets.KUAYUE_MAVEN_USERNAME }}
       KUAYUE_MAVEN_PASSWORD: ${{ secrets.KUAYUE_MAVEN_PASSWORD }}
