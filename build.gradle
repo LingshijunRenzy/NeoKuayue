@@ -76,7 +76,7 @@ switch (channel) {
 }
 
 System.out.println("Building KuaYue for channel: ${repository_channel}, version: ${version} (${minecraft_version})")
-
+mod_full_version = version
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
