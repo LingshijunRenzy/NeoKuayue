@@ -1,0 +1,79 @@
+on:
+  workflow_call:
+    inputs:
+
+      branch:
+        type: string
+        required: true
+
+      channel:
+        type: string
+        required: true
+
+      publish:
+        type: boolean
+        default: false
+
+    secrets:
+      KUAYUE_MAVEN_USERNAME:
+        required: false
+      KUAYUE_MAVEN_PASSWORD:
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout KuaYue Repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'KuaYueTeam/NeoKuaYue'
+          ref: ${{ inputs.kuayue_branch }}
+          path: 'kuayue'
+          submodules: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4.5.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4.3.1
+        with:
+          gradle-version: "7.5.1"
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: "22.x"
+
+      - name: Set UTC+8 Asia/Shanghai TimeZone
+        run: |
+          TIME="$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S')"
+          echo "Build At: $TIME" >> $GITHUB_STEP_SUMMARY
+
+
+      - name: Build KuaYue Javascript Code Pack
+        run: |
+          cd ./kuayue
+          git submodule update --remote --recursive
+          rm ./src/generated/resources/script/ -r -f
+          corepack enable
+          cd ./scripts/
+          yarn install
+          yarn tsx ./build.ts
+          corepack disable
+          cd ..
+      
+
+      - name: Build and Publish KuaYue
+        if: ${{ inputs.publish }}
+        run: |
+          ./gradlew build publishAllPublicationsToKuayueMavenRepository -Pchannel=${{ inputs.channel }} -Pgit_version=$(git rev-parse --short HEAD)  -PkuayueMavenUsername = "${{ secrets.KUAYUE_MAVEN_USERNAME }}" -PkuayueMavenPassword = "${{ secrets.KUAYUE_MAVEN_PASSWORD }}"
+
+      - name: Build KuaYue
+        if: ${{ !inputs.publish }}
+        run: |
+          ./gradlew build -Pchannel=${{ inputs.channel }} -Pgit_version=$(git rev-parse --short HEAD)
