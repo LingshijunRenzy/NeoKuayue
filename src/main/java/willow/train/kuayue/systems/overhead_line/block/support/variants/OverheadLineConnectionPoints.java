@@ -26,6 +26,6 @@ public class OverheadLineConnectionPoints {
     }
 
     public static List<Vec3> getEndCounterWeightConnectionPointIf(Level level, BlockPos blockPos, BlockState blockState) {
-        return List.of(new Vec3(2.5,0.075,0));
+        return List.of(new Vec3(2.5,-0.025,0.02));
     }
 }

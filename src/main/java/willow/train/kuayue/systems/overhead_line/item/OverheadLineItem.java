@@ -87,6 +87,12 @@ public class OverheadLineItem extends Item {
             return;
         }
 
+        Optional<String> canAcceptConnection = overheadLineSupportBlockEntity.checkCanAcceptNewConnection();
+        if(canAcceptConnection.isPresent()) {
+            ComponentTranslationTool.showError(player, canAcceptConnection.get(), true);
+            return;
+        }
+
         CompoundTag tag = item.getOrCreateTag();
 
         tag.put("target", NbtUtils.writeBlockPos(clickedPos));

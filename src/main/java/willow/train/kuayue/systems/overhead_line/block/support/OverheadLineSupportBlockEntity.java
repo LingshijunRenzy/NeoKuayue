@@ -131,7 +131,65 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> list) {}
 
     public Optional<String> checkConnectable(OverheadLineSupportBlockEntity targetSupport) {
+        if(connections.size() >= configuration.maxConnections()){
+            return Optional.of("overhead_line_max_connections_reached");
+        }
+
+        BlockPos targetPos = targetSupport.getBlockPos();
+        boolean duplicateExists = connections.stream()
+                .anyMatch(connection -> connection.absolutePos().equals(targetPos));
+        if(duplicateExists) {
+            return Optional.of("overhead_line_duplicate_connection");
+        }
+
         return Optional.empty();
+    }
+
+    public boolean updateConnectionToPosition(BlockPos targetPos, Vector3f newToPosition) {
+        boolean updated = false;
+        for (int i = 0; i < connections.size(); i++) {
+            Connection connection = connections.get(i);
+            if (connection.absolutePos().equals(targetPos)) {
+                // 创建新的连接记录，只更新toPosition
+                Connection updatedConnection = new Connection(
+                        connection.absolutePos(),
+                        connection.relativePos(),
+                        connection.type(),
+                        connection.connectionIndex(),
+                        connection.targetIndex(),
+                        newToPosition
+                );
+                connections.set(i, updatedConnection);
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            this.notifyUpdate();
+            // 不调用onConnectionModification()，避免无限递归
+        }
+
+        return updated;
+    }
+
+    public void refreshRenderingForConnection(BlockPos targetPos) {
+        if (level == null || level.isClientSide) {
+            return; // 只在服务端执行
+        }
+
+        // 找到对应的连接
+        for (Connection connection : connections) {
+            if (connection.absolutePos().equals(targetPos)) {
+                // 重新注册这个连接的渲染
+                if (level.isClientSide) {
+                    // 客户端刷新渲染
+                    DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                        OverheadLineRendererBridge.setBlockEntity(this, this.connections);
+                    });
+                }
+                break;
+            }
+        }
     }
 
     public float getRotation() {
@@ -421,4 +479,10 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
 
     }
 
+    public Optional<String> checkCanAcceptNewConnection() {
+        if(connections.size() >= configuration.maxConnections()) {
+            return Optional.of("overhead_line_max_connections_reached");
+        }
+        return Optional.empty();
+    }
 }
