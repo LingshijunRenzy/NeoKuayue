@@ -51,6 +51,7 @@ jobs:
       snapshot_serial: ${{ needs.extract.outputs.snapshot_serial }}
       branch: ${{ github.ref }}
       publish: true
+      kasuga_lib_channel: "snapshots"
     secrets:
       KUAYUE_MAVEN_USERNAME: ${{ secrets.KUAYUE_MAVEN_USERNAME }}
       KUAYUE_MAVEN_PASSWORD: ${{ secrets.KUAYUE_MAVEN_PASSWORD }}
