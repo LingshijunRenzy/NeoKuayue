@@ -73,7 +73,7 @@ jobs:
       - name: Build and Publish KuaYue
         if: ${{ inputs.publish }}
         run: |
-          ./gradlew build publishAllPublicationsToKuayueMavenRepository -Pchannel=${{ inputs.channel }} -Pkasuga_lib_channel=${{ inputs.kasuga_lib_channel }} -Pgit_version=$(git rev-parse --short HEAD)  -PkuayueMavenUsername = "${{ secrets.KUAYUE_MAVEN_USERNAME }}" -PkuayueMavenPassword = "${{ secrets.KUAYUE_MAVEN_PASSWORD }}"
+          ./gradlew build publishAllPublicationsToKuayueMavenRepository -Pchannel=${{ inputs.channel }} -Pkasuga_lib_channel=${{ inputs.kasuga_lib_channel }} -Pgit_version=$(git rev-parse --short HEAD)  -PkuayueMavenUsername="${{ secrets.KUAYUE_MAVEN_USERNAME }}" -PkuayueMavenPassword="${{ secrets.KUAYUE_MAVEN_PASSWORD }}"
 
       - name: Build KuaYue
         if: ${{ !inputs.publish }}
