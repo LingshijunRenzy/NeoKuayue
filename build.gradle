@@ -260,11 +260,7 @@ dependencies {
 
     // implementation files('libs/Mixed-Arithmetic-Logic-Interpreter-1.0.0.jar')
     if(channel == "nightly"){
-        implementation(fg.deobf("kasuga.lib:kasuga_lib-${minecraft_version}-create:+"){
-            isChanging = true
-        }){
-            isChanging = true
-        }
+        implementation(fg.deobf("kasuga.lib:kasuga_lib-${minecraft_version}-create:+"))
     } else {
         implementation fg.deobf("kasuga.lib:kasuga_lib-${minecraft_version}-create:${kasuga_lib_version}")
     }
