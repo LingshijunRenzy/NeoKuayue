@@ -8,7 +8,6 @@ import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -136,7 +135,7 @@ public class SpeedScreen extends CustomScreen<EditablePanelEditMenu, EditablePan
             tag.put("data", nbt);
             be.load(tag);
             be.setChanged();
-            AllPackets.CHANNEL.sendToServer(new NbtC2SPacket(be.getBlockPos(), tag));
+            AllPackets.CHANNEL.sendToServer(new NbtC2SPacket(tag));
             this.close();
         });
 
