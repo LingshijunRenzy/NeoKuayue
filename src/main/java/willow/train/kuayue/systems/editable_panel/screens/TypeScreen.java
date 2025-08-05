@@ -89,7 +89,7 @@ public class TypeScreen extends CustomScreen<EditablePanelEditMenu, EditablePane
             tag.put("data", nbt);
             entity.load(tag);
             entity.markUpdated();
-            AllPackets.CHANNEL.sendToServer(new NbtC2SPacket(pos, tag));
+            AllPackets.CHANNEL.sendToServer(new NbtC2SPacket(tag));
             this.close();
         });
     }
