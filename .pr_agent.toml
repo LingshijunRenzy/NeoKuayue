@@ -1,5 +1,5 @@
 [config]
-model = "gemini-2.5-pro"
-fallback_models=["gemini-2.5-flash"]
+model = "gpt-4.1"
+fallback_models=["gpt-4o-mini"]
 custom_model_max_tokens=128000
 duplicate_examples=true
