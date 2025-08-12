@@ -177,4 +177,9 @@ public class OverheadLineRendererSystem {
         event.getPoseStack().popPose();
     }
 
+    public static void clearCache() {
+        OVERHEAD_LINES.clear();
+        LOCK.clear();
+        OverheadLineRendererBridge.REGISTERED.clear();
+    }
 }
