@@ -15,6 +15,20 @@ public class AllOverheadLineSupportBlocks {
                     .withRenderer(()->OverheadSupportBlockRenderer::new)
                     .submit(AllElements.testRegistry);
 
+    public static BlockEntityReg<OverheadLineSupportBBlockEntity> OVERHEAD_LINE_SUPPORT_B_BLOCK_ENTITY =
+            new BlockEntityReg<OverheadLineSupportBBlockEntity>("overhead_line_support_b_block_entity")
+                    .blockEntityType(OverheadLineSupportBBlockEntity::new)
+                    .blockPredicates((r, i)->i instanceof OverheadLineSupportBlock)
+                    .withRenderer(()->OverheadSupportBlockRenderer::new)
+                    .submit(AllElements.testRegistry);
+
+    public static BlockEntityReg<OverheadLineSupportB2BlockEntity> OVERHEAD_LINE_SUPPORT_B2_BLOCK_ENTITY =
+            new BlockEntityReg<OverheadLineSupportB2BlockEntity>("overhead_line_support_b2_block_entity")
+                    .blockEntityType(OverheadLineSupportB2BlockEntity::new)
+                    .blockPredicates((r, i)->i instanceof OverheadLineSupportBlock)
+                    .withRenderer(()->OverheadSupportBlockRenderer::new)
+                    .submit(AllElements.testRegistry);
+
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_A1 =
             new OverheadLineSupportBlockReg<>("overhead_line_support_a1")
                     .blockType(NormalOverheadLineSupportBlock::new)
@@ -28,6 +42,7 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .maxConnections(8)
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_A2 =
@@ -43,36 +58,41 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .maxConnections(8)
                     .submit(AllElements.testRegistry);
 
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_B =
-            new OverheadLineSupportBlockReg<>("overhead_line_support_b")
-                    .blockType(NormalOverheadLineSupportBlock::new)
+    public static OverheadLineSupportBlockReg<OverheadLineSupportBBlock,OverheadLineSupportBBlockEntity> OVERHEAD_LINE_SUPPORT_B =
+            new OverheadLineSupportBlockReg<OverheadLineSupportBBlock,OverheadLineSupportBBlockEntity>("overhead_line_support_b")
+                    .blockType(OverheadLineSupportBBlock::new)
+                    .withBlockEntity(OVERHEAD_LINE_SUPPORT_B_BLOCK_ENTITY)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueGridTab)
                     .withRenderer(()-> OverheadLineSupportBRenderer.B1Renderer::new)
                     .connectionPoints(
-                            new Vec3(1.55, .125, 0)
+                            new Vec3(1.55, -0.3, 0)
                     )
                     .addAllowedWireType(
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .maxConnections(8)
                     .submit(AllElements.testRegistry);
 
-    public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_B2 =
-            new OverheadLineSupportBlockReg<>("overhead_line_support_b2")
-                    .blockType(NormalOverheadLineSupportBlock::new)
+    public static OverheadLineSupportBlockReg<OverheadLineSupportB2Block,OverheadLineSupportB2BlockEntity> OVERHEAD_LINE_SUPPORT_B2 =
+            new OverheadLineSupportBlockReg<OverheadLineSupportB2Block,OverheadLineSupportB2BlockEntity>("overhead_line_support_b2")
+                    .blockType(OverheadLineSupportB2Block::new)
+                    .withBlockEntity(OVERHEAD_LINE_SUPPORT_B2_BLOCK_ENTITY)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueGridTab)
                     .withRenderer(()-> OverheadLineSupportBRenderer.B2Renderer::new)
                     .connectionPoints(
-                            new Vec3(2.25, .125, 0)
+                            new Vec3(2.25, -0.6, 0)
                     )
                     .addAllowedWireType(
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .maxConnections(8)
                     .submit(AllElements.testRegistry);
 
     public static OverheadLineSupportBlockReg<OverheadLineSupportBlock<OverheadLineSupportBlockEntity>,OverheadLineSupportBlockEntity> OVERHEAD_LINE_SUPPORT_C =
@@ -89,6 +109,7 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .maxConnections(8)
                     .shouldCustomRenderItem(true)
                     .submit(AllElements.testRegistry);
 
@@ -106,6 +127,7 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .maxConnections(8)
                     .shouldCustomRenderItem(true)
                     .submit(AllElements.testRegistry);
 
@@ -144,6 +166,7 @@ public class AllOverheadLineSupportBlocks {
                             AllWires.OVERHEAD_LINE_WIRE,
                             AllWires.ELECTRONIC_WIRE
                     )
+                    .maxConnections(1)
                     .withConnectionPointBuilder(OverheadLineConnectionPoints::getEndCounterWeightConnectionPointIf)
                     .submit(AllElements.testRegistry);
     public static void invoke(){

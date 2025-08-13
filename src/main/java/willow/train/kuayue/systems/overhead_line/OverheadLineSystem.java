@@ -8,6 +8,7 @@ import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSuppo
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadSupportBlockRenderer;
 import willow.train.kuayue.systems.overhead_line.block.support.variants.AllOverheadLineSupportModels;
+import willow.train.kuayue.systems.overhead_line.client.AllOverheadLineMenuScreens;
 import willow.train.kuayue.systems.overhead_line.save.OverheadLineSaved;
 import willow.train.kuayue.systems.overhead_line.test.OverheadLineSupportBlockTest;
 import willow.train.kuayue.systems.overhead_line.wire.AllWires;
@@ -26,6 +27,7 @@ public class OverheadLineSystem {
         AllOverheadLineSupportBlocks.invoke();
         AllWires.invoke();
         AllOverheadLineDecoratingBlocks.invoke();
+        AllOverheadLineMenuScreens.invoke();
     }
 
     public OverheadLineSaved savedData = new OverheadLineSaved();

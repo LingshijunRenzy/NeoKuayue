@@ -22,9 +22,18 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
 
     @Override
     public void render(OverheadLineSupportBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        if(!(pBlockEntity instanceof OverheadLineEndWeightBlockEntity blockEntity)) {
-            return;
-        }
+        pPoseStack.pushPose();
+
+        OverheadLineEndWeightBlockEntity blockEntity = (OverheadLineEndWeightBlockEntity) pBlockEntity;
+
+        pPoseStack.mulPoseMatrix(
+                AllOverheadLineSupportModels.getDirectionOf.apply(
+                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
+                )
+        );
+
+        AllOverheadLineSupportModels.applyRotation(pPoseStack, pBlockEntity);
+        AllOverheadLineSupportModels.applyOffset(pPoseStack, pBlockEntity);
 
         switch (blockEntity.getRenderState()){
             case EMPTY -> {
@@ -40,6 +49,8 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
                 break;
             }
         }
+
+        pPoseStack.popPose();
     }
 
     private void renderEmpty(
@@ -51,11 +62,6 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
             int pPackedOverlay
     ) {
         pPoseStack.pushPose();
-        pPoseStack.mulPoseMatrix(
-                AllOverheadLineSupportModels.getDirectionOf.apply(
-                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
-                )
-        );
         AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT_EMPTY.render(
                 pPoseStack,
                 pBufferSource,
@@ -87,12 +93,16 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
             int pPackedOverlay
     ) {
         pPoseStack.pushPose();
-        pPoseStack.mulPoseMatrix(
-                AllOverheadLineSupportModels.getDirectionOf.apply(
-                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
-                )
-        );
         AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT_SMALL.render(
+                pPoseStack,
+                pBufferSource,
+                pPackedLight,
+                pPackedOverlay
+        );
+
+        this.renderHangerLineSmall(
+                pBlockEntity,
+                pPartialTick,
                 pPoseStack,
                 pBufferSource,
                 pPackedLight,
@@ -122,12 +132,16 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
             int pPackedOverlay
     ) {
         pPoseStack.pushPose();
-        pPoseStack.mulPoseMatrix(
-                AllOverheadLineSupportModels.getDirectionOf.apply(
-                        pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
-                )
-        );
         AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT.render(
+                pPoseStack,
+                pBufferSource,
+                pPackedLight,
+                pPackedOverlay
+        );
+
+        this.renderHangerLine(
+                pBlockEntity,
+                pPartialTick,
                 pPoseStack,
                 pBufferSource,
                 pPackedLight,
@@ -161,6 +175,7 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
     ) {
         int intHeight = pBlockEntity.getHeight();
         float height = (float) pBlockEntity.getHeight();
+        float yoffset = pBlockEntity.getYOffset();
 
         if(intHeight < 1) {
             return;
@@ -172,12 +187,56 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
         if(height < 1.0) {
             height = 1.0f;
         }
-        pPoseStack.translate(0, - (height - 1) ,0);
+        pPoseStack.translate(0, - (height/1.3f + yoffset - 1) ,0);
         model.render(
                 pPoseStack,
                 pBufferSource,
                 pPackedLight,
                 pPackedOverlay
         );
+    }
+
+    private void renderHangerLineSmall(
+            OverheadLineEndWeightBlockEntity pBlockEntity,
+            float pPartialTick,
+            PoseStack pPoseStack,
+            MultiBufferSource pBufferSource,
+            int pPackedLight,
+            int pPackedOverlay
+    ) {
+        pPoseStack.pushPose();
+        pPoseStack.translate(-0.82f, -0.15f, 0.0);
+        for(int i = 0; i < pBlockEntity.getHeight() + pBlockEntity.getYOffset() - 3; i++) {
+            pPoseStack.translate(0.0, -0.77f, 0.0);
+            AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE_SMALL.render(
+                    pPoseStack,
+                    pBufferSource,
+                    pPackedLight,
+                    pPackedOverlay
+            );
+        }
+        pPoseStack.popPose();
+    }
+
+    private void renderHangerLine(
+            OverheadLineEndWeightBlockEntity pBlockEntity,
+            float pPartialTick,
+            PoseStack pPoseStack,
+            MultiBufferSource pBufferSource,
+            int pPackedLight,
+            int pPackedOverlay
+    ) {
+        pPoseStack.pushPose();
+        pPoseStack.translate(-0.2f, -0.15f, 0.0);
+        for(int i = 0; i < pBlockEntity.getHeight() + pBlockEntity.getYOffset() - 3; i++) {
+            pPoseStack.translate(0.0, -0.77f, 0.0);
+            AllOverheadLineSupportModels.OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE.render(
+                    pPoseStack,
+                    pBufferSource,
+                    pPackedLight,
+                    pPackedOverlay
+            );
+        }
+        pPoseStack.popPose();
     }
 }

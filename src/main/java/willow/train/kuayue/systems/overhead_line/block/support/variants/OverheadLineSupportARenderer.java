@@ -30,7 +30,10 @@ public abstract class OverheadLineSupportARenderer {
                             pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
                     )
             );
-            // pPoseStack.mulPose(new Quaternion(90, 0, 0, true));
+
+            AllOverheadLineSupportModels.applyRotation(pPoseStack, pBlockEntity);
+            AllOverheadLineSupportModels.applyOffset(pPoseStack, pBlockEntity);
+
             AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_A1_MODEL.render(
                     pPoseStack,
                     pBufferSource,
@@ -51,6 +54,10 @@ public abstract class OverheadLineSupportARenderer {
                             pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
                     )
             );
+
+            AllOverheadLineSupportModels.applyRotation(pPoseStack, pBlockEntity);
+            AllOverheadLineSupportModels.applyOffset(pPoseStack, pBlockEntity);
+
             AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_A2_MODEL.render(
                     pPoseStack,
                     pBufferSource,
