@@ -26,6 +26,7 @@ import willow.train.kuayue.systems.overhead_line.wire.WireReg;
 import java.util.HashMap;
 import java.util.List;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEntity> extends SmartBlockEntityRenderer<T> implements BlockEntityRenderer<T> {
@@ -33,7 +34,9 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
     private static final HashMap<Supplier<Block>, BlockEntityRendererBuilder<OverheadLineSupportBlockEntity>> RENDERER_SUPPLIERS = new HashMap<>();
     private final HashMap<Block, BlockEntityRenderer<OverheadLineSupportBlockEntity>> RENDERERS = new HashMap<>();
 
-    private final WeakHashMap<OverheadLineSupportBlockEntity.Connection, RenderCurve> curveRenderCache = new WeakHashMap<>();
+    private final WeakHashMap<ConnectionCacheKey, RenderCurve> curveRenderCache = new WeakHashMap<>();
+
+    private static final ConcurrentHashMap<BlockPos, OverheadSupportBlockRenderer> RENDERER_INSTANCES = new ConcurrentHashMap<>();
 
     public OverheadSupportBlockRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
@@ -43,32 +46,36 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
 
     @Override
     protected void renderSafe(OverheadLineSupportBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+        RENDERER_INSTANCES.put(blockEntity.getBlockPos(), this);
+
         Block block = blockEntity.getBlockState().getBlock();
         if(RENDERERS.containsKey(block)){
             RENDERERS.get(block).render(blockEntity, partialTicks, ms, buffer, light, overlay);
         }
-        ms.pushPose();
-        List<OverheadLineSupportBlockEntity.Connection> connections = blockEntity.getConnections();
-        ms.scale(-0.01f,-0.01f,-0.01f);
-        Minecraft.getInstance().font.draw(
-                ms,
-                String.format("OverHeadLine (%d, %d, %d)", blockEntity.getBlockPos().getX(), blockEntity.getBlockPos().getY(), blockEntity.getBlockPos().getZ()),
-                0,
-                0,
-                0xffffff
-        );
-        ms.translate(0, 10, 0);
-        for (int i = 0; i < connections.size(); i++) {
+        if(Minecraft.getInstance().options.renderDebug){
+            ms.pushPose();
+            List<OverheadLineSupportBlockEntity.Connection> connections = blockEntity.getConnections();
+            ms.scale(-0.01f,-0.01f,-0.01f);
             Minecraft.getInstance().font.draw(
                     ms,
-                    String.format("#%d Absolute WorldPos: (%d, %d, %d) Type %s", i, connections.get(i).absolutePos().getX(), connections.get(i).absolutePos().getY(), connections.get(i).absolutePos().getZ(), WireReg.getName(connections.get(i).type()).toString()),
+                    String.format("OverHeadLine (%d, %d, %d)", blockEntity.getBlockPos().getX(), blockEntity.getBlockPos().getY(), blockEntity.getBlockPos().getZ()),
                     0,
                     0,
                     0xffffff
             );
             ms.translate(0, 10, 0);
+            for (int i = 0; i < connections.size(); i++) {
+                Minecraft.getInstance().font.draw(
+                        ms,
+                        String.format("#%d Absolute WorldPos: (%d, %d, %d) Type %s", i, connections.get(i).absolutePos().getX(), connections.get(i).absolutePos().getY(), connections.get(i).absolutePos().getZ(), WireReg.getName(connections.get(i).type()).toString()),
+                        0,
+                        0,
+                        0xffffff
+                );
+                ms.translate(0, 10, 0);
+            }
+            ms.popPose();
         }
-        ms.popPose();
         /*
         ms.popPose();
         ms.pushPose();
@@ -107,6 +114,68 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
             var block = entry.getKey();
             var renderer = entry.getValue();
             RENDERERS.put(block.get(), renderer.build(pContext));
+        }
+    }
+
+    public static void clearCacheForBlockEntity(OverheadLineSupportBlockEntity blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+
+        OverheadSupportBlockRenderer<?> renderer = RENDERER_INSTANCES.get(pos);
+        if (renderer != null) {
+            renderer.curveRenderCache.entrySet().removeIf(entry -> {
+                ConnectionCacheKey key = entry.getKey();
+                return key.fromPos.equals(pos) || key.toPos.equals(pos);
+            });
+        }
+    }
+
+    private static class ConnectionCacheKey {
+        private final BlockPos fromPos;
+        private final BlockPos toPos;
+        private final int connectionIndex;
+        private final int targetIndex;
+        private final float toPosX, toPosY, toPosZ; // 包含精确的位置信息
+
+        public ConnectionCacheKey(OverheadLineSupportBlockEntity.Connection connection, BlockPos fromPos) {
+            this.fromPos = fromPos;
+            this.toPos = connection.absolutePos();
+            this.connectionIndex = connection.connectionIndex();
+            this.targetIndex = connection.targetIndex();
+            this.toPosX = connection.toPosition().x();
+            this.toPosY = connection.toPosition().y();
+            this.toPosZ = connection.toPosition().z();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof ConnectionCacheKey that)) return false;
+
+            return connectionIndex == that.connectionIndex &&
+                    targetIndex == that.targetIndex &&
+                    Float.compare(that.toPosX, toPosX) == 0 &&
+                    Float.compare(that.toPosY, toPosY) == 0 &&
+                    Float.compare(that.toPosZ, toPosZ) == 0 &&
+                    fromPos.equals(that.fromPos) &&
+                    toPos.equals(that.toPos);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = fromPos.hashCode();
+            result = 31 * result + toPos.hashCode();
+            result = 31 * result + connectionIndex;
+            result = 31 * result + targetIndex;
+            result = 31 * result + Float.floatToIntBits(toPosX);
+            result = 31 * result + Float.floatToIntBits(toPosY);
+            result = 31 * result + Float.floatToIntBits(toPosZ);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("ConnectionCacheKey{%s->%s, idx=%d->%d, pos=(%.3f,%.3f,%.3f)}",
+                    fromPos, toPos, connectionIndex, targetIndex, toPosX, toPosY, toPosZ);
         }
     }
 }

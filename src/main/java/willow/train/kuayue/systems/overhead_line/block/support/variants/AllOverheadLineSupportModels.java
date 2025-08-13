@@ -3,6 +3,7 @@ package willow.train.kuayue.systems.overhead_line.block.support.variants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import kasuga.lib.core.client.model.BedrockModelLoader;
 import kasuga.lib.core.client.model.anim_model.AnimModel;
 import net.minecraft.Util;
@@ -72,6 +73,26 @@ public class AllOverheadLineSupportModels {
             pPoseStack.translate(connection.x, connection.y, connection.z);
             AllOverheadLineSupportModels.KUAYUE_TEST.render(pPoseStack, pBufferSource, LightTexture.FULL_BRIGHT, pPackedOverlay);
             pPoseStack.popPose();
+        }
+    }
+
+    public static void applyOffset(PoseStack pPoseStack, OverheadLineSupportBlockEntity entity){
+        float xOffset = entity.getXOffset();
+        float yOffset = entity.getYOffset();
+        float zOffset = entity.getZOffset();
+
+        if (Math.abs(xOffset) > 1e-6 || Math.abs(yOffset) > 1e-6 || Math.abs(zOffset) > 1e-6) {
+            pPoseStack.translate(-xOffset, yOffset, -zOffset);
+        }
+    }
+
+    public static void applyRotation(PoseStack pPoseStack, OverheadLineSupportBlockEntity entity){
+        float rotation = entity.getRotation();
+
+        if (Math.abs(rotation) > 1e-6) {
+            pPoseStack.translate(0.5, 0, 0.5);
+            pPoseStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+            pPoseStack.translate(-0.5, 0, -0.5);
         }
     }
 

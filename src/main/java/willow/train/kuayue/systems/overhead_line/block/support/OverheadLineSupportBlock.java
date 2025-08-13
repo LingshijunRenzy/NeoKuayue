@@ -1,12 +1,18 @@
 package willow.train.kuayue.systems.overhead_line.block.support;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -16,6 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 
@@ -65,5 +73,29 @@ public abstract class OverheadLineSupportBlock<T extends OverheadLineSupportBloc
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         pLevel.scheduleTick(pPos, pState.getBlock(), 2);
+    }
+
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        ItemStack item = pPlayer.getItemInHand(pHand);
+        
+        if (item.is(AllItems.WRENCH.get())) {
+            if (!pLevel.isClientSide) {
+                net.minecraft.world.level.block.entity.BlockEntity rawBlockEntity = pLevel.getBlockEntity(pPos);
+                
+                if (rawBlockEntity instanceof OverheadLineSupportBlockEntity) {
+                    OverheadLineSupportBlockEntity blockEntity = (OverheadLineSupportBlockEntity) rawBlockEntity;
+                    try {
+                        NetworkHooks.openScreen((ServerPlayer) pPlayer, blockEntity, pPos);
+                    } catch (Exception e) {
+                        System.out.println("[ERROR] Failed to open GUI: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
+        
+        return InteractionResult.PASS;
     }
 }

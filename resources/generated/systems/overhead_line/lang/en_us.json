@@ -20,6 +20,8 @@
 "msg.kuayue.overhead_line_target_set": "Current catenary frame selected, please click another catenary frame to establish connection",
 "msg.kuayue.overhead_line_same_support": "Cannot connect to the same catenary frame",
 "msg.kuayue.overhead_line_incompatible_block": "Incompatible block",
+"msg.kuayue.overhead_line_max_connections_reached": "Maximum number of connections reached",
+"msg.kuayue.overhead_line_duplicate_connection": "Cannot connect to the same two catenary frames",
 "block.kuayue.overhead_pillar_concrete": "Equidistant Round Concrete Pillar",
 "block.kuayue.overhead_pillar_concrete_truss_a": "Equidistant Round Pillar Truss Type A",
 "block.kuayue.overhead_pillar_concrete_truss_b": "Equidistant Round Pillar Truss Type B",

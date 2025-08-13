@@ -4,13 +4,11 @@ import kasuga.lib.core.client.model.anim_model.AnimModel;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -21,11 +19,8 @@ import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSuppo
 import willow.train.kuayue.systems.overhead_line.render.CachedCurveRenderer;
 import willow.train.kuayue.systems.overhead_line.render.RenderCurve;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
-import willow.train.kuayue.systems.overhead_line.wire.OverheadLineRendererUtils;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import static net.minecraftforge.client.event.RenderLevelStageEvent.Stage.*;
@@ -107,7 +102,7 @@ public class OverheadLineRendererSystem {
 
         RenderCurve curve = renderer.getRenderCurveFor(
                 blockEntity.getLevel(),
-                blockEntity.getConnectionPointByIndex(connection.connectionIndex()),
+                blockEntity.getConnectionPointByIndex(connection.connectionIndex(), connection.type()),
                 new Vec3(connection.toPosition())
         );
         OVERHEAD_LINES.put(locator, new Rendering(curve, renderer.getModel(), curve.getMatrix().getBoundingBox()));
