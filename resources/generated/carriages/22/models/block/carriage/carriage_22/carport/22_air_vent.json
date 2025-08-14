@@ -5,6 +5,7 @@
   "textures": {
     "particle": "kuayue:block/carriage/carriage_22/22_air_vent"
   },
+  "gui_light": "front",
   "display": {
     "thirdperson_righthand": {
       "translation": [-2.25, 0, 1.5],
@@ -27,7 +28,7 @@
     },
     "gui": {
       "rotation": [-157.5, -43, -180],
-      "translation": [1.5, 1.5, 0],
+      "translation": [1.5, 4.0, 0],
       "scale": [1.0, 1.0, 1.0]
     },
     "fixed": {

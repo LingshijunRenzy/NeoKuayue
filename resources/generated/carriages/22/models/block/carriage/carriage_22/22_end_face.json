@@ -5,6 +5,7 @@
   "textures": {
     "particle": "kuayue:block/carriage/carriage_22/22_end_face"
   },
+  "gui_light": "front",
   "display": {
     "thirdperson_righthand": {
       "translation": [-2.25, 0, 1.5],
@@ -26,9 +27,9 @@
       "scale": [0.4, 0.4, 0.4]
     },
     "gui": {
-      "rotation": [-157.5, -43, -180],
-      "translation": [-1.75, -0.5, 0],
-      "scale": [0.2, 0.2, 0.2]
+      "rotation": [-157.5, 150, -180],
+      "translation": [-1.0, 1.0, 0],
+      "scale": [0.3, 0.3, 0.3]
     },
     "fixed": {
       "translation": [0.25, 0, 0.5],
