@@ -38,12 +38,13 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
     private final PantographProps pantographType;
     private final Map<String, PartialModel> pantographModel;
     private final float risenSpeed;
-    private final float risenAngle;
+    private final float downPullRodAngle;
+    private final float risePullRodAngle;
 
     public SingleArmPantographBlock(Properties pProperties, PantographProps pantographType,
                                     String basePath, String largeArmPath,
-                                    String pullRodPath, String smallArmPath,
-                                    String bowHeadPath, float risenSpeed, float risenAngle) {
+                                    String pullRodPath, String smallArmPath, String bowHeadPath,
+                                    float risenSpeed, float downPullRodAngle, float risePullRodAngle) {
         super(pProperties);
         this.pantographType = pantographType;
         Map<String, PartialModel> map = new HashMap<>();
@@ -59,7 +60,8 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
                 new PartialModel(new ResourceLocation(Kuayue.MODID,"block/" + bowHeadPath)));
         this.pantographModel = map;
         this.risenSpeed = risenSpeed;
-        this.risenAngle = risenAngle;
+        this.downPullRodAngle = downPullRodAngle;
+        this.risePullRodAngle = risePullRodAngle;
 
         registerDefaultState(this.getStateDefinition().any()
                 .setValue(OPEN, false)
@@ -115,7 +117,11 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
         return risenSpeed;
     }
 
-    public float getRisenAngle() {
-        return risenAngle;
+    public float getDownPullRodAngle() {
+        return downPullRodAngle;
+    }
+
+    public float getRisePullRodAngle() {
+        return risePullRodAngle;
     }
 }

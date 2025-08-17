@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.bogey.ISingleSideBogey;
 import willow.train.kuayue.utils.StationMixinCache;
 
@@ -97,10 +96,11 @@ public class MixinStationBlockEntity {
                                    @Local(ordinal = 2) BlockState newBlock) {
 
         Level level = ((StationBlockEntity)(Object) this).getLevel();
-        if(level != null) {
+        String descriptionId = newBlock.getBlock().getDescriptionId();
+        if(level != null && descriptionId.startsWith("kuayue", 6)) {
             player.displayClientMessage(
                     Component.translatable("msg.bogey.style.changed." +
-                            newBlock.getBlock().getDescriptionId()), true);
+                            descriptionId), true);
         }
     }
 }

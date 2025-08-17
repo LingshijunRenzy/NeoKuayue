@@ -28,7 +28,8 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
     private boolean isRisen = true;
     private PantographProps pantographType;
     private float risenSpeed;
-    private float risenAngle;
+    private float downPullRodAngle;
+    private float risePullRodAngle;
     public double pullRodAngle = 170.0;
     private double transPosY = -0.5;
 
@@ -41,7 +42,9 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         if (state.getBlock() instanceof SingleArmPantographBlock block) {
             this.pantographType = block.getPantographType();
             this.risenSpeed = block.getRisenSpeed();
-            this.risenAngle = block.getRisenAngle();
+            this.downPullRodAngle = block.getDownPullRodAngle();
+            this.risePullRodAngle = block.getRisePullRodAngle();
+            this.pullRodAngle = block.getDownPullRodAngle();
         }
 //        if (level == null)
 //            return;
@@ -97,8 +100,12 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         return risenSpeed;
     }
 
-    public float getRisenAngle() {
-        return risenAngle;
+    public float getDownPullRodAngle() {
+        return downPullRodAngle;
+    }
+
+    public float getRisePullRodAngle() {
+        return risePullRodAngle;
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
@@ -112,14 +113,6 @@ public class C22Panel {
                     .tab(AllElements.neoKuayueCarriageTab)
                     .submit(AllElements.testRegistry);
 
-    public static final SlabRegistration<CarportHingeSlabBlock> C22_CARPORT_PANEL_TOP =
-            new SlabRegistration<CarportHingeSlabBlock>("22_carport_panel_top")
-                    .block(p -> new CarportHingeSlabBlock(p, false))
-                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
-                    .tab(AllElements.neoKuayueCarriageTab)
-                    .noOcclusion().strengthAndTool(1.5f, 3f)
-                    .submit(AllElements.testRegistry);
-
     public static final SlabRegistration<TrainSlabBlock> C22_COUPLER =
             new SlabRegistration<TrainSlabBlock>("22_coupler")
                     .block(p -> new TrainSlabBlock(p, false))
@@ -142,9 +135,25 @@ public class C22Panel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
-    public static final SlabRegistration<CarportHingeSlabBlock> C22_CARPORT_PANEL_TOP_LAMP =
-            new SlabRegistration<CarportHingeSlabBlock>("22_carport_panel_top_lamp")
-                    .block(p -> new CarportHingeSlabBlock(p, false))
+    public static final PanelRegistration<TrainPanelBlock> C22_CARPORT_PANEL_TOP =
+            new PanelRegistration<TrainPanelBlock>("22_carport_panel_top")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainHingePanelBlock> C22_CARPORT_PANEL_TOP_LAMP =
+            new PanelRegistration<TrainHingePanelBlock>("22_carport_panel_top_lamp")
+                    .block(p -> new TrainHingePanelBlock(p, new Vec2(0, 0), new Vec2(1, 1)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<TrainSlabBlock> C22_CARPORT_TOP_CAP =
+            new SlabRegistration<TrainSlabBlock>("22_carport_top_cap")
+                    .block(p -> new TrainSlabBlock(p, true))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueCarriageTab)
                     .noOcclusion().strengthAndTool(1.5f, 3f)
