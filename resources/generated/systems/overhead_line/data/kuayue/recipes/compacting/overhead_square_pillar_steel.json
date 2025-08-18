@@ -2,8 +2,7 @@
   "type": "create:compacting",
   "ingredients": [
     {
-      "item": "kuayue:weathering_resistant_steel_ingot",
-      "count": 6
+      "item": "kuayue:weathering_resistant_steel_board"
     }
   ],
   "results": [
