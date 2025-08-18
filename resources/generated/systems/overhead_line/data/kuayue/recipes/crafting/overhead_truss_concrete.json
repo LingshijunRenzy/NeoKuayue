@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "kuayue:overhead_pillar_concrete"
+    }
+  ],
+  "result": {
+    "item": "kuayue:overhead_truss_concrete"
+  }
+}
