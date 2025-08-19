@@ -77,6 +77,10 @@ public class PlayerDataEvent {
         if (player.level.isClientSide) return;
 
         NetworkCacheManager.MANAGER.removeCache((ServerPlayer) player);
+        if (PlayerDataManager.MANAGER.containsPlayerData(player)) {
+            PlayerDataDist.DIST.saveToDisk(((ServerPlayer) player).getLevel());
+            PlayerDataManager.MANAGER.removePlayerData(player);
+        }
     }
 
     @SubscribeEvent
