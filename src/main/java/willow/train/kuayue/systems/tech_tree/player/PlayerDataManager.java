@@ -42,6 +42,14 @@ public class PlayerDataManager extends SavedData implements NbtSerializable {
         return compoundTag;
     }
 
+    public @Nullable PlayerData removePlayerData(UUID uuid) {
+        return playerData.remove(uuid);
+    }
+
+    public @Nullable PlayerData removePlayerData(Player player) {
+        return removePlayerData(player.getUUID());
+    }
+
     public @Nullable PlayerData getPlayerData(UUID id) {
         return playerData.getOrDefault(id, null);
     }
