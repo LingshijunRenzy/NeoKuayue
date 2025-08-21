@@ -25,8 +25,8 @@ import java.util.Random;
 public class SingleArmPantographRenderer implements
         BlockEntityRenderer<SingleArmPantographBlockEntity>, IPantographModel {
 
-    public static float STEP_FAST = 0.35f;
-    public static float STEP_SLOW = 0.15f;
+    public static float STEP_FAST = 0.20f;
+    public static float STEP_SLOW = 0.05f;
 
     public SingleArmPantographRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -96,19 +96,29 @@ public class SingleArmPantographRenderer implements
         pose.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot() + 90f));
 
         // 升降弓拉杆角度变化
-        if(risen && pBlockEntity.pullRodAngle > 135) {
+//        if (risen && pBlockEntity.pullRodAngle > risePullRodAngle) {
+//            pBlockEntity.pullRodAngle -= STEP_SLOW * risenSpeed;
+//        } else if (!risen && pBlockEntity.pullRodAngle < downPullRodAngle) {
+//            pBlockEntity.pullRodAngle += STEP_SLOW * risenSpeed;
+//        } else if (risen) {
+//            pBlockEntity.pullRodAngle = risePullRodAngle;
+//        } else {
+//            pBlockEntity.pullRodAngle = downPullRodAngle;
+//        }
+        if(risen && pBlockEntity.pullRodAngle > 155) {
             pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
-        } else if (risen && pBlockEntity.pullRodAngle <= 135 && pBlockEntity.pullRodAngle > risePullRodAngle) {
+        } else if (risen && pBlockEntity.pullRodAngle <= 155 && pBlockEntity.pullRodAngle > risePullRodAngle) {
             pBlockEntity.pullRodAngle -= STEP_SLOW * risenSpeed;
-        } else if (!risen && pBlockEntity.pullRodAngle < 135) {
+        } else if (!risen && pBlockEntity.pullRodAngle < 155) {
             pBlockEntity.pullRodAngle += STEP_SLOW * risenSpeed;
-        } else if (!risen && pBlockEntity.pullRodAngle >= 135 && pBlockEntity.pullRodAngle < downPullRodAngle) {
+        } else if (!risen && pBlockEntity.pullRodAngle >= 155 && pBlockEntity.pullRodAngle < downPullRodAngle) {
             pBlockEntity.pullRodAngle += STEP_FAST * risenSpeed;
         } else if (risen) {
             pBlockEntity.pullRodAngle = risePullRodAngle;
         } else {
             pBlockEntity.pullRodAngle = downPullRodAngle;
         }
+
         // 随动角度与坐标
         HashMap<String, Double> pantoModelMap = IPantographModel.getPantoModelMapByType(pantographProps, pBlockEntity.pullRodAngle);
         Double largeArmAngle = pantoModelMap.get(LARGE_ARM_ANGLE);
