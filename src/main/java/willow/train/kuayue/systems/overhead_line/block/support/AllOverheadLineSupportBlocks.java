@@ -69,7 +69,7 @@ public class AllOverheadLineSupportBlocks {
                     .tabTo(AllElements.neoKuayueGridTab)
                     .withRenderer(()-> OverheadLineSupportBRenderer.B1Renderer::new)
                     .connectionPoints(
-                            new Vec3(1.55, -0.3, 0)
+                            new Vec3(1.55, -0.55, 0)
                     )
                     .addAllowedWireType(
                             AllWires.OVERHEAD_LINE_WIRE,

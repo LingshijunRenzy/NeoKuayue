@@ -64,7 +64,7 @@ public class OverheadLineItem extends Item {
             if(tags != null && tags.contains("target", Tag.TAG_COMPOUND)) {
                 CompoundTag target = tags.getCompound("target");
                 int previousIndex = tags.getInt("index");
-                if(this.connectStacks(pContext,player ,pContext.getClickedPos(), target, previousIndex)) {
+                if(this.connectStacks(pContext,player ,pContext.getClickedPos(), item, target, previousIndex)) {
                     ComponentTranslationTool.showSuccess(player, "overhead_line_target_connected", true);
                     tags.remove("target");
                 }
@@ -101,7 +101,7 @@ public class OverheadLineItem extends Item {
         ComponentTranslationTool.showSuccess(player, "overhead_line_target_set", true);
     }
 
-    private boolean connectStacks(UseOnContext pContext, Player player, BlockPos clickedPos, CompoundTag target, int previousIndex){
+    private boolean connectStacks(UseOnContext pContext, Player player, BlockPos clickedPos, ItemStack item, CompoundTag target, int previousIndex){
         Level level = pContext.getLevel();
 
         BlockPos targetPos = NbtUtils.readBlockPos(target);
@@ -114,9 +114,14 @@ public class OverheadLineItem extends Item {
         BlockEntity clickedBlockEntity = level.getBlockEntity(clickedPos);
         BlockEntity targetBlockEntity = level.getBlockEntity(targetPos);
 
+        if(!(targetBlockEntity instanceof OverheadLineSupportBlockEntity targetSupport)){
+            item.getOrCreateTag().remove("target");
+            this.addTargetIntoStack(pContext, player, clickedPos, item);
+            return false;
+        }
+
         if(
-                !(clickedBlockEntity instanceof OverheadLineSupportBlockEntity clickedSupport) ||
-                !(targetBlockEntity instanceof OverheadLineSupportBlockEntity targetSupport)
+                !(clickedBlockEntity instanceof OverheadLineSupportBlockEntity clickedSupport)
         ){
             ComponentTranslationTool.showError(player, "overhead_line_incompatible_block", true);
             return false;

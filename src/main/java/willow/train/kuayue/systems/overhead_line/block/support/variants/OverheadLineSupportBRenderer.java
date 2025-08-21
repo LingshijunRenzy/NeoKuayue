@@ -23,6 +23,7 @@ public abstract class OverheadLineSupportBRenderer {
             AllOverheadLineSupportModels.applyRotation(pPoseStack, pBlockEntity);
             AllOverheadLineSupportModels.applyOffset(pPoseStack, pBlockEntity);
 
+            pPoseStack.translate(0, -0.25, 0);
             AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_C1_MODEL.render(
                     pPoseStack,
                     pBufferSource,
