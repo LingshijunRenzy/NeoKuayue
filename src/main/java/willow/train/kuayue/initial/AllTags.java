@@ -90,6 +90,9 @@ public class AllTags {
     public static final BlockTagReg IJY290 = new BlockTagReg("ijy290", "panel/ijy290")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg I5 = new BlockTagReg("i5", "panel/i5")
+            .submit(AllElements.testRegistry);
+
     public static final BlockTagReg MULTI_SEAT_BLOCK = new BlockTagReg("multi_seat_block", "multi_seat_block")
             .submit(AllElements.testRegistry);
 
