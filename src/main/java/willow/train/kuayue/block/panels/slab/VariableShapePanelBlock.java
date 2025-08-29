@@ -15,10 +15,6 @@ import java.util.function.Supplier;
 
 public class VariableShapePanelBlock extends TrainPanelBlock implements IWrenchable {
 
-    public final static VoxelShape HALF_PANEL_SHAPE_EAST = Block.box(0, 0, 0, 8, 16, 16);
-
-    public static final VoxelShape QUARTER_PANEL_SHAPE_EAST = Block.box(0, 0, 0, 4, 16, 16);
-
     private Supplier<VoxelShapeSup> voxelShapeSupplier;
 
     private Supplier<VoxelShapeSup> collisionShapeSupplier;

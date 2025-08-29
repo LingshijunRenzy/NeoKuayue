@@ -271,7 +271,17 @@ public class TrainPanelShapes {
     protected static final VoxelShape OverheadPillarTruss_WE_AABB =
             Shapes.box(0, 0.25, 0.25, 1, 0.75, 0.75);
 
+    public final static VoxelShape HALF_PANEL_SHAPE_EAST = Block.box(0, 0, 0, 8, 16, 16);
 
+    public static final VoxelShape QUARTER_PANEL_SHAPE_EAST = Block.box(0, 0, 0, 4, 16, 16);
+
+    public static final VoxelShape DF5_CARPORT_SHAPE_EAST = Shapes.or(
+            Block.box(0, 0, 0, 8, 12, 16),
+            Block.box(-8, 12, 0, 8, 16, 16));
+
+    public static final VoxelShape DF5_CARPORT_COLLISION_SHAPE_EAST = Shapes.or(
+            Block.box(0, 0, 0, 4, 12, 16),
+            Block.box(-8, 12, 0, 8, 16, 16));
 
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {
