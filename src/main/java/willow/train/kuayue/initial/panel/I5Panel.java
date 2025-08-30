@@ -223,6 +223,57 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_AIR_INTAKE =
+            new PanelRegistration<VariableShapePanelBlock>("df5_air_intake")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.HALF_PANEL_SHAPE_EAST),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.QUARTER_PANEL_SHAPE_EAST)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_AIR_INTAKE_2 =
+            new PanelRegistration<VariableShapePanelBlock>("df5_air_intake_2")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_CARPORT_SHAPE_EAST),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_CARPORT_COLLISION_SHAPE_EAST)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_AIR_INTAKE_3 =
+            new PanelRegistration<VariableShapePanelBlock>("df5_air_intake_3")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.HALF_PANEL_SHAPE_EAST),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.QUARTER_PANEL_SHAPE_EAST)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
     public static final PanelRegistration<TrainPanelBlock> DF5_HANDRAIL =
             new PanelRegistration<TrainPanelBlock>("df5_handrail")
                     .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
