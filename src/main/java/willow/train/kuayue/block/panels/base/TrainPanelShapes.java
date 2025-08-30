@@ -281,7 +281,7 @@ public class TrainPanelShapes {
 
     public static final VoxelShape DF5_CARPORT_COLLISION_SHAPE_EAST = Shapes.or(
             Block.box(0, 0, 0, 4, 12, 16),
-            Block.box(-8, 12, 0, 8, 16, 16));
+            Block.box(-8, 12, 0, 4, 16, 16));
 
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {

@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec2;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelShapes;
+import willow.train.kuayue.block.panels.slab.VariableShapeHingePanelBlock;
 import willow.train.kuayue.block.panels.slab.VariableShapePanelBlock;
 import willow.train.kuayue.block.panels.slab.HingeSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
@@ -154,9 +155,9 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<VariableShapePanelBlock> DF5_CARPORT_3 =
-            new PanelRegistration<VariableShapePanelBlock>("df5_carport_3")
-                    .block(p -> new VariableShapePanelBlock(p,
+    public static final PanelRegistration<VariableShapeHingePanelBlock> DF5_CARPORT_3 =
+            new PanelRegistration<VariableShapeHingePanelBlock>("df5_carport_3")
+                    .block(p -> new VariableShapeHingePanelBlock(p,
                             new Vec2(0, 0), new Vec2(1, 1),
                             () -> (state, level, blockPos, context) ->
                                     TrainPanelShapes.rotateShape(Direction.EAST,
@@ -171,9 +172,9 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<VariableShapePanelBlock> DF5_CARPORT_4 =
-            new PanelRegistration<VariableShapePanelBlock>("df5_carport_4")
-                    .block(p -> new VariableShapePanelBlock(p,
+    public static final PanelRegistration<VariableShapeHingePanelBlock> DF5_CARPORT_4 =
+            new PanelRegistration<VariableShapeHingePanelBlock>("df5_carport_4")
+                    .block(p -> new VariableShapeHingePanelBlock(p,
                             new Vec2(0, 0), new Vec2(1, 1),
                             () -> (state, level, blockPos, context) ->
                                     TrainPanelShapes.rotateShape(Direction.EAST,
