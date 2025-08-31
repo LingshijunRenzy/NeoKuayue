@@ -1,10 +1,10 @@
 {
   "loader": "forge:obj",
-  "model": "kuayue:models/block/df5/floor/df5_transit_floor.obj",
+  "model": "kuayue:models/block/df5/carport/df5_carport_4_lh.obj",
   "render_type": "cutout_mipped",
   "flip_v": true,
   "textures": {
-    "particle": "kuayue:block/df5/df5_transit_floor"
+    "particle": "kuayue:block/df5/df5_carport_3"
   },
   "display": {
     "thirdperson_righthand": {
