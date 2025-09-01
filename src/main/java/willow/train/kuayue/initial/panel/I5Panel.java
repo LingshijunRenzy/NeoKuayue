@@ -87,6 +87,14 @@ public class I5Panel {
                     .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<TrainPanelBlock> DF5_HANDRAIL =
+            new PanelRegistration<TrainPanelBlock>("df5_handrail")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
     public static final PanelRegistration<VariableShapePanelBlock> DF5_PANEL_BOTTOM =
             new PanelRegistration<VariableShapePanelBlock>("df5_panel_bottom")
                     .block(p -> new VariableShapePanelBlock(p,
@@ -274,9 +282,31 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<TrainPanelBlock> DF5_HANDRAIL =
-            new PanelRegistration<TrainPanelBlock>("df5_handrail")
-                    .block(p -> new TrainPanelBlock(p, new Vec2(0,0),new Vec2(1,1)))
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_RADIATOR_GRID =
+            new PanelRegistration<VariableShapePanelBlock>("df5_radiator_grid")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 2),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_RADIATOR_GRID_SHAPE_EAST),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_RADIATOR_GRID_COLLISION_SHAPE_EAST)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_HEAD =
+            new PanelRegistration<VariableShapePanelBlock>("df5_head")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 2),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.NORTH,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_HEAD_SHAPE_NORTH)))
                     .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f,3f)

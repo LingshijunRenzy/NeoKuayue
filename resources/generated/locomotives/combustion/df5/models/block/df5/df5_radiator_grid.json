@@ -1,10 +1,10 @@
 {
   "loader": "forge:obj",
-  "model": "kuayue:models/block/df5/carport/df5_air_intake_2.obj",
+  "model": "kuayue:models/block/df5/df5_radiator_grid.obj",
   "render_type": "cutout_mipped",
   "flip_v": true,
   "textures": {
-    "particle": "kuayue:block/df5/df5_air_intake_2"
+    "particle": "kuayue:block/df5/df5_radiator_grid"
   },
   "display": {
     "thirdperson_righthand": {
