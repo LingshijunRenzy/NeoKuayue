@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "22_floor_center"
+    }
+  ],
+  "pattern": [
+    " a",
+    "fb"
+  ],
+  "key": {
+    "a": {
+      "item": "kuayue:weathering_resistant_steel_pole"
+    },
+    "b": {
+      "item": "kuayue:weathering_resistant_steel_ingot"
+    },
+    "f": {
+      "item": "kuayue:22_floor_center"
+    }
+  },
+  "result": {
+    "item": "kuayue:22_coupler",
+    "count": 1
+  }
+}
