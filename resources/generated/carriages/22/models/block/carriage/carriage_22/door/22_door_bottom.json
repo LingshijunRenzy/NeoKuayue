@@ -9,8 +9,8 @@
 	"elements": [
 		{
 			"name": "门",
-			"from": [0, 0, 0],
-			"to": [14, 16, 1],
+			"from": [0, 0, -0.5],
+			"to": [14, 16, 0.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 16, 1]},
 			"faces": {
 				"north": {"uv": [3.5, 4, 0, 8], "texture": "#48"},

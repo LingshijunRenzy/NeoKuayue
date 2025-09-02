@@ -1,7 +1,7 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
-	"render_type": "translucent",
 	"textures": {
 		"0": "kuayue:block/carriage_facilities/ceilin_shelf",
 		"particle": "kuayue:block/carriage_facilities/ceilin_shelf"
@@ -44,19 +44,6 @@
 				"west": {"uv": [2.5, 12.25, 5, 12.5], "texture": "#0"},
 				"up": {"uv": [8, 8, 4, 5.5], "texture": "#0"},
 				"down": {"uv": [4, 7.5, 0, 10], "texture": "#0"}
-			}
-		},
-		{
-			"from": [0, 5, 15.75],
-			"to": [16, 16, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [0, -4, -16]},
-			"faces": {
-				"north": {"uv": [4, 0, 8, 2.75], "texture": "#0"},
-				"east": {"uv": [12, 7.25, 12.25, 10], "texture": "#0"},
-				"south": {"uv": [4, 2.75, 8, 5.5], "texture": "#0"},
-				"west": {"uv": [12, 10, 12.25, 12.75], "texture": "#0"},
-				"up": {"uv": [16, 1.5, 12, 1.25], "texture": "#0"},
-				"down": {"uv": [16, 1.5, 12, 1.75], "texture": "#0"}
 			}
 		},
 		{
@@ -242,7 +229,7 @@
 			"scale": [0.25, 0.25, 0.25]
 		},
 		"gui": {
-			"rotation": [30, 225, 0],
+			"rotation": [30, -135, 0],
 			"translation": [-0.5, -0.25, 0],
 			"scale": [0.47, 0.47, 0.47]
 		},
@@ -271,7 +258,7 @@
 					"name": "light",
 					"origin": [0, 0, 0],
 					"color": 0,
-					"children": [3, 4, 5, 6, 7]
+					"children": [3, 4, 5, 6]
 				},
 				{
 					"name": "shelf",
@@ -294,7 +281,7 @@
 							"name": "frame",
 							"origin": [0, 0.03492, 0.06075],
 							"color": 0,
-							"children": [8, 9, 10, 11, 12, 13]
+							"children": [7, 8, 9, 10, 11, 12]
 						}
 					]
 				},
@@ -308,7 +295,7 @@
 					"name": "hook1",
 					"origin": [0, 3, 30],
 					"color": 0,
-					"children": [14, 15]
+					"children": [13, 14]
 				}
 			]
 		}
