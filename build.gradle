@@ -236,7 +236,7 @@ repositories {
 
     maven {
         name = "KuaYue Maven"
-        url = uri("https://maven.kuayue.pw/${kasuga_lib_channel}")
+        url = uri("https://maven.kycraft.cn/${kasuga_lib_channel}")
     }
 }
 
@@ -366,7 +366,7 @@ publishing {
     repositories {
         maven {
             name = "kuayueMaven"
-            url = uri("https://maven.kuayue.pw/${repository_channel}/")
+            url = uri("https://maven.kycraft.cn/${repository_channel}/")
             credentials(PasswordCredentials) {
                 username = project.findProperty("kuayueMavenUsername") ?: localProperties.getProperty("repository_username")
                 password = project.findProperty("kuayueMavenPassword") ?: localProperties.getProperty("repository_password")
