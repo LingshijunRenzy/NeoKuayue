@@ -290,12 +290,22 @@ public class TrainPanelShapes {
             Block.box(0, 0, 0, 4, 32, 16);
 
     public static final VoxelShape DF5_EQUIP_DOOR_2_SHAPE_SOUTH = Shapes.or(
-            Block.box(0, 30, 8, 16, 32, 16),
-            Block.box(6, 2, 8, 10, 27, 9));
+            Block.box(0, 30, 0, 16, 32, 8),
+            Block.box(6, 2, 6, 10, 27, 8));
 
     public static final VoxelShape DF5_EQUIP_DOOR_2_COLLISION_SHAPE_SOUTH = Shapes.or(
-            Block.box(0, 30, 8, 16, 32, 16),
-            Block.box(6, 2, 8, 10, 27, 9));
+            Block.box(0, 30, 0, 16, 32, 4),
+            Block.box(6, 2, 0, 10, 27, 4));
+
+    public static final VoxelShape DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST =
+            Block.box(6, 0, 0, 8, 32, 16);
+
+    public static final VoxelShape DF5_ENGINE_ACCESS_DOOR_COLLISION_SHAPE_EAST =
+            Block.box(0, 0, 0, 4, 32, 16);
+
+    public static final VoxelShape DF5_ENGINE_ACCESS_DOOR_OPEN_COLLISION_SHAPE_EAST = Shapes.or(
+            Block.box(0, 0, 0, 4, 32, 1),
+            Block.box(0, 0, 15, 4, 32, 16));
 
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {
