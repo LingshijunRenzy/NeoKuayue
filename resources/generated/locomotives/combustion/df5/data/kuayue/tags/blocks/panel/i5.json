@@ -21,8 +21,11 @@
     "kuayue:df5_air_intake_3",
     "kuayue:df5_radiator_grid",
     "kuayue:df5_head",
-    "kuayue:df5_equip_door_2",
     "kuayue:df5_engine_access_door",
-    "kuayue:df5_equip_door_3"
+    "kuayue:df5_equip_door_1",
+    "kuayue:df5_equip_door_2",
+    "kuayue:df5_equip_door_3",
+    "kuayue:df5_cooling_fan",
+    "kuayue:df5_cabin_door"
   ]
 }

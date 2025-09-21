@@ -289,13 +289,23 @@ public class TrainPanelShapes {
     public static final VoxelShape DF5_RADIATOR_GRID_COLLISION_SHAPE_EAST =
             Block.box(0, 0, 0, 4, 32, 16);
 
+    public static final VoxelShape DF5_EQUIP_DOOR_1_SHAPE_EAST =
+            Block.box(6, 0, 0, 8, 32, 22);
+
+    public static final VoxelShape DF5_EQUIP_DOOR_1_COLLISION_SHAPE_EAST =
+            Block.box(0, 0, 0, 4, 32, 22);
+
+    public static final VoxelShape DF5_EQUIP_DOOR_1_OPEN_COLLISION_SHAPE_EAST = Shapes.or(
+            Block.box(0, 0, 21, 4, 32, 22),
+            Block.box(0, 0, 0, 4, 32, 1));
+
     public static final VoxelShape DF5_EQUIP_DOOR_2_SHAPE_SOUTH = Shapes.or(
-            Block.box(0, 30, 0, 16, 32, 8),
-            Block.box(6, 2, 6, 10, 27, 8));
+            Block.box(0, 31, 0, 16, 32, 8),
+            Block.box(6, 0, 6, 10, 31, 8));
 
     public static final VoxelShape DF5_EQUIP_DOOR_2_COLLISION_SHAPE_SOUTH = Shapes.or(
-            Block.box(0, 30, 0, 16, 32, 4),
-            Block.box(6, 2, 0, 10, 27, 4));
+            Block.box(0, 31, 0, 16, 32, 4),
+            Block.box(6, 0, 0, 10, 31, 4));
 
     public static final VoxelShape DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST =
             Block.box(6, 0, 0, 8, 32, 16);
@@ -306,6 +316,12 @@ public class TrainPanelShapes {
     public static final VoxelShape DF5_ENGINE_ACCESS_DOOR_OPEN_COLLISION_SHAPE_EAST = Shapes.or(
             Block.box(0, 0, 0, 4, 32, 1),
             Block.box(0, 0, 15, 4, 32, 16));
+
+    public static final VoxelShape DF5_CABIN_DOOR_SHAPE_EAST =
+            Block.box(6, 0, 8, 8, 32, 16);
+
+    public static final VoxelShape DF5_CABIN_DOOR_OPEN_COLLISION_SHAPE_EAST =
+            Block.box(0, 0, 0, 8, 32, 1);
 
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {
