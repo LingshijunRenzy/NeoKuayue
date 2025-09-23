@@ -1,11 +1,11 @@
 {
   "variants": {
     "facing=east,hinge=left,open=false": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_lh",
       "y": 90
     },
     "facing=east,hinge=left,open=true": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1_open",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_open_lh",
       "y": 90
     },
     "facing=east,hinge=right,open=false": {
@@ -17,11 +17,11 @@
       "y": 90
     },
     "facing=north,hinge=left,open=false": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_lh",
       "y": 0
     },
     "facing=north,hinge=left,open=true": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1_open",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_open_lh",
       "y": 0
     },
     "facing=north,hinge=right,open=false": {
@@ -33,11 +33,11 @@
       "y": 0
     },
     "facing=south,hinge=left,open=false": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_lh",
       "y": 180
     },
     "facing=south,hinge=left,open=true": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1_open",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_open_lh",
       "y": 180
     },
     "facing=south,hinge=right,open=false": {
@@ -49,11 +49,11 @@
       "y": 180
     },
     "facing=west,hinge=left,open=false": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_lh",
       "y": 270
     },
     "facing=west,hinge=left,open=true": {
-      "model": "kuayue:block/df5/door/df5_equip_door_1_open",
+      "model": "kuayue:block/df5/door/df5_equip_door_1_open_lh",
       "y": 270
     },
     "facing=west,hinge=right,open=false": {

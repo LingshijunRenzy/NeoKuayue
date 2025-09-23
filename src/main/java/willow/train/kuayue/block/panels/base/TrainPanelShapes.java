@@ -516,6 +516,7 @@ public class TrainPanelShapes {
             default -> Shapes.block();
         };
     }
+
     public static VoxelShape getOverheadLinePillarShape(Direction direction) {
         // 根据不同朝向返回旋转后的形状
         return switch (direction) {
@@ -550,6 +551,7 @@ public class TrainPanelShapes {
             default -> Shapes.block();
         };
     }
+
     //以下为自动旋转碰撞箱方法
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
         VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
@@ -567,5 +569,4 @@ public class TrainPanelShapes {
 
         return buffer[0];
     }
-
 }

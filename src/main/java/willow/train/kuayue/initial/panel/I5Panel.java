@@ -3,12 +3,17 @@ package willow.train.kuayue.initial.panel;
 import kasuga.lib.registrations.common.BlockReg;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelShapes;
+import willow.train.kuayue.block.panels.carport.DF11GChimneyBlock;
+import willow.train.kuayue.block.panels.carport.DF5ChimneyBlock;
 import willow.train.kuayue.block.panels.door.TrainDoorBlock;
 import willow.train.kuayue.block.panels.slab.*;
 import willow.train.kuayue.initial.AllElements;
@@ -331,18 +336,27 @@ public class I5Panel {
             new PanelRegistration<VariableShapeTrainDoorBlock>("df5_equip_door_1")
                     .block(p -> new VariableShapeTrainDoorBlock(p,
                             new Vec2(0, 0), new Vec2(1, 1),
-                            () -> (state, level, blockPos, context) ->
-                                    TrainPanelShapes.rotateShape(Direction.EAST,
-                                            state.getValue(TrainPanelBlock.FACING),
-                                            TrainPanelShapes.DF5_EQUIP_DOOR_1_SHAPE_EAST),
                             () -> (state, level, blockPos, context) -> {
+                                DoorHingeSide hingeSide = state.getValue(BlockStateProperties.DOOR_HINGE);
+                                VoxelShape shape = TrainPanelShapes.DF5_EQUIP_DOOR_1_SHAPE_EAST;
+                                return TrainPanelShapes.rotateShape(Direction.EAST,
+                                        state.getValue(TrainPanelBlock.FACING),
+                                        hingeSide == DoorHingeSide.RIGHT ? shape :
+                                                shape.move(0, 0, -0.375));
+                            },
+                            () -> (state, level, blockPos, context) -> {
+                                DoorHingeSide hingeSide = state.getValue(BlockStateProperties.DOOR_HINGE);
+                                VoxelShape collisionShape = TrainPanelShapes.DF5_EQUIP_DOOR_1_COLLISION_SHAPE_EAST;
+                                VoxelShape openCollisionShape = TrainPanelShapes.DF5_EQUIP_DOOR_1_OPEN_COLLISION_SHAPE_EAST;
                                 if (state.getValue(TrainDoorBlock.OPEN))
                                     return TrainPanelShapes.rotateShape(Direction.EAST,
                                             state.getValue(TrainPanelBlock.FACING),
-                                            TrainPanelShapes.DF5_EQUIP_DOOR_1_OPEN_COLLISION_SHAPE_EAST);
+                                            hingeSide == DoorHingeSide.RIGHT ? openCollisionShape :
+                                                    openCollisionShape.move(0, 0, -0.375));
                                 return TrainPanelShapes.rotateShape(Direction.EAST,
                                         state.getValue(TrainPanelBlock.FACING),
-                                        TrainPanelShapes.DF5_EQUIP_DOOR_1_COLLISION_SHAPE_EAST);
+                                        hingeSide == DoorHingeSide.RIGHT ? collisionShape :
+                                                collisionShape.move(0, 0, -0.375));
                             }))
                     .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
@@ -408,6 +422,14 @@ public class I5Panel {
                     .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<DF5ChimneyBlock> DF5_CHIMNEY =
+            new SlabRegistration<DF5ChimneyBlock>("df5_chimney")
+                    .block(p -> new DF5ChimneyBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}

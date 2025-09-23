@@ -71,17 +71,18 @@ public class ChimneyMovementBehaviour implements MovementBehaviour {
                             0.2F,
                             (direction == Direction.SOUTH || direction == Direction.NORTH) ?
                                     (double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F);
+                } else {
+                    pLevel.addParticle(
+                            ParticleTypes.LARGE_SMOKE,
+                            context.position.x(),
+                            context.position.y() + 0.70D,
+                            context.position.z(),
+                            (direction == Direction.EAST || direction == Direction.WEST) ?
+                                    -(double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F,
+                            0.2F,
+                            (direction == Direction.SOUTH || direction == Direction.NORTH) ?
+                                    -(double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F);
                 }
-                pLevel.addParticle(
-                        ParticleTypes.LARGE_SMOKE,
-                        context.position.x(),
-                        context.position.y() + 0.70D,
-                        context.position.z(),
-                        (direction == Direction.EAST || direction == Direction.WEST) ?
-                                -(double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F,
-                        0.2F,
-                        (direction == Direction.SOUTH || direction == Direction.NORTH) ?
-                                -(double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F);
             }
         }
     }

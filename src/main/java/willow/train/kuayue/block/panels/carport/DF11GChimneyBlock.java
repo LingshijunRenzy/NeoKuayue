@@ -83,6 +83,7 @@ public class DF11GChimneyBlock extends HingeSlabBlock implements IBE<DF11GChimne
                             0.2F,
                             (direction == Direction.SOUTH || direction == Direction.NORTH) ?
                                     (double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F);
+                    continue;
                 }
                 pLevel.addParticle(
                         ParticleTypes.LARGE_SMOKE,
