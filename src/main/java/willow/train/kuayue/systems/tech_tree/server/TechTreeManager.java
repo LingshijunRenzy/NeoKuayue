@@ -5,8 +5,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import lombok.Getter;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.*;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
@@ -21,6 +24,8 @@ public class TechTreeManager implements ResourceManagerReloadListener {
     @Getter
     private final Set<String> namespaces;
     public static final TechTreeManager MANAGER = new TechTreeManager();
+
+    private final TechTreeCycleHandler cycleHandler = new TechTreeCycleHandler();
 
     protected TechTreeManager() {
         trees = new HashMap<>();
@@ -108,5 +113,40 @@ public class TechTreeManager implements ResourceManagerReloadListener {
         trees.forEach((namespace, tree) -> {
             tree.compileConnections();
         });
+        cycleHandler.handle(this);
+    }
+
+    public void notifyCycleDetected(Player player) {
+        if(!cycleHandler.hasCycles()) return;
+
+        player.displayClientMessage(
+                Component.literal("Found cycle(s) in Tech Tree:")
+                        .withStyle(ChatFormatting.RED),
+                false
+        );
+        for(String cycleStr : cycleHandler.cyclesToString()){
+            player.displayClientMessage(
+                    Component.literal(cycleStr)
+                            .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC),
+                    false
+            );
+        }
+        player.displayClientMessage(
+                Component.literal("These connections will be broken:")
+                        .withStyle(ChatFormatting.RED),
+                false
+        );
+        for(String cycleStr : cycleHandler.brokenEdgesToString()){
+            player.displayClientMessage(
+                    Component.literal(cycleStr)
+                            .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC),
+                    false
+            );
+        }
+        player.displayClientMessage(
+                Component.literal("For more details, see logs")
+                        .withStyle(ChatFormatting.RED),
+                false
+        );
     }
 }

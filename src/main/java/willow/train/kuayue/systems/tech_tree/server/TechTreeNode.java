@@ -161,4 +161,12 @@ public class TechTreeNode {
     public @Nullable UnlockCondition getUnlockCondition() {
         return getData().getUnlockCondition();
     }
+
+    public void removeNext(TechTreeNode node) {
+        this.next.remove(node);
+    }
+
+    public void removePrev(TechTreeNode node) {
+        this.prev.remove(node);
+    }
 }

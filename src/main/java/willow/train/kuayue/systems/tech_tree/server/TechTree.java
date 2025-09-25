@@ -36,20 +36,6 @@ public class TechTree {
         nodes.forEach((loc, node) -> {
             node.compileConnections();
         });
-        HashSet<String> groupsToRemove = new HashSet<>();
-        groups.forEach((str, grp) -> {
-            if (grp.hasRing()) {
-                Kuayue.LOGGER.error("Found cycle(s) in Tech Tree Group <" + grp.tree.getNamespace() +
-                        ":" + str + ">, that group would not be applied.");
-                groupsToRemove.add(str);
-                return;
-            }
-            nodes.values().forEach(n -> {
-                if (!n.getNextGroups().contains(grp)) return;
-                grp.addPrev(n);
-            });
-        });
-        groupsToRemove.forEach(groups::remove);
     }
 
     protected void grepNbt(ResourceManager manager) {
