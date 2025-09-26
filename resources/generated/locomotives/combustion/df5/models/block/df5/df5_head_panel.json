@@ -1,10 +1,10 @@
 {
   "loader": "forge:obj",
-  "model": "kuayue:models/block/df5/df5_head.obj",
+  "model": "kuayue:models/block/df5/df5_head_panel.obj",
   "render_type": "cutout_mipped",
   "flip_v": true,
   "textures": {
-    "particle": "kuayue:block/df5/df5_head"
+    "particle": "kuayue:block/df5/df5_cabin"
   },
   "display": {
     "thirdperson_righthand": {

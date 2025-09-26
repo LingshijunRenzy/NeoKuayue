@@ -10,6 +10,7 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
+import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelShapes;
 import willow.train.kuayue.block.panels.carport.DF11GChimneyBlock;
@@ -234,6 +235,14 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
+    public static final SlabRegistration<HingeSlabBlock> DF5_CARPORT_CABIN =
+            new SlabRegistration<HingeSlabBlock>("df5_carport_cabin")
+                    .block(p -> new HingeSlabBlock(p, false))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueCarriageTab )
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
     public static final PanelRegistration<VariableShapePanelBlock> DF5_AIR_INTAKE =
             new PanelRegistration<VariableShapePanelBlock>("df5_air_intake")
                     .block(p -> new VariableShapePanelBlock(p,
@@ -422,6 +431,40 @@ public class I5Panel {
                     .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_HEAD_END_FACE =
+            new PanelRegistration<VariableShapePanelBlock>("df5_head_end_face")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_HEAD_END_FACE_2 =
+            new PanelRegistration<VariableShapePanelBlock>("df5_head_end_face_2")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> DF5_HEAD_PANEL =
+            new PanelRegistration<TrainPanelBlock>("df5_head_panel")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 2)))
+                    .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
     public static final SlabRegistration<DF5ChimneyBlock> DF5_CHIMNEY =
