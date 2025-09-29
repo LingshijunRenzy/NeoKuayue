@@ -72,7 +72,7 @@ public class DF11GChimneyBlock extends HingeSlabBlock implements IBE<DF11GChimne
 
         if (pState.getValue(LIT)) {
             for (int i = 0; i < 3; i++) {
-                if (pRandom.nextFloat() < 0.5f) {
+                if (pRandom.nextFloat() < 0.5F) {
                     pLevel.addParticle(
                             ParticleTypes.LARGE_SMOKE,
                             (double)pPos.getX() + 0.5D,

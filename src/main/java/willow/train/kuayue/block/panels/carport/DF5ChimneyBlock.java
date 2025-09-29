@@ -7,7 +7,19 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Map;
+
 public class DF5ChimneyBlock extends DF11GChimneyBlock{
+
+    public record DirectionProperties(double xOffset, double zOffset, double xSpeed, double zSpeed) {}
+
+    public static final Map<Direction, DirectionProperties> PROPERTIES_MAP = Map.of(
+            Direction.NORTH, new DirectionProperties(-0.1F, -0.3F, 0.0F, -0.05F),
+            Direction.EAST,  new DirectionProperties(1.3F,  -0.1F, 0.05F, 0.0F),
+            Direction.SOUTH, new DirectionProperties(1.1F,  1.3F, 0.0F, 0.05F),
+            Direction.WEST,  new DirectionProperties(-0.3F, 1.1F, -0.05F, 0.0F)
+    );
+
     public DF5ChimneyBlock(Properties properties, boolean isCarport) {
         super(properties, isCarport);
     }
@@ -18,21 +30,20 @@ public class DF5ChimneyBlock extends DF11GChimneyBlock{
     }
 
     private static void dF5SpawnParticles(BlockState pState, Level pLevel, BlockPos pPos) {
-        RandomSource pRandom = pLevel.random;
+
         Direction direction = pState.getValue(FACING);
+
+        DirectionProperties props = PROPERTIES_MAP.getOrDefault(direction,
+                new DirectionProperties(0.0F, 0.0F, 0.0F, 0.0F));
 
         if (pState.getValue(LIT)) {
             for (int i = 0; i < 2; i++) {
                 pLevel.addParticle(
                         ParticleTypes.LARGE_SMOKE,
-                        (double)pPos.getX() + 1.0D,
-                        (double)pPos.getY() + 1.0D,
-                        (double)pPos.getZ() + 1.0D,
-                        (direction == Direction.EAST || direction == Direction.WEST) ?
-                                (double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F,
-                        0.2F,
-                        (direction == Direction.SOUTH || direction == Direction.NORTH) ?
-                                (double)(0.05F + pRandom.nextFloat() / 10.0F) : 0.0F);
+                        (double)pPos.getX() + props.xOffset,
+                        (double)pPos.getY() + 1.2F,
+                        (double)pPos.getZ() + props.zOffset,
+                        props.xSpeed, 0.2F, props.zSpeed);
             }
         }
     }

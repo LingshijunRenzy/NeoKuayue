@@ -16,9 +16,9 @@ import static willow.train.kuayue.block.panels.carport.DF11GChimneyBlock.LIT;
 
 public class ChimneyMovementBehaviour implements MovementBehaviour {
 
-    private double posSpeedDiff = 0.0F;
+    protected double posSpeedDiff = 0.0F;
 
-    private boolean isStopped = true;
+    protected boolean isStopped = true;
 
     @Override
     public boolean renderAsNormalBlockEntity() {
@@ -60,7 +60,7 @@ public class ChimneyMovementBehaviour implements MovementBehaviour {
 
         if (pState.getValue(LIT)) {
             if (pRandom.nextFloat() < (density + posSpeedDiff * 10)) {
-                if (pRandom.nextFloat() < 0.5f) {
+                if (pRandom.nextFloat() < 0.5F) {
                     pLevel.addParticle(
                             ParticleTypes.LARGE_SMOKE,
                             context.position.x(),

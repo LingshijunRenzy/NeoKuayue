@@ -321,7 +321,7 @@ public class TrainPanelShapes {
             Block.box(6, 0, 8, 8, 32, 16);
 
     public static final VoxelShape DF5_CABIN_DOOR_OPEN_COLLISION_SHAPE_EAST =
-            Block.box(0, 0, 0, 8, 32, 1);
+            Block.box(7, 0, 0, 8, 32, 1);
 
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {

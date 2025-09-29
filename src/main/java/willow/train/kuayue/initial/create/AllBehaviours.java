@@ -3,12 +3,10 @@ package willow.train.kuayue.initial.create;
 import com.simibubi.create.foundation.block.IBE;
 import kasuga.lib.registrations.create.InteractionReg;
 import kasuga.lib.registrations.create.MovementReg;
-import willow.train.kuayue.behaviour.AnimationMovementBehaviour;
-import willow.train.kuayue.behaviour.ChimneyMovementBehaviour;
-import willow.train.kuayue.behaviour.CompanyClickBehaviour;
-import willow.train.kuayue.behaviour.SeatClickBehaviour;
+import willow.train.kuayue.behaviour.*;
 import willow.train.kuayue.block.panels.block_entity.IContraptionMovementBlockEntity;
 import willow.train.kuayue.block.panels.carport.DF11GChimneyBlock;
+import willow.train.kuayue.block.panels.carport.DF5ChimneyBlock;
 import willow.train.kuayue.block.seat.YZSeatBlock;
 import willow.train.kuayue.initial.AllBlocks;
 import willow.train.kuayue.initial.AllElements;
@@ -40,7 +38,16 @@ public class AllBehaviours {
             new MovementReg<ChimneyMovementBehaviour>("chimney_movement_behaviour")
                     .behaviour(new ChimneyMovementBehaviour())
                     .statePredicate(
-                            state -> state.getBlock() instanceof DF11GChimneyBlock
+                            state -> state.getBlock() instanceof DF11GChimneyBlock &&
+                                    !(state.getBlock() instanceof DF5ChimneyBlock)
+                    )
+                    .submit(AllElements.testRegistry);
+
+    public static final MovementReg<DF5ChimneyMovementBehaviour> DF5_CHIMNEY_MOVEMENT_BEHAVIOUR =
+            new MovementReg<DF5ChimneyMovementBehaviour>("df5_chimney_movement_behaviour")
+                    .behaviour(new DF5ChimneyMovementBehaviour())
+                    .statePredicate(
+                            state -> state.getBlock() instanceof DF5ChimneyBlock
                     )
                     .submit(AllElements.testRegistry);
 
