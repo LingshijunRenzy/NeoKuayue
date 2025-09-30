@@ -31,6 +31,7 @@ public class AllPackets {
             .loadPacket(TechTreeHandShakeC2SPacket.class, TechTreeHandShakeC2SPacket::new)
             .loadPacket(TechTreeEOFS2CPacket.class, TechTreeEOFS2CPacket::new)
             .loadPacket(TechTreeEOFC2SPacket.class, TechTreeEOFC2SPacket::new)
+            .loadPacket(TechTreeSendOverPacket.class, TechTreeSendOverPacket::new)
             .loadPacket(UpdateUnlockedS2CPacket.class, UpdateUnlockedS2CPacket::new)
             .loadPacket(CanUnlockNodePacket.class, CanUnlockNodePacket::new)
             .loadPacket(CanUnlockNodeS2CPacket.class, CanUnlockNodeS2CPacket::new)
