@@ -372,23 +372,6 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<VariableShapePanelBlock> DF5_EQUIP_DOOR_2 =
-            new PanelRegistration<VariableShapePanelBlock>("df5_equip_door_2")
-                    .block(p -> new VariableShapePanelBlock(p,
-                            new Vec2(0, 0), new Vec2(1, 1),
-                            () -> (state, level, blockPos, context) ->
-                                    TrainPanelShapes.rotateShape(Direction.SOUTH,
-                                            state.getValue(TrainPanelBlock.FACING),
-                                            TrainPanelShapes.DF5_EQUIP_DOOR_2_SHAPE_SOUTH),
-                            () -> (state, level, blockPos, context) ->
-                                    TrainPanelShapes.rotateShape(Direction.SOUTH,
-                                            state.getValue(TrainPanelBlock.FACING),
-                                            TrainPanelShapes.DF5_EQUIP_DOOR_2_COLLISION_SHAPE_SOUTH)))
-                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
-                    .tab(AllElements.neoKuayueLocoTab)
-                    .noOcclusion().strengthAndTool(1.5f,3f)
-                    .submit(AllElements.testRegistry);
-
     public static final PanelRegistration<VariableShapeTrainDoorBlock> DF5_EQUIP_DOOR_3 =
             new PanelRegistration<VariableShapeTrainDoorBlock>("df5_equip_door_3")
                     .block(p -> new VariableShapeTrainDoorBlock(p,
