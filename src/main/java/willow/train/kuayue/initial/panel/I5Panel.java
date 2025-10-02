@@ -372,8 +372,8 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<VariableShapeTrainDoorBlock> DF5_EQUIP_DOOR_3 =
-            new PanelRegistration<VariableShapeTrainDoorBlock>("df5_equip_door_3")
+    public static final PanelRegistration<VariableShapeTrainDoorBlock> DF5_EQUIP_DOOR_2 =
+            new PanelRegistration<VariableShapeTrainDoorBlock>("df5_equip_door_2")
                     .block(p -> new VariableShapeTrainDoorBlock(p,
                             new Vec2(0, 0), new Vec2(1, 1),
                             () -> (state, level, blockPos, context) ->
