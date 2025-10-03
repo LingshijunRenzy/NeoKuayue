@@ -80,6 +80,7 @@ public class ServerNetworkCache implements Runnable {
         while (true) {
             if (transmitStage == TransmitStage.STANDING_BY) {
                 if (waitingForSend.isEmpty()) {
+                    sendOverPacket();
                     threadStarted = false;
                     return;
                 }
@@ -166,6 +167,10 @@ public class ServerNetworkCache implements Runnable {
     private void sendEOFPacket() {
         if (batch == null) return;
         AllPackets.TECH_TREE_CHANNEL.sendToClient(new TechTreeEOFS2CPacket(batch), (ServerPlayer) player);
+    }
+
+    private void sendOverPacket() {
+        AllPackets.TECH_TREE_CHANNEL.sendToClient(new TechTreeSendOverPacket(), (ServerPlayer) player);
     }
 
     public enum TransmitStage implements StringRepresentable {

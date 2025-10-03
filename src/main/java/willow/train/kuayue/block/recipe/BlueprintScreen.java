@@ -789,6 +789,18 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
     }
 
     private void setChosenLabel(TechTreeLabel label) {
+        ResourceLocation group = label.getNode().getLocation().getGroupLocation();
+        if(group != null && !group.equals(chosenGroup.getId())) {
+            this.chosenGroup = getGroup(group);
+            refreshGroupButtons();
+            refreshPanels(false);
+            updateGuidelines(scale);
+            setPanelsPosition();
+            panels.forEach((g, p) -> {
+                p.setSize(map(247, scale), map(117, scale));
+                p.moveToWindowCentral(scale);
+            });
+        }
         updateSub(label.getNode());
         updateGrids();
         updateSlotPos(scale);
