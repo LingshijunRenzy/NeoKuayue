@@ -4,6 +4,7 @@ import kasuga.lib.core.util.Envs;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.initial.ClientInit;
+import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 
 public class ColorTemplateEvents {
 
@@ -24,6 +25,7 @@ public class ColorTemplateEvents {
         if (Envs.isClient()) {
             // ClientInit.COLOR_TEMPLATES.writeToFile();
             // ClientInit.COLOR_TEMPLATES.clear();
+            OverheadLineRendererSystem.clearCache();
         }
     }
 }

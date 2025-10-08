@@ -15,7 +15,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import willow.train.kuayue.initial.recipe.AllRecipes;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 
 public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
@@ -72,5 +74,10 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
     public void writeAdditional(FriendlyByteBuf buffer) {
         super.writeAdditional(buffer);
         node.writeToByteBuf(buffer);
+    }
+
+    @Override
+    public @NotNull RecipeSerializer<?> getSerializer() {
+        return AllRecipes.blueprintSerializer;
     }
 }

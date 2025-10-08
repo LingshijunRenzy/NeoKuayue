@@ -152,7 +152,6 @@ public class DFH21Renderer extends BogeyRenderer {
                 int light,
                 VertexConsumer vb,
                 boolean inContraption) {
-            light *= 1.1; // 调整光照
 
             boolean forwards = BogeyDataConstants.isForwards(bogeyData, inContraption);
 
@@ -322,7 +321,6 @@ public class DFH21Renderer extends BogeyRenderer {
 
             @Override
             public void render(CompoundTag bogeyData, float wheelAngle, PoseStack ms, int light, VertexConsumer vb, boolean inContraption) {
-                light *= 1.1; // 调整光照
 
                 boolean forwards = BogeyDataConstants.isForwards(bogeyData, inContraption);
 

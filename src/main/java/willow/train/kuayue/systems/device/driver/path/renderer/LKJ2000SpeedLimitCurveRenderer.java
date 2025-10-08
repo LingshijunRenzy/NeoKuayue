@@ -37,9 +37,12 @@ public class LKJ2000SpeedLimitCurveRenderer {
 
     protected float displayMaxSpeed = 140.0F;
 
+    public boolean shouldRerenderCurve = true;
+
 
     public void setDisplayMaxSpeed(float displayMaxSpeed) {
         this.displayMaxSpeed = displayMaxSpeed;
+        shouldRerenderCurve = true;
     }
 
     public LKJ2000SpeedLimitCurveRenderer(
@@ -67,7 +70,7 @@ public class LKJ2000SpeedLimitCurveRenderer {
         }
              */
         curveLineRenderer.init();
-        curveLineRenderer.render();
+        shouldRerenderCurve = true;
     }
 
     public void render(){
@@ -136,7 +139,7 @@ public class LKJ2000SpeedLimitCurveRenderer {
                         tHeight
                 );
             } else {
-                float breakDistance = (float) Math.abs( penetrate ? generator.getBreakDistance(nextSpeedLimit, speed) : generator.getBreakDistance(penetrateSpeedLimit, speed));
+                float breakDistance = (float) Math.abs( penetrate ? generator.getBreakDistance(penetrateSpeedLimit, speed) : generator.getBreakDistance(nextSpeedLimit, speed));
                 float stopBreakPositionX = nextPositionX;
                 float startLinePositionX = thisPositionX;
                 float startBreakPositionX = Math.max(nextPositionX - breakDistance, startLinePositionX);
@@ -176,8 +179,6 @@ public class LKJ2000SpeedLimitCurveRenderer {
                         nextSpeedLimit,
                         yScale
                 );
-                System.out.println("Break: " + startBreakPositionX + " - " + stopBreakPositionX);
-                System.out.println("Line: " + startLinePositionX + " - " + stopLinePositionX);
             }
 
             Tesselator tesselator = Tesselator.getInstance();
@@ -298,6 +299,13 @@ public class LKJ2000SpeedLimitCurveRenderer {
         }
 
         renderer.destroy();
+    }
+
+    public void update() {
+        if(shouldRerenderCurve) {
+            curveLineRenderer.render();
+            shouldRerenderCurve = false;
+        }
     }
 
     public static class TestSpeedLine implements SpeedEdgePathLine {

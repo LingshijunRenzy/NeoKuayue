@@ -1,36 +1,54 @@
 package willow.train.kuayue.systems.overhead_line.block.support;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import kasuga.lib.core.create.boundary.ResourcePattle;
 import kasuga.lib.core.util.Envs;
+import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererBridge;
 import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.variants.OverheadLineBlockDynamicConfiguration;
+import willow.train.kuayue.systems.overhead_line.client.OverheadLineSupportAdjustMenu;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 import willow.train.kuayue.systems.overhead_line.wire.WireReg;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
-public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
+public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements MenuProvider {
 
     public record Connection(
             BlockPos absolutePos,
@@ -67,6 +85,17 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         @Override
         public int hashCode() {
             return Objects.hash(absolutePos, relativePos, type, connectionIndex);
+        }
+
+        public Connection withBlockEntityPosition(BlockPos bePosition, Vector3f toPosition){
+            return new Connection(
+                    bePosition.offset(relativePos),
+                    relativePos,
+                    type,
+                    connectionIndex,
+                    targetIndex,
+                    toPosition
+            );
         }
     };
 
@@ -112,32 +141,95 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     List<Connection> connections = new ArrayList<>();
 
     float rotation = 0f;
+    protected float x_offset = 0.0f;
+    protected float y_offset = 0.0f;
+    protected float z_offset = 0.0f;
+
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> list) {}
 
     public Optional<String> checkConnectable(OverheadLineSupportBlockEntity targetSupport) {
+        if(connections.size() >= configuration.maxConnections()){
+            return Optional.of("overhead_line_max_connections_reached");
+        }
+
+        BlockPos targetPos = targetSupport.getBlockPos();
+        boolean duplicateExists = connections.stream()
+                .anyMatch(connection -> connection.absolutePos().equals(targetPos));
+        if(duplicateExists) {
+            return Optional.of("overhead_line_duplicate_connection");
+        }
+
         return Optional.empty();
     }
 
+    public boolean updateConnectionToPosition() {
+        boolean updated = false;
+        if(level == null) {
+            return false;
+        }
+
+        for (int i = 0; i < connections.size(); i++) {
+            Connection connection = connections.get(i);
+            BlockEntity targetEntity = level.getBlockEntity(connection.absolutePos());
+            if(targetEntity == null) {
+                continue;
+            }
+
+            if(targetEntity instanceof OverheadLineSupportBlockEntity targetSupport) {
+                int index = IntStream.range(0, targetSupport.connections.size())
+                        .filter(j -> Objects.equals(targetSupport.connections.get(j).absolutePos, this.getBlockPos()))
+                        .findFirst()
+                        .orElse(-1);
+
+                if (index == -1) {
+                    continue;
+                }
+
+                Connection old = targetSupport.connections.get(index);
+                Vec3 newToPosition = this.getConnectionPointByIndex(old.targetIndex(), old.type());
+
+                Connection newConnection = new Connection(
+                        old.absolutePos(),
+                        old.relativePos(),
+                        old.type(),
+                        old.connectionIndex(),
+                        old.targetIndex(),
+                        newToPosition.toVector3f()
+                );
+
+                targetSupport.connections.set(index, newConnection);
+                targetSupport.onConnectionPositionUpdated(newConnection, true);
+
+                if (level.isClientSide) {
+                    DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                        OverheadLineRendererBridge.setBlockEntity(targetSupport, targetSupport.connections);
+                    });
+                }
+                updated = true;
+            }
+        }
+
+        return updated;
+    }
+
+    protected void onConnectionPositionUpdated(Connection updatedConnection, boolean fromExternal) {
+        this.notifyUpdate();
+    }
+
     public float getRotation() {
-        return (- this.getBlockState().getValue(OverheadLineSupportBlock.FACING).getOpposite().toYRot() - 90 + this.rotation);
+        return this.rotation;
     }
 
     public static final Vec3 BASIC_OFFSET = new Vec3(.5, 0, .5);
 
     public int getConnectionIndexOf(Vec3 eyePosition){
-        float rot = (float) Math.toRadians(getRotation());
-        List<Vec3> conPos = this.getConnectionPoints();
-        BlockPos pPos = this.getBlockPos();
-        if(conPos.size() > 1){
+        List<Vec3> actualConnections = this.getActualConnectionPoints();
+        if(actualConnections.size() > 1){
             int closest = 0;
-            double distance = conPos.get(0).yRot(rot)
-                    .add(pPos.getX(), pPos.getY(), pPos.getZ())
-                    .add(BASIC_OFFSET).distanceTo(eyePosition);
-            for(int i = 1; i < conPos.size(); i++) {
-                double dis_temp = conPos.get(i).yRot(rot)
-                        .add(pPos.getX(), pPos.getY(), pPos.getZ())
-                        .add(BASIC_OFFSET).distanceTo(eyePosition);
+            double distance = actualConnections.get(0).distanceTo(eyePosition);
+            for(int i = 1; i < actualConnections.size(); i++) {
+                double dis_temp = actualConnections.get(i).distanceTo(eyePosition);
                 if(distance > dis_temp) {
                     distance = dis_temp;
                     closest = i;
@@ -150,18 +242,55 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     }
 
     public List<Vec3> getActualConnectionPoints() {
-        List<Vec3> conPos = this.getConnectionPoints();
+        List<Vec3> localPoints = this.getConnectionPoints();
         BlockPos pPos = this.getBlockPos();
-        float rot = (float) Math.toRadians(getRotation());
-        List<Vec3> actualConPos = new ArrayList<>();
-        for(Vec3 pos : conPos) {
-            actualConPos.add(pos.yRot(rot).add(pPos.getX(), pPos.getY(), pPos.getZ()).add(BASIC_OFFSET));
-       }
-        return actualConPos;
+        float manualDeg = getRotation();
+
+        PoseStack pose = new PoseStack();
+        pose.translate(pPos.getX(), pPos.getY(), pPos.getZ());
+        pose.translate(BASIC_OFFSET.x, BASIC_OFFSET.y, BASIC_OFFSET.z);
+
+        if (getBlockState().hasProperty(OverheadLineSupportBlock.FACING)) {
+            Direction facing = getBlockState().getValue(OverheadLineSupportBlock.FACING);
+            pose.mulPose(facing.getRotation());
+//            pose.mulPose(new Quaternion(-90, -90, 0, true));
+            pose.mulPose(new Quaternionf(-90, -90, 0, 0.5));
+        }
+
+        pose.mulPose(Axis.YP.rotationDegrees(manualDeg * 1.03f));
+        float xOff = this.x_offset;
+        float yOff = this.y_offset;
+        float zOff = this.z_offset;
+        pose.translate(
+                -xOff * 1.3f,
+                yOff * 1.3f,
+                -zOff * 1.3f);
+
+        Matrix4f m = pose.last().pose();
+        List<Vec3> worldPoints = new ArrayList<>(localPoints.size());
+        for (Vec3 lp : localPoints) {
+            pose.pushPose();
+            pose.translate(-lp.x, lp.y, -lp.z);
+            Matrix4f tm = pose.last().pose();
+            Matrix4f originMatrix4f = new Matrix4f();
+            Vector4f origin = new Vector4f(0f, 0f, 0f, 1f);
+            originMatrix4f.transform(origin);
+            Vec3 worldPoint = new Vec3(origin.x(), origin.y(), origin.z());
+            worldPoints.add(worldPoint);
+            pose.popPose();
+        }
+
+        return worldPoints;
     }
 
     public Vec3 getConnectionPointByIndex(int index){
-        return index >= getConnectionPoints().size() ? Vec3.atCenterOf(getBlockPos()) : getActualConnectionPoints().get(index);
+        List<Vec3> connectionPoints = getConnectionPoints();
+        Vec3 result = index >= connectionPoints.size() ? Vec3.atCenterOf(getBlockPos()) : getActualConnectionPoints().get(index);
+        return result;
+    }
+
+    public Vec3 getConnectionPointByIndex(int index, OverheadLineType wireType) {
+        return getConnectionPointByIndex(index);
     }
 
 
@@ -191,6 +320,24 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         onConnectionModification();
     }
 
+    public Pair<Boolean,Optional<Connection>> getFreshConnection(Connection connection) {
+        BlockPos thisPos = this.getBlockPos();
+        Level level = this.getLevel();
+        if(level == null)
+            return Pair.of(false, Optional.empty());
+        BlockPos newAbsolutePos = thisPos.offset(connection.relativePos());
+        BlockEntity targetBlockEntity = level.getBlockEntity(newAbsolutePos);
+
+        if(!(targetBlockEntity instanceof OverheadLineSupportBlockEntity targetOverhead)) {
+            return Pair.of(true, Optional.empty());
+        }
+
+        return Pair.of(true, Optional.of(connection.withBlockEntityPosition(
+                newAbsolutePos,
+                new Vector3f(targetOverhead.getConnectionPointByIndex(connection.targetIndex(), connection.type()).toVector3f())
+        )));
+    }
+
     public void removeAllConnections(){
         List<Connection> $connections = List.copyOf(this.connections);
         for (Connection connection : $connections) {
@@ -214,6 +361,15 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
+
+        this.x_offset = tag.getFloat("x_offset");
+        this.y_offset = tag.getFloat("y_offset");
+        this.z_offset = tag.getFloat("z_offset");
+
+        if (tag.contains("rotation")) {
+            this.rotation = tag.getFloat("rotation");
+        }
+
         ResourcePattle palette = ResourcePattle.read(tag.getCompound("ResourcePalette"));
         if(tag.contains("connections")) {
             connections = new ArrayList<>();
@@ -228,14 +384,16 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                         Kuayue.LOGGER.warn("Unknown connection type: " + connectionType);
                         continue;
                     }
-                    connections.add(new Connection(
+                    Vector3f toPos = new Vector3f(connectionTag.getFloat("tX"), connectionTag.getFloat("tY"), connectionTag.getFloat("tZ"));
+                    Connection connection = new Connection(
                             absolutePosition,
                             NbtUtils.readBlockPos(connectionTag.getCompound("absolutePos")).subtract(this.getBlockPos()),
                             overheadLineType,
                             connectionTag.getInt("index"),
                             connectionTag.getInt("targetIndex"),
-                            new Vector3f(connectionTag.getFloat("tX"), connectionTag.getFloat("tY"), connectionTag.getFloat("tZ"))
-                    ));
+                            toPos
+                    );
+                    connections.add(connection);
                 }
             } else {
                 ListTag connectionTags = tag.getList("connections", Tag.TAG_COMPOUND);
@@ -243,23 +401,22 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
                     CompoundTag connectionTag = connectionTags.getCompound(i);
                     BlockPos absolutePos = NbtUtils.readBlockPos(connectionTag.getCompound("absolutePos"));
                     BlockPos relativePos = NbtUtils.readBlockPos(connectionTag.getCompound("relativePos"));
-                    if(!absolutePos.subtract(this.getBlockPos()).equals(relativePos)) {
-                        absolutePos = relativePos.offset(this.getBlockPos());
-                    }
                     ResourceLocation connectionType = palette.decode(connectionTag.getInt("type"));
                     OverheadLineType overheadLineType = WireReg.get(connectionType);
                     if(overheadLineType == null || !this.configuration.typePredictor().test(overheadLineType)) {
                         Kuayue.LOGGER.warn("OverheadLineSupportBlockEntity: {} connection type {} is not valid", this.getBlockPos(), connectionType);
                         continue;
                     }
-                    connections.add(new Connection(
+                    Vector3f toPos = new Vector3f(connectionTag.getFloat("tX"), connectionTag.getFloat("tY"), connectionTag.getFloat("tZ"));
+                    Connection connection = new Connection(
                             absolutePos,
                             relativePos,
                             overheadLineType,
                             connectionTag.getInt("index"),
                             connectionTag.getInt("targetIndex"),
-                            new Vector3f(connectionTag.getFloat("tX"), connectionTag.getFloat("tY"), connectionTag.getFloat("tZ"))
-                    ));
+                            toPos
+                    );
+                    connections.add(connection);
                 }
             }
         }
@@ -272,9 +429,16 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     @Override
     protected void write(CompoundTag tag, boolean clientPacket) {
         super.write(tag, clientPacket);
+
+        tag.putFloat("x_offset", x_offset);
+        tag.putFloat("y_offset", y_offset);
+        tag.putFloat("z_offset", z_offset);
+        tag.putFloat("rotation", rotation);
+
         ResourcePattle palette = new ResourcePattle();
         ListTag connectionTags = new ListTag();
-        for(Connection connection : connections) {
+        for(int i = 0; i < connections.size(); i++) {
+            Connection connection = connections.get(i);
             CompoundTag connectionTag = new CompoundTag();
             connectionTag.put("absolutePos", NbtUtils.writeBlockPos(connection.absolutePos()));
             if(!clientPacket){
@@ -330,12 +494,19 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
     }
 
     public void onConnectionModification(){
-        if(this.level == null)
-            return;
-        if(this.level.isClientSide) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()-> OverheadLineRendererBridge.setBlockEntity(this, this.connections));
+        if(this.level == null) {
             return;
         }
+
+        if(this.level.isClientSide) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, ()->()-> {
+                clearBlockEntityRenderCache();
+                updateConnectionToPosition();
+                OverheadLineRendererBridge.setBlockEntity(this, this.connections);
+            });
+            return;
+        }
+
         if(!connections.isEmpty()) {
             Kuayue.OVERHEAD.savedData.getMigration().setConnectionNode(
                     level,
@@ -358,4 +529,124 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity {
         return new AABB(getBlockPos().offset(-200000, -200000,-200000), getBlockPos().offset(200000,200000,200000));
     }
 
+    public void onPlacement() {
+        boolean updated = false;
+        Iterator<Connection> connectionIterator = this.connections.iterator();
+        ArrayList<Connection> updatedConnections = new ArrayList<>();
+        while(connectionIterator.hasNext()) {
+            Connection connection = connectionIterator.next();
+            if(!connection.absolutePos.subtract(this.getBlockPos()).equals(connection.relativePos)) {
+                updated = true;
+                Pair<Boolean, Optional<Connection>> newConnection = getFreshConnection(connection);
+                if(newConnection.getFirst()) {
+                    connectionIterator.remove();
+                } else continue;
+                if(newConnection.getSecond().isPresent()){
+                    updatedConnections.add(newConnection.getSecond().get());
+                }
+            }
+        }
+        if(updated) {
+            this.connections.addAll(updatedConnections);
+        }
+        if(updated) {
+            onConnectionModification();
+        }
+        this.notifyUpdate();
+    }
+
+
+    boolean shouldRecheckTargetPositions = false;
+
+    public void checkTargetPosition(){
+
+    }
+
+    public Optional<String> checkCanAcceptNewConnection() {
+        if(connections.size() >= configuration.maxConnections()) {
+            return Optional.of("overhead_line_max_connections_reached");
+        }
+        return Optional.empty();
+    }
+
+    public float getXOffset() {
+        return x_offset;
+    }
+
+    public float getYOffset() {
+        return y_offset;
+    }
+
+    public float getZOffset() {
+        return z_offset;
+    }
+
+    public float getManualRotation() {
+        return rotation;
+    }
+
+    public void setXOffset(float x_offset) {
+        this.x_offset = x_offset;
+        this.notifyUpdate();
+        onConnectionModification();
+    }
+
+    public void setYOffset(float y_offset) {
+        this.y_offset = y_offset;
+        this.notifyUpdate();
+        onConnectionModification();
+    }
+
+    public void setZOffset(float z_offset) {
+        this.z_offset = z_offset;
+        this.notifyUpdate();
+        onConnectionModification();
+    }
+
+    public void setManualRotation(float rotation) {
+        this.rotation = rotation;
+        this.notifyUpdate();
+        onConnectionModification();
+    }
+
+    public void setTransformParameters(float x_offset, float y_offset, float z_offset, float rotation) {
+        this.x_offset = x_offset;
+        this.y_offset = y_offset;
+        this.z_offset = z_offset;
+        this.rotation = rotation;
+
+        this.notifyUpdate();
+        onConnectionModification();
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable("gui.kuayue.overhead_line_support_adjust");
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+        return new OverheadLineSupportAdjustMenu(pContainerId, pPlayerInventory, this);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void clearBlockEntityRenderCache() {
+        if (OverheadLineRendererBridge.REGISTERED.containsKey(this)) {
+            List<Connection> registeredConnections = OverheadLineRendererBridge.REGISTERED.get(this);
+            for (Connection connection : registeredConnections) {
+                OverheadLineRendererSystem.removeOverheadLine(this, connection);
+            }
+        }
+
+        OverheadSupportBlockRenderer.clearCacheForBlockEntity(this);
+
+        for (Connection connection : this.connections) {
+            if (level != null) {
+                BlockEntity targetEntity = level.getBlockEntity(connection.absolutePos());
+                if (targetEntity instanceof OverheadLineSupportBlockEntity targetSupport) {
+                    OverheadSupportBlockRenderer.clearCacheForBlockEntity(targetSupport);
+                }
+            }
+        }
+    }
 }

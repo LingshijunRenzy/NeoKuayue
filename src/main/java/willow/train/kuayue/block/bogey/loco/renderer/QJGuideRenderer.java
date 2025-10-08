@@ -42,7 +42,6 @@ public class QJGuideRenderer extends BogeyRenderer {
             int light,
             VertexConsumer vb,
             boolean inContraption) {
-        light *= 1.1;
 
         Direction direction =
                 bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)

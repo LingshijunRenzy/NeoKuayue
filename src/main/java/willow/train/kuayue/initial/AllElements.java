@@ -31,30 +31,30 @@ public class AllElements {
 
     public static final CreateRegistry createRegistry = new CreateRegistry(Create.ID, Kuayue.BUS);
 
-    public static final CreativeTabReg neoKuayueMainTab = new CreativeTabReg("main")
+    public static final CreativeTabReg neoKuayueMainTab = new CreativeTabReg("kuayue_main")
             .icon(() -> AllBlocks.CR_LOGO.itemInstance().getDefaultInstance())
             .submit(testRegistry);
 
-    public static final CreativeTabReg neoKuayueLocoTab = new CreativeTabReg("loco")
+    public static final CreativeTabReg neoKuayueLocoTab = new CreativeTabReg("kuayue_loco")
             .icon(() -> AllItems.LOCO_LOGOS.getItem().getDefaultInstance())
             .submit(testRegistry);
 
-    public static final CreativeTabReg neoKuayueCarriageTab = new CreativeTabReg("carriage")
+    public static final CreativeTabReg neoKuayueCarriageTab = new CreativeTabReg("kuayue_carriage")
             .icon(() -> AllItems.SERIES_25_LOGOS.getItem().getDefaultInstance())
             .submit(testRegistry);
 
-    public static final CreativeTabReg neoKuayueDietTab = new CreativeTabReg("diet")
+    public static final CreativeTabReg neoKuayueDietTab = new CreativeTabReg("kuayue_diet")
             .icon(() -> AllItems.CA_25T.getItem().getDefaultInstance())
             .submit(testRegistry);
 
-    public static final CreativeTabReg neoKuayueDeviceTab = new CreativeTabReg("device")
+    public static final CreativeTabReg neoKuayueDeviceTab = new CreativeTabReg("kuayue_device")
             .icon(() -> AllDeviceItems.ITEM_LOGO.getItem().getDefaultInstance())
             .submit(testRegistry);
 
-    public static final CreativeTabReg neoKuayueOverheadLineTab = new CreativeTabReg("overhead_line")
+    public static final CreativeTabReg neoKuayueGridTab = new CreativeTabReg("kuayue_grid")
             .icon(() -> AllOverheadLineSupportBlocks.OVERHEAD_LINE_SUPPORT_A1.itemInstance().getDefaultInstance())
             .submit(testRegistry);
-    public static final CreativeTabReg neoKuayueMaterialTab = new CreativeTabReg("materials")
+    public static final CreativeTabReg neoKuayueMaterialTab = new CreativeTabReg("kuayue_materials")
             .icon(() -> AllItems.CIRCUIT_MOTHERBOARD.getItem().getDefaultInstance())
             .submit(testRegistry);
 
@@ -83,19 +83,19 @@ public class AllElements {
         if (Envs.isClient()) {
             ClientInit.invoke();
             Kuayue.BUS.addListener(ClientInit::registerHUDOverlays);
-            Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
             MinecraftForge.EVENT_BUS.addListener(RenderArrowEvent::renderBlockBounds);
             MinecraftForge.EVENT_BUS.addListener(OverheadLineRendererSystem::onRenderLevelLast);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::unloadEvent);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::saveEvent);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::loadEvent);
-            MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);
             MinecraftForge.EVENT_BUS.addListener(ClientPassengerEvent::onMountEvent);
             MinecraftForge.EVENT_BUS.addListener(ClientRenderTickManager::renderClientTick);
             MinecraftForge.EVENT_BUS.addListener(ClientTickScheduler::onClientEarlyTick);
             // MinecraftForge.EVENT_BUS.addListener(RenderPrePosedBlockEvent::renderBlock);
             MinecraftForge.EVENT_BUS.register(new CarriageInventoryEvents());
         }
+        Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
+        MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);
         MinecraftForge.EVENT_BUS.addListener(ServerResourceReloadEvent::onServerResourceReload);
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::onPlayerLogin);
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::onPlayerLogout);

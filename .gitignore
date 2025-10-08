@@ -27,3 +27,7 @@ node_modules
 yarn.lock
 /dev/
 /script/
+
+local.properties
+
+mcmodsrepo

@@ -12,6 +12,12 @@ public class OverheadLineRendererBridge {
     public static void setBlockEntity(OverheadLineSupportBlockEntity blockEntity, List<OverheadLineSupportBlockEntity.Connection> connections){
         unloadBlockEntity(blockEntity);
 
+        if(REGISTERED.containsKey(blockEntity)){
+            REGISTERED.get(blockEntity).forEach((c)->{
+                OverheadLineRendererSystem.removeOverheadLine(blockEntity, c);
+            });
+        }
+
         connections.forEach((c)->{
             OverheadLineRendererSystem.registerOverheadLine(blockEntity, c);
         });

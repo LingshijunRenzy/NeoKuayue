@@ -98,6 +98,4 @@ public class HingeSlabBlock extends TrainSlabBlock implements IWrenchable {
 
         return InteractionResult.SUCCESS;
     }
-
-
 }

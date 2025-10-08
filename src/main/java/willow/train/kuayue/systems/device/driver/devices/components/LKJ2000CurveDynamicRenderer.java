@@ -84,16 +84,20 @@ public class LKJ2000CurveDynamicRenderer {
         if (texture == null)
             return;
 
-        if (context.getContextType() == RenderContext.RenderContextType.WORLD) {
+        if (context.getContextType() == RenderContext.RenderContextType.WORLD || context.getBufferSource() != null) {
             RenderType type = RenderType.text(location);
             VertexConsumer consumer = context.getBufferSource().getBuffer(type);
             Matrix4f matrix = context.poseMatrix();
-            SimpleColor color = SimpleColor.fromRGB(1, 1, 1);
+            SimpleColor color = SimpleColor.fromRGBA(255, 255, 255, 255);
             int light = context.getLight();
-            buildVertex(consumer, matrix, new Vector3f(coordinate.x, coordinate.y, 0), new Vec2f(0, 0), color, light);
-            buildVertex(consumer, matrix, new Vector3f(coordinate.x, coordinate.y + coordinate.height, 0), new Vec2f(0, 1), color, light);
-            buildVertex(consumer, matrix, new Vector3f(coordinate.x + coordinate.width, coordinate.y + coordinate.height, 0), new Vec2f(1, 1), color, light);
-            buildVertex(consumer, matrix, new Vector3f(coordinate.x, coordinate.y + coordinate.height, 0), new Vec2f(1, 0), color, light);
+            buildVertex(consumer, matrix, new Vector3f(coordinate.x, -coordinate.y, 0.5f), new Vec2f(0, 1), color, light);
+
+            buildVertex(consumer, matrix, new Vector3f(coordinate.x, -coordinate.y - coordinate.height, 0.5f), new Vec2f(0, 0), color, light);
+
+            buildVertex(consumer, matrix, new Vector3f(coordinate.x + coordinate.width, -coordinate.y - coordinate.height, 0.5f), new Vec2f(1, 0), color, light);
+
+            buildVertex(consumer, matrix, new Vector3f(coordinate.x + coordinate.width, -coordinate.y, 0.5f), new Vec2f(1, 1), color, light);
+
         } else {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, location);
@@ -130,6 +134,7 @@ public class LKJ2000CurveDynamicRenderer {
     boolean isDirty = false;
 
     public void update(){
+        this.renderer.update();
         if(isDirty) {
             renderCurve();
         }

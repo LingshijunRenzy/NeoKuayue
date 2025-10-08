@@ -28,8 +28,11 @@ import willow.train.kuayue.initial.AllBlocks;
 import willow.train.kuayue.utils.DirectionUtil;
 
 public class TrainDoorBlock extends TrainPanelBlock {
+
     public static final EnumProperty<DoorHingeSide> HINGE = BlockStateProperties.DOOR_HINGE;
+
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+
     public TrainDoorBlock(Properties pProperties) {
         super(pProperties, new Vec2(0, 0), new Vec2(1, 2));
         this.registerDefaultState(
@@ -37,6 +40,16 @@ public class TrainDoorBlock extends TrainPanelBlock {
                     .setValue(FACING, Direction.EAST)
                     .setValue(HINGE, DoorHingeSide.LEFT)
                     .setValue(OPEN, false)
+        );
+    }
+
+    public TrainDoorBlock(Properties pProperties, Vec2 beginPos, Vec2 endPos) {
+        super(pProperties, beginPos, endPos);
+        this.registerDefaultState(
+                this.getStateDefinition().any()
+                        .setValue(FACING, Direction.EAST)
+                        .setValue(HINGE, DoorHingeSide.LEFT)
+                        .setValue(OPEN, false)
         );
     }
 

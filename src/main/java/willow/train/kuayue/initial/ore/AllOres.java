@@ -46,16 +46,17 @@ public class AllOres {
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
 
-    // todo: ore reg need to be fixed(ksglib?).
-    public static final OreReg<DropExperienceBlock> SALT_ORE_REG =
-            new OreReg<DropExperienceBlock>("salt_ore")
-            .addOreReplaceTarget(SALT_ORE)
-            .addDeepSlateReplaceTarget(DEEPSLATE_SALT_ORE)
-            .setOreCountPerChunk(90)
-            .setOreQuantityPerGroup(9)
-            .setOreDistributionType(PlacedFeatureReg.DistributionType.TRIANGLE)
-            .setOreAnchorAbsolute(80, -64)
-            .submit(AllElements.testRegistry);
+    // 自mc 1.20.1 后强制使用数据驱动的方式注册矿物，下述代码无效也不应在之后的版本使用
+//    @Deprecated
+//    public static final OreReg<DropExperienceBlock> SALT_ORE_REG =
+//            new OreReg<DropExperienceBlock>("salt_ore")
+//            .addOreReplaceTarget(SALT_ORE)
+//            .addDeepSlateReplaceTarget(DEEPSLATE_SALT_ORE)
+//            .setOreCountPerChunk(90)
+//            .setOreQuantityPerGroup(9)
+//            .setOreDistributionType(PlacedFeatureReg.DistributionType.TRIANGLE)
+//            .setOreAnchorAbsolute(80, -64)
+//            .submit(AllElements.testRegistry);
 
     public static void invoke() {}
 }

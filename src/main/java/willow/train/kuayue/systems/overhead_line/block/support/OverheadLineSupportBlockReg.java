@@ -30,6 +30,7 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
     private Supplier<BlockEntityRendererBuilder<OverheadLineSupportBlockEntity>> renderer = null;
     private List<ResourceLocation> lineRenderModes = List.of();
     private List<Vec3> connectionPoints = List.of();
+    private int maxConnections = Integer.MAX_VALUE;
 
     private OverheadLineBlockDynamicConfiguration.ConnectionPointBuilder connectionPointBuilder = null;
 
@@ -79,7 +80,8 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
         OverheadLineBlockDynamicConfiguration configuration = new OverheadLineBlockDynamicConfiguration(
                 connectionPointBuilder != null ? connectionPointBuilder : (a,b,c)->this.connectionPoints,
                 allowedWireTypePredictor != null ? allowedWireTypePredictor : allowedTypes::contains,
-                this.lineRenderModes
+                this.lineRenderModes,
+                this.maxConnections
         );
         OverheadLineSupportBlockEntity.registerPoint(this::getBlock, configuration);
         return this;
@@ -128,6 +130,11 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
 
     public OverheadLineSupportBlockReg<T, V> connectionPoints(Vec3 ...connectionPositions) {
         this.connectionPoints = List.of(connectionPositions);
+        return this;
+    }
+
+    public OverheadLineSupportBlockReg<T, V> maxConnections(int maxConnections) {
+        this.maxConnections = maxConnections;
         return this;
     }
 

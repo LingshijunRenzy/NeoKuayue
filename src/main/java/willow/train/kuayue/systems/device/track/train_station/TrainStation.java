@@ -1,11 +1,9 @@
 package willow.train.kuayue.systems.device.track.train_station;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.graph.DimensionPalette;
 import com.simibubi.create.content.trains.graph.TrackEdge;
 import com.simibubi.create.content.trains.graph.TrackGraph;
 import com.simibubi.create.content.trains.signal.SingleBlockEntityEdgePoint;
-import kasuga.lib.KasugaLib;
 import kasuga.lib.core.create.boundary.CustomSegmentUtil;
 import kasuga.lib.core.create.boundary.CustomTrackSegment;
 import net.minecraft.nbt.CompoundTag;
@@ -14,10 +12,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import willow.train.kuayue.Kuayue;
-import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.device.AllDeviceEdgePoints;
-import willow.train.kuayue.systems.device.graph.CRRailwayGraphData;
-import willow.train.kuayue.systems.device.graph.KuaYueRailwayManager;
 import willow.train.kuayue.systems.device.graph.station.GraphStation;
 import willow.train.kuayue.systems.device.track.entry.StationSegment;
 
@@ -67,7 +62,7 @@ public class TrainStation extends SingleBlockEntityEdgePoint {
     }
 
 
-    private int lazyTickCount = -1;
+    private int lazyTickCount = -10;
 
     @Override
     public void tick(TrackGraph graph, boolean preTrains) {
@@ -92,14 +87,22 @@ public class TrainStation extends SingleBlockEntityEdgePoint {
                 );
 
         if(!(segment instanceof StationSegment stationSegment)) {
+            if(segmentId != null) {
+                Kuayue.RAILWAY.getSavedData().getOptionalStation(segmentId)
+                        .ifPresent((station)->{
+                            station.removeStation(this);
+                            Kuayue.RAILWAY.getSavedData().notifyStationGC(station);
+                        });
+                segmentId = null;
+            }
             return;
         }
 
         UUID newSegmentId = stationSegment.getSegmentId();
 
         if(Objects.equals(newSegmentId,segmentId)){
-
-            Kuayue.RAILWAY.SERVER.getOptionalStation(segmentId)
+            segmentId = newSegmentId;
+            Kuayue.RAILWAY.getSavedData().getOptionalStation(segmentId)
                     .ifPresent((station)->{
                         this.localInfo = station.getStationInfo();
                     });
@@ -107,33 +110,39 @@ public class TrainStation extends SingleBlockEntityEdgePoint {
         }
 
         if(segmentId != null){
-            Kuayue.RAILWAY.SERVER.getOptionalStation(segmentId)
+            Kuayue.RAILWAY.getSavedData().getOptionalStation(segmentId)
                     .ifPresent((station)->{
                         station.removeStation(this);
-                        Kuayue.RAILWAY.SERVER.notifyStationGC(station);
+                        Kuayue.RAILWAY.getSavedData().notifyStationGC(station);
                     });
+            segmentId = null;
         }
 
         if(newSegmentId != null) {
-            GraphStation station = Kuayue.RAILWAY.SERVER.getOrCreateStation(newSegmentId);
+            GraphStation station = Kuayue.RAILWAY.getSavedData().getOrCreateStation(newSegmentId);
             station.addStation(this);
             if(localInfo != null){
                 station.updateInfo(localInfo);
+            } else {
+                this.localInfo = station.getStationInfo();
             }
+            segmentId = newSegmentId;
         }
 
-        segmentId = newSegmentId;
     }
 
     @Override
     public void onRemoved(TrackGraph graph) {
         super.onRemoved(graph);
 
-        Kuayue.RAILWAY.SERVER.getOptionalStation(segmentId)
+        Kuayue.RAILWAY.getSavedData().getOptionalStation(segmentId)
                 .ifPresent((station)->{
                     station.removeStation(this);
-                    Kuayue.RAILWAY.SERVER.notifyStationGC(station);
+                    Kuayue.RAILWAY.getSavedData().notifyStationGC(station);
                 });
     }
 
+    public UUID getSegmentId() {
+        return segmentId;
+    }
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kuayue:block/jy290/jy290_door_item"
+  }
+}
+
