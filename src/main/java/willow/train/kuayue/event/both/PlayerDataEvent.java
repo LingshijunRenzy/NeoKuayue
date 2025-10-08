@@ -1,7 +1,6 @@
 package willow.train.kuayue.event.both;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -10,12 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllItems;
 import willow.train.kuayue.initial.AllPackets;
@@ -36,6 +33,7 @@ public class PlayerDataEvent {
         PlayerDataDist.DIST.loadFromDisk(serverLevel);
         if(serverLevel.dimension().equals(ServerLevel.OVERWORLD)) {
             Kuayue.OVERHEAD.savedData.load(serverLevel);
+            Kuayue.RAILWAY.savedData.loadFromDisk(serverLevel);
         }
     }
 
@@ -46,6 +44,7 @@ public class PlayerDataEvent {
         PlayerDataDist.DIST.saveToDisk(serverLevel);
         if(serverLevel.dimension().equals(ServerLevel.OVERWORLD)) {
             Kuayue.OVERHEAD.savedData.save(serverLevel);
+            Kuayue.RAILWAY.savedData.saveToDisk(serverLevel);
         }
     }
 
@@ -79,6 +78,10 @@ public class PlayerDataEvent {
         if (player.level().isClientSide) return;
 
         NetworkCacheManager.MANAGER.removeCache((ServerPlayer) player);
+        if (PlayerDataManager.MANAGER.containsPlayerData(player)) {
+            PlayerDataDist.DIST.saveToDisk(((ServerPlayer) player).serverLevel());
+            PlayerDataManager.MANAGER.removePlayerData(player);
+        }
     }
 
     @SubscribeEvent

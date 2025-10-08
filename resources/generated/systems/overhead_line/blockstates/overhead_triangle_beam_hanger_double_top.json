@@ -1,0 +1,20 @@
+﻿{
+  "variants": {
+    "facing=east": {
+      "model": "kuayue:block/overhead_line/overhead_triangle_beam_hanger_double_top",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "kuayue:block/overhead_line/overhead_triangle_beam_hanger_double_top",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "kuayue:block/overhead_line/overhead_triangle_beam_hanger_double_top",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "kuayue:block/overhead_line/overhead_triangle_beam_hanger_double_top",
+      "y": 90
+    }
+  }
+}

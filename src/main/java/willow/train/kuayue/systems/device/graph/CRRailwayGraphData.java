@@ -59,6 +59,8 @@ public class CRRailwayGraphData extends SavedData {
     }
 
     public static CRRailwayGraphData load(CompoundTag compoundTag) {
-        return null;
+        CRRailwayGraphData data = new CRRailwayGraphData();
+        data.read(null, compoundTag);
+        return data;
     }
 }

@@ -1,0 +1,25 @@
+name: PR Agent
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+  issue_comment:
+
+jobs:
+  pr_agent_job:
+    if: |
+      github.event.sender.type != 'Bot' &&
+      !contains(github.event.pull_request.title, 'Crowdin')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
+    steps:
+      - name: PR Agent action step
+        uses: qodo-ai/pr-agent@main
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI.API_BASE: ${{ secrets.OPENAI_API_BASE }}
+          OPEN_AI_BASE: ${{ secrets.OPENAI_API_BASE }}

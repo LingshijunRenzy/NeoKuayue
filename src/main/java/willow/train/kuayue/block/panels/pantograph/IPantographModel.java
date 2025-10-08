@@ -17,7 +17,7 @@ public interface IPantographModel {
     public static final String BOW_HEAD_POS_X = "bowHeadPosX";
     public static final String BOW_HEAD_POS_Y = "bowHeadPosY";
 
-    default HashMap<String, Double> singleArmPantographModel(
+    static HashMap<String, Double> singleArmPantographModel(
             double baselineLength, double largeArmLength,
             double pullRodLength, double connectingRodLength,
             double smallArmAngle, double smallArmLength,
@@ -64,7 +64,7 @@ public interface IPantographModel {
         return singlePantoModel;
     }
 
-    default HashMap<String, Double> getPantoModelMapByType (PantographProps pantographProps, double pullRodAngle) {
+    static HashMap<String, Double> getPantoModelMapByType (PantographProps pantographProps, double pullRodAngle) {
 
         HashMap<String, Double> pantoModelMap = new HashMap<>();
 

@@ -6,6 +6,7 @@ import willow.train.kuayue.network.c2s.tech_tree.*;
 import willow.train.kuayue.network.s2c.*;
 import willow.train.kuayue.network.s2c.tech_tree.*;
 import willow.train.kuayue.systems.device.track.train_station.packet.C2STrainStationInfoUpdatePacket;
+import willow.train.kuayue.systems.overhead_line.packet.C2SOverheadLineSupportAdjustPacket;
 
 public class AllPackets {
     public static final String KUAYUE_NETWORK_VERSION = "v1.0.0";
@@ -18,6 +19,7 @@ public class AllPackets {
             .loadPacket(DiscardChangeC2SPacket.class, DiscardChangeC2SPacket::new)
             .loadPacket(NbtC2SPacket.class, NbtC2SPacket::new)
             .loadPacket(C2STrainStationInfoUpdatePacket.class, C2STrainStationInfoUpdatePacket::new)
+            .loadPacket(C2SOverheadLineSupportAdjustPacket.class, C2SOverheadLineSupportAdjustPacket::new)
             .submit(AllElements.testRegistry);
 
     public static final ChannelReg TECH_TREE_CHANNEL = new ChannelReg("kuayue_tech_tree_channel")

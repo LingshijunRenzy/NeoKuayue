@@ -1,0 +1,26 @@
+{
+  "values": [
+    "kuayue:df5_end_face_1",
+    "kuayue:df5_end_face_2",
+    "kuayue:df5_cowcatcher",
+    "kuayue:df5_floor",
+    "kuayue:df5_center_floor",
+    "kuayue:df5_transit_floor",
+    "kuayue:df5_fuel_tank",
+    "kuayue:df5_panel_top",
+    "kuayue:df5_panel_bottom",
+    "kuayue:df5_handrail",
+    "kuayue:df5_carport_1",
+    "kuayue:df5_carport_2",
+    "kuayue:df5_carport_3",
+    "kuayue:df5_carport_4",
+    "kuayue:df5_carport_5",
+    "kuayue:df5_carport_grille",
+    "kuayue:df5_air_intake",
+    "kuayue:df5_air_intake_2",
+    "kuayue:df5_air_intake_3",
+    "kuayue:df5_radiator_grid",
+    "kuayue:df5_head",
+    "kuayue:df5_equip_door_2"
+  ]
+}

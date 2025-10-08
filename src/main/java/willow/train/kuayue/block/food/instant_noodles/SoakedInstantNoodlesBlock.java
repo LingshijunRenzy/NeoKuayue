@@ -2,8 +2,6 @@ package willow.train.kuayue.block.food.instant_noodles;
 
 import com.simibubi.create.foundation.particle.AirParticleData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -24,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.food.PlacementFoodBlock;
@@ -123,5 +122,15 @@ public class SoakedInstantNoodlesBlock extends PlacementFoodBlock {
             }
         }
         super.stepOn(pLevel, pPos, pState, pEntity);
+    }
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (level.isClientSide()) {
+            String key = "destroy_soaked_instant_noodles";
+            player.displayClientMessage(
+                    Component.translatable("msg." + Kuayue.MODID + "." + key), true);
+        }
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 }

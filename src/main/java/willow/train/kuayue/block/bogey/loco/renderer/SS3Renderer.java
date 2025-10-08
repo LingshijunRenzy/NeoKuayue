@@ -44,8 +44,6 @@ public class SS3Renderer extends BogeyRenderer {
             VertexConsumer vb,
             boolean inContraption) {
 
-        light *= 1;
-
         Direction direction =
                 bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)
                         ? NBTHelper.readEnum(
@@ -113,8 +111,6 @@ public class SS3Renderer extends BogeyRenderer {
                 int light,
                 VertexConsumer vb,
                 boolean inContraption) {
-
-            light *= 1.1;
 
             Direction direction =
                     bogeyData.contains(BogeyDataConstants.BOGEY_ASSEMBLY_DIRECTION_KEY)

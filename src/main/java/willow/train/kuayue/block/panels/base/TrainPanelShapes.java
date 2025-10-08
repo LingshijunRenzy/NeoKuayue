@@ -1,13 +1,19 @@
 package willow.train.kuayue.block.panels.base;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import willow.train.kuayue.utils.DirectionUtil;
+
+
 
 public class TrainPanelShapes {
 
@@ -202,6 +208,95 @@ public class TrainPanelShapes {
                     Block.box(14, 0, 30, 17, 40, 32),
                     Block.box(14, 38, 0, 17, 40, 32));
 
+    protected static final VoxelShape JY290_DOOR_CLOSE_NORTH_AABB =
+            Block.box(0, 0, 14, 32, 32, 16);
+
+    protected static final VoxelShape JY290_DOOR_CLOSE_WEST_AABB =
+            Block.box(14, 0, -16, 16, 32, 16);
+
+    protected static final VoxelShape JY290_DOOR_CLOSE_SOUTH_AABB =
+            Block.box(-16, 0, 0, 16, 32, 2);
+
+    protected static final VoxelShape JY290_DOOR_CLOSE_EAST_AABB =
+            Block.box(0, 0, 0, 2, 32, 32);
+
+    protected static final VoxelShape JY290_DOOR_OPEN_NORTH_AABB =
+            Shapes.or(
+                    Block.box(0, 0, 14, 2, 32, 16),
+                    Block.box(30, 0, 14, 32, 32, 16),
+                    Block.box(0, 32, 14, 32, 32, 16));
+
+    protected static final VoxelShape JY290_DOOR_OPEN_WEST_AABB =
+            Shapes.or(
+                    Block.box(14, 0, -16, 16, 32, -14),
+                    Block.box(14, 0, 14, 16, 32, 16),
+                    Block.box(14, 32, -16, 16, 32, 16));
+
+    protected static final VoxelShape JY290_DOOR_OPEN_SOUTH_AABB =
+            Shapes.or(
+                    Block.box(-16, 0, 0, -14, 32, 2),
+                    Block.box(14, 0, 0, 16, 32, 2),
+                    Block.box(-16, 32, 0, 16, 32, 2));
+
+    protected static final VoxelShape JY290_DOOR_OPEN_EAST_AABB =
+            Shapes.or(
+                    Block.box(0, 0, 0, 2, 32, 2),
+                    Block.box(0, 0, 30, 2, 32, 32),
+                    Block.box(0, 32, 0, 2, 32, 32));
+
+    protected static final VoxelShape OverheadLinePillar_AABB =
+            Shapes.or(
+                    Shapes.box(0.1875, 0, 0.1875, 0.8125, 1, 0.8125));
+
+
+
+    public static final VoxelShape CARRIAGEUNDERGROUND_NORTH =
+            Shapes.or(
+                    Shapes.box(0.4375, -0.25, -1.875, 1.1875, 0.5, 0),
+                    Shapes.box(0.625, 0, 0, 0.75, 0.125, 0.125));
+
+    protected static final VoxelShape OverheadSmallTruss_NS_AABB =
+            Shapes.box(0.4375, 0, 0, 0.5625, 1, 1);
+
+    protected static final VoxelShape OverheadSmallTruss_WE_AABB =
+            Shapes.box(0, 0, 0.4375, 1, 1, 0.5625);
+    protected static final VoxelShape OverheadBigTruss_NS_AABB =
+            Shapes.box(0.25, 0, 0, 0.75, 1, 1);
+    protected static final VoxelShape OverheadBigTruss_WE_AABB =
+            Shapes.box(0, 0, 0.25, 1, 1, 0.75);
+
+    protected static final VoxelShape OverheadPillarTruss_NS_AABB =
+            Shapes.box(0.25, 0.25, 0, 0.75, 0.75, 1);
+
+    protected static final VoxelShape OverheadPillarTruss_WE_AABB =
+            Shapes.box(0, 0.25, 0.25, 1, 0.75, 0.75);
+
+    public final static VoxelShape HALF_PANEL_SHAPE_EAST = Block.box(0, 0, 0, 8, 16, 16);
+
+    public static final VoxelShape QUARTER_PANEL_SHAPE_EAST = Block.box(0, 0, 0, 4, 16, 16);
+
+    public static final VoxelShape DF5_CARPORT_SHAPE_EAST = Shapes.or(
+            Block.box(0, 0, 0, 8, 12, 16),
+            Block.box(-8, 12, 0, 8, 16, 16));
+
+    public static final VoxelShape DF5_CARPORT_COLLISION_SHAPE_EAST = Shapes.or(
+            Block.box(0, 0, 0, 4, 12, 16),
+            Block.box(-8, 12, 0, 4, 16, 16));
+
+    public static final VoxelShape DF5_RADIATOR_GRID_SHAPE_EAST =
+            Block.box(0, 0, 0, 8, 32, 16);
+
+    public static final VoxelShape DF5_RADIATOR_GRID_COLLISION_SHAPE_EAST =
+            Block.box(0, 0, 0, 4, 32, 16);
+
+    public static final VoxelShape DF5_EQUIP_DOOR_2_SHAPE_SOUTH = Shapes.or(
+            Block.box(0, 30, 8, 16, 32, 16),
+            Block.box(6, 2, 8, 10, 27, 9));
+
+    public static final VoxelShape DF5_EQUIP_DOOR_2_COLLISION_SHAPE_SOUTH = Shapes.or(
+            Block.box(0, 30, 8, 16, 32, 16),
+            Block.box(6, 2, 8, 10, 27, 9));
+
     public static VoxelShape getShape(Direction direction) {
         return switch (direction) {
             case EAST -> EAST_AABB;
@@ -335,4 +430,116 @@ public class TrainPanelShapes {
             default -> C70_DOOR_CLOSE_NORTH_AABB.move(1, 0, 0);
         };
     }
+
+    public static VoxelShape getJY290DoorShape(boolean open, DoorHingeSide hinge, Direction direction) {
+        if (!open)
+            return getJY290DoorCloseShape(hinge, direction);
+        if (hinge == DoorHingeSide.RIGHT) {
+            return switch (direction) {
+                case NORTH -> JY290_DOOR_OPEN_NORTH_AABB;
+                case SOUTH -> JY290_DOOR_OPEN_SOUTH_AABB;
+                case WEST -> JY290_DOOR_OPEN_WEST_AABB;
+                case EAST -> JY290_DOOR_OPEN_EAST_AABB;
+                default -> JY290_DOOR_OPEN_NORTH_AABB;
+            };
+        }
+        return switch (direction) {
+            case NORTH -> JY290_DOOR_OPEN_NORTH_AABB.move(-1, 0, 0);
+            case SOUTH -> JY290_DOOR_OPEN_SOUTH_AABB.move(1, 0, 0);
+            case WEST -> JY290_DOOR_OPEN_WEST_AABB.move(0, 0, 1);
+            case EAST -> JY290_DOOR_OPEN_EAST_AABB.move(0, 0, -1);
+            default -> JY290_DOOR_OPEN_NORTH_AABB.move(1, 0, 0);
+        };
+    }
+
+    public static VoxelShape getJY290DoorCloseShape(DoorHingeSide hinge, Direction direction) {
+        if (hinge == DoorHingeSide.RIGHT) {
+            return switch (direction) {
+                case NORTH -> JY290_DOOR_CLOSE_NORTH_AABB;
+                case SOUTH -> JY290_DOOR_CLOSE_SOUTH_AABB;
+                case WEST -> JY290_DOOR_CLOSE_WEST_AABB;
+                case EAST -> JY290_DOOR_CLOSE_EAST_AABB;
+                default -> JY290_DOOR_CLOSE_NORTH_AABB;
+            };
+        }
+        return switch (direction) {
+            case NORTH -> JY290_DOOR_CLOSE_NORTH_AABB.move(-1, 0, 0);
+            case SOUTH -> JY290_DOOR_CLOSE_SOUTH_AABB.move(1, 0, 0);
+            case WEST -> JY290_DOOR_CLOSE_WEST_AABB.move(0, 0, 1);
+            case EAST -> JY290_DOOR_CLOSE_EAST_AABB.move(0, 0, -1);
+            default -> JY290_DOOR_CLOSE_NORTH_AABB.move(1, 0, 0);
+        };
+    }
+
+    public static final VoxelShape CARRIAGEUNDERGROUND_WEST;
+    public static final VoxelShape CARRIAGEUNDERGROUND_SOUTH;
+    public static final VoxelShape CARRIAGEUNDERGROUND_EAST;
+
+    static {
+        CARRIAGEUNDERGROUND_EAST = rotateShape(Direction.NORTH, Direction.EAST, CARRIAGEUNDERGROUND_NORTH);
+        CARRIAGEUNDERGROUND_SOUTH = rotateShape(Direction.NORTH, Direction.SOUTH, CARRIAGEUNDERGROUND_NORTH);
+        CARRIAGEUNDERGROUND_WEST = rotateShape(Direction.NORTH, Direction.WEST, CARRIAGEUNDERGROUND_NORTH);
+    }
+
+    public static VoxelShape getCarriageUndergroundShape(Direction direction) {
+        return switch (direction) {
+            case EAST -> CARRIAGEUNDERGROUND_EAST;
+            case NORTH -> CARRIAGEUNDERGROUND_NORTH;
+            case WEST -> CARRIAGEUNDERGROUND_WEST;
+            case SOUTH -> CARRIAGEUNDERGROUND_SOUTH;
+            default -> Shapes.block();
+        };
+    }
+    public static VoxelShape getOverheadLinePillarShape(Direction direction) {
+        // 根据不同朝向返回旋转后的形状
+        return switch (direction) {
+            case NORTH -> rotateShape(Direction.NORTH, direction, OverheadLinePillar_AABB);
+            case SOUTH -> rotateShape(Direction.SOUTH,direction, OverheadLinePillar_AABB);
+            case WEST -> rotateShape(Direction.WEST, direction, OverheadLinePillar_AABB);
+            case EAST -> OverheadLinePillar_AABB;
+            default -> OverheadLinePillar_AABB;
+        };
+    }
+
+    public static VoxelShape getOverheadSmallTrussShape(Direction direction) {
+        return switch (direction) {
+            case EAST, WEST -> OverheadSmallTruss_WE_AABB;
+            case NORTH, SOUTH -> OverheadSmallTruss_NS_AABB;
+            default -> Shapes.block();
+        };
+    }
+
+    public static VoxelShape getOverheadBigTrussShape(Direction direction) {
+        return switch (direction) {
+            case EAST, WEST -> OverheadBigTruss_WE_AABB;
+            case NORTH, SOUTH -> OverheadBigTruss_NS_AABB;
+            default -> Shapes.block();
+        };
+    }
+
+    public static VoxelShape getOverheadPillarTrussShape(Direction direction) {
+        return switch (direction) {
+            case EAST, WEST -> OverheadPillarTruss_WE_AABB;
+            case NORTH, SOUTH -> OverheadPillarTruss_NS_AABB;
+            default -> Shapes.block();
+        };
+    }
+    //以下为自动旋转碰撞箱方法
+    public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
+        VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
+
+        int times = (to.get2DDataValue() - from.get2DDataValue() + 4) % 4;
+        for (int i = 0; i < times; i++) {
+            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = Shapes.joinUnoptimized(
+                    buffer[1],
+                    Shapes.box(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX),
+                    BooleanOp.OR
+            ));
+            buffer[0] = buffer[1];
+            buffer[1] = Shapes.empty();
+        }
+
+        return buffer[0];
+    }
+
 }

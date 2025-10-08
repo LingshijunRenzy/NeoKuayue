@@ -18,13 +18,15 @@ import willow.train.kuayue.block.panels.pantograph.IPantographModel;
 import willow.train.kuayue.block.panels.pantograph.PantographProps;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class SingleArmPantographRenderer implements
         BlockEntityRenderer<SingleArmPantographBlockEntity>, IPantographModel {
 
-    public static float STEP_FAST = 0.35f;
-    public static float STEP_SLOW = 0.15f;
+    public static float STEP_FAST = 0.20f;
+    public static float STEP_SLOW = 0.05f;
 
     public SingleArmPantographRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -37,12 +39,29 @@ public class SingleArmPantographRenderer implements
         BlockState blockState = pBlockEntity.getBlockState();
         boolean risen = pBlockEntity.isRisen();
         float risenSpeed = pBlockEntity.getRisenSpeed();
-        float risenAngle = 180 - pBlockEntity.getRisenAngle();
+        float downPullRodAngle = pBlockEntity.getDownPullRodAngle();
+        float risePullRodAngle = pBlockEntity.getRisePullRodAngle();
         double transPosY = pBlockEntity.getTransPosY();
         // 获取玩家朝向
         Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
         // 各部件固定参数
         PantographProps pantographProps = pBlockEntity.getPantographType();
+
+        if (!pantographProps.isMapping()) {
+            pantographProps.heightListInit(pantographProps, risePullRodAngle, downPullRodAngle);
+//            System.out.println(pantographProps.getHeightList().toString());
+        }
+
+//        List<PantographProps.PantographMapping> heightList = pantographProps.getHeightList();
+//
+//        Random random = new Random();
+//        double randomNumber =
+//                random.nextDouble(heightList.get(0).getBowHeight() -
+//                        heightList.get(heightList.size() - 1).getBowHeight()) +
+//                        heightList.get(heightList.size() - 1).getBowHeight();
+//        double pantographAngleByList =
+//                pantographProps.getPantographAngleByList(heightList, randomNumber);
+//        System.out.println("randomNumber: " + randomNumber + ".angleByList: " + pantographAngleByList);
 
         // 建模转缓存
         Map<String, PartialModel> pantographModel = pBlockEntity.getPantographModel();
@@ -77,21 +96,31 @@ public class SingleArmPantographRenderer implements
         pose.mulPose(Axis.YP.rotationDegrees(facing.toYRot() + 90f));
 
         // 升降弓拉杆角度变化
-        if(risen && pBlockEntity.pullRodAngle > 135) {
+//        if (risen && pBlockEntity.pullRodAngle > risePullRodAngle) {
+//            pBlockEntity.pullRodAngle -= STEP_SLOW * risenSpeed;
+//        } else if (!risen && pBlockEntity.pullRodAngle < downPullRodAngle) {
+//            pBlockEntity.pullRodAngle += STEP_SLOW * risenSpeed;
+//        } else if (risen) {
+//            pBlockEntity.pullRodAngle = risePullRodAngle;
+//        } else {
+//            pBlockEntity.pullRodAngle = downPullRodAngle;
+//        }
+        if(risen && pBlockEntity.pullRodAngle > 155) {
             pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
-        } else if (risen && pBlockEntity.pullRodAngle <= 135 && pBlockEntity.pullRodAngle > risenAngle) {
+        } else if (risen && pBlockEntity.pullRodAngle <= 155 && pBlockEntity.pullRodAngle > risePullRodAngle) {
             pBlockEntity.pullRodAngle -= STEP_SLOW * risenSpeed;
-        } else if (!risen && pBlockEntity.pullRodAngle < 135) {
+        } else if (!risen && pBlockEntity.pullRodAngle < 155) {
             pBlockEntity.pullRodAngle += STEP_SLOW * risenSpeed;
-        } else if (!risen && pBlockEntity.pullRodAngle >= 135 && pBlockEntity.pullRodAngle < 170) {
+        } else if (!risen && pBlockEntity.pullRodAngle >= 155 && pBlockEntity.pullRodAngle < downPullRodAngle) {
             pBlockEntity.pullRodAngle += STEP_FAST * risenSpeed;
         } else if (risen) {
-            pBlockEntity.pullRodAngle = risenAngle;
+            pBlockEntity.pullRodAngle = risePullRodAngle;
         } else {
-            pBlockEntity.pullRodAngle = 170.0f;
+            pBlockEntity.pullRodAngle = downPullRodAngle;
         }
+
         // 随动角度与坐标
-        HashMap<String, Double> pantoModelMap = getPantoModelMapByType(pantographProps, pBlockEntity.pullRodAngle);
+        HashMap<String, Double> pantoModelMap = IPantographModel.getPantoModelMapByType(pantographProps, pBlockEntity.pullRodAngle);
         Double largeArmAngle = pantoModelMap.get(LARGE_ARM_ANGLE);
         Double smallArmPosX = pantoModelMap.get(SMALL_ARM_POS_X);
         Double smallArmPosY = pantoModelMap.get(SMALL_ARM_POS_Y);

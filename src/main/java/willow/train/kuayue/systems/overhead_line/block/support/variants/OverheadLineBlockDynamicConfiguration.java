@@ -13,7 +13,8 @@ import java.util.function.Predicate;
 public record OverheadLineBlockDynamicConfiguration(
         ConnectionPointBuilder connectionPoints,
         Predicate<OverheadLineType> typePredictor,
-        List<ResourceLocation> renderTypes
+        List<ResourceLocation> renderTypes,
+        int maxConnections
 ) {
     public static interface ConnectionPointBuilder {
         public List<Vec3> get(Level level, BlockPos blockPos, BlockState blockState);

@@ -1,0 +1,48 @@
+{
+  "variants": {
+    "facing=north,connected_type=none,connection_direction=none": { "model": "kuayue:block/overhead_line/overhead_hanger_single" },
+    "facing=south,connected_type=none,connection_direction=none": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "y": 180 },
+    "facing=east,connected_type=none,connection_direction=none": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "y": 90 },
+    "facing=west,connected_type=none,connection_direction=none": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "y": 270 },
+
+    "facing=north,connected_type=single,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_hanger_single" },
+    "facing=south,connected_type=single,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "y": 180 },
+    "facing=east,connected_type=single,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "y": 90 },
+    "facing=west,connected_type=single,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "y": 270 },
+
+    "facing=north,connected_type=single,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "x": 180 },
+    "facing=south,connected_type=single,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "x": 180, "y": 180 },
+    "facing=east,connected_type=single,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "x": 180, "y": 90 },
+    "facing=west,connected_type=single,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_hanger_single", "x": 180, "y": 270 },
+
+    "facing=north,connected_type=double,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top" },
+    "facing=south,connected_type=double,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top", "y": 180 },
+    "facing=east,connected_type=double,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top", "y": 90 },
+    "facing=west,connected_type=double,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top", "y": 270 },
+
+    "facing=north,connected_type=double,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top", "x": 180 },
+    "facing=south,connected_type=double,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top", "x": 180, "y": 180 },
+    "facing=east,connected_type=double,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top", "x": 180, "y": 90 },
+    "facing=west,connected_type=double,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_truss_double_hanger_top", "x": 180, "y": 270 },
+
+    "facing=north,connected_type=concrete,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger" },
+    "facing=south,connected_type=concrete,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger", "y": 180 },
+    "facing=east,connected_type=concrete,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger", "y": 90 },
+    "facing=west,connected_type=concrete,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger", "y": 270 },
+
+    "facing=north,connected_type=concrete,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger", "x": 180 },
+    "facing=south,connected_type=concrete,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger", "x": 180, "y": 180 },
+    "facing=east,connected_type=concrete,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger", "x": 180, "y": 90 },
+    "facing=west,connected_type=concrete,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_pillar_concrete_truss_hanger", "x": 180, "y": 270 },
+
+    "facing=north,connected_type=triangle,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger" },
+    "facing=south,connected_type=triangle,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger", "y": 180 },
+    "facing=east,connected_type=triangle,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger", "y": 90 },
+    "facing=west,connected_type=triangle,connection_direction=above": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger", "y": 270 },
+
+    "facing=north,connected_type=triangle,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger", "x": 180 },
+    "facing=south,connected_type=triangle,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger", "x": 180, "y": 180 },
+    "facing=east,connected_type=triangle,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger", "x": 180, "y": 90 },
+    "facing=west,connected_type=triangle,connection_direction=below": { "model": "kuayue:block/overhead_line/overhead_triangle_truss_hanger", "x": 180, "y": 270 }
+  }
+}

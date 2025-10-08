@@ -4,6 +4,7 @@ import kasuga.lib.core.client.frontend.gui.GuiContext;
 import kasuga.lib.core.client.frontend.gui.GuiInstance;
 import kasuga.lib.core.client.frontend.gui.SourceInfo;
 import kasuga.lib.core.client.frontend.gui.events.mouse.MouseEvent;
+import kasuga.lib.core.client.frontend.gui.nodes.GuiDomNode;
 import kasuga.lib.core.client.frontend.rendering.RenderContext;
 import kasuga.lib.core.menu.base.BindingClient;
 import kasuga.lib.core.menu.base.GuiMenu;
@@ -31,6 +32,16 @@ public class InteractiveScreenTarget {
         instance.getContext().ifPresent((context)->{
             context.appendTask(()->{
                 context.getRootNode().onMouseEvent(source, event);
+            });
+        });
+    }
+
+    public void dispatchEventToActivate(MouseEvent event) {
+        instance.getContext().ifPresent((context)->{
+            context.appendTask(()->{
+                for (GuiDomNode activateElement : context.getActivateElements()) {
+                    activateElement.dispatchEvent(event.getType(), event);
+                }
             });
         });
     }

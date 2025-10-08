@@ -27,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import willow.train.kuayue.initial.AllElements;
+import willow.train.kuayue.systems.device.AllDeviceSystems;
 import willow.train.kuayue.systems.device.AllDevicesMenus;
 import willow.train.kuayue.systems.device.IEntityTrackingMovementBehavior;
 import willow.train.kuayue.systems.device.driver.seat.AnchorPoint;
@@ -67,7 +68,12 @@ public class InternalCombustionDriveControllerMovementBehavior
                         }
                     })
                     .with(AllDevicesMenus.CIR)
-                    .with(AllDevicesMenus.INTERNAL_COMBUSTION_DRIVING_MENU)
+                    .with(AllDevicesMenus.INTERNAL_COMBUSTION_DRIVING_MENU, (menu)->{
+                        if(!context.world.isClientSide) {
+                            Pair<TrainDeviceManager, TrainDeviceLocation> pair = TrainDeviceManager.getManager(context);
+                            menu.providePower(pair.getFirst().getOrCreateSystem(AllDeviceSystems.POWER), pair.getSecond());
+                        }
+                    })
                     .locatedAt(locator)
                     .build();
             holder.enable(context.world);
@@ -157,8 +163,8 @@ public class InternalCombustionDriveControllerMovementBehavior
                         ()->MENUS.containsKey(context),
                         ()->MENUS.get(context).getMenu(2).orElseThrow(),
                         new Vec2(0, -4),
-                        new Vec2(0.75f,0.75f),
-                        new Vec2(508,68)
+                        new Vec2(0.075f,0.075f),
+                        new Vec2(5080,680)
                 ) {{
                     setScreenAnchor(AnchorPoint.BOTTOM_CENTER);
                     setSelfAnchor(AnchorPoint.BOTTOM_CENTER);

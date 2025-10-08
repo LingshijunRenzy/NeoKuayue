@@ -30,6 +30,10 @@
     "kuayue:window_double_small_m1",
     "kuayue:window_large_jy30",
     "kuayue:window_large_between_jy30",
+    "kuayue:22_window",
+    "kuayue:22_large_window",
+    "kuayue:22_double_small_window",
+    "kuayue:22_small_window",
 
     "kuayue:door_marshalled_cr200j",
     "kuayue:door_marshalled_cr200j_2",
@@ -45,6 +49,7 @@
     "kuayue:door_cabin_df21",
     "kuayue:door_equip_df21",
     "kuayue:door_m1",
+    "kuayue:22_door",
     "kuayue:door_cabin_df11g",
     "kuayue:door_equip_room_df11g",
     "kuayue:door_cabin_hxd3d",
@@ -56,6 +61,7 @@
     "kuayue:ss8_door",
     "kuayue:ss3_door",
     "kuayue:df11_door",
-    "kuayue:flourescent_light"
+    "kuayue:flourescent_light",
+    "kuayue:jy290_door"
   ]
 }

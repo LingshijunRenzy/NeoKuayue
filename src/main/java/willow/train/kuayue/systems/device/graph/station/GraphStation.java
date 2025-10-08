@@ -9,10 +9,12 @@ import net.minecraft.world.level.LevelAccessor;
 import willow.train.kuayue.initial.AllEdgePoints;
 import willow.train.kuayue.systems.device.graph.track.StationTrack;
 import willow.train.kuayue.systems.device.track.entry.StationEntry;
+import willow.train.kuayue.systems.device.track.exit.StationExit;
 import willow.train.kuayue.systems.device.track.train_station.GraphStationInfo;
 import willow.train.kuayue.systems.device.track.train_station.TrainStation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class GraphStation {
@@ -22,7 +24,7 @@ public class GraphStation {
     public String shortenCode;
     public ArrayList<TrainStation> stations = new ArrayList<>();
     public ArrayList<StationEntry> entries = new ArrayList<StationEntry>();
-    public ArrayList<StationTrack> stationTracks = new ArrayList<>();
+    public HashMap<UUID, StationTrack> stationTracks = new HashMap<>();
 
     public GraphStation(UUID uuid) {
         this.uuid = uuid;
@@ -58,7 +60,7 @@ public class GraphStation {
 
 
         ListTag stationTracks = new ListTag();
-        for (StationTrack stationTrack : this.stationTracks) {
+        for (StationTrack stationTrack : this.stationTracks.values()) {
             stationTracks.add(stationTrack.write());
         }
         tag.put("Tracks", stationTracks);
@@ -105,8 +107,10 @@ public class GraphStation {
         ListTag trackTags = nbt.getList("Tracks", Tag.TAG_COMPOUND);
         for(int i=0;i<trackTags.size();i++){
             CompoundTag trackTag = tag.getCompound(i);
-            StationTrack track = StationTrack.read(network, trackTag);
-            this.stationTracks.add(track);
+            StationTrack track = StationTrack.read(network, this, trackTag);
+            if(track.isEmptyExit())
+                continue;
+            this.stationTracks.put(track.getId(), track);
         }
     }
 
@@ -126,6 +130,31 @@ public class GraphStation {
     }
 
     public GraphStationInfo getStationInfo() {
+        if(this.name == null) name = "";
+        if(this.shortenCode == null) shortenCode = "";
         return new GraphStationInfo(this.name, this.shortenCode);
+    }
+
+    public void addTrack(UUID trackId) {
+        this.stationTracks.computeIfAbsent(trackId, i -> new StationTrack(this, i));
+    }
+
+    public void registerTrack(UUID trackId, StationExit exit, boolean direction) {
+        StationTrack track = this.stationTracks.computeIfAbsent(trackId, i -> new StationTrack(this, i));
+        track.addExitSignal(exit, direction);
+    }
+
+    public void unregisterTrack(UUID trackId, StationExit exit, boolean direction) {
+        StationTrack track = this.stationTracks.get(trackId);
+        if (track != null) {
+            track.removeExitSignal(exit, direction);
+            if (track.isEmptyExit()) {
+                this.stationTracks.remove(trackId);
+            }
+        }
+    }
+
+    public void removeTrack(UUID trackId) {
+        this.stationTracks.remove(trackId);
     }
 }

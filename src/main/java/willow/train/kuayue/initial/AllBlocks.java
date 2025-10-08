@@ -142,6 +142,7 @@ public class AllBlocks {
                     .addBlock(ISS8Panel.SS8_DOOR.block)
                     .addBlock(ISS3Panel.SS3_DOOR.block)
                     .addBlock(CM1Panel.DOOR_M1.block)
+                    .addBlock(C22Panel.DOOR_22.block)
                     .addBlock(I11Panel.DF11_DOOR.block)
                     .submit(AllElements.testRegistry);
 
@@ -173,6 +174,7 @@ public class AllBlocks {
                     .addBlock(C25ZPanel.END_FACE_25Z_2.block)
                     .addBlock(C25ZPanel.END_FACE_25Z_3.block)
                     .addBlock(I11GPanel.END_FACE_DF11G.block)
+                    .addBlock(C22Panel.C22_END_FACE.block)
                     .submit(AllElements.testRegistry);
 
     public static final BlockEntityReg<DoubleDoorEntity> DOUBLE_DOOR_ENTITY =
@@ -255,6 +257,9 @@ public class AllBlocks {
         ISS8Panel.invoke();
         AllRecipeBlock.invoke();
         I11Panel.invoke();
+        IJY290Panel.invoke();
+        C22Panel.invoke();
+        I5Panel.invoke();
     }
 
     public static void generateDrops(String name) {

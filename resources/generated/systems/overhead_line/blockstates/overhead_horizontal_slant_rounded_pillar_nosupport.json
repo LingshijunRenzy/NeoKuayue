@@ -1,0 +1,20 @@
+﻿{
+  "variants": {
+    "facing=east": {
+      "model": "kuayue:block/overhead_line/overhead_horizontal_slant_rounded_pillar_nosupport",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "kuayue:block/overhead_line/overhead_horizontal_slant_rounded_pillar_nosupport",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "kuayue:block/overhead_line/overhead_horizontal_slant_rounded_pillar_nosupport",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "kuayue:block/overhead_line/overhead_horizontal_slant_rounded_pillar_nosupport",
+      "y": 90
+    }
+  }
+}

@@ -31,8 +31,8 @@ import java.util.Set;
 @OnlyIn(Dist.CLIENT)
 public class CarriageInventoryEvents {
 
-    private static final int CARRIAGE_TYPE_COUNTS = 10;
-    private static final int LOCO_TYPE_COUNTS = 7;
+    private static final int CARRIAGE_TYPE_COUNTS = 11;
+    private static final int LOCO_TYPE_COUNTS = 9;
     private static int carriageType = 0;
     private static int locoType = 0;
     ItemIconButton[] imgBtn = new ItemIconButton[CARRIAGE_TYPE_COUNTS];
@@ -118,6 +118,7 @@ public class CarriageInventoryEvents {
         icons[7] = new ItemStack(CR200JPanel.PANEL_BOTTOM_MARSHALLED_CR200J.block.getBlock());
         icons[8] = new ItemStack(CM1Panel.BOTTOM_SLAB_M1.block.getBlock());
         icons[9] = new ItemStack(CFreightPanel.FREIGHT_C70_END_FACE.block.getBlock());
+        icons[10] = new ItemStack(C22Panel.C22_PANEL_BOTTOM.block.getBlock());
 
         ItemStack[] locoIcons = new ItemStack[LOCO_TYPE_COUNTS];
         locoIcons[0] = new ItemStack(AllBlocks.CR_LOGO.getBlock());
@@ -127,6 +128,8 @@ public class CarriageInventoryEvents {
         locoIcons[4] = new ItemStack(ISS8Panel.SS8_HEAD.getBlock());
         locoIcons[5] = new ItemStack(ISS3Panel.SS3_HEAD.getBlock());
         locoIcons[6] = new ItemStack(I11Panel.DF11_HEAD.getBlock());
+        locoIcons[7] = new ItemStack(IJY290Panel.JY290_HEAD_2.getBlock());
+        locoIcons[8] = new ItemStack(I5Panel.DF5_END_FACE_1.getBlock());
 
         // 定义左侧向上箭头按钮
         upAndDownBtn[0] = new ImageButton(upRegex, this.guiLeft - 22, this.guiTop - 8, 20, 20, Component.empty(),
@@ -197,6 +200,9 @@ public class CarriageInventoryEvents {
                 Component.translatable("container." + Kuayue.MODID + ".inventory.button.m1");
         components[9] =
                 Component.translatable("container." + Kuayue.MODID + ".inventory.button.freight");
+        components[10] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.button.c22");
+
 
         Component[] locoComponents = new Component[LOCO_TYPE_COUNTS];
         locoComponents[0] =
@@ -213,6 +219,10 @@ public class CarriageInventoryEvents {
                 Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.ss3");
         locoComponents[6] =
                 Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.df11");
+        locoComponents[7] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.jy290");
+        locoComponents[8] =
+                Component.translatable("container." + Kuayue.MODID + ".inventory.loco.button.df5");
 
 
         // 定义所有列车车厢板类型按钮
@@ -473,6 +483,10 @@ public class CarriageInventoryEvents {
                 menu.items.clear();
                 menu.items.addAll(itemList.get(10));
                 break;
+            case 10: // 22
+                menu.items.clear();
+                menu.items.addAll(itemList.get(11));
+                break;
             default: // carriageType为0时添加所有类型
                 menu.items.clear();
                 menu.items.addAll(itemList.get(0)); // B
@@ -486,6 +500,7 @@ public class CarriageInventoryEvents {
                 menu.items.addAll(itemList.get(8)); // bgkzt
                 menu.items.addAll(itemList.get(9)); // M1
                 menu.items.addAll(itemList.get(10)); // Freight
+                menu.items.addAll(itemList.get(11)); // 22
         }
     }
 
@@ -507,7 +522,6 @@ public class CarriageInventoryEvents {
                 menu.items.clear();
                 menu.items.addAll(locoItemList.get(3));
                 break;
-
             case 5: // SS3
                 menu.items.clear();
                 menu.items.addAll(locoItemList.get(4));
@@ -517,6 +531,14 @@ public class CarriageInventoryEvents {
                 menu.items.clear();
                 menu.items.addAll(locoItemList.get(5));
                 break;
+            case 7: // JY290
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(6));
+                break;
+            case 8: // DF5
+                menu.items.clear();
+                menu.items.addAll(locoItemList.get(7));
+                break;
             default: // locoType为0时添加所有类型
                 menu.items.clear();
                 menu.items.addAll(locoItemList.get(0)); // DF11G
@@ -525,7 +547,8 @@ public class CarriageInventoryEvents {
                 menu.items.addAll(locoItemList.get(3)); // SS8
                 menu.items.addAll(locoItemList.get(4)); // SS3
                 menu.items.addAll(locoItemList.get(5)); // DF11
-
+                menu.items.addAll(locoItemList.get(6)); // JY290
+                menu.items.addAll(locoItemList.get(7)); // DF5
         }
     }
 
@@ -544,6 +567,7 @@ public class CarriageInventoryEvents {
                         add(getListByTag(AllTags.C25BGKZT.tag())); // BGKZT 8
                         add(getListByTag(AllTags.CM1.tag()));   // M1 9
                         add(getListByTag(AllTags.C_FREIGHT.tag())); // Freight 10
+                        add(getListByTag(AllTags.C22.tag())); // 22 11
                     }
                 };
 
@@ -555,8 +579,9 @@ public class CarriageInventoryEvents {
                         add(getListByTag(AllTags.I21.tag())); // DF21 2
                         add(getListByTag(AllTags.ISS8.tag())); // SS8 3
                         add(getListByTag(AllTags.ISS3.tag())); // SS3 4
-                        add(getListByTag(AllTags.I11.tag())); // I11 5
-
+                        add(getListByTag(AllTags.I11.tag())); // DF11 5
+                        add(getListByTag(AllTags.IJY290.tag())); // JY290 6
+                        add(getListByTag(AllTags.I5.tag())); // DF5 7
                     }
                 };
     }

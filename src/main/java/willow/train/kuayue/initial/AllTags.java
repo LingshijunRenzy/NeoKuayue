@@ -66,6 +66,9 @@ public class AllTags {
     public static final BlockTagReg C_FREIGHT = new BlockTagReg("c_freight", "panel/c_freight")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg C22 = new BlockTagReg("c22", "panel/c22")
+            .submit(AllElements.testRegistry);
+
     public static final BlockTagReg I3D = new BlockTagReg("i3d", "panel/i3d")
             .submit(AllElements.testRegistry);
 
@@ -84,6 +87,12 @@ public class AllTags {
     public static final BlockTagReg I11 = new BlockTagReg("i11", "panel/i11")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg IJY290 = new BlockTagReg("ijy290", "panel/ijy290")
+            .submit(AllElements.testRegistry);
+
+    public static final BlockTagReg I5 = new BlockTagReg("i5", "panel/i5")
+            .submit(AllElements.testRegistry);
+
     public static final BlockTagReg MULTI_SEAT_BLOCK = new BlockTagReg("multi_seat_block", "multi_seat_block")
             .submit(AllElements.testRegistry);
 
@@ -94,6 +103,8 @@ public class AllTags {
             new FluidTagReg("forge", "cola_fluid", "fluids/cola_fluid")
                     .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg OVERHEAD_PILLAR_MIDDLE = new BlockTagReg("overhead_pillar_middle", "overhead_line/overhead_pillar_middle")
+            .submit(AllElements.testRegistry);
     public static void invoke() {}
 
     @FunctionalInterface

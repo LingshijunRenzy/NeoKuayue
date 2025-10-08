@@ -27,9 +27,13 @@ public abstract class OverheadLineInsulatorRenderer {
             pPoseStack.pushPose();
             pPoseStack.mulPoseMatrix(
                     AllOverheadLineSupportModels.getDirectionOf.apply(
-                            pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.0f
+                            pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
                     )
             );
+
+            AllOverheadLineSupportModels.applyRotation(pPoseStack, pBlockEntity);
+            AllOverheadLineSupportModels.applyOffset(pPoseStack, pBlockEntity);
+
             (pBlockEntity.getBlockState().getValue(OverheadLineSupportInsulatorBlock.WALL)
                     ? AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_INSULATOR_A_WALL
                     :AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_INSULATOR_A)
@@ -50,9 +54,13 @@ public abstract class OverheadLineInsulatorRenderer {
             pPoseStack.pushPose();
             pPoseStack.mulPoseMatrix(
                     AllOverheadLineSupportModels.getDirectionOf.apply(
-                            pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.0f
+                            pBlockEntity.getBlockState().getValue(OverheadLineSupportBlock.FACING), 1.3f
                     )
             );
+
+            AllOverheadLineSupportModels.applyRotation(pPoseStack, pBlockEntity);
+            AllOverheadLineSupportModels.applyOffset(pPoseStack, pBlockEntity);
+
             (pBlockEntity.getBlockState().getValue(OverheadLineSupportInsulatorBlock.WALL)
                     ? AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_INSULATOR_B_WALL
                     :AllOverheadLineSupportModels.OVERHEAD_LINE_SUPPORT_INSULATOR_B)
