@@ -300,18 +300,32 @@ publishing {
         }
     }
 
+//    repositories {
+//        maven {
+//            name = "GradleCIMaven"
+//            url = uri("https://git.gradle.ci/api/packages/KuaYueTeam/maven")
+//
+//            credentials(HttpHeaderCredentials) {
+//                name = "Authorization"
+//                value = "Bearer ${project.findProperty("kuaYueTeamGradleCiToken")}"
+//            }
+//
+//            authentication {
+//                header(HttpHeaderAuthentication)
+//            }
+//        }
+//    }
+
     repositories {
         maven {
-            name = "GradleCIMaven"
-            url = uri("https://git.gradle.ci/api/packages/KuaYueTeam/maven")
-
-            credentials(HttpHeaderCredentials) {
-                name = "Authorization"
-                value = "Bearer ${project.findProperty("kuaYueTeamGradleCiToken")}"
+            name = "kuayueMaven"
+            url = uri("https://maven.kycraft.cn/${repository_channel}/")
+            credentials(PasswordCredentials) {
+                username = project.findProperty("kuayueMavenUsername") ?: localProperties.getProperty("repository_username")
+                password = project.findProperty("kuayueMavenPassword") ?: localProperties.getProperty("repository_password")
             }
-
             authentication {
-                header(HttpHeaderAuthentication)
+                basic(BasicAuthentication)
             }
         }
     }
