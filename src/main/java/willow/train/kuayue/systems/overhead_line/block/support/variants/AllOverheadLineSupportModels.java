@@ -10,6 +10,7 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.TransformationHelper;
@@ -101,78 +102,78 @@ public class AllOverheadLineSupportModels {
     public static void invoke(){
         OVERHEAD_LINE_SUPPORT_A1_MODEL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_grid_a1"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_SUPPORT_A2_MODEL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_grid_a2"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_SUPPORT_C1_MODEL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_grid_c"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_SUPPORT_C2_MODEL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_grid_c2"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_SUPPORT_INSULATOR_A = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_a"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_SUPPORT_INSULATOR_A_WALL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_a_wall"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_SUPPORT_INSULATOR_B = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_b"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_SUPPORT_INSULATOR_B_WALL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_insulator_b_wall"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         KUAYUE_TEST = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/test/test"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         KUAYUE_TEST_LINE = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/test/test_line"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
 
         OVERHEAD_LINE_END_COUNTERWEIGHT = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
 
         OVERHEAD_LINE_END_COUNTERWEIGHT_SMALL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_small"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
 
         OVERHEAD_LINE_END_COUNTERWEIGHT_EMPTY = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_empty"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_hanger_line"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_END_COUNTERWEIGHT_HANGER_LINE_SMALL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_end_counterweight_hanger_line_small"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_WEIGHT = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_weight"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_WEIGHT_ON_GROUND = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_weight_on_ground"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
         OVERHEAD_LINE_WEIGHT_SMALL = BedrockModelLoader.getModel(
                 AllElements.testRegistry.asResource("block/overhead_line/overhead_line_weight_small"),
-                RenderType.cutoutMipped()
+                Sheets.cutoutBlockSheet()
         );
 
         OVERHEAD_LINE_SUPPORT_A1_MODEL.init();

@@ -67,6 +67,7 @@ public class PlayerDataEvent {
 //        TechTreeManager.sendAllPayloads((ServerPlayer) player);
         ServerNetworkCache cache = NetworkCacheManager.MANAGER.addCacheFor((ServerPlayer) player);
         TechTreeManager.MANAGER.trees().forEach((s, tree) -> cache.enqueueTree(tree));
+        TechTreeManager.MANAGER.notifyCycleDetected(player);
 
         if (PlayerDataManager.MANAGER.containsPlayerData(player)) return;
         PlayerDataManager.MANAGER.createPlayerData(player);

@@ -62,6 +62,11 @@
     "kuayue:ss3_door",
     "kuayue:df11_door",
     "kuayue:flourescent_light",
-    "kuayue:jy290_door"
+    "kuayue:jy290_door",
+
+    "kuayue:df5_engine_access_door",
+    "kuayue:df5_equip_door_1",
+    "kuayue:df5_equip_door_3",
+    "kuayue:df5_cabin_door"
   ]
 }
