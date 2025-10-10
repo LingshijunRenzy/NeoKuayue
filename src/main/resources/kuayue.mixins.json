@@ -11,12 +11,11 @@
     "MixinSimpleBlockMovingInteraction",
     "MixinStationBlockEntity",
     "MixinTrackTargetingBlockItem",
-    "SnrCompatibilityMixinStationBlockEntity",
-    "client.MixinBlockReg"
+    "SnrCompatibilityMixinStationBlockEntity"
   ],
   "client": [
     "client.AccessorCreativeTabScreen",
-    "LevelRendererAccessor",
+    "client.LevelRendererAccessor",
     "client.AccessorEditBox",
     "client.MixinCarriageContraptionEntityRenderer",
     "client.MixinLivingEntityRenderer",
