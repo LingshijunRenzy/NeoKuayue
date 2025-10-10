@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import kasuga.lib.core.client.animation.neo_neo.VectorUtil;
 import kasuga.lib.core.create.boundary.ResourcePattle;
 import kasuga.lib.core.util.Envs;
 import kasuga.lib.core.util.data_type.Pair;
@@ -253,8 +254,9 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
         if (getBlockState().hasProperty(OverheadLineSupportBlock.FACING)) {
             Direction facing = getBlockState().getValue(OverheadLineSupportBlock.FACING);
             pose.mulPose(facing.getRotation());
-//            pose.mulPose(new Quaternion(-90, -90, 0, true));
-            pose.mulPose(new Quaternionf(-90, -90, 0, 0.5));
+//          // pose.mulPose(new Quaternion(-90, -90, 0, true));
+            pose.mulPose(VectorUtil.fromXYZDegrees(new Vector3f(-90, -90, 0)));
+            // pose.mulPose(new Quaternionf(-90, -90, 0, 0.5));
         }
 
         pose.mulPose(Axis.YP.rotationDegrees(manualDeg * 1.03f));
@@ -272,9 +274,9 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
             pose.pushPose();
             pose.translate(-lp.x, lp.y, -lp.z);
             Matrix4f tm = pose.last().pose();
-            Matrix4f originMatrix4f = new Matrix4f();
+            // Matrix4f originMatrix4f = new Matrix4f();
             Vector4f origin = new Vector4f(0f, 0f, 0f, 1f);
-            originMatrix4f.transform(origin);
+            origin.mul(tm);
             Vec3 worldPoint = new Vec3(origin.x(), origin.y(), origin.z());
             worldPoints.add(worldPoint);
             pose.popPose();

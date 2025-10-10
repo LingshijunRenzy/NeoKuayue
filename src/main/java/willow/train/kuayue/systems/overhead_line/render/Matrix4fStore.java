@@ -29,7 +29,32 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public void write(int needle, Matrix4f matrix) {
-        matrix.set(buffer.slice(needle * 16,16));
+        // matrix.get(needle * 16, buffer);
+        // matrix.set(buffer.slice(needle * 16,16));
+        compatStore(matrix, buffer.slice(needle * 16, 16));
+    }
+
+    private static void compatStore(Matrix4f matrix, FloatBuffer buffer) {
+        buffer.put(bufferIndex(0, 0), matrix.m00());
+        buffer.put(bufferIndex(0, 1), matrix.m01());
+        buffer.put(bufferIndex(0, 2), matrix.m02());
+        buffer.put(bufferIndex(0, 3), matrix.m03());
+        buffer.put(bufferIndex(1, 0), matrix.m10());
+        buffer.put(bufferIndex(1, 1), matrix.m11());
+        buffer.put(bufferIndex(1, 2), matrix.m12());
+        buffer.put(bufferIndex(1, 3), matrix.m13());
+        buffer.put(bufferIndex(2, 0), matrix.m20());
+        buffer.put(bufferIndex(2, 1), matrix.m21());
+        buffer.put(bufferIndex(2, 2), matrix.m22());
+        buffer.put(bufferIndex(2, 3), matrix.m23());
+        buffer.put(bufferIndex(3, 0), matrix.m30());
+        buffer.put(bufferIndex(3, 1), matrix.m31());
+        buffer.put(bufferIndex(3, 2), matrix.m32());
+        buffer.put(bufferIndex(3, 3), matrix.m33());
+    }
+
+    public static int bufferIndex(int px, int py) {
+        return py * 4 + px;
     }
 
     public Matrix4f getHandler(){
@@ -37,7 +62,27 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public void load(int needle){
-        handler.get(buffer.slice(needle * 16, 16));
+        // handler.set(buffer.slice(needle * 16, 16));
+        compatLoad(handler, buffer.slice(needle * 16, 16));
+    }
+
+    private static void compatLoad(Matrix4f matrix, FloatBuffer buffer) {
+        matrix.set(0, 0, buffer.get(bufferIndex(0, 0)));
+        matrix.set(0, 1, buffer.get(bufferIndex(0, 1)));
+        matrix.set(0, 2, buffer.get(bufferIndex(0, 2)));
+        matrix.set(0, 3, buffer.get(bufferIndex(0, 3)));
+        matrix.set(1, 0, buffer.get(bufferIndex(1, 0)));
+        matrix.set(1, 1, buffer.get(bufferIndex(1, 1)));
+        matrix.set(1, 2, buffer.get(bufferIndex(1, 2)));
+        matrix.set(1, 3, buffer.get(bufferIndex(1, 3)));
+        matrix.set(2, 0, buffer.get(bufferIndex(2, 0)));
+        matrix.set(2, 1, buffer.get(bufferIndex(2, 1)));
+        matrix.set(2, 2, buffer.get(bufferIndex(2, 2)));
+        matrix.set(2, 3, buffer.get(bufferIndex(2, 3)));
+        matrix.set(3, 0, buffer.get(bufferIndex(3, 0)));
+        matrix.set(3, 1, buffer.get(bufferIndex(3, 1)));
+        matrix.set(3, 2, buffer.get(bufferIndex(3, 2)));
+        matrix.set(3, 3, buffer.get(bufferIndex(3, 3)));
     }
 
     @NotNull
@@ -52,7 +97,8 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
             }
             @Override
             public Matrix4f next() {
-                matrix4f.set(buffer.slice(index * 16, 16));
+                compatLoad(matrix4f, buffer.slice(index * 16, 16));
+                // matrix4f.set(buffer.slice(index * 16, 16));
                 index++;
                 return matrix4f;
             }
@@ -114,7 +160,8 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public Matrix4f get(Matrix4f matrixHandle, int i) {
-        matrixHandle.set(buffer.slice(i * 16, 16));
+        compatLoad(matrixHandle, buffer.slice(i * 16, 16));
+        // matrixHandle.set(buffer.slice(i * 16, 16));
         return matrixHandle;
     }
 }

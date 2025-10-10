@@ -1,5 +1,6 @@
 package willow.train.kuayue.systems.overhead_line.block.line;
 
+import com.google.common.eventbus.Subscribe;
 import kasuga.lib.core.client.model.anim_model.AnimModel;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.mixins.mixin.client.LevelRendererAccessor;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 import willow.train.kuayue.systems.overhead_line.render.CachedCurveRenderer;
@@ -130,11 +132,12 @@ public class OverheadLineRendererSystem {
         LOCK.put(locator, newLock);
     }
 
+    @SubscribeEvent
     public static void onRenderLevelLast(RenderLevelStageEvent event) {
 
         ClientLevel level = ((LevelRendererAccessor) event.getLevelRenderer()).getLevel();
 
-        MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 
         if(event.getStage() != AFTER_SKY)
             return;

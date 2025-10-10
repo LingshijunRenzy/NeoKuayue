@@ -12,7 +12,7 @@ public class CachedCurveRenderer {
         pose.pushPose();
         Matrix4f original = new Matrix4f(pose.last().pose());
         for (Pair<Matrix4f, Integer> part : curve) {
-            pose.last().pose().mul(part.getFirst());
+            pose.mulPoseMatrix(part.getFirst());
             curveModel.render(pose, bufferSource, part.getSecond(), overlay);
             pose.last().pose().set(original);
         }

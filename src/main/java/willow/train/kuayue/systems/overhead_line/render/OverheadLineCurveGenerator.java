@@ -33,7 +33,6 @@ public class OverheadLineCurveGenerator {
     public static void straightLine(RenderCurve.Builder builder, Vec3 a, Vec3 b, float r) {
         Vec3 dir = b.subtract(a);
 
-
         PoseStack pose = builder.getPoseStack();
         pose.mulPose(Axis.XP.rotation( - (float) Math.atan2(dir.y, Math.sqrt(dir.x * dir.x + dir.z * dir.z))));
         pose.scale(r, r, (float) a.distanceTo(b));
