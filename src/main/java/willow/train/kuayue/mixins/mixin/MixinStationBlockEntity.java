@@ -91,10 +91,10 @@ public class MixinStationBlockEntity {
                     value = "INVOKE",
                     target = "Lcom/simibubi/create/content/trains/bogey/AbstractBogeyBlockEntity;setBogeyData(Lnet/minecraft/nbt/CompoundTag;)V"),
             remap = false)
-    public void addBogeyChangeText(Player player, InteractionHand hand, ITrackBlock track, BlockState state,
+    public void addBogeyChangeText(Player player, InteractionHand hand,
+                                   ITrackBlock track, BlockState state,
                                    BlockPos pos, CallbackInfoReturnable<Boolean> cir,
                                    @Local(ordinal = 2) BlockState newBlock) {
-
         Level level = ((StationBlockEntity)(Object) this).getLevel();
         String descriptionId = newBlock.getBlock().getDescriptionId();
         if(level != null && descriptionId.startsWith("kuayue", 6)) {

@@ -334,6 +334,9 @@ tasks.named("jar").configure {
 
     // finalizedBy 'reobfJar'
 }
+tasks.named("jarJar").configure {
+    archiveClassifier = ''
+}
 
 java {
     // withJavadocJar()
@@ -343,7 +346,7 @@ java {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifact jar
+            artifact tasks.named("jarJar")
             artifact sourcesJar
             // artifact javadocJar
             groupId = "willow.train.kuayue"
