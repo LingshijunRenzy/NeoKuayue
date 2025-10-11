@@ -160,8 +160,8 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
      * @author MegumiKasuga(Carole)
      */
     private static void compatStore(Matrix4f matrix, FloatBuffer buffer) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 buffer.put(bufferIndex(i, j), matrix.get(i, j));
             }
         }
@@ -186,8 +186,8 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
      * @author MegumiKasuga(Carole)
      */
     private static void compatLoad(Matrix4f matrix, FloatBuffer buffer) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 matrix.set(i, j, buffer.get(bufferIndex(i, j)));
             }
         }
