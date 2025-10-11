@@ -7,10 +7,12 @@ import kasuga.lib.core.client.render.texture.Matrix;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix2d;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.Iterator;
 
@@ -28,61 +30,44 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
         this.handler = new Matrix4f();
     }
 
+    /**
+     * Theoretically it should be {@link Matrix4f#get(FloatBuffer)} here.
+     * <br> But there may be some bugs in {@link org.joml.MemUtil.MemUtilUnsafe#put(Matrix4f, long)},
+     * which would cause {@code EXCEPTION_ACCESS_VIOLATION}, this would lead to a JVM failure.
+     * <br> SO, I write a pair of {@code compat methods} to fix this problem. they are just the
+     * same logic of Minecraft used in {@code 1.19.2}.
+     * See {@link Matrix4fStore#compatStore(Matrix4f, FloatBuffer)} and
+     * {@link Matrix4fStore#compatLoad(Matrix4f, FloatBuffer)} below.
+     * @author MegumiKasuga(Carole)
+     * @param needle offset of the memory pointer.
+     * @param matrix the matrix you want to write to this buffer.
+     */
     public void write(int needle, Matrix4f matrix) {
         // matrix.get(needle * 16, buffer);
         // matrix.set(buffer.slice(needle * 16,16));
+        // NOTICE: compat version of storage method is used.
         compatStore(matrix, buffer.slice(needle * 16, 16));
-    }
-
-    private static void compatStore(Matrix4f matrix, FloatBuffer buffer) {
-        buffer.put(bufferIndex(0, 0), matrix.m00());
-        buffer.put(bufferIndex(0, 1), matrix.m01());
-        buffer.put(bufferIndex(0, 2), matrix.m02());
-        buffer.put(bufferIndex(0, 3), matrix.m03());
-        buffer.put(bufferIndex(1, 0), matrix.m10());
-        buffer.put(bufferIndex(1, 1), matrix.m11());
-        buffer.put(bufferIndex(1, 2), matrix.m12());
-        buffer.put(bufferIndex(1, 3), matrix.m13());
-        buffer.put(bufferIndex(2, 0), matrix.m20());
-        buffer.put(bufferIndex(2, 1), matrix.m21());
-        buffer.put(bufferIndex(2, 2), matrix.m22());
-        buffer.put(bufferIndex(2, 3), matrix.m23());
-        buffer.put(bufferIndex(3, 0), matrix.m30());
-        buffer.put(bufferIndex(3, 1), matrix.m31());
-        buffer.put(bufferIndex(3, 2), matrix.m32());
-        buffer.put(bufferIndex(3, 3), matrix.m33());
-    }
-
-    public static int bufferIndex(int px, int py) {
-        return py * 4 + px;
     }
 
     public Matrix4f getHandler(){
         return handler;
     }
 
-    public void load(int needle){
+    /**
+     * Theoretically it should be {@link Matrix4f#set(FloatBuffer)} here.
+     * <br> But there may be some bugs in {@link org.joml.MemUtil.MemUtilUnsafe#get(Matrix4f, long)},
+     * which would cause {@code EXCEPTION_ACCESS_VIOLATION}, this would lead to a JVM failure.
+     * <br> SO, I write a pair of {@code compat methods} to fix this problem. they are just the
+     * same logic of Minecraft used in {@code 1.19.2}.
+     * See {@link Matrix4fStore#compatStore(Matrix4f, FloatBuffer)} and
+     * {@link Matrix4fStore#compatLoad(Matrix4f, FloatBuffer)}.
+     * @author MegumiKasuga(Carole)
+     * @param needle offset of the memory pointer.
+     */
+    public void load(int needle) {
         // handler.set(buffer.slice(needle * 16, 16));
+        // NOTICE: compat version of loading method is used.
         compatLoad(handler, buffer.slice(needle * 16, 16));
-    }
-
-    private static void compatLoad(Matrix4f matrix, FloatBuffer buffer) {
-        matrix.set(0, 0, buffer.get(bufferIndex(0, 0)));
-        matrix.set(0, 1, buffer.get(bufferIndex(0, 1)));
-        matrix.set(0, 2, buffer.get(bufferIndex(0, 2)));
-        matrix.set(0, 3, buffer.get(bufferIndex(0, 3)));
-        matrix.set(1, 0, buffer.get(bufferIndex(1, 0)));
-        matrix.set(1, 1, buffer.get(bufferIndex(1, 1)));
-        matrix.set(1, 2, buffer.get(bufferIndex(1, 2)));
-        matrix.set(1, 3, buffer.get(bufferIndex(1, 3)));
-        matrix.set(2, 0, buffer.get(bufferIndex(2, 0)));
-        matrix.set(2, 1, buffer.get(bufferIndex(2, 1)));
-        matrix.set(2, 2, buffer.get(bufferIndex(2, 2)));
-        matrix.set(2, 3, buffer.get(bufferIndex(2, 3)));
-        matrix.set(3, 0, buffer.get(bufferIndex(3, 0)));
-        matrix.set(3, 1, buffer.get(bufferIndex(3, 1)));
-        matrix.set(3, 2, buffer.get(bufferIndex(3, 2)));
-        matrix.set(3, 3, buffer.get(bufferIndex(3, 3)));
     }
 
     @NotNull
@@ -97,6 +82,7 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
             }
             @Override
             public Matrix4f next() {
+                // NOTICE: compat version of loading method is used.
                 compatLoad(matrix4f, buffer.slice(index * 16, 16));
                 // matrix4f.set(buffer.slice(index * 16, 16));
                 index++;
@@ -160,8 +146,50 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
     }
 
     public Matrix4f get(Matrix4f matrixHandle, int i) {
+        // NOTICE: compat version of loading method is used.
         compatLoad(matrixHandle, buffer.slice(i * 16, 16));
         // matrixHandle.set(buffer.slice(i * 16, 16));
         return matrixHandle;
+    }
+
+    /**
+     * The previous version of data storage from Minecraft {@code 1.19.2}.
+     * <br> It could be only used for compat reason in {@link Matrix4fStore}.
+     * @param matrix the matrix you want to store in.
+     * @param buffer data in the input matrix would be filled into this buffer.
+     * @author MegumiKasuga(Carole)
+     */
+    private static void compatStore(Matrix4f matrix, FloatBuffer buffer) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                buffer.put(bufferIndex(i, j), matrix.get(i, j));
+            }
+        }
+    }
+
+    /**
+     * Utility method.
+     * <br> It could be only used for compat reason in {@link Matrix4fStore}.
+     * @param px row.
+     * @param py col.
+     * @author MegumiKasuga(Carole)
+     */
+    public static int bufferIndex(int px, int py) {
+        return py * 4 + px;
+    }
+
+    /**
+     * The previous version of data loading from Minecraft {@code 1.19.2}.
+     * <br> It could be only used for compat reason in {@link Matrix4fStore}.
+     * @param buffer the buffer you want to load from.
+     * @param matrix data in the buffer would be filled into this matrix.
+     * @author MegumiKasuga(Carole)
+     */
+    private static void compatLoad(Matrix4f matrix, FloatBuffer buffer) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                matrix.set(i, j, buffer.get(bufferIndex(i, j)));
+            }
+        }
     }
 }

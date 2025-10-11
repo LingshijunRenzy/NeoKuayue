@@ -255,6 +255,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
             Direction facing = getBlockState().getValue(OverheadLineSupportBlock.FACING);
             pose.mulPose(facing.getRotation());
 //          // pose.mulPose(new Quaternion(-90, -90, 0, true));
+            // NOTICE: fixed incorrect PoseStack operation here.
             pose.mulPose(VectorUtil.fromXYZDegrees(new Vector3f(-90, -90, 0)));
             // pose.mulPose(new Quaternionf(-90, -90, 0, 0.5));
         }
@@ -276,6 +277,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
             Matrix4f tm = pose.last().pose();
             // Matrix4f originMatrix4f = new Matrix4f();
             Vector4f origin = new Vector4f(0f, 0f, 0f, 1f);
+            // NOTICE: fixed incorrect matrix operation here.
             origin.mul(tm);
             Vec3 worldPoint = new Vec3(origin.x(), origin.y(), origin.z());
             worldPoints.add(worldPoint);

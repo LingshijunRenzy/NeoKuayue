@@ -273,6 +273,7 @@ dependencies {
 
     // implementation fg.deobf("curse.maven:worldedit-225608:3922622")
 
+    // NOTICE: This implementation's version should be manually modified.
     implementation fg.deobf("curse.maven:lan-server-properties-387365:4776657")
 
     implementation "org.spongepowered:mixin:${mixin_version}"
