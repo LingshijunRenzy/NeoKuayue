@@ -191,5 +191,6 @@ public class Matrix4fStore implements Iterable<Matrix4f> {
                 matrix.set(i, j, buffer.get(bufferIndex(i, j)));
             }
         }
+        matrix.determineProperties();
     }
 }
