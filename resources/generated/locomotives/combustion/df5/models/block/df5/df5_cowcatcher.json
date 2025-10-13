@@ -6,6 +6,7 @@
   "textures": {
     "particle": "kuayue:block/df5/df5_cowcatcher"
   },
+  "gui_light": "front",
   "display": {
     "thirdperson_righthand": {
       "rotation": [75, 45, 0],
@@ -27,8 +28,8 @@
     },
     "gui": {
       "rotation": [30, 225, 0],
-      "translation": [1.0, 1.5, 0],
-      "scale": [0.25, 0.25, 0.25]
+      "translation": [1.0, 0, 0],
+      "scale": [0.3, 0.3, 0.3]
     }
   }
 }
