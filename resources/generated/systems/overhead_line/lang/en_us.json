@@ -22,6 +22,7 @@
 "msg.kuayue.overhead_line_incompatible_block": "Incompatible block",
 "msg.kuayue.overhead_line_max_connections_reached": "Maximum number of connections reached",
 "msg.kuayue.overhead_line_duplicate_connection": "Cannot connect to the same two catenary frames",
+"msg.kuayue.overhead_line_incompatible_types": "Incompatible catenary types",
 "block.kuayue.overhead_pillar_concrete": "Equidistant Round Concrete Pillar",
 "block.kuayue.overhead_pillar_concrete_truss_a": "Equidistant Round Pillar Truss Type A",
 "block.kuayue.overhead_pillar_concrete_truss_b": "Equidistant Round Pillar Truss Type B",
