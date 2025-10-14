@@ -645,4 +645,8 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
             }
         }
     }
+
+    public boolean isWireTypeAllowed(OverheadLineType type){
+        return configuration.typePredictor().test(type);
+    }
 }
