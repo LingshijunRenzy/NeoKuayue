@@ -70,7 +70,7 @@ public class AllLocoBogeys {
             .size(0.915F / 2F)
             .submit(testRegistry);
 
-    public static final BogeySizeReg ss8BackwardAndesite = new BogeySizeReg("ss8_backward_a")
+   public static final BogeySizeReg ss8BackwardAndesite = new BogeySizeReg("ss8_backward_a")
             .size(0.915F / 2F)
             .submit(testRegistry);
     public static final BogeySizeReg ss3Andesite = new BogeySizeReg("ss3_a")
@@ -103,7 +103,7 @@ public class AllLocoBogeys {
             .size(0.915F / 2F)
             .submit(testRegistry);
 
-    public static final BogeySizeReg qjGuideAndesite = new BogeySizeReg("qj_guide_a")
+    public static final BogeySizeReg qjGuideAndesite = new BogeySizeReg("qj_guide_bogey_a")
             .size(0.915F / 2F)
             .submit(testRegistry);
 
@@ -190,7 +190,7 @@ public class AllLocoBogeys {
             .bogey(df11gAndesite.getSize(), DF11GRenderer.Andesite::new, testRegistry.asResource("df11g_bogey_a"))
             .bogey(df11gBackwardAndesite.getSize(), DF11GRenderer.Andesite.Backward::new, testRegistry.asResource("df11g_backward_bogey_a"))
             .bogey(qjMainAndesite.getSize(), QJMainRenderer.Andesite::new, testRegistry.asResource("qj_bogey_a"))
-            .bogey(qjGuideAndesite.getSize(), QJGuideRenderer.Andesite::new, testRegistry.asResource("qj_guide_a"))
+            .bogey(qjGuideAndesite.getSize(), QJGuideRenderer.Andesite::new, testRegistry.asResource("qj_guide_bogey_a"))
             .bogey(hxd3dAndesite.getSize(), HXD3DRenderer.Andesite::new, testRegistry.asResource("hxd3d_bogey_a"))
             .bogey(hxd3dBackwardAndesite.getSize(), HXD3DRenderer.Andesite.Backward::new, testRegistry.asResource("hxd3d_backward_bogey_a"))
             .bogey(dfh21Andesite.getSize(), DFH21Renderer.Andesite::new, testRegistry.asResource("dfh21_bogey_a"))
