@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
+import willow.train.kuayue.systems.overhead_line.wire.WireReg;
 import willow.train.kuayue.utils.client.ComponentTranslationTool;
 
 import javax.swing.text.html.Option;
@@ -79,6 +80,12 @@ public class OverheadLineItem extends Item {
         Level level = pContext.getLevel();
         BlockEntity clickedBlockEntity = level.getBlockEntity(clickedPos);
         if(!(clickedBlockEntity instanceof OverheadLineSupportBlockEntity overheadLineSupportBlockEntity)){
+            return;
+        }
+
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item.getItem());
+        if(!overheadLineSupportBlockEntity.isWireTypeAllowed(WireReg.get(key))) {
+            ComponentTranslationTool.showError(player, "overhead_line_incompatible_types", true);
             return;
         }
 
@@ -153,6 +160,11 @@ public class OverheadLineItem extends Item {
         }
 
         ResourceLocation itemType = ForgeRegistries.ITEMS.getKey(this);
+
+        if(!clickedSupport.isWireTypeAllowed(WireReg.get(itemType))){
+            ComponentTranslationTool.showError(player, "overhead_line_incompatible_types", true);
+            return false;
+        }
 
         int index = clickedSupport.getConnectionIndexOf(player.getEyePosition());
 

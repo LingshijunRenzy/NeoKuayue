@@ -36,7 +36,8 @@ public class LKJ2000CurveRenderNode extends GuiViewNode implements ClientRenderT
         LKJ2000SpeedLimitCurveRenderer.TestSpeedLine entryLine = new LKJ2000SpeedLimitCurveRenderer.TestSpeedLine(2000.0D, 1200.0D, 0D);
         speedLines.addPathLine(entryLine);
 
-        generator.points.addPathPoint(new StationMark(100D, "Á¼Ïç"));
+        // NOTICE: Don't use GBK Charset for zh-cn.
+        generator.points.addPathPoint(new StationMark(100D, "è‰¯ä¹¡"));
         this.generator = generator;
         ClientRenderTickManager.register(this);
     }
