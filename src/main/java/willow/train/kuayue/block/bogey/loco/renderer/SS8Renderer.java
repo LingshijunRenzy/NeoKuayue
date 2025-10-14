@@ -21,7 +21,7 @@ public class SS8Renderer extends BogeyRenderer {
         return AllElements.testRegistry.asResource("block/" + path);
     }
     public static final PartialModel
-            SS8_FRAME = new PartialModel(asBlockModelResource("bogey/ss8//ss8_frame")),
+            SS8_FRAME = new PartialModel(asBlockModelResource("bogey/ss8/ss8_frame")),
             SS8_WHEEL = new PartialModel(asBlockModelResource("bogey/ss8/ss8_wheel"));
     @Override
     public void initialiseContraptionModelData(
