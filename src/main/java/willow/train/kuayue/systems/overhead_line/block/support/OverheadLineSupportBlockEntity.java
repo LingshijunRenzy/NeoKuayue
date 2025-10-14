@@ -8,6 +8,7 @@ import kasuga.lib.core.client.animation.neo_neo.VectorUtil;
 import kasuga.lib.core.create.boundary.ResourcePattle;
 import kasuga.lib.core.util.Envs;
 import kasuga.lib.core.util.data_type.Pair;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -141,6 +142,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
 
     List<Connection> connections = new ArrayList<>();
 
+    @Getter
     float rotation = 0f;
     protected float x_offset = 0.0f;
     protected float y_offset = 0.0f;
@@ -216,10 +218,6 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
 
     protected void onConnectionPositionUpdated(Connection updatedConnection, boolean fromExternal) {
         this.notifyUpdate();
-    }
-
-    public float getRotation() {
-        return this.rotation;
     }
 
     public static final Vec3 BASIC_OFFSET = new Vec3(.5, 0, .5);
@@ -652,5 +650,9 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
                 }
             }
         }
+    }
+
+    public boolean isWireTypeAllowed(OverheadLineType type){
+        return configuration.typePredictor().test(type);
     }
 }

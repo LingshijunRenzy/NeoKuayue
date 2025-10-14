@@ -1,12 +1,18 @@
 package willow.train.kuayue.systems.overhead_line.block.support;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import kasuga.lib.core.client.animation.neo_neo.VectorUtil;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector4f;
 import willow.train.kuayue.systems.overhead_line.wire.AllWires;
 
 
@@ -88,7 +94,26 @@ public class OverheadLineEndWeightBlockEntity extends OverheadLineSupportBlockEn
         }
         Connection connection = connections.get(0);
 
-        Vec3 myPos = Vec3.atCenterOf(this.getBlockPos());
+        Vec3 pPos = Vec3.atCenterOf(this.getBlockPos());
+        PoseStack pose = new PoseStack();
+        pose.translate(pPos.x(), pPos.y(), pPos.z());
+        if (getBlockState().hasProperty(OverheadLineSupportBlock.FACING)) {
+            Direction facing = getBlockState().getValue(OverheadLineSupportBlock.FACING);
+            pose.mulPose(facing.getRotation());
+            pose.mulPose(VectorUtil.fromXYZDegrees(new Vector3f(-90, -90, 0)));
+        }
+
+        pose.mulPose(Axis.YP.rotationDegrees(this.rotation * 1.03f));
+        pose.translate(
+                -this.x_offset * 1.3f,
+                this.y_offset * 1.3f,
+                -this.z_offset * 1.3f
+                );
+        Matrix4f m = pose.last().pose();
+        Vector4f origin = new Vector4f(0f, 0f, 0f, 1f);
+        origin.mul(m);
+        Vec3 myPos = new Vec3(origin.x(), origin.y(), origin.z());
+
         Vec3 targetPos = getDynamicTargetPosition(connection);
 
         float absoluteAngle = calculateAngle(myPos, targetPos);
@@ -141,7 +166,7 @@ public class OverheadLineEndWeightBlockEntity extends OverheadLineSupportBlockEn
     protected void onConnectionPositionUpdated(Connection updatedConnection, boolean fromExternal) {
         super.onConnectionPositionUpdated(updatedConnection, fromExternal);
         if(fromExternal && !this.connections.isEmpty()) {
-            this.onConnectionModification();
+            this.notifyUpdate();
             this.calculateDynamicRotation();
         }
     }
