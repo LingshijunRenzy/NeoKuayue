@@ -14,7 +14,7 @@
 
     },
     "axis=x,waterlogged=true": {
-      "model": "ckuayue:block/bogey/qj/qj_guide_top",
+      "model": "kuayue:block/bogey/qj/qj_guide_top",
       "y": 90
     }
   }
