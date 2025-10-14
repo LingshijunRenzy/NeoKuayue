@@ -280,7 +280,7 @@ public class LaqueredScreen
         }
 
         int lineFontMaxWidth = (int) (guiScaledWidth * 0.28);
-        addWidget(new TransparentEditBox(font,
+        addCustomWidget(new TransparentEditBox(font,
                 // 使其根据文本内容大小偏移
                 (int) (leftMoJiMargin + bgImageXStarter),
                 (int) (bgImageYStarter + heightMarginPixel),
@@ -292,7 +292,7 @@ public class LaqueredScreen
                 values[0],
                 BLACK)
         );
-        addWidget(new TransparentEditBox(font,
+        addCustomWidget(new TransparentEditBox(font,
                 (int) (leftEngMoJiMargin + bgImageXStarter),
                 (int) (colorBarHeightStart + heightMarginPixel),
                 width1,
@@ -303,7 +303,7 @@ public class LaqueredScreen
                 values[1],
                 WHITE));
         // 目的地布局（values[2]和values[3]）
-        addWidget(new TransparentEditBox(font,
+        addCustomWidget(new TransparentEditBox(font,
                 // imageBgWidth * 0.6 用于将文字偏移到logo右边
                 (int) (rightMoJiMargin + (bgImageXStarter + (imageBgWidth * 0.6))),
                 (int) (bgImageYStarter + heightMarginPixel),
@@ -315,7 +315,7 @@ public class LaqueredScreen
                 values[2],
                 BLACK));
 
-        addWidget(new TransparentEditBox(font,
+        addCustomWidget(new TransparentEditBox(font,
                 (int) (rightEngMoJiMargin + (bgImageXStarter + (imageBgWidth * 0.6))),
                 (int) (colorBarHeightStart + heightMarginPixel),
                 width3,
@@ -327,7 +327,7 @@ public class LaqueredScreen
                 WHITE));
 
         int trainNumberMaxLength = (int) (guiScaledWidth * 0.085);
-        addWidget(new TransparentEditBox(font,
+        addCustomWidget(new TransparentEditBox(font,
                 (int) (((guiScaledWidth * 0.95) / 2) - width4 / 2),
                 (int) (colorBarHeightStart + heightMarginPixel),
                 width4,
@@ -339,7 +339,7 @@ public class LaqueredScreen
                 BLACK));
 
 // 左侧logo文字
-        addWidget(new TransparentEditBox(font,
+        addCustomWidget(new TransparentEditBox(font,
                 (int) logoXStarter - 25,
                 (int) (logoYStarter - 15),
                 width5,
@@ -351,7 +351,7 @@ public class LaqueredScreen
                 BLACK));
 
         // 右侧logo文字
-        addWidget(new TransparentEditBox(font,
+        addCustomWidget(new TransparentEditBox(font,
                 (int) ((int) logoXStarter + (logoWidthHalf) - 5.5),
                 (int) logoYStarter - 15,
                 width6,
@@ -409,7 +409,7 @@ public class LaqueredScreen
         titleLabel = new Label(Component.translatable("clip_board.laquered"));
         int width = font.width(titleLabel.getPlainText());
         titleLabel.setPosition((guiScaledWidth / 2) - (width / 2), bgImageYStarter - 20);
-        addWidget(titleLabel);
+        addCustomWidget(titleLabel);
 
         mirrorBtn = new ImageButton(mirrorBtnImage, (16), offsetButtonY, 16, 16, Component.empty(), b -> {
             revert = !revert;
@@ -451,19 +451,19 @@ public class LaqueredScreen
             showBg = true;
         });
 
-        addWidget(cancelBtn);
-        addWidget(confirmBtn);
-        addWidget(editBar);
+        addCustomWidget(cancelBtn);
+        addCustomWidget(confirmBtn);
+        addCustomWidget(editBar);
         ImageButton editorBtn = offsetEditor.getEditorBtn();
         editorBtn.setPos((int) (bgImageXStarter + imageBgWidth - (17 * 3)), offsetButtonY);
-        addWidget(editorBtn);
+        addCustomWidget(editorBtn);
         ImageButton colorBtn = colorEditor.getColorBtn();
         colorBtn.setPos((int) (bgImageXStarter + (10)), offsetButtonY);
-        addWidget(colorBtn);
+        addCustomWidget(colorBtn);
         ImageButton templateBtn = colorEditor.getTemplateBtn();
         templateBtn.setPos((int) (bgImageXStarter + (30)), offsetButtonY);
-        addWidget(templateBtn);
-        addWidget(offsetEditor);
+        addCustomWidget(templateBtn);
+        addCustomWidget(offsetEditor);
     }
 
     private void refresh() {
@@ -483,16 +483,16 @@ public class LaqueredScreen
         }
         clearWidgets();
 
-        addWidget(cancelBtn);
-        addWidget(confirmBtn);
-        addWidget(titleLabel);
-        addWidget(editBar);
-        addWidget(mirrorBtn);
-        addWidget(colorEditor);
-        addWidget(colorEditor.getColorBtn());
-        addWidget(colorEditor.getTemplateBtn());
-        addWidget(offsetEditor.getEditorBtn());
-        addWidget(offsetEditor);
+        addCustomWidget(cancelBtn);
+        addCustomWidget(confirmBtn);
+        addCustomWidget(titleLabel);
+        addCustomWidget(editBar);
+        addCustomWidget(mirrorBtn);
+        addCustomWidget(colorEditor);
+        addCustomWidget(colorEditor.getColorBtn());
+        addCustomWidget(colorEditor.getTemplateBtn());
+        addCustomWidget(offsetEditor.getEditorBtn());
+        addCustomWidget(offsetEditor);
 
         clearLabels();
         Font font = Minecraft.getInstance().font;
@@ -534,7 +534,7 @@ public class LaqueredScreen
             showBg = true;
         });
         colorEditor.visible = false;
-        addWidget(colorEditor);
+        addCustomWidget(colorEditor);
     }
 
     /**
