@@ -1,3 +1,6 @@
 {
-  "parent": "kuayue:block/df5/df5_handrail"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kuayue:item/df5_handrail_item"
+  }
 }

@@ -1,3 +1,6 @@
 {
-  "parent": "kuayue:block/df5/df5_end_face_1"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kuayue:item/df5_end_face_item"
+  }
 }
