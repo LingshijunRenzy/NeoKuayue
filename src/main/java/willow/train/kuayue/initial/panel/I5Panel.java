@@ -3,15 +3,17 @@ package willow.train.kuayue.initial.panel;
 import kasuga.lib.registrations.common.BlockReg;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelShapes;
-import willow.train.kuayue.block.panels.slab.VariableShapeHingePanelBlock;
-import willow.train.kuayue.block.panels.slab.VariableShapePanelBlock;
-import willow.train.kuayue.block.panels.slab.HingeSlabBlock;
-import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
+import willow.train.kuayue.block.panels.carport.DF5ChimneyBlock;
+import willow.train.kuayue.block.panels.door.TrainDoorBlock;
+import willow.train.kuayue.block.panels.slab.*;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.registration.PanelRegistration;
 import willow.train.kuayue.initial.registration.SlabRegistration;
@@ -230,6 +232,14 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
+    public static final SlabRegistration<HingeSlabBlock> DF5_CARPORT_CABIN =
+            new SlabRegistration<HingeSlabBlock>("df5_carport_cabin")
+                    .block(p -> new HingeSlabBlock(p, false))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueCarriageTab )
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
     public static final PanelRegistration<VariableShapePanelBlock> DF5_AIR_INTAKE =
             new PanelRegistration<VariableShapePanelBlock>("df5_air_intake")
                     .block(p -> new VariableShapePanelBlock(p,
@@ -298,21 +308,151 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<VariableShapePanelBlock> DF5_EQUIP_DOOR_2 =
-            new PanelRegistration<VariableShapePanelBlock>("df5_equip_door_2")
-                    .block(p -> new VariableShapePanelBlock(p,
+    public static final SlabRegistration<TrainSlabBlock> DF5_COOLING_FAN =
+            new SlabRegistration<TrainSlabBlock>("df5_cooling_fan")
+                    .block(p -> new TrainSlabBlock(p, true ))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapeTrainDoorBlock> DF5_ENGINE_ACCESS_DOOR =
+            new PanelRegistration<VariableShapeTrainDoorBlock>("df5_engine_access_door")
+                    .block(p -> new VariableShapeTrainDoorBlock(p,
                             new Vec2(0, 0), new Vec2(1, 1),
                             () -> (state, level, blockPos, context) ->
-                                    TrainPanelShapes.rotateShape(Direction.SOUTH,
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
                                             state.getValue(TrainPanelBlock.FACING),
-                                            TrainPanelShapes.DF5_EQUIP_DOOR_2_SHAPE_SOUTH),
-                            () -> (state, level, blockPos, context) ->
-                                    TrainPanelShapes.rotateShape(Direction.SOUTH,
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST),
+                            () -> (state, level, blockPos, context) -> {
+                                if (state.getValue(TrainDoorBlock.OPEN))
+                                    return TrainPanelShapes.rotateShape(Direction.EAST,
                                             state.getValue(TrainPanelBlock.FACING),
-                                            TrainPanelShapes.DF5_EQUIP_DOOR_2_SHAPE_SOUTH)))
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_OPEN_COLLISION_SHAPE_EAST);
+                                return TrainPanelShapes.rotateShape(Direction.EAST,
+                                        state.getValue(TrainPanelBlock.FACING),
+                                        TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_COLLISION_SHAPE_EAST);
+                            }))
                     .materialAndColor(MapColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapeTrainDoorBlock> DF5_EQUIP_DOOR_1 =
+            new PanelRegistration<VariableShapeTrainDoorBlock>("df5_equip_door_1")
+                    .block(p -> new VariableShapeTrainDoorBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) -> {
+                                DoorHingeSide hingeSide = state.getValue(BlockStateProperties.DOOR_HINGE);
+                                VoxelShape shape = TrainPanelShapes.DF5_EQUIP_DOOR_1_SHAPE_EAST;
+                                return TrainPanelShapes.rotateShape(Direction.EAST,
+                                        state.getValue(TrainPanelBlock.FACING),
+                                        hingeSide == DoorHingeSide.RIGHT ? shape :
+                                                shape.move(0, 0, -0.375));
+                            },
+                            () -> (state, level, blockPos, context) -> {
+                                DoorHingeSide hingeSide = state.getValue(BlockStateProperties.DOOR_HINGE);
+                                VoxelShape collisionShape = TrainPanelShapes.DF5_EQUIP_DOOR_1_COLLISION_SHAPE_EAST;
+                                VoxelShape openCollisionShape = TrainPanelShapes.DF5_EQUIP_DOOR_1_OPEN_COLLISION_SHAPE_EAST;
+                                if (state.getValue(TrainDoorBlock.OPEN))
+                                    return TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            hingeSide == DoorHingeSide.RIGHT ? openCollisionShape :
+                                                    openCollisionShape.move(0, 0, -0.375));
+                                return TrainPanelShapes.rotateShape(Direction.EAST,
+                                        state.getValue(TrainPanelBlock.FACING),
+                                        hingeSide == DoorHingeSide.RIGHT ? collisionShape :
+                                                collisionShape.move(0, 0, -0.375));
+                            }))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapeTrainDoorBlock> DF5_EQUIP_DOOR_2 =
+            new PanelRegistration<VariableShapeTrainDoorBlock>("df5_equip_door_2")
+                    .block(p -> new VariableShapeTrainDoorBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST),
+                            () -> (state, level, blockPos, context) -> {
+                                if (state.getValue(TrainDoorBlock.OPEN))
+                                    return TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_OPEN_COLLISION_SHAPE_EAST);
+                                return TrainPanelShapes.rotateShape(Direction.EAST,
+                                        state.getValue(TrainPanelBlock.FACING),
+                                        TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_COLLISION_SHAPE_EAST);
+                            }))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapeTrainDoorBlock> DF5_CABIN_DOOR =
+            new PanelRegistration<VariableShapeTrainDoorBlock>("df5_cabin_door")
+                    .block(p -> new VariableShapeTrainDoorBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_CABIN_DOOR_SHAPE_EAST),
+                            () -> (state, level, blockPos, context) -> {
+                                if (state.getValue(TrainDoorBlock.OPEN))
+                                    return TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_CABIN_DOOR_OPEN_COLLISION_SHAPE_EAST);
+                                return TrainPanelShapes.rotateShape(Direction.EAST,
+                                        state.getValue(TrainPanelBlock.FACING),
+                                        TrainPanelShapes.DF5_CABIN_DOOR_SHAPE_EAST);
+                            }))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_HEAD_END_FACE =
+            new PanelRegistration<VariableShapePanelBlock>("df5_head_end_face")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST)))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<VariableShapePanelBlock> DF5_HEAD_END_FACE_2 =
+            new PanelRegistration<VariableShapePanelBlock>("df5_head_end_face_2")
+                    .block(p -> new VariableShapePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_ENGINE_ACCESS_DOOR_SHAPE_EAST)))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final PanelRegistration<TrainPanelBlock> DF5_HEAD_PANEL =
+            new PanelRegistration<TrainPanelBlock>("df5_head_panel")
+                    .block(p -> new TrainPanelBlock(p, new Vec2(0, 0), new Vec2(1, 2)))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
+                    .submit(AllElements.testRegistry);
+
+    public static final SlabRegistration<DF5ChimneyBlock> DF5_CHIMNEY =
+            new SlabRegistration<DF5ChimneyBlock>("df5_chimney")
+                    .block(p -> new DF5ChimneyBlock(p, false))
+                    .materialAndColor(MapColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
