@@ -5,6 +5,7 @@ import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
 import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity;
+import com.sk89q.jchronic.utils.Span;
 import kasuga.lib.core.create.device.TrainDeviceLocation;
 import kasuga.lib.core.create.device.TrainDeviceManager;
 import kasuga.lib.core.util.data_type.Pair;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.ContraptionNbtUpdatePacket;
@@ -162,6 +164,13 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         }
 
         BlockPos nextSupportPos = cache.getCurrLink();
+        BlockPos currentSupportPos = cache.getCurrSupportPos();
+        // 方向突然间反过来的话也要更新
+        if (Vec3.atCenterOf(nextSupportPos).subtract(Vec3.atCenterOf(currentSupportPos))
+                .dot(context.motion.normalize()) < 0.0f) {
+            DebugDrawUtil.clearAllDebugElements();
+            return true;
+        }
         Vec3 nextPointPos = cache.getNextPointPos();
         Vec3 supportVec = nextPointPos.subtract(cache.getCurrPointPos());
         Vec3 pantographVec = Vec3.atCenterOf(new Vec3i(context.position.x, context.position.y, context.position.z))
@@ -192,6 +201,46 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         return false;
     }
 
+    // 嗅探，找到最近的可用挂架
+    private @Nullable BlockPos getClosedSupport(MovementContext context, Vec3 forwardVec, int searchRadius) {
+        BlockPos pantographPos = new BlockPos(context.position.x, context.position.y, context.position.z);
+        BlockPos minPos = pantographPos.offset(-searchRadius, -searchRadius, -searchRadius);
+        BlockPos maxPos = pantographPos.offset(searchRadius, searchRadius, searchRadius);
+
+        List<BlockPos> supportPosList = new ArrayList<>();
+        BlockPos.betweenClosedStream(minPos, maxPos)
+                .forEach(blockPos -> {
+                    if(context.world.getBlockEntity(blockPos) instanceof OverheadLineSupportBlockEntity) {
+                        supportPosList.add(blockPos.immutable());
+                    }
+                });
+
+        if(supportPosList.isEmpty()) {
+            return null;
+        }
+
+        double dist = Double.MAX_VALUE;
+        BlockPos supportPos = null;
+
+        // only leave the most close support
+        for(BlockPos blockPos : supportPosList) {
+            BlockEntity blockEntity = context.world.getBlockEntity(blockPos);
+            if(!(blockEntity instanceof OverheadLineSupportBlockEntity)) {
+                continue;
+            }
+            Vec3 supportVec = Vec3.atCenterOf(blockPos).subtract(
+                    Vec3.atCenterOf(pantographPos)
+            );
+            double currentDist = supportVec.cross(forwardVec).length() / forwardVec.length();
+            if(currentDist < dist) {
+                dist = currentDist;
+                supportPos = blockPos;
+            }
+        }
+
+        return supportPos;
+    }
+
     private void updateOverheadLineCache(MovementContext context) {
         CompoundTag data = context.blockEntityData.getCompound("overhead_line_support_cache");
         CurrOverheadLineCache cache = new CurrOverheadLineCache();
@@ -207,43 +256,11 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
         if(!cache.hasCurrLink()) {
             if(!cache.hasCurrSupport()) {
-                BlockPos pantographPos = new BlockPos(context.position.x, context.position.y, context.position.z);
+                // 这里是嗅探逻辑
 
-                BlockPos minPos = pantographPos.offset(-searchRadius, -searchRadius, -searchRadius);
-                BlockPos maxPos = pantographPos.offset(searchRadius, searchRadius, searchRadius);
+                @Nullable BlockPos supportPos = getClosedSupport(context, forwardVec, searchRadius);
 
-                List<BlockPos> supportPosList = new ArrayList<>();
-                BlockPos.betweenClosedStream(minPos, maxPos)
-                        .forEach(blockPos -> {
-                            if(context.world.getBlockEntity(blockPos) instanceof OverheadLineSupportBlockEntity) {
-                                supportPosList.add(blockPos.immutable());
-                            }
-                        });
-
-                if(supportPosList.isEmpty()) {
-                    return;
-                }
-
-                double dist = Double.MAX_VALUE;
-                BlockPos supportPos = null;
-
-                // only leave the most close support
-                for(BlockPos blockPos : supportPosList) {
-                    BlockEntity blockEntity = context.world.getBlockEntity(blockPos);
-                    if(!(blockEntity instanceof OverheadLineSupportBlockEntity)) {
-                        continue;
-                    }
-                    Vec3 supportVec = Vec3.atCenterOf(blockPos).subtract(
-                            Vec3.atCenterOf(pantographPos)
-                    );
-                    double currentDist = supportVec.cross(forwardVec).length() / forwardVec.length();
-                    if(currentDist < dist) {
-                        dist = currentDist;
-                        supportPos = blockPos;
-                    }
-                }
-
-                if(supportPos == null) {
+                if (supportPos == null) {
                     return;
                 }
 
@@ -252,7 +269,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     return;
                 }
 
-                List<OverheadLineSupportBlockEntity.Connection> connectionList = supportBlockEntity.getConnections();
+                List<OverheadLineSupportBlockEntity.Connection> connectionList = new ArrayList<>(supportBlockEntity.getConnections());
                 fineBestConnection(context, forwardVec, supportBlockEntity, connectionList);
 
                 if(connectionList.isEmpty()) {
@@ -288,7 +305,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     return;
                 }
 
-                List< OverheadLineSupportBlockEntity.Connection> connectionList = supportBlockEntity.getConnections();
+                List< OverheadLineSupportBlockEntity.Connection> connectionList = new ArrayList<>(supportBlockEntity.getConnections());
                 fineBestConnection(context, forwardVec, supportBlockEntity, connectionList);
 
                 // all connections are out, re-select on next tick.
@@ -324,6 +341,27 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             }
             cache.write(data);
             context.blockEntityData.put("overhead_line_support_cache", data);
+        } else {
+            // 有link, 有support
+            BlockPos currSupportPos = cache.getCurrSupportPos();
+            BlockPos nextSupportPos = cache.getCurrLink();
+            Vec3 currentSupportIndex = cache.getCurrPointPos();
+            Vec3 nextSupportIndex = cache.getNextPointPos();
+
+            Vec3 nextPointBlock = Vec3.atCenterOf(cache.getCurrLink());
+            Vec3 thisPointBlock = Vec3.atCenterOf(cache.getCurrSupportPos());
+            Vec3 linkVec = nextPointBlock.subtract(thisPointBlock);
+
+            // 要把方向反过来
+            if (linkVec.dot(forwardVec) < 0.0) {
+                cache.setCurrLink(currSupportPos);
+                cache.setCurrPointPos(nextSupportIndex);
+
+                cache.setCurrSupportPos(nextSupportPos);
+                cache.setNextPointPos(currentSupportIndex);
+                cache.write(data);
+                context.blockEntityData.put("overhead_line_support_cache", data);
+            }
         }
     }
 
@@ -336,13 +374,14 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             OverheadLineSupportBlockEntity entity,
             List<OverheadLineSupportBlockEntity.Connection> connectionList
     ) {
+        double outerThreshold = Math.cos(Math.toRadians(45.0));
         List<OverheadLineSupportBlockEntity.Connection> connections = entity.getConnections();
 
         if(connections.isEmpty() || forward.equals(Vec3.ZERO)) {
             return;
         }
 
-        if(connectionList.isEmpty()){
+        if(connectionList.isEmpty()) {
             connectionList.addAll(connections);
         }
 
@@ -359,9 +398,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             Vec3 connectionHoriz = new Vec3(connectionVec.x, 0, connectionVec.z).normalize();
             Vec3 forwardHoriz = new Vec3(forward.x, 0, forward.z).normalize();
 
-            double angleCos = connectionHoriz.dot(forwardHoriz)/ (connectionHoriz.length() * forwardHoriz.length());
+            double angleCos = connectionHoriz.dot(forwardHoriz) /
+                    (connectionHoriz.length() * forwardHoriz.length());
 
-            if(angleCos < Math.cos(Math.toRadians(45.0))){
+            if(angleCos < outerThreshold){
                 toRemove.add(connection);
                 continue;
             }
@@ -372,7 +412,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     context.position.z() - entity.getConnectionPointByIndex(connection.connectionIndex()).z()
             );
 
-            double dist = connectionHoriz.cross(w).length()/ connectionHoriz.length();
+            double dist = connectionHoriz.cross(w).length() / connectionHoriz.length();
             if(dist > 1.0) {
                 toRemove.add(connection);
             }
