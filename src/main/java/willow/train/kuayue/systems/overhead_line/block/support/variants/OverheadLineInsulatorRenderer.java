@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
@@ -46,6 +47,11 @@ public abstract class OverheadLineInsulatorRenderer {
                         );
             pPoseStack.popPose();
         }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
+        }
     }
 
     public static class BRenderer extends OverheadLineInsulatorRenderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
@@ -72,6 +78,11 @@ public abstract class OverheadLineInsulatorRenderer {
                             pPackedOverlay
                     );
             pPoseStack.popPose();
+        }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
         }
     }
 }
