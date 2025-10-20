@@ -19,7 +19,6 @@ import willow.train.kuayue.block.panels.door.TrainDoorBlock;
 
 @Mixin(SimpleBlockMovingInteraction.class)
 public abstract class MixinSimpleBlockMovingInteraction {
-
     @Shadow
     protected abstract BlockState handle(Player player, Contraption contraption, BlockPos pos,
                                          BlockState currentState);

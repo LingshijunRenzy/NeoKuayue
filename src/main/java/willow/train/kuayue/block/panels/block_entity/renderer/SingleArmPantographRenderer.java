@@ -105,18 +105,28 @@ public class SingleArmPantographRenderer implements
 //        } else {
 //            pBlockEntity.pullRodAngle = downPullRodAngle;
 //        }
-        if(risen && pBlockEntity.pullRodAngle > 155) {
-            pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
-        } else if (risen && pBlockEntity.pullRodAngle <= 155 && pBlockEntity.pullRodAngle > risePullRodAngle) {
-            pBlockEntity.pullRodAngle -= STEP_SLOW * risenSpeed;
-        } else if (!risen && pBlockEntity.pullRodAngle < 155) {
-            pBlockEntity.pullRodAngle += STEP_SLOW * risenSpeed;
-        } else if (!risen && pBlockEntity.pullRodAngle >= 155 && pBlockEntity.pullRodAngle < downPullRodAngle) {
-            pBlockEntity.pullRodAngle += STEP_FAST * risenSpeed;
-        } else if (risen) {
-            pBlockEntity.pullRodAngle = risePullRodAngle;
+        float speedThreshold = 155;
+
+        float deltaAngle = (float) (pBlockEntity.getAngle() - pBlockEntity.pullRodAngle);
+        // 这地方的算法改成向给定的值靠拢
+        if (Math.abs(deltaAngle) > 0.002 && pBlockEntity.getCache() != null) {
+            pBlockEntity.pullRodAngle += deltaAngle * .6f;
         } else {
-            pBlockEntity.pullRodAngle = downPullRodAngle;
+            if (risen && pBlockEntity.pullRodAngle > speedThreshold) {
+                pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
+            } else if (risen && pBlockEntity.pullRodAngle <= speedThreshold &&
+                    pBlockEntity.pullRodAngle > risePullRodAngle) {
+                pBlockEntity.pullRodAngle -= STEP_SLOW * risenSpeed;
+            } else if (!risen && pBlockEntity.pullRodAngle < speedThreshold) {
+                pBlockEntity.pullRodAngle += STEP_SLOW * risenSpeed;
+            } else if (!risen && pBlockEntity.pullRodAngle >= speedThreshold &&
+                    pBlockEntity.pullRodAngle < downPullRodAngle) {
+                pBlockEntity.pullRodAngle += STEP_FAST * risenSpeed;
+            } else if (risen) {
+                pBlockEntity.pullRodAngle = risePullRodAngle;
+            } else {
+                pBlockEntity.pullRodAngle = downPullRodAngle;
+            }
         }
 
         // 随动角度与坐标

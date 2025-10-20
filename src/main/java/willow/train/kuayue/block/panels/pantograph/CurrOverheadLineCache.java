@@ -6,7 +6,12 @@ import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -18,16 +23,32 @@ public class CurrOverheadLineCache implements NbtSerializable {
     private Vec3 currPointPos;
     private Vec3 nextPointPos;
 
+    private int currentPoint, nextPoint;
+
+    private int cacheVectorIndex;
+    private double cacheProgress;
+    private double cacheHeight;
+    private double cacheTotalHeight;
+    private ArrayList<Vec2> cachedPoints;
+    private ArrayList<Vec2> revertCachedPoints;
+
+
     public CurrOverheadLineCache(
             BlockPos currSupportPos,
             BlockPos currLink,
             Vec3 currPointPos,
-            Vec3 nextPointPos
+            Vec3 nextPointPos,
+            int currentPoint,
+            int nextPoint
     ) {
         this.currSupportPos = currSupportPos;
         this.currLink = currLink;
         this.currPointPos = currPointPos;
         this.nextPointPos = nextPointPos;
+        this.currentPoint = currentPoint;
+        this.nextPoint = nextPoint;
+
+        clearCache();
     }
 
     public CurrOverheadLineCache() {
@@ -35,6 +56,10 @@ public class CurrOverheadLineCache implements NbtSerializable {
         this.currLink = BlockPos.ZERO;
         this.currPointPos = Vec3.ZERO;
         this.nextPointPos = Vec3.ZERO;
+        this.currentPoint = -1;
+        this.nextPoint = -1;
+
+        clearCache();
     }
 
     @Override
@@ -46,12 +71,14 @@ public class CurrOverheadLineCache implements NbtSerializable {
         currPointTag.putDouble("x", currPointPos.x);
         currPointTag.putDouble("y", currPointPos.y);
         currPointTag.putDouble("z", currPointPos.z);
+        currPointTag.putInt("currentPoint", currentPoint);
         nbt.put("currPointPos", currPointTag);
 
         CompoundTag nextPointTag = new CompoundTag();
         nextPointTag.putDouble("x", nextPointPos.x);
         nextPointTag.putDouble("y", nextPointPos.y);
         nextPointTag.putDouble("z", nextPointPos.z);
+        nextPointTag.putInt("nextPoint", nextPoint);
         nbt.put("nextPointPos", nextPointTag);
 
     }
@@ -67,6 +94,7 @@ public class CurrOverheadLineCache implements NbtSerializable {
                 currPointTag.getDouble("y"),
                 currPointTag.getDouble("z")
         );
+        this.currentPoint = currPointTag.getInt("currentPoint");
 
         CompoundTag nextPointTag = nbt.getCompound("nextPointPos");
         this.nextPointPos = new Vec3(
@@ -74,19 +102,23 @@ public class CurrOverheadLineCache implements NbtSerializable {
                 nextPointTag.getDouble("y"),
                 nextPointTag.getDouble("z")
         );
+        this.nextPoint = nextPointTag.getInt("nextPoint");
     }
 
-    public boolean hasCurrSupport(){
-        return !this.currSupportPos.equals(BlockPos.ZERO);
+    public boolean hasCurrSupport() {
+        return this.currentPoint > -1;
     }
 
-    public boolean hasCurrLink(){
-        return !this.currLink.equals(BlockPos.ZERO);
+    public boolean hasCurrLink() {
+        return this.nextPoint > -1;
     }
 
-    public void clearCurrLink(){
+    public void clearCurrLink() {
         this.currLink = BlockPos.ZERO;
         this.nextPointPos = Vec3.ZERO;
+        this.nextPoint = -1;
+
+        clearCache();
     }
 
     public void clearAll(){
@@ -94,5 +126,18 @@ public class CurrOverheadLineCache implements NbtSerializable {
         this.currLink = BlockPos.ZERO;
         this.currPointPos = Vec3.ZERO;
         this.nextPointPos = Vec3.ZERO;
+        this.currentPoint = -1;
+        this.nextPoint = -1;
+
+        clearCache();
+    }
+
+    public void clearCache() {
+        this.cacheVectorIndex = -1;
+        this.cacheProgress = 0;
+        this.cacheHeight = 0;
+        this.cacheTotalHeight = 0;
+        this.cachedPoints = null;
+        this.revertCachedPoints = null;
     }
 }
