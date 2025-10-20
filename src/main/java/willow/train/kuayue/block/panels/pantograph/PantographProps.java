@@ -26,7 +26,7 @@ public class PantographProps implements IPantographAngleMapping {
 
         PantographMapping pantographMapping = new PantographMapping(0.0, 0.0);
 
-        for (double pullRodAngle = risePullRodAngle; pullRodAngle <= downPullRodAngle; pullRodAngle += 0.1) {
+        for (double pullRodAngle = risePullRodAngle; pullRodAngle <= downPullRodAngle; pullRodAngle += 0.05) {
             HashMap<String, Double> pantoModelMap =
                     IPantographModel.getPantoModelMapByType(pantographProps, pullRodAngle);
             Double bowHeight = pantoModelMap.get(BOW_HEAD_POS_Y);

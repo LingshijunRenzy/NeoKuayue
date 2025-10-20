@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
+import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -107,10 +108,10 @@ public class SingleArmPantographRenderer implements
 //        }
         float speedThreshold = 155;
 
-        float deltaAngle = (float) (pBlockEntity.getAngle() - pBlockEntity.pullRodAngle);
+        Pair<Double, Double> angle = pBlockEntity.getAngle();
         // 这地方的算法改成向给定的值靠拢
-        if (Math.abs(deltaAngle) > 0.002 && pBlockEntity.getCache() != null) {
-            pBlockEntity.pullRodAngle += deltaAngle * .6f;
+        if (pBlockEntity.getCache() != null) {
+            pBlockEntity.pullRodAngle = angle.getFirst() + (angle.getSecond() - angle.getFirst()) * pPartialTick;
         } else {
             if (risen && pBlockEntity.pullRodAngle > speedThreshold) {
                 pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
