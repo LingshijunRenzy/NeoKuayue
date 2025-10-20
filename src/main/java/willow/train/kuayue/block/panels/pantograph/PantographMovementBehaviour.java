@@ -203,7 +203,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             cache.clearAll();
             be.setCache(null);
               if (context.world.isClientSide) {
-                  be.setAngle(0);
+                  be.setAngle(Pair.of(0d ,0d));
               }
 
             cache.write(data);
@@ -317,19 +317,28 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             return;
         }
         Vec2 currentVec = vectors.get(cache.getCacheVectorIndex());
+        // 这里计算的是当前的高度
         float currentHeight = (float) (cache.getCurrPointPos().y() + cache.getCacheHeight() +
                 currentVec.y * (res - cache.getCacheProgress()) /
                         (currentVec.x - cache.getCacheProgress()));
 
         // System.out.println(currentHeight);
+        float velocity = (float) context.motion.length();
+        // 这里计算的是预测的下一时刻的高度
+        float nextHeight = (float) (cache.getCurrPointPos().y() + cache.getCacheHeight() +
+                currentVec.y * (res + velocity - cache.getCacheProgress()) /
+                (currentVec.x + velocity - cache.getCacheProgress()));
 
-        float deltaHeight = (float) (currentHeight - bePos.y);
+        float deltaHeight = (float) (currentHeight - bePos.y) -
+                (float) mapping.getBaseHeight() - (float) be.getYOffset();
+        float nextDeltaHeight = (float) (nextHeight - bePos.y) -
+                (float) mapping.getBaseHeight() - (float) be.getYOffset();
 
-        deltaHeight -= (float) mapping.getBaseHeight() - (float) be.getYOffset();
         // System.out.println(deltaHeight);
         double angle = mapping.getAngleByHeight(deltaHeight * 16f);
-        System.out.println(angle);
-        be.setAngle(angle);
+        double nextAngle = mapping.getAngleByHeight(nextDeltaHeight * 16f);
+        // System.out.println(angle);
+        be.setAngle(Pair.of(angle, nextAngle));
     }
 
     // 嗅探，找到最近的可用挂架
@@ -408,7 +417,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.clearAll();
                     be.setCache(null);
                     if (context.world.isClientSide) {
-                        be.setAngle(0);
+                        be.setAngle(Pair.of(0d, 0d));
                     }
                 } else if(connectionList.size() == 1) {
                     // if after filtering, have only one connection, it's the best one
@@ -424,7 +433,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                         cache.clearAll();
                         be.setCache(null);
                         if (context.world.isClientSide) {
-                            be.setAngle(0);
+                            be.setAngle(Pair.of(0d, 0d));
                         }
                         return;
                     }
@@ -446,7 +455,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.clearAll();
                     be.setCache(null);
                     if (context.world.isClientSide) {
-                        be.setAngle(0);
+                        be.setAngle(Pair.of(0d, 0d));
                     }
                     return;
                 }
@@ -459,7 +468,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.clearAll();
                     be.setCache(null);
                     if (context.world.isClientSide) {
-                        be.setAngle(0);
+                        be.setAngle(Pair.of(0d, 0d));
                     }
                     return;
                 }
@@ -473,7 +482,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                         cache.clearAll();
                         be.setCache(null);
                         if (context.world.isClientSide) {
-                            be.setAngle(0);
+                            be.setAngle(Pair.of(0d, 0d));
                         }
                         return;
                     }

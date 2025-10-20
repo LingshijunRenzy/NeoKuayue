@@ -4,6 +4,7 @@ import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import kasuga.lib.core.util.data_type.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
@@ -36,7 +37,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
     @Getter
     private float risePullRodAngle;
     public double pullRodAngle = 170.0;
-    private double targetAngle;
+    private Pair<Double, Double> targetAngle;
     @Getter
     private double transPosY = -0.5;
 
@@ -56,7 +57,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
             this.downPullRodAngle = block.getDownPullRodAngle();
             this.risePullRodAngle = block.getRisePullRodAngle();
             this.pullRodAngle = block.getDownPullRodAngle();
-            this.targetAngle = pullRodAngle;
+            this.targetAngle = Pair.of(pullRodAngle, pullRodAngle);
         }
 //        if (level == null)
 //            return;
@@ -88,7 +89,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
     }
 
     @Override
-    public double getAngle() {
+    public Pair<Double, Double> getAngle() {
         return targetAngle;
     }
 
@@ -97,8 +98,12 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         return pantographType;
     }
 
-    public void setAngle(double angle) {
-        targetAngle = Math.max(Math.min(angle, downPullRodAngle), risePullRodAngle);
+    public void setAngle(Pair<Double, Double> angle) {
+        targetAngle = Pair.of(getCenterAngleOf(angle.getFirst()), getCenterAngleOf(angle.getSecond()));
+    }
+
+    public double getCenterAngleOf(double angle) {
+        return Math.max(Math.min(angle, downPullRodAngle), risePullRodAngle);
     }
 
     @Override
