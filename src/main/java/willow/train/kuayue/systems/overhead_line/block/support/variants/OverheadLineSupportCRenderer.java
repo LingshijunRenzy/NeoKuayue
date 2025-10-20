@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.TransformationHelper;
 import org.joml.Vector3f;
+import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 
@@ -22,6 +23,7 @@ public abstract class OverheadLineSupportCRenderer {
 
     public static class C1Renderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
         public C1Renderer(BlockEntityRendererProvider.Context context) {}
+
         @Override
         public void render(OverheadLineSupportBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
@@ -50,10 +52,16 @@ public abstract class OverheadLineSupportCRenderer {
             );
             pPoseStack.popPose();
         }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
+        }
     }
 
     public static class C2Renderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
         public C2Renderer(BlockEntityRendererProvider.Context context) {}
+
         @Override
         public void render(OverheadLineSupportBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
@@ -81,6 +89,11 @@ public abstract class OverheadLineSupportCRenderer {
                     pPackedOverlay
             );
             pPoseStack.popPose();
+        }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
         }
     }
 

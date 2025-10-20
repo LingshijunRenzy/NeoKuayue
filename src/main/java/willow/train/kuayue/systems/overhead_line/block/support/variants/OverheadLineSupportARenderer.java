@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.phys.Vec3;
+import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.systems.overhead_line.block.support.AllOverheadLineSupportBlocks;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
@@ -21,6 +22,7 @@ public abstract class OverheadLineSupportARenderer {
 
     public static class A1Renderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
         public A1Renderer(BlockEntityRendererProvider.Context context) {}
+
         @Override
         public void render(OverheadLineSupportBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
@@ -41,10 +43,16 @@ public abstract class OverheadLineSupportARenderer {
             );
             pPoseStack.popPose();
         }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
+        }
     }
 
     public static class A2Renderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
         public A2Renderer(BlockEntityRendererProvider.Context context) {}
+
         @Override
         public void render(OverheadLineSupportBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
@@ -64,6 +72,11 @@ public abstract class OverheadLineSupportARenderer {
                     pPackedOverlay
             );
             pPoseStack.popPose();
+        }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
         }
     }
 }

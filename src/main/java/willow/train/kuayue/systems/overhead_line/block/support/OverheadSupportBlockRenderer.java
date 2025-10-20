@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
+import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 import willow.train.kuayue.systems.overhead_line.block.line.PositionComparator;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
@@ -114,6 +115,11 @@ public class OverheadSupportBlockRenderer<T extends OverheadLineSupportBlockEnti
             CachedCurveRenderer.render(OverheadLineRendererSystem.getRendererFor(connection.type()).getModel(), curve, ms, buffer, overlay);
         }
          */
+    }
+
+    @Override
+    public int getViewDistance() {
+        return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
     }
 
     public static void register(Supplier<Block> block, Supplier<BlockEntityRendererBuilder<OverheadLineSupportBlockEntity>> renderer) {
