@@ -9,7 +9,7 @@ import java.util.List;
 import static willow.train.kuayue.block.panels.pantograph.IPantographModel.BOW_HEAD_POS_Y;
 
 @Data
-public class PantographProps {
+public class PantographProps implements IPantographAngleMapping {
 
     private double baselineLength;
     private double largeArmLength;
@@ -17,6 +17,7 @@ public class PantographProps {
     private double connectingRodLength;
     private double smallArmAngle;
     private double smallArmLength;
+    private double basementHeight;
 
     public List<PantographMapping> heightList = new ArrayList<>();
     public boolean isMapping = false;
@@ -25,7 +26,7 @@ public class PantographProps {
 
         PantographMapping pantographMapping = new PantographMapping(0.0, 0.0);
 
-        for (double pullRodAngle = risePullRodAngle; pullRodAngle <= downPullRodAngle; pullRodAngle += 0.10) {
+        for (double pullRodAngle = risePullRodAngle; pullRodAngle <= downPullRodAngle; pullRodAngle += 0.1) {
             HashMap<String, Double> pantoModelMap =
                     IPantographModel.getPantoModelMapByType(pantographProps, pullRodAngle);
             Double bowHeight = pantoModelMap.get(BOW_HEAD_POS_Y);
@@ -36,7 +37,11 @@ public class PantographProps {
         isMapping = true;
     }
 
-    public double getPantographAngleByList(List<PantographMapping> heightList, double bowHeight) {
+    public boolean readyForMap() {
+        return heightList != null && !heightList.isEmpty();
+    }
+
+    public double getAngleByHeight(double bowHeight) {
 
         if (heightList == null || heightList.isEmpty()) {
             throw new RuntimeException("Instance heightList is null or empty!");
@@ -65,23 +70,34 @@ public class PantographProps {
         }
 
         if (right >= 0 && left < heightList.size()) {
-            double rodAngle1 = heightList.get(left).getPullRodAngle();
-            double rodAngle2 = heightList.get(right).getPullRodAngle();
-            return (rodAngle1 + rodAngle2) / 2.0;
+            PantographMapping mLeft = heightList.get(left);
+            PantographMapping mRight = heightList.get(right);
+            double rodAngle1 = mLeft.getPullRodAngle();
+            double rodAngle2 = mRight.getPullRodAngle();
+            double heightLeft = mLeft.getBowHeight();
+            double heightRight = mRight.getBowHeight();
+            return rodAngle1 + (rodAngle2 - rodAngle1) * (bowHeight -  heightLeft) / (heightRight - heightLeft);
         }
 
         return 0.0;
         // throw new RuntimeException("Can not find target angle!");
     }
 
+    @Override
+    public double getBaseHeight() {
+        return basementHeight;
+    }
+
     public PantographProps(double baselineLength, double largeArmLength, double pullRodLength,
-                           double connectingRodLength, double smallArmAngle, double smallArmLength) {
+                           double connectingRodLength, double smallArmAngle, double smallArmLength,
+                           double basementHeight) {
         this.baselineLength = baselineLength;
         this.largeArmLength = largeArmLength;
         this.pullRodLength = pullRodLength;
         this.connectingRodLength = connectingRodLength;
         this.smallArmAngle = smallArmAngle;
         this.smallArmLength = smallArmLength;
+        this.basementHeight = basementHeight;
     }
 
     @Data

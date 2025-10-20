@@ -175,7 +175,8 @@ public class I3DPanel {
                             new PantographProps(
                                     8.8, 25.44,
                                     19.52, 3.130,
-                                    161.0, 25.28),
+                                    161.0, 25.28,
+                                    -.025),
                             "hxd3d/pantograph/hxd3d_panto_base",
                             "hxd3d/pantograph/hxd3d_panto_large_arm",
                             "hxd3d/pantograph/hxd3d_panto_pull_rod",

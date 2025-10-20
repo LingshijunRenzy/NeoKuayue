@@ -5,7 +5,6 @@ import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
 import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity;
-import com.sk89q.jchronic.utils.Span;
 import kasuga.lib.core.create.device.TrainDeviceLocation;
 import kasuga.lib.core.create.device.TrainDeviceManager;
 import kasuga.lib.core.util.data_type.Pair;
@@ -16,20 +15,24 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.ContraptionNbtUpdatePacket;
 import willow.train.kuayue.systems.device.AllDeviceSystems;
 import willow.train.kuayue.systems.device.driver.devices.power.PantographState;
 import willow.train.kuayue.systems.device.driver.devices.power.PantographSystem;
+import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
+import willow.train.kuayue.systems.overhead_line.render.RenderCurve;
 import willow.train.kuayue.utils.client.DebugDrawUtil;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,8 +44,8 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
     @Override
     public void tick(MovementContext context) {
-        if(context.world.isClientSide)
-            return;
+//        if(context.world.isClientSide)
+//            return;
 
         if(ticker.computeIfAbsent(context, k -> new AtomicInteger(0)).incrementAndGet() <= 10)
             return;
@@ -98,12 +101,15 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             context.blockEntityData.put("overhead_line_support_cache", data);
         }
 
-        if(isOverheadLineCacheNeedUpdate(context)) {
-            updateOverheadLineCache(context);
+        if(isOverheadLineCacheNeedUpdate(context, pantographBlockEntity)) {
+            updateOverheadLineCache(context, pantographBlockEntity);
         }
 
         CompoundTag cacheData = context.blockEntityData.getCompound("overhead_line_support_cache");
-        CurrOverheadLineCache cache = new CurrOverheadLineCache();
+        CurrOverheadLineCache cache = Objects.requireNonNullElse(
+                pantographBlockEntity.getCache(), new CurrOverheadLineCache()
+        );
+        pantographBlockEntity.setCache(cache);
         cache.read(cacheData);
 
         //render a red box to show the current support pos
@@ -127,11 +133,11 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         }
 
 
-        Kuayue.LOGGER.debug("Pantograph at {}", context.position);
-        Kuayue.LOGGER.debug("Current Support: {}", cache.hasCurrSupport() ? cache.getCurrSupportPos().toShortString() : "null");
-        Kuayue.LOGGER.debug("Current Point Pos: {}", cache.getCurrPointPos());
-        Kuayue.LOGGER.debug("Current Link: {}", cache.hasCurrLink() ? cache.getCurrLink().toShortString() : "null");
-        Kuayue.LOGGER.debug("Next Point Pos: {}", cache.getNextPointPos());
+//        Kuayue.LOGGER.debug("Pantograph at {}", context.position);
+//        Kuayue.LOGGER.debug("Current Support: {}", cache.hasCurrSupport() ? cache.getCurrSupportPos().toShortString() : "null");
+//        Kuayue.LOGGER.debug("Current Point Pos: {}", cache.getCurrPointPos());
+//        Kuayue.LOGGER.debug("Current Link: {}", cache.hasCurrLink() ? cache.getCurrLink().toShortString() : "null");
+//        Kuayue.LOGGER.debug("Next Point Pos: {}", cache.getNextPointPos());
     }
 
 
@@ -148,9 +154,9 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         );
     }
 
-    private boolean isOverheadLineCacheNeedUpdate(MovementContext context) {
+    private boolean isOverheadLineCacheNeedUpdate(MovementContext context, IPantographBlockEntity be) {
         CompoundTag data = context.blockEntityData.getCompound("overhead_line_support_cache");
-        CurrOverheadLineCache cache = new CurrOverheadLineCache();
+        CurrOverheadLineCache cache = Objects.requireNonNullElse(be.getCache(), new CurrOverheadLineCache());
         cache.read(data);
 
         if(!cache.hasCurrSupport()) {
@@ -173,15 +179,19 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         }
         Vec3 nextPointPos = cache.getNextPointPos();
         Vec3 supportVec = nextPointPos.subtract(cache.getCurrPointPos());
-        Vec3 pantographVec = Vec3.atCenterOf(new Vec3i(context.position.x, context.position.y, context.position.z))
-                .subtract(cache.getCurrPointPos());
+        Vec3 pantographPos = Vec3.atCenterOf(new Vec3i(context.position.x, context.position.y, context.position.z));
+        Vec3 pantographVec = pantographPos.subtract(cache.getCurrPointPos());
 
-        double res = supportVec.dot(pantographVec) / (supportVec.length() * supportVec.length());
+        // double res = supportVec.dot(pantographVec) / (supportVec.length() * supportVec.length());
+        float res = (float) (pantographVec.dot(supportVec) / supportVec.lengthSqr());
 
-        if(res > 1.0){
+          if(res > 1.0) {
             DebugDrawUtil.clearAllDebugElements();
+
             cache.setCurrSupportPos(nextSupportPos);
             cache.setCurrPointPos(nextPointPos);
+            cache.setCurrentPoint(cache.getNextPoint());
+
             cache.clearCurrLink();
 
             cache.write(data);
@@ -191,6 +201,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         } else if (res < 0.0){
             DebugDrawUtil.clearAllDebugElements();
             cache.clearAll();
+            be.setCache(null);
+              if (context.world.isClientSide) {
+                  be.setAngle(0);
+              }
 
             cache.write(data);
             context.blockEntityData.put("overhead_line_support_cache", data);
@@ -198,7 +212,124 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             return true;
         }
 
+        getPantographHeight(context, be, pantographPos, cache, (float) (res * supportVec.length()));
+
         return false;
+    }
+
+    private void getPantographHeight(MovementContext context, IPantographBlockEntity be,
+                                     Vec3 bePos, CurrOverheadLineCache cache, float res) {
+        if (!context.world.isClientSide) return;
+        IPantographAngleMapping mapping = be.getPantographAngleMapping();
+        if (!mapping.readyForMap()) return;
+        OverheadLineRendererSystem.OverheadLineLocator curveLocator =
+                new OverheadLineRendererSystem.OverheadLineLocator(
+                        context.world.dimension(),
+                        cache.getCurrSupportPos(), cache.getCurrLink(),
+                        cache.getCurrentPoint(), cache.getNextPoint()
+                );
+        OverheadLineRendererSystem.Rendering rendering =
+                OverheadLineRendererSystem.OVERHEAD_LINES.get(curveLocator);
+        if (rendering == null) {
+             curveLocator =
+                    new OverheadLineRendererSystem.OverheadLineLocator(
+                            context.world.dimension(),
+                            cache.getCurrLink(), cache.getCurrSupportPos(),
+                            cache.getCurrentPoint(), cache.getNextPoint()
+                    );
+             rendering =  OverheadLineRendererSystem.OVERHEAD_LINES.get(curveLocator);
+             if (rendering == null) {
+                 cache.clearCache();
+                 return;
+             }
+        }
+        RenderCurve curve = rendering.curve();
+        Objects.requireNonNull(curve);
+        ArrayList<Vec2> vectors = Objects.requireNonNullElse(
+                cache.getCachedPoints(),
+                curve.getPantographAdjustVectors()
+        );
+        if (cache.getCachedPoints() == null) {
+            // 把结点都反过来
+            ArrayList<Vec2> newVectors = new ArrayList<>(vectors.size());
+            for (int i = vectors.size() - 1; i >= 0; i--) {
+                newVectors.add(new Vec2(vectors.get(i).x, - vectors.get(i).y));
+            }
+            cache.setRevertCachedPoints(newVectors);
+            cache.setCachedPoints(vectors);
+            float totalDeltaHeight = 0;
+            for (Vec2 vec : vectors) {
+                totalDeltaHeight += vec.y;
+            }
+            cache.setCacheTotalHeight(totalDeltaHeight);
+        }
+
+        if (Math.abs(cache.getCurrPointPos().y +
+                cache.getCacheTotalHeight() - cache.getNextPointPos().y) > 0.05) {
+            vectors = cache.getRevertCachedPoints();
+        }
+        if (vectors.isEmpty()) {
+            cache.clearCache();
+            return;
+        }
+        if (cache.getCacheVectorIndex() < 0) {
+            if (vectors.size() == 1) {
+                cache.setCacheProgress(0);
+                cache.setCacheHeight(0);
+                cache.setCacheVectorIndex(0);
+            } else {
+                double progressIntegral = 0;
+                double heightIntegral = 0;
+                Vec2 current;
+                for (int i = 0; i < vectors.size(); i++) {
+                    current = vectors.get(i);
+                    if (progressIntegral <= res &&
+                            (progressIntegral + current.x) >= res) {
+                        cache.setCacheProgress(progressIntegral);
+                        cache.setCacheHeight(heightIntegral);
+                        cache.setCacheVectorIndex(i);
+                        break;
+                    }
+                    progressIntegral += current.x;
+                    heightIntegral += current.y;
+                }
+            }
+        } else {
+            double cacheProgress = cache.getCacheProgress();
+            double cacheHeight = cache.getCacheHeight();
+            int cacheVectorIndex = cache.getCacheVectorIndex();
+            while (res > cacheProgress + vectors.get(cacheVectorIndex).x) {
+                cacheProgress += vectors.get(cacheVectorIndex).x;
+                cacheHeight += vectors.get(cacheVectorIndex).y;
+                cacheVectorIndex ++;
+                if (cacheVectorIndex >= vectors.size()) {
+                    cache.clearCache();
+                    return;
+                }
+            }
+            cache.setCacheProgress(cacheProgress);
+            cache.setCacheVectorIndex(cacheVectorIndex);
+            cache.setCacheHeight(cacheHeight);
+        }
+
+        if (cache.getCacheVectorIndex() < 0) {
+            cache.clearCache();
+            return;
+        }
+        Vec2 currentVec = vectors.get(cache.getCacheVectorIndex());
+        float currentHeight = (float) (cache.getCurrPointPos().y() + cache.getCacheHeight() +
+                currentVec.y * (res - cache.getCacheProgress()) /
+                        (currentVec.x - cache.getCacheProgress()));
+
+        // System.out.println(currentHeight);
+
+        float deltaHeight = (float) (currentHeight - bePos.y);
+
+        deltaHeight -= (float) mapping.getBaseHeight() - (float) be.getYOffset();
+        // System.out.println(deltaHeight);
+        double angle = mapping.getAngleByHeight(deltaHeight * 16f);
+        System.out.println(angle);
+        be.setAngle(angle);
     }
 
     // 嗅探，找到最近的可用挂架
@@ -241,7 +372,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         return supportPos;
     }
 
-    private void updateOverheadLineCache(MovementContext context) {
+    private void updateOverheadLineCache(MovementContext context, IPantographBlockEntity be) {
         CompoundTag data = context.blockEntityData.getCompound("overhead_line_support_cache");
         CurrOverheadLineCache cache = new CurrOverheadLineCache();
         cache.read(data);
@@ -275,6 +406,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                 if(connectionList.isEmpty()) {
                     // if after filtering, no connection is suitable, skip
                     cache.clearAll();
+                    be.setCache(null);
+                    if (context.world.isClientSide) {
+                        be.setAngle(0);
+                    }
                 } else if(connectionList.size() == 1) {
                     // if after filtering, have only one connection, it's the best one
                     OverheadLineSupportBlockEntity.Connection connection = connectionList.get(0);
@@ -282,19 +417,26 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.setCurrSupportPos(supportPos);
                     cache.setCurrPointPos(supportBlockEntity.getConnectionPointByIndex(connection.connectionIndex()));
                     cache.setCurrLink(connection.absolutePos());
+                    cache.setCurrentPoint(connection.connectionIndex());
 
                     BlockEntity targetBlockEntity = context.world.getBlockEntity(connection.absolutePos());
                     if(!(targetBlockEntity instanceof OverheadLineSupportBlockEntity targetSupportBlockEntity)) {
                         cache.clearAll();
+                        be.setCache(null);
+                        if (context.world.isClientSide) {
+                            be.setAngle(0);
+                        }
                         return;
                     }
                     cache.setNextPointPos(targetSupportBlockEntity.getConnectionPointByIndex(connection.targetIndex()));
+                    cache.setNextPoint(connection.targetIndex());
                 } else {
                     // have multiple suitable connections, just set curr support. leave next empty.
                     cache.setCurrSupportPos(supportPos);
                     cache.setCurrPointPos(supportBlockEntity.getConnectionPointByIndex(
                             connectionList.get(0).connectionIndex()
                     ));
+                    cache.setCurrentPoint(connectionList.get(0).connectionIndex());
                 }
             } else {
                 BlockPos currSupportPos = cache.getCurrSupportPos();
@@ -302,6 +444,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
                 if(!(blockEntity instanceof OverheadLineSupportBlockEntity supportBlockEntity)) {
                     cache.clearAll();
+                    be.setCache(null);
+                    if (context.world.isClientSide) {
+                        be.setAngle(0);
+                    }
                     return;
                 }
 
@@ -311,6 +457,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                 // all connections are out, re-select on next tick.
                 if(connectionList.isEmpty()) {
                     cache.clearAll();
+                    be.setCache(null);
+                    if (context.world.isClientSide) {
+                        be.setAngle(0);
+                    }
                     return;
                 }
 
@@ -321,9 +471,14 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     BlockEntity targetBlockEntity = context.world.getBlockEntity(connection.absolutePos());
                     if(!(targetBlockEntity instanceof OverheadLineSupportBlockEntity targetSupportBlockEntity)) {
                         cache.clearAll();
+                        be.setCache(null);
+                        if (context.world.isClientSide) {
+                            be.setAngle(0);
+                        }
                         return;
                     }
                     cache.setNextPointPos(targetSupportBlockEntity.getConnectionPointByIndex(connection.targetIndex()));
+                    cache.setNextPoint(connection.targetIndex());
                 }
                 // if size > 1, do nothing for next tick to filter again
                 //DEBUG render: blue boxes are candidates
@@ -356,10 +511,14 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             if (linkVec.dot(forwardVec) < 0.0) {
                 cache.setCurrLink(currSupportPos);
                 cache.setCurrPointPos(nextSupportIndex);
+                cache.setCurrentPoint(cache.getNextPoint());
 
                 cache.setCurrSupportPos(nextSupportPos);
                 cache.setNextPointPos(currentSupportIndex);
+                cache.setNextPoint(cache.getCurrentPoint());
                 cache.write(data);
+                cache.clearCache();
+
                 context.blockEntityData.put("overhead_line_support_cache", data);
             }
         }
