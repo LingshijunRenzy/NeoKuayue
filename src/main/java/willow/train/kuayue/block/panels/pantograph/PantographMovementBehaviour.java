@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -19,6 +20,9 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import willow.train.kuayue.KuayueConfig;
+import willow.train.kuayue.block.panels.pantograph.network.ClientSyncManager;
+import willow.train.kuayue.block.panels.pantograph.network.ServerSyncManager;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.ContraptionNbtUpdatePacket;
 import willow.train.kuayue.systems.device.AllDeviceSystems;
@@ -47,8 +51,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 //        if(context.world.isClientSide)
 //            return;
 
-        if(ticker.computeIfAbsent(context, k -> new AtomicInteger(0)).incrementAndGet() <= 10)
-            return;
+        if(ticker.computeIfAbsent(context, k -> new AtomicInteger(0)).incrementAndGet() <=
+                (context.world.isClientSide ?
+                        KuayueConfig.CONFIG.getIntValue("PANTOGRAPH_FRESH_INTERVAL_TICKS_CLIENT") :
+                        KuayueConfig.CONFIG.getIntValue("PANTOGRAPH_FRESH_INTERVAL_TICKS_SERVER"))) return;
 
         ticker.get(context).set(0);
 
@@ -109,6 +115,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         CurrOverheadLineCache cache = Objects.requireNonNullElse(
                 pantographBlockEntity.getCache(), new CurrOverheadLineCache()
         );
+        cache = clientSync(context, cache);
         pantographBlockEntity.setCache(cache);
         cache.read(cacheData);
 
@@ -202,15 +209,20 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             DebugDrawUtil.clearAllDebugElements();
             cache.clearAll();
             be.setCache(null);
-              if (context.world.isClientSide) {
+                if (context.world.isClientSide) {
                   be.setAngle(Pair.of(0d ,0d));
-              }
+                }
 
             cache.write(data);
             context.blockEntityData.put("overhead_line_support_cache", data);
 
             return true;
-        }
+        } else if (res >= .4f && res <= .6f) {
+              // NOTICE: 在这中间进行更新应该是最保险的
+              if (serverNeedToSync(context)) {
+                  serverSync(context, cache);
+              }
+          }
 
         getPantographHeight(context, be, pantographPos, cache, (float) (res * supportVec.length()));
 
@@ -383,7 +395,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
     private void updateOverheadLineCache(MovementContext context, IPantographBlockEntity be) {
         CompoundTag data = context.blockEntityData.getCompound("overhead_line_support_cache");
-        CurrOverheadLineCache cache = new CurrOverheadLineCache();
+        CurrOverheadLineCache cache = Objects.requireNonNullElse(be.getCache(), new CurrOverheadLineCache());
         cache.read(data);
 
         int searchRadius = 5;
@@ -448,6 +460,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.setCurrentPoint(connectionList.get(0).connectionIndex());
                 }
             } else {
+                // System.out.println("Has Curr Support & No Curr Link");
                 BlockPos currSupportPos = cache.getCurrSupportPos();
                 BlockEntity blockEntity = context.world.getBlockEntity(currSupportPos);
 
@@ -470,6 +483,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     if (context.world.isClientSide) {
                         be.setAngle(Pair.of(0d, 0d));
                     }
+                    context.blockEntityData.remove("overhead_line_support_cache");  // 降级为嗅探模式
                     return;
                 }
 
@@ -587,4 +601,42 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         }
         connectionList.removeAll(toRemove);
     }
+
+    // ==================================== Network Start ====================================
+
+    public boolean serverNeedToSync(MovementContext context) {
+        if (context.world.isClientSide) return false;
+        return ServerSyncManager.getInstance().needToSync(context.contraption);
+    }
+
+    // NOTICE: 服务端提交更新的方法
+    public void serverSync(MovementContext context,
+                           CurrOverheadLineCache cache) {
+        // 只有在 server 才更新
+        if (context.world.isClientSide) return;
+        ServerSyncManager manager = ServerSyncManager.getInstance();
+        if (manager.needToSync(context.contraption)) {
+            manager.sync(
+                    (ServerLevel) context.world,
+                    new BlockPos(context.position),
+                    context.contraption,
+                    cache);
+        }
+    }
+
+    // NOTICE: 客户端接收更新的方法
+    public CurrOverheadLineCache clientSync(MovementContext context,
+                           CurrOverheadLineCache currCache) {
+        // 只有在 client 才更新
+        if (!context.world.isClientSide) return currCache;
+        ClientSyncManager manager = ClientSyncManager.getInstance();
+        CurrOverheadLineCache cache = manager.pop(context.contraption);
+        if (cache == null || currCache == null) return currCache;
+        if (Objects.equals(cache, currCache)) {
+            return currCache;
+        }
+        return cache;
+    }
+
+    // ===================================== Network Ends ====================================
 }
