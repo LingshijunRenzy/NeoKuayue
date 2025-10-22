@@ -6,6 +6,7 @@ import com.mojang.math.Vector3f;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
 import kasuga.lib.core.util.data_type.Pair;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -159,5 +160,20 @@ public class SingleArmPantographRenderer implements
                     .renderInto(pose, buffer.getBuffer(RenderType.cutout()));
 
         pose.popPose();
+
+        if(pBlockEntity.getCache() != null){
+            pose.pushPose();
+            pose.translate(0f,1f,0f);
+            pose.scale(-0.02f,-0.02f,-0.02f);
+            pose.translate(0, 10, 0);
+            Minecraft.getInstance().font.draw(
+                    pose,
+                    String.format("PullRodAngle: %.3f, angle: <%.3f, %.3f>",pBlockEntity.pullRodAngle, angle.getFirst(), angle.getSecond()),
+                    0,
+                    0,
+                    0xffffff
+            );
+            pose.popPose();
+        }
     }
 }

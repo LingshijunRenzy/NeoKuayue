@@ -20,6 +20,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.block.panels.pantograph.network.ClientSyncManager;
 import willow.train.kuayue.block.panels.pantograph.network.ServerSyncManager;
@@ -186,11 +187,13 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         }
         Vec3 nextPointPos = cache.getNextPointPos();
         Vec3 supportVec = nextPointPos.subtract(cache.getCurrPointPos());
-        Vec3 pantographPos = Vec3.atCenterOf(new Vec3i(context.position.x, context.position.y, context.position.z));
+        Vec3 supportVecHoriz = new Vec3(supportVec.x, 0f, supportVec.z);
+        Vec3 pantographPos = context.position;
         Vec3 pantographVec = pantographPos.subtract(cache.getCurrPointPos());
+        Vec3 pantographVecHoriz = new Vec3(pantographVec.x, 0f, pantographVec.z);
 
         // double res = supportVec.dot(pantographVec) / (supportVec.length() * supportVec.length());
-        float res = (float) (pantographVec.dot(supportVec) / supportVec.lengthSqr());
+        float res = (float) (pantographVecHoriz.dot(supportVecHoriz) / supportVecHoriz.lengthSqr());
 
           if(res > 1.0) {
             DebugDrawUtil.clearAllDebugElements();

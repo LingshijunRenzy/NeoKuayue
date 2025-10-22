@@ -62,6 +62,10 @@ public class DebugDrawUtil {
             return;
         }
 
+        if(!Minecraft.getInstance().options.renderDebug) {
+            return;
+        }
+
         PoseStack stack = event.getPoseStack();
         MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
         Vec3 cameraPos = event.getCamera().getPosition();
