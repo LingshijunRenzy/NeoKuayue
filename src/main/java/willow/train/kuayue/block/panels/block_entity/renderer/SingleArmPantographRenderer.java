@@ -161,7 +161,7 @@ public class SingleArmPantographRenderer implements
 
         pose.popPose();
 
-        if(pBlockEntity.getCache() != null){
+        if(pBlockEntity.getCache() != null && Minecraft.getInstance().options.renderDebug){
             pose.pushPose();
             pose.translate(0f,1f,0f);
             pose.scale(-0.02f,-0.02f,-0.02f);
