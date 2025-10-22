@@ -15,7 +15,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
@@ -49,9 +51,6 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
     @Override
     public void tick(MovementContext context) {
-//        if(context.world.isClientSide)
-//            return;
-
         if(ticker.computeIfAbsent(context, k -> new AtomicInteger(0)).incrementAndGet() <=
                 (context.world.isClientSide ?
                         KuayueConfig.CONFIG.getIntValue("PANTOGRAPH_FRESH_INTERVAL_TICKS_CLIENT") :
@@ -81,6 +80,11 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                 !(blockEntity instanceof IPantographBlockEntity pantographBlockEntity) ||
                 !(blockEntity instanceof SyncedBlockEntity syncedBlockEntity)
         ) return;
+        StructureTemplate.StructureBlockInfo bsInfo = context.contraption.getBlocks().get(context.localPos);
+        if (bsInfo == null) return;
+        if (!bsInfo.state.hasProperty(BlockStateProperties.OPEN)) return;
+        boolean risenFlag = bsInfo.state.getValue(BlockStateProperties.OPEN);
+        pantographBlockEntity.setRisen(risenFlag);
 
         PantographSystem pantographSystem = locator.getFirst().getOrCreateSystem(AllDeviceSystems.PANTOGRAPH);
 
@@ -106,6 +110,11 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             cache.write(data);
 
             context.blockEntityData.put("overhead_line_support_cache", data);
+        }
+
+        if (!risenFlag) {
+            pantographBlockEntity.tick();
+            return;
         }
 
         if(isOverheadLineCacheNeedUpdate(context, pantographBlockEntity)) {
@@ -609,7 +618,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
     public boolean serverNeedToSync(MovementContext context) {
         if (context.world.isClientSide) return false;
-        return ServerSyncManager.getInstance().needToSync(context.contraption);
+        return ServerSyncManager.getInstance().needToSync(context.contraption, context.localPos);
     }
 
     // NOTICE: 服务端提交更新的方法
@@ -618,9 +627,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         // 只有在 server 才更新
         if (context.world.isClientSide) return;
         ServerSyncManager manager = ServerSyncManager.getInstance();
-        if (manager.needToSync(context.contraption)) {
+        if (manager.needToSync(context.contraption, context.localPos)) {
             manager.sync(
                     (ServerLevel) context.world,
+                    context.localPos,
                     new BlockPos(context.position),
                     context.contraption,
                     cache);
@@ -633,7 +643,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         // 只有在 client 才更新
         if (!context.world.isClientSide) return currCache;
         ClientSyncManager manager = ClientSyncManager.getInstance();
-        CurrOverheadLineCache cache = manager.pop(context.contraption);
+        CurrOverheadLineCache cache = manager.pop(context.contraption, context.localPos);
         if (cache == null || currCache == null) return currCache;
         if (Objects.equals(cache, currCache)) {
             return currCache;
