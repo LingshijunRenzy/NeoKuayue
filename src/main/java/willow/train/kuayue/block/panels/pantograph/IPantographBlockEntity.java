@@ -4,7 +4,8 @@ package willow.train.kuayue.block.panels.pantograph;
 import kasuga.lib.core.util.data_type.Pair;
 
 public interface IPantographBlockEntity {
-    public void setRisen(boolean risen);
+
+    void setRisen(boolean risen);
 
     boolean isRisen();
 
@@ -19,4 +20,6 @@ public interface IPantographBlockEntity {
     CurrOverheadLineCache getCache();
 
     IPantographAngleMapping getPantographAngleMapping();
+
+    void tick();
 }

@@ -2,6 +2,7 @@ package willow.train.kuayue.initial.panel;
 
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.registrations.common.BlockReg;
+import kasuga.lib.registrations.create.InteractionReg;
 import kasuga.lib.registrations.create.MovementReg;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -19,6 +20,7 @@ import willow.train.kuayue.block.panels.pantograph.SingleArmPantographBlock;
 import willow.train.kuayue.block.panels.slab.HeightSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
 import willow.train.kuayue.initial.AllElements;
+import willow.train.kuayue.initial.AllTags;
 import willow.train.kuayue.initial.registration.PanelRegistration;
 import willow.train.kuayue.initial.registration.SlabRegistration;
 
@@ -195,8 +197,14 @@ public class I3DPanel {
     public static MovementReg<PantographMovementBehaviour> PANTOGRAPH_MOVEMENT =
             new MovementReg<PantographMovementBehaviour>("pantograph_movement")
                     .behaviour(new PantographMovementBehaviour())
-                    .sortByBlocks(HXD3D_PANTOGRAPH)
+                    .sortByTags(AllTags.PANTOGRAPH_TAG.tag())
                     .submit(AllElements.testRegistry);
+
+//    public static InteractionReg<PantographClickBehavior> PANTOGRAPH_CLICK =
+//            new InteractionReg<PantographClickBehavior>("pantograph_click")
+//                    .behaviour(new PantographClickBehavior())
+//                    .sortByTags(AllTags.PANTOGRAPH_TAG.tag())
+//                    .submit(AllElements.testRegistry);
 
     public static void invoke(){}
 }

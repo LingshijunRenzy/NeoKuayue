@@ -1,6 +1,7 @@
 package willow.train.kuayue.block.panels.pantograph.network;
 
 import com.simibubi.create.content.contraptions.Contraption;
+import kasuga.lib.core.util.data_type.Pair;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -18,17 +19,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ServerSyncManager {
 
     @Getter
-    private final HashMap<Contraption, AtomicInteger> tickers;
+    private final HashMap<Pair<Contraption, BlockPos>, AtomicInteger> tickers;
 
     @Getter
-    private final HashMap<Contraption, AtomicInteger> needSync;
+    private final HashMap<Pair<Contraption, BlockPos>, AtomicInteger> needSync;
 
-    private final HashSet<Contraption> deadTickers;
+    private final HashSet<Pair<Contraption, BlockPos>> deadTickers;
 
     public static final ServerSyncManager INSTANCE = new ServerSyncManager();
 
     private ServerSyncManager() {
-        tickers = new HashMap<Contraption, AtomicInteger>();
+        tickers = new HashMap<Pair<Contraption, BlockPos>, AtomicInteger>();
         needSync = new HashMap<>();
         deadTickers = new HashSet<>();
     }
@@ -60,21 +61,24 @@ public class ServerSyncManager {
         deadTickers.clear();
     }
 
-    public boolean needToSync(Contraption contraption) {
-        tickers.computeIfAbsent(contraption,
+    public boolean needToSync(Contraption contraption, BlockPos localPos) {
+        Pair<Contraption, BlockPos> pair = Pair.of(contraption, localPos);
+        tickers.computeIfAbsent(pair,
                 c -> new AtomicInteger(getConfigValue()));
-        return needSync.containsKey(contraption);
+        return needSync.containsKey(pair);
     }
 
-    public void forceSync(Contraption contraption) {
-        if (needToSync(contraption)) return;
-        needSync.put(contraption, tickers.computeIfAbsent(contraption,
+    public void forceSync(Contraption contraption, BlockPos localPos) {
+        if (needToSync(contraption, localPos)) return;
+        Pair<Contraption, BlockPos> pair = Pair.of(contraption, localPos);
+        needSync.put(pair, tickers.computeIfAbsent(pair,
                 c -> new AtomicInteger(getConfigValue())));
     }
 
-    public void removeTicker(Contraption contraption) {
-        tickers.remove(contraption);
-        needSync.remove(contraption);
+    public void removeTicker(Contraption contraption, BlockPos localPos) {
+        Pair<Contraption, BlockPos> pair =  Pair.of(contraption, localPos);
+        tickers.remove(pair);
+        needSync.remove(pair);
     }
 
     public void clear() {
@@ -83,11 +87,12 @@ public class ServerSyncManager {
         deadTickers.clear();
     }
 
-    public void sync(ServerLevel level, BlockPos pos, Contraption contraption, CurrOverheadLineCache cache) {
-        if (!needSync.containsKey(contraption)) return;
-        PantographSyncPacket packet = new PantographSyncPacket(contraption, cache);
+    public void sync(ServerLevel level, BlockPos localPos, BlockPos pos, Contraption contraption, CurrOverheadLineCache cache) {
+        Pair<Contraption, BlockPos> pair = Pair.of(contraption, localPos);
+        if (!needSync.containsKey(pair)) return;
+        PantographSyncPacket packet = new PantographSyncPacket(contraption, localPos, cache);
         AllPackets.CHANNEL.boardcastToClients(packet, level, pos);
-        needSync.remove(contraption).set(0);
+        needSync.remove(pair).set(0);
     }
 
     @SubscribeEvent

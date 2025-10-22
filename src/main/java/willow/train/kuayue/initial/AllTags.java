@@ -105,6 +105,10 @@ public class AllTags {
 
     public static final BlockTagReg OVERHEAD_PILLAR_MIDDLE = new BlockTagReg("overhead_pillar_middle", "overhead_line/overhead_pillar_middle")
             .submit(AllElements.testRegistry);
+
+    public static final BlockTagReg PANTOGRAPH_TAG = new BlockTagReg("pantographs",  "pantographs")
+            .submit(AllElements.testRegistry);
+
     public static void invoke() {}
 
     @FunctionalInterface
