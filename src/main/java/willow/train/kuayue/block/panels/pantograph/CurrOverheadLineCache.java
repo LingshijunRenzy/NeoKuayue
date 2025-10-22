@@ -12,6 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -139,5 +140,16 @@ public class CurrOverheadLineCache implements NbtSerializable {
         this.cacheTotalHeight = 0;
         this.cachedPoints = null;
         this.revertCachedPoints = null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CurrOverheadLineCache c)) return false;
+        return Objects.equals(currSupportPos, c.currSupportPos) &&
+                Objects.equals(currLink, c.currLink) &&
+                Objects.equals(currPointPos, c.currPointPos) &&
+                Objects.equals(nextPointPos, c.nextPointPos) &&
+                Objects.equals(currentPoint, c.currentPoint) &&
+                Objects.equals(nextPoint, c.nextPoint);
     }
 }

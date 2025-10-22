@@ -23,7 +23,9 @@ public class KuayueConfig {
             .rangedIntConfig("PANTOGRAPH_FRESH_INTERVAL_TICKS_SERVER",
                     "How often (in ticks) the pantograph matches the overhead line from server side",
                     10, 1, 20)
-
+            .rangedIntConfig("PANTOGRAPH_SYNC_TICKS",
+                    "the server would send pantograph sync packets to all clients in every <this> ticks.",
+                    100, 1, 500)
             .registerConfigs();
 
     public static void invoke(){}
