@@ -109,10 +109,31 @@ public class SingleArmPantographRenderer implements
 //        }
         float speedThreshold = 155;
 
-        Pair<Double, Double> angle = pBlockEntity.getAngle();
+        double targetAngle = pBlockEntity.getAngle();
         // 这地方的算法改成向给定的值靠拢
         if (pBlockEntity.getCache() != null) {
-            pBlockEntity.pullRodAngle = angle.getFirst() + (angle.getSecond() - angle.getFirst()) * pPartialTick;
+            //pBlockEntity.pullRodAngle = targetAngle.getFirst() + (targetAngle.getSecond() - targetAngle.getFirst()) * pPartialTick;
+            if(risen && pBlockEntity.pullRodAngle < targetAngle) {
+                pBlockEntity.pullRodAngle += STEP_FAST * risenSpeed * 1.1f;
+                if(pBlockEntity.pullRodAngle > targetAngle) {
+                    pBlockEntity.pullRodAngle = targetAngle;
+                }
+            } else if(risen && pBlockEntity.pullRodAngle > targetAngle) {
+                pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed * 1.1f;
+                if(pBlockEntity.pullRodAngle < targetAngle) {
+                    pBlockEntity.pullRodAngle = targetAngle;
+                }
+            } else if(!risen && pBlockEntity.pullRodAngle < downPullRodAngle) {
+                pBlockEntity.pullRodAngle += STEP_FAST * risenSpeed;
+                if(pBlockEntity.pullRodAngle > downPullRodAngle) {
+                    pBlockEntity.pullRodAngle = downPullRodAngle;
+                }
+            } else if(!risen && pBlockEntity.pullRodAngle > downPullRodAngle) {
+                pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
+                if(pBlockEntity.pullRodAngle > downPullRodAngle) {
+                    pBlockEntity.pullRodAngle = downPullRodAngle;
+                }
+            }
         } else {
             if (risen && pBlockEntity.pullRodAngle > speedThreshold) {
                 pBlockEntity.pullRodAngle -= STEP_FAST * risenSpeed;
@@ -161,14 +182,30 @@ public class SingleArmPantographRenderer implements
 
         pose.popPose();
 
-        if(pBlockEntity.getCache() != null && Minecraft.getInstance().options.renderDebug){
+        if(Minecraft.getInstance().options.renderDebug){
             pose.pushPose();
             pose.translate(0f,1f,0f);
             pose.scale(-0.02f,-0.02f,-0.02f);
             pose.translate(0, 10, 0);
             Minecraft.getInstance().font.draw(
                     pose,
-                    String.format("PullRodAngle: %.3f, angle: <%.3f, %.3f>",pBlockEntity.pullRodAngle, angle.getFirst(), angle.getSecond()),
+                    String.format("isRisen: %s", pBlockEntity.isRisen() ? "true" : "false"),
+                    0,
+                    0,
+                    0xffffff
+            );
+            pose.translate(0, 10, 0);
+            Minecraft.getInstance().font.draw(
+                    pose,
+                    String.format("hasCache: %s", pBlockEntity.getCache() != null ? "true" : "false"),
+                    0,
+                    0,
+                    0xffffff
+            );
+            pose.translate(0, 10, 0);
+            Minecraft.getInstance().font.draw(
+                    pose,
+                    String.format("PullRodAngle: %.3f, targetAngle: %.3f",pBlockEntity.pullRodAngle, targetAngle),
                     0,
                     0,
                     0xffffff

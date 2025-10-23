@@ -222,7 +222,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             cache.clearAll();
             be.setCache(null);
                 if (context.world.isClientSide) {
-                  be.setAngle(Pair.of(0d ,0d));
+                  be.resetAngle();
                 }
 
             cache.write(data);
@@ -349,20 +349,20 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         // System.out.println(currentHeight);
         float velocity = (float) context.motion.length();
         // 这里计算的是预测的下一时刻的高度
-        float nextHeight = (float) (cache.getCurrPointPos().y() + cache.getCacheHeight() +
-                currentVec.y * (res + velocity - cache.getCacheProgress()) /
-                (currentVec.x + velocity - cache.getCacheProgress()));
+//        float nextHeight = (float) (cache.getCurrPointPos().y() + cache.getCacheHeight() +
+//                currentVec.y * (res + velocity - cache.getCacheProgress()) /
+//                (currentVec.x + velocity - cache.getCacheProgress()));
 
         float deltaHeight = (float) (currentHeight - bePos.y) -
                 (float) mapping.getBaseHeight() - (float) be.getYOffset();
-        float nextDeltaHeight = (float) (nextHeight - bePos.y) -
-                (float) mapping.getBaseHeight() - (float) be.getYOffset();
+//        float nextDeltaHeight = (float) (nextHeight - bePos.y) -
+//                (float) mapping.getBaseHeight() - (float) be.getYOffset();
 
         // System.out.println(deltaHeight);
         double angle = mapping.getAngleByHeight(deltaHeight * 16f);
-        double nextAngle = mapping.getAngleByHeight(nextDeltaHeight * 16f);
+//        double nextAngle = mapping.getAngleByHeight(nextDeltaHeight * 16f);
         // System.out.println(angle);
-        be.setAngle(Pair.of(angle, nextAngle));
+        be.setAngle(angle);
     }
 
     // 嗅探，找到最近的可用挂架
@@ -441,7 +441,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.clearAll();
                     be.setCache(null);
                     if (context.world.isClientSide) {
-                        be.setAngle(Pair.of(0d, 0d));
+                        be.resetAngle();
                     }
                 } else if(connectionList.size() == 1) {
                     // if after filtering, have only one connection, it's the best one
@@ -457,7 +457,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                         cache.clearAll();
                         be.setCache(null);
                         if (context.world.isClientSide) {
-                            be.setAngle(Pair.of(0d, 0d));
+                            be.resetAngle();
                         }
                         return;
                     }
@@ -480,7 +480,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.clearAll();
                     be.setCache(null);
                     if (context.world.isClientSide) {
-                        be.setAngle(Pair.of(0d, 0d));
+                        be.resetAngle();
                     }
                     return;
                 }
@@ -493,7 +493,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                     cache.clearAll();
                     be.setCache(null);
                     if (context.world.isClientSide) {
-                        be.setAngle(Pair.of(0d, 0d));
+                        be.resetAngle();
                     }
                     context.blockEntityData.remove("overhead_line_support_cache");  // 降级为嗅探模式
                     return;
@@ -508,7 +508,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                         cache.clearAll();
                         be.setCache(null);
                         if (context.world.isClientSide) {
-                            be.setAngle(Pair.of(0d, 0d));
+                            be.resetAngle();
                         }
                         return;
                     }

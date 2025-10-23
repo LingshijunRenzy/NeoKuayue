@@ -9,11 +9,13 @@ public interface IPantographBlockEntity {
 
     boolean isRisen();
 
-    void setAngle(Pair<Double, Double> angle);
+    void setAngle(double angle);
+
+    void resetAngle();
 
     double getYOffset();
 
-    Pair<Double, Double> getAngle();
+    double getAngle();
 
     void setCache(CurrOverheadLineCache cache);
 

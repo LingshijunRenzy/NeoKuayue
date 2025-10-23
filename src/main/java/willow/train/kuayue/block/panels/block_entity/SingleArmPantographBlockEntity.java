@@ -37,7 +37,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
     @Getter
     private float risePullRodAngle;
     public double pullRodAngle = 170.0;
-    private Pair<Double, Double> targetAngle;
+    private double targetAngle;
     @Getter
     private double transPosY = -0.5;
 
@@ -57,7 +57,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
             this.downPullRodAngle = block.getDownPullRodAngle();
             this.risePullRodAngle = block.getRisePullRodAngle();
             this.pullRodAngle = block.getDownPullRodAngle();
-            this.targetAngle = Pair.of(pullRodAngle, pullRodAngle);
+            this.targetAngle = pullRodAngle;
         }
 //        if (level == null)
 //            return;
@@ -89,7 +89,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
     }
 
     @Override
-    public Pair<Double, Double> getAngle() {
+    public double getAngle() {
         return targetAngle;
     }
 
@@ -98,8 +98,13 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         return pantographType;
     }
 
-    public void setAngle(Pair<Double, Double> angle) {
-        targetAngle = Pair.of(getCenterAngleOf(angle.getFirst()), getCenterAngleOf(angle.getSecond()));
+    public void setAngle(double angle) {
+        targetAngle = angle;
+    }
+
+    @Override
+    public void resetAngle() {
+        this.targetAngle = (double) downPullRodAngle;
     }
 
     public double getCenterAngleOf(double angle) {
