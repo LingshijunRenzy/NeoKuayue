@@ -1,6 +1,7 @@
 package willow.train.kuayue.initial;
 
 import kasuga.lib.registrations.common.ChannelReg;
+import willow.train.kuayue.block.panels.pantograph.network.PantographSyncPacket;
 import willow.train.kuayue.network.c2s.*;
 import willow.train.kuayue.network.c2s.tech_tree.*;
 import willow.train.kuayue.network.s2c.*;
@@ -20,6 +21,7 @@ public class AllPackets {
             .loadPacket(NbtC2SPacket.class, NbtC2SPacket::new)
             .loadPacket(C2STrainStationInfoUpdatePacket.class, C2STrainStationInfoUpdatePacket::new)
             .loadPacket(C2SOverheadLineSupportAdjustPacket.class, C2SOverheadLineSupportAdjustPacket::new)
+            .loadPacket(PantographSyncPacket.class, PantographSyncPacket::new)
             .submit(AllElements.testRegistry);
 
     public static final ChannelReg TECH_TREE_CHANNEL = new ChannelReg("kuayue_tech_tree_channel")

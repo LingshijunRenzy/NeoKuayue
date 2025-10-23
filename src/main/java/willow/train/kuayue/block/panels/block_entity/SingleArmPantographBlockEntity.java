@@ -4,6 +4,9 @@ import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import kasuga.lib.core.util.data_type.Pair;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -13,9 +16,7 @@ import net.minecraft.world.level.levelgen.DebugLevelSource;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import willow.train.kuayue.block.panels.pantograph.IPantographBlockEntity;
-import willow.train.kuayue.block.panels.pantograph.PantographProps;
-import willow.train.kuayue.block.panels.pantograph.SingleArmPantographBlock;
+import willow.train.kuayue.block.panels.pantograph.*;
 import willow.train.kuayue.initial.AllBlocks;
 import willow.train.kuayue.initial.AllTags;
 
@@ -25,13 +26,24 @@ import java.util.Objects;
 
 public class SingleArmPantographBlockEntity extends SmartBlockEntity implements IContraptionMovementBlockEntity, IPantographBlockEntity {
 
+    @Getter
     private boolean isRisen = true;
+    @Getter
     private PantographProps pantographType;
+    @Getter
     private float risenSpeed;
+    @Getter
     private float downPullRodAngle;
+    @Getter
     private float risePullRodAngle;
     public double pullRodAngle = 170.0;
+    private double targetAngle;
+    @Getter
     private double transPosY = -0.5;
+
+    @Getter
+    @Setter
+    private CurrOverheadLineCache cache = null;
 
     public SingleArmPantographBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -45,6 +57,7 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
             this.downPullRodAngle = block.getDownPullRodAngle();
             this.risePullRodAngle = block.getRisePullRodAngle();
             this.pullRodAngle = block.getDownPullRodAngle();
+            this.targetAngle = pullRodAngle;
         }
 //        if (level == null)
 //            return;
@@ -75,12 +88,32 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         isRisen = risen;
     }
 
-    public boolean isRisen() {
-        return isRisen;
+    @Override
+    public double getAngle() {
+        return targetAngle;
     }
 
-    public PantographProps getPantographType() {
+    @Override
+    public IPantographAngleMapping getPantographAngleMapping() {
         return pantographType;
+    }
+
+    public void setAngle(double angle) {
+        targetAngle = angle;
+    }
+
+    @Override
+    public void resetAngle() {
+        this.targetAngle = (double) downPullRodAngle;
+    }
+
+    public double getCenterAngleOf(double angle) {
+        return Math.max(Math.min(angle, downPullRodAngle), risePullRodAngle);
+    }
+
+    @Override
+    public double getYOffset() {
+        return transPosY;
     }
 
     public Map<String, PartialModel> getPantographModel() {
@@ -90,22 +123,6 @@ public class SingleArmPantographBlockEntity extends SmartBlockEntity implements 
         if (!(state.getBlock() instanceof SingleArmPantographBlock block))
             return null;
         return block.getPantographModel();
-    }
-
-    public double getTransPosY() {
-        return transPosY;
-    }
-
-    public float getRisenSpeed() {
-        return risenSpeed;
-    }
-
-    public float getDownPullRodAngle() {
-        return downPullRodAngle;
-    }
-
-    public float getRisePullRodAngle() {
-        return risePullRodAngle;
     }
 
     @Override
