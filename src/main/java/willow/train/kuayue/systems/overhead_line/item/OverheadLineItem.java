@@ -50,7 +50,7 @@ public class OverheadLineItem extends Item {
         if(pContext.getPlayer() == null){
             return InteractionResult.PASS;
         }
-        if(pContext.getLevel().isClientSide()){
+        if(pContext.getLevel().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         Player player = pContext.getPlayer();

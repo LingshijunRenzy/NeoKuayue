@@ -1160,4 +1160,6 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         return flag;
     }
 
+    @Override
+    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {}
 }
