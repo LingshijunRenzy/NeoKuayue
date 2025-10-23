@@ -98,8 +98,7 @@ public class DebugDrawUtil {
         AABB aabb = new AABB(x, y, z, x + 1, y + 1, z + 1).inflate(box.expand());
 
         if (box.fill()) {
-            // 渲染填充框
-            DebugRenderer.renderFilledBox(aabb, box.r(), box.g(), box.b(), box.a());
+            DebugRenderer.renderFilledBox(stack, source, aabb, box.r(), box.g(), box.b(), box.a());
         } else {
             // 渲染线框
             VertexConsumer consumer = source.getBuffer(RenderType.lines());
@@ -122,6 +121,7 @@ public class DebugDrawUtil {
     private static void renderDebugText(PoseStack stack, MultiBufferSource source, Vec3 cameraPos, DebugText text) {
         Vec3 pos = text.pos().subtract(cameraPos);
         DebugRenderer.renderFloatingText(
+                stack, source,
                 text.text(),
                 pos.x(), pos.y(), pos.z(),
                 text.color(),

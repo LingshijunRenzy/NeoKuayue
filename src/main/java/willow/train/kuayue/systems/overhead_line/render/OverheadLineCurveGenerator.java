@@ -7,6 +7,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.KuayueConfig;
 
@@ -34,12 +36,12 @@ public class OverheadLineCurveGenerator {
         Vec3 dir = b.subtract(a);
 
         float rotZ = - (float) Math.atan2(dir.y, Math.sqrt(dir.x * dir.x + dir.z * dir.z));
-        Quaternion q = Vector3f.XP.rotation(rotZ);
-        Quaternion qZ = Vector3f.ZP.rotation(rotZ);
+        Quaternionf q = Axis.XP.rotation(rotZ);
+        Quaternionf qZ = Axis.ZP.rotation(rotZ);
         float distance = (float) a.distanceTo(b);
 
         Vector3f one = new Vector3f(1, 0, 0);
-        one.transform(qZ);
+        one.rotate(qZ);
         one.mul(distance);
         Vec2 vecResult = new Vec2((float) Math.sqrt(one.x() * one.x() + one.z() * one.z()), one.y());
 
@@ -50,7 +52,7 @@ public class OverheadLineCurveGenerator {
 
         builder.store(vecResult);
     }
-    
+
     public static RenderCurve conicHangLine(Level level, Vec3 first, Vec3 last, float firstOffset, float secondOffset,
                                             float distance, float setonSpacing, float r) {
         RenderCurve.Builder builder = RenderCurve.create();
@@ -61,8 +63,8 @@ public class OverheadLineCurveGenerator {
         return builder.build(level);
     }
 
-    public static void conicHangLine(RenderCurve.Builder builder, Vec3 first, Vec3 last, 
-                                   float firstOffset, float secondOffset, 
+    public static void conicHangLine(RenderCurve.Builder builder, Vec3 first, Vec3 last,
+                                   float firstOffset, float secondOffset,
                                    float distance, float segmentSpacing,
                                      float r
     ) {
@@ -147,11 +149,11 @@ public class OverheadLineCurveGenerator {
     public static void catenaryLine(RenderCurve.Builder builder, Vec3 first, Vec3 last, float partSpacing, float r) {
         float horizontalDistance = (float) last.subtract(first).horizontalDistance();
         float dy = (float) (last.y() - first.y());
-        
+
         float constant_g = KuayueConfig.CONFIG.getDefaultDouble("OVERHEAD_LINE_SAGGING_COEFFICIENT").floatValue();
         float constant_step = Math.abs(dy);
         float offset_result;
-        
+
         // 计算悬链线偏移
         if (dy == 0) {
             offset_result = -horizontalDistance / 2;
@@ -186,11 +188,11 @@ public class OverheadLineCurveGenerator {
             }
             offset_result = x;
         }
-        
+
         // 准备渲染
         prepareLine(builder, first, last.subtract(first), r);
         PoseStack pose = builder.getPoseStack();
-        
+
         // 计算分段
         float parts = (float) Math.ceil(horizontalDistance/partSpacing);
         float trueSpacing = horizontalDistance/parts;
@@ -211,12 +213,12 @@ public class OverheadLineCurveGenerator {
 
             actualLastY += (float) (segmentLength * Math.sin(zRot));
             actualLastX += (float) (segmentLength * Math.cos(zRot));
-            Quaternion rotation = Vector3f.XP.rotation(-zRot);
-            Quaternion rotationZ = Vector3f.ZP.rotation(zRot);
+            Quaternionf rotation = Axis.XP.rotation(-zRot);
+            Quaternionf rotationZ = Axis.ZP.rotation(zRot);
 
 
             cache = new Vector3f(1, 0, 0);
-            cache.transform(rotationZ);
+            cache.rotate(rotationZ);
             cache.mul(segmentLength);
             vec2 = new Vec2((float) Math.sqrt(cache.x() * cache.x() + cache.z() * cache.z()), cache.y());
 

@@ -82,8 +82,8 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         ) return;
         StructureTemplate.StructureBlockInfo bsInfo = context.contraption.getBlocks().get(context.localPos);
         if (bsInfo == null) return;
-        if (!bsInfo.state.hasProperty(BlockStateProperties.OPEN)) return;
-        boolean risenFlag = bsInfo.state.getValue(BlockStateProperties.OPEN);
+        if (!bsInfo.state().hasProperty(BlockStateProperties.OPEN)) return;
+        boolean risenFlag = bsInfo.state().getValue(BlockStateProperties.OPEN);
         pantographBlockEntity.setRisen(risenFlag);
 
         PantographSystem pantographSystem = locator.getFirst().getOrCreateSystem(AllDeviceSystems.PANTOGRAPH);
@@ -367,7 +367,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
 
     // 嗅探，找到最近的可用挂架
     private @Nullable BlockPos getClosedSupport(MovementContext context, Vec3 forwardVec, int searchRadius) {
-        BlockPos pantographPos = new BlockPos(context.position.x, context.position.y, context.position.z);
+        BlockPos pantographPos = BlockPos.containing(context.position);
         BlockPos minPos = pantographPos.offset(-searchRadius, -searchRadius, -searchRadius);
         BlockPos maxPos = pantographPos.offset(searchRadius, searchRadius, searchRadius);
 
@@ -631,7 +631,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             manager.sync(
                     (ServerLevel) context.world,
                     context.localPos,
-                    new BlockPos(context.position),
+                    BlockPos.containing(context.position),
                     context.contraption,
                     cache);
         }
