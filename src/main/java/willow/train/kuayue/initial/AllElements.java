@@ -6,6 +6,8 @@ import kasuga.lib.registrations.common.CreativeTabReg;
 import kasuga.lib.registrations.registry.CreateRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.block.panels.pantograph.network.ClientSyncManager;
+import willow.train.kuayue.block.panels.pantograph.network.ServerSyncManager;
 import willow.train.kuayue.event.both.OnFinalizeSetup;
 import willow.train.kuayue.event.both.PlayerDataEvent;
 import willow.train.kuayue.event.client.*;
@@ -93,6 +95,7 @@ public class AllElements {
             MinecraftForge.EVENT_BUS.addListener(ClientTickScheduler::onClientEarlyTick);
             // MinecraftForge.EVENT_BUS.addListener(RenderPrePosedBlockEvent::renderBlock);
             MinecraftForge.EVENT_BUS.register(new CarriageInventoryEvents());
+            MinecraftForge.EVENT_BUS.addListener(ClientSyncManager::clientTick);
         }
         Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);
@@ -103,6 +106,8 @@ public class AllElements {
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::onLevelSave);
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::addCustomTrades);
         MinecraftForge.EVENT_BUS.addListener(EntityTrackingListener::onEntityUnload);
+        MinecraftForge.EVENT_BUS.addListener(ServerSyncManager::serverTick);
+        MinecraftForge.EVENT_BUS.addListener(ServerSyncManager::onLevelUnload);
         testRegistry.submit();
         createRegistry.submit();
     }
