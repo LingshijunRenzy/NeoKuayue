@@ -33,12 +33,22 @@ public class OverheadLineCurveGenerator {
     public static void straightLine(RenderCurve.Builder builder, Vec3 a, Vec3 b, float r) {
         Vec3 dir = b.subtract(a);
 
+        float rotZ = - (float) Math.atan2(dir.y, Math.sqrt(dir.x * dir.x + dir.z * dir.z));
+        Quaternion q = Vector3f.XP.rotation(rotZ);
+        Quaternion qZ = Vector3f.ZP.rotation(rotZ);
+        float distance = (float) a.distanceTo(b);
+
+        Vector3f one = new Vector3f(1, 0, 0);
+        one.transform(qZ);
+        one.mul(distance);
+        Vec2 vecResult = new Vec2((float) Math.sqrt(one.x() * one.x() + one.z() * one.z()), one.y());
+
         PoseStack pose = builder.getPoseStack();
-        pose.mulPose(Axis.XP.rotation( - (float) Math.atan2(dir.y, Math.sqrt(dir.x * dir.x + dir.z * dir.z))));
-        pose.scale(r, r, (float) a.distanceTo(b));
+        pose.mulPose(q);
+        pose.scale(r, r, distance);
         pose.translate(-0.5, - 0.5, 0);
 
-        builder.store();
+        builder.store(vecResult);
     }
     
     public static RenderCurve conicHangLine(Level level, Vec3 first, Vec3 last, float firstOffset, float secondOffset,
@@ -56,8 +66,6 @@ public class OverheadLineCurveGenerator {
                                    float distance, float segmentSpacing,
                                      float r
     ) {
-
-
         Vec3 hangPointFirst = first.add(UP.scale(firstOffset));
         Vec3 hangPointLast = last.add(UP.scale(secondOffset));
         float projectionDistance = (float) hangPointLast.subtract(hangPointFirst).horizontalDistance();
@@ -191,7 +199,8 @@ public class OverheadLineCurveGenerator {
         float spx = dy >= 0 ? trueSpacing : -trueSpacing;
 
         float actualLastY = 0f, actualLastX = 0f;
-        
+        Vector3f cache; Vec2 vec2;
+
         // 生成曲线段
         for (int i = 0; i < parts; i++) {
             x += spx;
@@ -200,14 +209,23 @@ public class OverheadLineCurveGenerator {
             float zRot = (float) Math.atan2(deltaY, Math.abs(trueSpacing));
             float segmentLength = (float) Math.sqrt(deltaY * deltaY + trueSpacing * trueSpacing);
 
-            pose.pushPose();
-            pose.translate(0, actualLastY, actualLastX);
-            pose.mulPose(Axis.XP.rotation(-zRot));
-
             actualLastY += (float) (segmentLength * Math.sin(zRot));
             actualLastX += (float) (segmentLength * Math.cos(zRot));
+            Quaternion rotation = Vector3f.XP.rotation(-zRot);
+            Quaternion rotationZ = Vector3f.ZP.rotation(zRot);
+
+
+            cache = new Vector3f(1, 0, 0);
+            cache.transform(rotationZ);
+            cache.mul(segmentLength);
+            vec2 = new Vec2((float) Math.sqrt(cache.x() * cache.x() + cache.z() * cache.z()), cache.y());
+
+            pose.pushPose();
+            pose.translate(0, actualLastY, actualLastX);
+            pose.mulPose(rotation);
+
             pose.scale(r, r, segmentLength);
-            builder.store();
+            builder.store(vec2);
             pose.popPose();
             
             last_y = current_y;
