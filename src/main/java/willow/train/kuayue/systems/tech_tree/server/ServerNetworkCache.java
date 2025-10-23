@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.player.Player;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.tech_tree.*;
 import willow.train.kuayue.systems.tech_tree.NetworkState;
@@ -22,10 +23,7 @@ public class ServerNetworkCache implements Runnable {
     private final Player player;
     private final Queue<TechTree> waitingForSend;
     private final Queue<S2CPacket> packets;
-    private boolean waiting;
-    private int delay, times;
     private TransmitStage transmitStage;
-    private static final int handshakeDelay = 150000, timeout = 300000;
     private boolean threadStarted;
     private final Thread myThread;
 
@@ -50,8 +48,6 @@ public class ServerNetworkCache implements Runnable {
     private void startBatch(UUID batchId) {
         this.batch = batchId;
         transmitStage = TransmitStage.HANDSHAKE;
-        delay = 0;
-        times = 0;
     }
 
     private void compileTree(TechTree tree) {
@@ -66,97 +62,86 @@ public class ServerNetworkCache implements Runnable {
     }
 
     public void collectClientNetworkState(NetworkState state) {
-        if (state == NetworkState.BUSY) {
-            waiting = true;
-            delay = 0;
-            times = 0;
-        } else {
-            transmitStage = TransmitStage.TRANSMITTING;
-        }
+        transmitStage = TransmitStage.TRANSMITTING;
     }
 
     @Override
     public void run() {
+        final int waitingMillis = KuayueConfig.CONFIG.
+                getIntValue("TECH_TREE_TRANSMISSION_TIMEOUT");
+        final int retryTimes = KuayueConfig.CONFIG.
+                getIntValue("TECH_TREE_TRANSMISSION_RETRY_TIMES");
         while (true) {
-            if (transmitStage == TransmitStage.STANDING_BY) {
-                if (waitingForSend.isEmpty()) {
-                    sendOverPacket();
-                    threadStarted = false;
-                    return;
+            switch (transmitStage) {
+                case STANDING_BY -> {
+                    if (waitingForSend.isEmpty()) {
+                        sendOverPacket();
+                        threadStarted = false;
+                        return;
+                    }
+                    startBatch(UUID.randomUUID());
+                    compileTree(waitingForSend.poll());
                 }
-                startBatch(UUID.randomUUID());
-                compileTree(waitingForSend.poll());
-                continue;
-            }
-            if (transmitStage == TransmitStage.HANDSHAKE) {
-                waiting = true;
-                if (!onWait((obj) -> {
-                    sendHandShakePacket();
-                })) forceStop();
-                continue;
-            }
-            if (transmitStage == TransmitStage.TRANSMITTING) {
-                delay = 0;
-                times = 0;
-                while (!packets.isEmpty()) {
-                    S2CPacket payload = packets.poll();
-                    AllPackets.TECH_TREE_CHANNEL.sendToClient(payload, (ServerPlayer) player);
+                case HANDSHAKE -> {
+                    sendAndRetry(o -> sendHandShakePacket(),
+                                 o -> forceStop(true, retryTimes),
+                             waitingMillis, retryTimes,
+                                        TransmitStage.TRANSMITTING);
                 }
-                transmitStage = TransmitStage.EOF;
-            }
-            if (transmitStage == TransmitStage.EOF) {
-                waiting = true;
-                if (!onWait(obj -> {
-                    sendEOFPacket();
-                })) forceStop();
+                case TRANSMITTING -> {
+                    sendAndRetry(o -> sendPayloads(),
+                            o -> forceStop(true, retryTimes),
+                            waitingMillis, retryTimes,
+                            TransmitStage.EOF);
+                }
+                case EOF -> {
+                    sendAndRetry(o -> sendEOFPacket(),
+                            o -> forceStop(true, retryTimes),
+                            waitingMillis, retryTimes,
+                            TransmitStage.STANDING_BY);
+                }
             }
         }
     }
 
-    public boolean onWait(Consumer<Object> consumer) {
-        if (waiting && times >= timeout) {
-            clear();
-            return false;
-        } else if (waiting && transmitStage == TransmitStage.HANDSHAKE &&
-                delay > 0 && delay < handshakeDelay) {
-            delay();
-            delay++;
-        } else if (waiting) {
+    public void sendAndRetry(Consumer<Object> consumer,
+                             Consumer<Object> runOnFailed,
+                             int waitingMillis,
+                             int retryTimes,
+                             TransmitStage nextStage) {
+        int retry = 0;
+        do {
             consumer.accept(null);
-            delay();
-            delay = 1;
-            times++;
-        } else {
-            consumer.accept(null);
-        }
-        return true;
+            delay(waitingMillis);
+            retry++;
+        } while (transmitStage != nextStage && retry < retryTimes);
+        if (retry >= retryTimes) runOnFailed.accept(null);
     }
 
     private void clear() {
         packets.clear();
         transmitStage = TransmitStage.STANDING_BY;
         batch = null;
-        waiting = false;
-        times = 0;
-        delay = 0;
     }
 
     public void nextTree() {
         clear();
     }
 
-    public void forceStop() {
-        Kuayue.LOGGER.error("Failed to send tech tree data to player {} on phase {}, " +
-                        "already waiting for {} ms.",
-                player.getDisplayName().getString(), transmitStage, times * 10);
+    public void forceStop(boolean shouldPlayMessage, int times) {
+        if (shouldPlayMessage) {
+            Kuayue.LOGGER.error("Failed to send tech tree data to player {} on phase {}, " +
+                            "already retried {} times.",
+                    player.getDisplayName().getString(), transmitStage, times);
+        }
         clear();
         waitingForSend.clear();
         transmitStage = TransmitStage.STANDING_BY;
     }
 
-    private void delay() {
+    private void delay(long waitingMillis) {
         try {
-            Thread.sleep(20);
+            Thread.sleep(waitingMillis);
         } catch (InterruptedException ignored) {}
     }
 
@@ -171,6 +156,14 @@ public class ServerNetworkCache implements Runnable {
 
     private void sendOverPacket() {
         AllPackets.TECH_TREE_CHANNEL.sendToClient(new TechTreeSendOverPacket(), (ServerPlayer) player);
+    }
+
+    private void sendPayloads() {
+        while (!packets.isEmpty()) {
+            S2CPacket payload = packets.poll();
+            AllPackets.TECH_TREE_CHANNEL.sendToClient(payload, (ServerPlayer) player);
+        }
+        this.transmitStage = TransmitStage.EOF;
     }
 
     public enum TransmitStage implements StringRepresentable {

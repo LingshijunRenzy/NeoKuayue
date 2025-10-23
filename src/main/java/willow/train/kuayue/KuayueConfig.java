@@ -26,6 +26,12 @@ public class KuayueConfig {
             .rangedIntConfig("PANTOGRAPH_SYNC_TICKS",
                     "the server would send pantograph sync packets to all clients in every <this> ticks.",
                     100, 1, 500)
+            .rangedIntConfig("TECH_TREE_TRANSMISSION_TIMEOUT",
+                    "the timeout of the transmission of tech tree packets from server to client (milliseconds)",
+                    500, 100, 10000)
+            .rangedIntConfig("TECH_TREE_TRANSMISSION_RETRY_TIMES",
+                    "the retry times of the transmission of tech tree packets from server to client (times)",
+                    10, 0, 100)
             .registerConfigs();
 
     public static void invoke(){}
