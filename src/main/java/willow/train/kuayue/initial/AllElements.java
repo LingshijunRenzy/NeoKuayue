@@ -20,6 +20,7 @@ import willow.train.kuayue.initial.food.AllFoods;
 import willow.train.kuayue.initial.material.AllMaterials;
 import willow.train.kuayue.initial.ore.AllOres;
 import willow.train.kuayue.initial.ore.FeaturesInit;
+import willow.train.kuayue.systems.blueprint_distributor.DistributionEvent;
 import willow.train.kuayue.systems.device.AllDeviceItems;
 import willow.train.kuayue.initial.recipe.AllRecipes;
 import willow.train.kuayue.systems.device.EntityTrackingListener;
@@ -85,6 +86,7 @@ public class AllElements {
         if (Envs.isClient()) {
             ClientInit.invoke();
             Kuayue.BUS.addListener(ClientInit::registerHUDOverlays);
+            Kuayue.BUS.addListener(DistributionEvent::onClientStarted);
             MinecraftForge.EVENT_BUS.addListener(RenderArrowEvent::renderBlockBounds);
             MinecraftForge.EVENT_BUS.addListener(OverheadLineRendererSystem::onRenderLevelLast);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::unloadEvent);
