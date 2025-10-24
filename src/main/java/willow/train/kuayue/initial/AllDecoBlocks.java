@@ -262,6 +262,17 @@ public class AllDecoBlocks {
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueMainTab)
                     .submit(AllElements.testRegistry);
+
+    public static final BlockReg<ACOutdoorUnitBlock> AC_OUTDOOR_UNIT =
+            new BlockReg<ACOutdoorUnitBlock>("ac_outdoor_unit")
+                    .blockType(ACOutdoorUnitBlock::new)
+                    .materialColor(MapColor.METAL)
+                    .addProperty(BlockBehaviour.Properties::noOcclusion)
+                    .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                    .addProperty(properties -> properties.strength(1.0f, 2.0f))
+                    .defaultBlockItem()
+                    .tabTo(AllElements.neoKuayueMainTab)
+                    .submit(AllElements.testRegistry);
     
     public static final SkirtRegistration<SkirtBlock> AUXILIARY_RESERVOIR =
             new SkirtRegistration<SkirtBlock>("auxiliary_reservoir")

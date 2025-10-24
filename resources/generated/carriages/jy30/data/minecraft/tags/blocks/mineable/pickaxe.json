@@ -1,7 +1,5 @@
 {
   "values": [
-    "kuayue:window_large_jy30",
-    "kuayue:window_large_between_jy30",
-    "kuayue:slab_bottom_jy30"
+    "#kuayue:panel/jy30"
   ]
 }
