@@ -206,6 +206,7 @@ public class AllItems {
                     .element("carriage_25k_circuit_blueprint")
                     .element("carriage_25z_circuit_blueprint")
                     .element("carriage_25t_circuit_blueprint")
+                    .element("carriage_22_circuit_blueprint")
                     .element("carriage_cr200j_circuit_blueprint")
                     .element("head_ss8_circuit_blueprint")
                     .submit(AllElements.testRegistry);
@@ -225,6 +226,7 @@ public class AllItems {
                     .element("carriage_25k_blueprint")
                     .element("carriage_25z_blueprint")
                     .element("carriage_25t_blueprint")
+                    .element("carriage_22_blueprint")
                     .element("carriage_cr200j_blueprint")
                     .element("carriage_m1_blueprint")
                     .element("carriage_marshalled_blueprint")
@@ -248,6 +250,7 @@ public class AllItems {
                     .element("carriage_25k_circuit")
                     .element("carriage_25z_circuit")
                     .element("carriage_25t_circuit")
+                    .element("carriage_22_circuit")
                     .element("carriage_cr200j_circuit")
                     .element("head_ss8_circuit")
                     .submit(AllElements.testRegistry);
@@ -266,6 +269,7 @@ public class AllItems {
                     .element("carriage_25k_circuit_constructing")
                     .element("carriage_25z_circuit_constructing")
                     .element("carriage_25t_circuit_constructing")
+                    .element("carriage_22_circuit_constructing")
                     .element("carriage_cr200j_circuit_constructing")
                     .element("head_ss8_circuit_constructing")
                     .submit(AllElements.testRegistry);
@@ -285,6 +289,7 @@ public class AllItems {
                     .element("carriage_25k_mould")
                     .element("carriage_25z_mould")
                     .element("carriage_25t_mould")
+                    .element("carriage_22_mould")
                     .element("carriage_cr200j_mould")
                     .element("carriage_m1_mould")
                     .element("carriage_marshalled_mould")
@@ -307,6 +312,7 @@ public class AllItems {
                     .element("carriage_25k_mould_constructing")
                     .element("carriage_25z_mould_constructing")
                     .element("carriage_25t_mould_constructing")
+                    .element("carriage_22_mould_constructing")
                     .element("carriage_cr200j_mould_constructing")
                     .element("carriage_m1_mould_constructing")
                     .element("carriage_marshalled_mould_constructing")
