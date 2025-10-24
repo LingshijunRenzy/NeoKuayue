@@ -1,0 +1,14 @@
+{
+  "values": [
+    "kuayue:panel_kuayue_df11g",
+    "kuayue:panel_top_df11g",
+    "kuayue:df11g_panel_upper_blind",
+    "kuayue:df11g_panel_upper_cooling_blind",
+
+    "kuayue:df11_carport_equip_b",
+    "kuayue:df11_carport_equip_a",
+    "kuayue:df11_carport_general",
+    "kuayue:df11_carport_equip_blinds",
+    "kuayue:df11_carport_louver_fan"
+  ]
+}

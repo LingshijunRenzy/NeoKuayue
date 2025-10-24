@@ -1,21 +1,3 @@
 {
-  "values": [
-    "kuayue:window_wide_marshalled_cr200j",
-    "kuayue:window_wide_sealed_marshalled_cr200j",
-    "kuayue:panel_middle_logo_cr_marshalled_cr200j",
-    "kuayue:window_sealed_marshalled_cr200j",
-    "kuayue:panel_middle_marshalled_cr200j",
-    "kuayue:panel_middle_25b",
-    "kuayue:panel_middle_25g",
-    "kuayue:panel_middle_25k",
-    "kuayue:panel_middle_25t",
-    "kuayue:panel_middle_25t_2",
-    "kuayue:panel_middle_25z",
-    "kuayue:panel_middle_side_25z",
-    "kuayue:22_panel_middle",
-
-    "kuayue:panel_middle_marshalled_25",
-    "kuayue:window_oc_25",
-    "kuayue:window_oc_sealed_25"
-  ]
+  "values": []
 }
