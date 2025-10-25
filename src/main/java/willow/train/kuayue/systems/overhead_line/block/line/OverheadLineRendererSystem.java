@@ -21,6 +21,7 @@ import willow.train.kuayue.systems.overhead_line.render.RenderCurve;
 import willow.train.kuayue.systems.overhead_line.types.OverheadLineType;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import static net.minecraftforge.client.event.RenderLevelStageEvent.Stage.*;
@@ -76,6 +77,11 @@ public class OverheadLineRendererSystem {
                 $fromIndex,
                 $toIndex
             );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(level, fromPosition, toPosition, fromIndex, toIndex);
         }
     }
 

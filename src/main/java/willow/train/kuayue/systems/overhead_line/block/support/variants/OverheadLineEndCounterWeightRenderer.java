@@ -239,4 +239,9 @@ public class OverheadLineEndCounterWeightRenderer implements BlockEntityRenderer
         }
         pPoseStack.popPose();
     }
+
+    @Override
+    public int getViewDistance() {
+        return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
+    }
 }

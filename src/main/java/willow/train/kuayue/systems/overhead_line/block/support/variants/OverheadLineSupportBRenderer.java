@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import willow.train.kuayue.KuayueConfig;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlock;
 import willow.train.kuayue.systems.overhead_line.block.support.OverheadLineSupportBlockEntity;
 
@@ -11,6 +12,7 @@ public abstract class OverheadLineSupportBRenderer {
 
     public static class B1Renderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
         public B1Renderer(BlockEntityRendererProvider.Context context) {}
+
         @Override
         public void render(OverheadLineSupportBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
@@ -32,10 +34,16 @@ public abstract class OverheadLineSupportBRenderer {
             );
             pPoseStack.popPose();
         }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
+        }
     }
 
     public static class B2Renderer implements BlockEntityRenderer<OverheadLineSupportBlockEntity> {
         public B2Renderer(BlockEntityRendererProvider.Context context) {}
+
         @Override
         public void render(OverheadLineSupportBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
             pPoseStack.pushPose();
@@ -56,6 +64,11 @@ public abstract class OverheadLineSupportBRenderer {
                     pPackedOverlay
             );
             pPoseStack.popPose();
+        }
+
+        @Override
+        public int getViewDistance() {
+            return KuayueConfig.CONFIG.getIntValue("OVERHEAD_LINE_SUPPORT_RENDER_DISTANCE");
         }
     }
 }

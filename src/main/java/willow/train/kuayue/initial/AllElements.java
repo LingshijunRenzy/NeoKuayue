@@ -6,6 +6,8 @@ import kasuga.lib.registrations.common.CreativeTabReg;
 import kasuga.lib.registrations.registry.CreateRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.block.panels.pantograph.network.ClientSyncManager;
+import willow.train.kuayue.block.panels.pantograph.network.ServerSyncManager;
 import willow.train.kuayue.event.both.OnFinalizeSetup;
 import willow.train.kuayue.event.both.PlayerDataEvent;
 import willow.train.kuayue.event.client.*;
@@ -18,6 +20,7 @@ import willow.train.kuayue.initial.food.AllFoods;
 import willow.train.kuayue.initial.material.AllMaterials;
 import willow.train.kuayue.initial.ore.AllOres;
 import willow.train.kuayue.initial.ore.FeaturesInit;
+import willow.train.kuayue.systems.blueprint_distributor.DistributionEvent;
 import willow.train.kuayue.systems.device.AllDeviceItems;
 import willow.train.kuayue.initial.recipe.AllRecipes;
 import willow.train.kuayue.systems.device.EntityTrackingListener;
@@ -83,6 +86,7 @@ public class AllElements {
         if (Envs.isClient()) {
             ClientInit.invoke();
             Kuayue.BUS.addListener(ClientInit::registerHUDOverlays);
+            Kuayue.BUS.addListener(DistributionEvent::onClientStarted);
             MinecraftForge.EVENT_BUS.addListener(RenderArrowEvent::renderBlockBounds);
             MinecraftForge.EVENT_BUS.addListener(OverheadLineRendererSystem::onRenderLevelLast);
             MinecraftForge.EVENT_BUS.addListener(ColorTemplateEvents::unloadEvent);
@@ -93,6 +97,7 @@ public class AllElements {
             MinecraftForge.EVENT_BUS.addListener(ClientTickScheduler::onClientEarlyTick);
             // MinecraftForge.EVENT_BUS.addListener(RenderPrePosedBlockEvent::renderBlock);
             MinecraftForge.EVENT_BUS.register(new CarriageInventoryEvents());
+            MinecraftForge.EVENT_BUS.addListener(ClientSyncManager::clientTick);
         }
         Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);
@@ -103,6 +108,8 @@ public class AllElements {
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::onLevelSave);
         MinecraftForge.EVENT_BUS.addListener(PlayerDataEvent::addCustomTrades);
         MinecraftForge.EVENT_BUS.addListener(EntityTrackingListener::onEntityUnload);
+        MinecraftForge.EVENT_BUS.addListener(ServerSyncManager::serverTick);
+        MinecraftForge.EVENT_BUS.addListener(ServerSyncManager::onLevelUnload);
         testRegistry.submit();
         createRegistry.submit();
     }

@@ -23,12 +23,12 @@ public class NetworkCacheManager {
     public void removeCache(ServerPlayer player) {
         ServerNetworkCache cache = caches.remove(player);
         if (cache == null) return;
-        cache.forceStop();
+        cache.forceStop(false, 0);
     }
 
     public void stopAll() {
         caches.forEach((player, serverNetworkCache) ->
-                serverNetworkCache.forceStop());
+                serverNetworkCache.forceStop(false, 0));
     }
 
     public @Nullable ServerNetworkCache getCache(ServerPlayer player) {
