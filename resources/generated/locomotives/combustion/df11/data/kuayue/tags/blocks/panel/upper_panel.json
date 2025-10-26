@@ -1,14 +1,21 @@
 {
   "values": [
-    "kuayue:panel_kuayue_df11g",
+    "kuayue:road_sign_df11g",
     "kuayue:panel_top_df11g",
     "kuayue:df11g_panel_upper_blind",
     "kuayue:df11g_panel_upper_cooling_blind",
+    "kuayue:df11g_panel_upper_ph_blind",
+    "kuayue:df11g_windows_ph_eh",
+    "kuayue:louver_equip_room_df11g_1",
+    "kuayue:louver_equip_room_df11g_2_top",
+    "kuayue:window_equip_room_df11g_2",
 
-    "kuayue:df11_carport_equip_b",
-    "kuayue:df11_carport_equip_a",
-    "kuayue:df11_carport_general",
-    "kuayue:df11_carport_equip_blinds",
-    "kuayue:df11_carport_louver_fan"
+    "kuayue:df11_equip_room_window_1",
+    "kuayue:df11_equip_room_window_2",
+    "kuayue:df11_panel_air_intake",
+    "kuayue:df11_panel_blind_top",
+    "kuayue:df11_panel_equip_top",
+    "kuayue:df11_window_equip_small",
+    "kuayue:panel_top_df11"
   ]
 }

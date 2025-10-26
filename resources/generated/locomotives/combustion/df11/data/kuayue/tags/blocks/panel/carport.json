@@ -11,7 +11,12 @@
     "kuayue:df11g_carport_eh_blind",
     "kuayue:df11g_carport_filter_blind",
 
-
-    "kuayue:df11_carport_center_cooling_fan"
+    "kuayue:df11_carport_center_cooling_fan",
+    "kuayue:df11_carport_equip_a",
+    "kuayue:df11_carport_equip_b",
+    "kuayue:df11_carport_equip_blinds",
+    "kuayue:df11_carport_general",
+    "kuayue:df11_carport_louver_fan",
+    "kuayue:df11_chimney"
   ]
 }
