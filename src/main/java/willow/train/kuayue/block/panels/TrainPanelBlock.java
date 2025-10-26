@@ -100,10 +100,10 @@ public class TrainPanelBlock extends Block implements IWrenchable, EntityBlock {
         TrainPanelProperties.EditType orgType = pState.getValue(EDIT_TYPE);
         boolean changed = false;
         // 手持水牌
-        if ((item.is(EditablePanelItem.LAQUERED_BOARD.getItem()) || (item.is(EditablePanelItem.COLORED_BRUSH.getItem()) && TrainPanelProperties.EditType.LAQUERED.equals(orgType))) && pState.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag()))
-                && neoState.getBlock().getClass().getName().equals(TrainPanelBlock.class.getName())
-                && !neoState.getBlock().builtInRegistryHolder().key().location().toString().equals(I11GPanel.PANEL_BOTTOM_DF11G.block.getBlock().builtInRegistryHolder().key().location().toString())
-                && !neoState.getBlock().builtInRegistryHolder().key().location().toString().equals(I3DPanel.HXD3D_PANEL_BOTTOM.block.getBlock().builtInRegistryHolder().key().location().toString())
+        if (
+                (item.is(EditablePanelItem.LAQUERED_BOARD.getItem()) || (item.is(EditablePanelItem.COLORED_BRUSH.getItem()) && TrainPanelProperties.EditType.LAQUERED.equals(orgType)))
+                && pState.is(Objects.requireNonNull(AllTags.BOTTOM_PANEL.tag()))
+                && neoState.getBlock() instanceof TrainPanelBlock
         ) {
             neoState = pState.setValue(EDIT_TYPE, TrainPanelProperties.EditType.LAQUERED);
             changed = orgType != TrainPanelProperties.EditType.LAQUERED;

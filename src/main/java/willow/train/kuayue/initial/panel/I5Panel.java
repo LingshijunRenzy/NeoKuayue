@@ -458,5 +458,18 @@ public class I5Panel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
+    public static final PanelRegistration<VariableShapeHingePanelBlock> DF5_COWCATCHER_LADDER =
+            new PanelRegistration<VariableShapeHingePanelBlock>("df5_cowcatcher_ladder")
+                    .block(p -> new VariableShapeHingePanelBlock(p,
+                            new Vec2(0, 0), new Vec2(1, 1),
+                            () -> (state, level, blockPos, context) ->
+                                    TrainPanelShapes.rotateShape(Direction.EAST,
+                                            state.getValue(TrainPanelBlock.FACING),
+                                            TrainPanelShapes.DF5_COWCATCHER_LADDER_EAST)))
+                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .tab(AllElements.neoKuayueLocoTab)
+                    .noOcclusion().strengthAndTool(1.5f,3f)
+                    .submit(AllElements.testRegistry);
+
     public static void invoke(){}
 }

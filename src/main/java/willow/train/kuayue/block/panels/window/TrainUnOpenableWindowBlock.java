@@ -54,9 +54,4 @@ public class TrainUnOpenableWindowBlock extends TrainPanelBlock {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite())
                 .setValue(HINGE, TrainOpenableWindowBlock.getHinge(pContext));
     }
-
-    @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        return InteractionResult.PASS;
-    }
 }
