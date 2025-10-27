@@ -133,10 +133,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         boolean debugging = false;
         if (clientSide) {
             debugging = Minecraft.getInstance().options.renderDebug;
-        }
-        if (!debugging) {
-            DebugDrawUtil.clearAllDebugElements();
-            DebugDrawUtil.clearAllDebugElements();
+            if (!debugging) {
+                DebugDrawUtil.clearAllDebugElements();
+                DebugDrawUtil.clearAllDebugElements();
+            }
         }
 
         //render a red box to show the current support pos
