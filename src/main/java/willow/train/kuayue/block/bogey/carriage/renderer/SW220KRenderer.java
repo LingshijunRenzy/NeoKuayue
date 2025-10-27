@@ -17,15 +17,23 @@ import willow.train.kuayue.initial.AllElements;
 import static willow.train.kuayue.block.bogey.carriage.renderer.PK209PRenderer.PK209P_WHEEL2;
 
 public class SW220KRenderer extends BogeyRenderer {
+
     private static ResourceLocation asBlockModelResource(String path) {
         return AllElements.testRegistry.asResource("block/" + path);
     }
-    public static PartialModel SW220K = new PartialModel(asBlockModelResource("bogey/sw220k/sw220k"));
+
+    public static PartialModel SW220K_FRAME =
+            new PartialModel(asBlockModelResource("bogey/sw220k/sw220k_frame"));
+    public static PartialModel SW220K_WHEEL =
+            new PartialModel(asBlockModelResource("bogey/sw220k/sw220k_wheel"));
+
+    public static double SW220K_FRAME_TRANS_Y = 0.925F;
+
     @Override
     public void initialiseContraptionModelData(
             MaterialManager materialManager, CarriageBogey carriageBogey) {
-        this.createModelInstance(materialManager, SW220K);
-        this.createModelInstance(materialManager, PK209P_WHEEL2, 2);
+        this.createModelInstance(materialManager, SW220K_FRAME);
+        this.createModelInstance(materialManager, SW220K_WHEEL, 2);
     }
 
     @Override
@@ -44,10 +52,10 @@ public class SW220KRenderer extends BogeyRenderer {
 
         boolean inInstancedContraption = vb == null;
 
-        BogeyModelData frame = getTransform(SW220K, ms, inInstancedContraption);
-        BogeyModelData[] wheels = getTransform(PK209P_WHEEL2, ms, inInstancedContraption, 2);
+        BogeyModelData frame = getTransform(SW220K_FRAME, ms, inInstancedContraption);
+        BogeyModelData[] wheels = getTransform(SW220K_WHEEL, ms, inInstancedContraption, 2);
 
-        frame.translate(0, 0.635, 0).render(ms, light, vb);
+        frame.translate(0, SW220K_FRAME_TRANS_Y, 0).render(ms, light, vb);
 
         for (int side : Iterate.positiveAndNegative) {
             if (!inInstancedContraption) ms.pushPose();
@@ -63,8 +71,8 @@ public class SW220KRenderer extends BogeyRenderer {
         @Override
         public void initialiseContraptionModelData(
                 MaterialManager materialManager, CarriageBogey carriageBogey) {
-            this.createModelInstance(materialManager, SW220K);
-            this.createModelInstance(materialManager, PK209P_WHEEL2, 2);
+            this.createModelInstance(materialManager, SW220K_FRAME);
+            this.createModelInstance(materialManager, SW220K_WHEEL, 2);
         }
 
         @Override
@@ -83,11 +91,11 @@ public class SW220KRenderer extends BogeyRenderer {
 
             boolean inInstancedContraption = vb == null;
 
-            BogeyModelData frame = getTransform(SW220K, ms, inInstancedContraption);
-            BogeyModelData[] wheels = getTransform(PK209P_WHEEL2, ms, inInstancedContraption, 2);
+            BogeyModelData frame = getTransform(SW220K_FRAME, ms, inInstancedContraption);
+            BogeyModelData[] wheels = getTransform(SW220K_WHEEL, ms, inInstancedContraption, 2);
 
             // 渲染架体
-            frame.translate(0, 0.635, 0).render(ms, light, vb);
+            frame.translate(0, SW220K_FRAME_TRANS_Y, 0).render(ms, light, vb);
             // 渲染轮对
             for (int side : Iterate.positiveAndNegative) {
                 if (!inInstancedContraption) ms.pushPose();
