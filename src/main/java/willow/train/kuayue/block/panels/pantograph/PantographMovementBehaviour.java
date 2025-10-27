@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity;
 import kasuga.lib.core.create.device.TrainDeviceLocation;
 import kasuga.lib.core.create.device.TrainDeviceManager;
 import kasuga.lib.core.util.data_type.Pair;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -128,9 +129,18 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         cache = clientSync(context, cache);
         pantographBlockEntity.setCache(cache);
         cache.read(cacheData);
+        boolean clientSide = context.world.isClientSide();
+        boolean debugging = false;
+        if (clientSide) {
+            debugging = Minecraft.getInstance().options.renderDebug;
+        }
+        if (!debugging) {
+            DebugDrawUtil.clearAllDebugElements();
+            DebugDrawUtil.clearAllDebugElements();
+        }
 
         //render a red box to show the current support pos
-        if(cache.hasCurrSupport()){
+        if(cache.hasCurrSupport() && clientSide && debugging) {
             DebugDrawUtil.addDebugBox("pantograph_support_curr",
                     cache.getCurrSupportPos(),
                     1.0f,
@@ -140,7 +150,7 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         }
 
         //render a green box to show the current link pos
-        if(cache.hasCurrLink()){
+        if(cache.hasCurrLink() && clientSide && debugging) {
             DebugDrawUtil.addDebugBox("pantograph_link_curr",
                     cache.getCurrLink(),
                     0.0f,
@@ -175,14 +185,23 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         CompoundTag data = context.blockEntityData.getCompound("overhead_line_support_cache");
         CurrOverheadLineCache cache = Objects.requireNonNullElse(be.getCache(), new CurrOverheadLineCache());
         cache.read(data);
+        boolean clientSide = context.world.isClientSide();
+        boolean debugging = false;
+        if (clientSide) {
+            debugging = Minecraft.getInstance().options.renderDebug;
+        }
 
         if(!cache.hasCurrSupport()) {
-            DebugDrawUtil.clearAllDebugElements();
+            if (clientSide && debugging) {
+                DebugDrawUtil.clearAllDebugElements();
+            }
             return true;
         }
 
         if(!cache.hasCurrLink()) {
-            DebugDrawUtil.clearAllDebugElements();
+            if (clientSide && debugging) {
+                DebugDrawUtil.clearAllDebugElements();
+            }
             return true;
         }
 
@@ -191,7 +210,9 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         // 方向突然间反过来的话也要更新
         if (Vec3.atCenterOf(nextSupportPos).subtract(Vec3.atCenterOf(currentSupportPos))
                 .dot(context.motion.normalize()) < 0.0f) {
-            DebugDrawUtil.clearAllDebugElements();
+            if (clientSide && debugging) {
+                DebugDrawUtil.clearAllDebugElements();
+            }
             return true;
         }
         Vec3 nextPointPos = cache.getNextPointPos();
@@ -204,8 +225,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         // double res = supportVec.dot(pantographVec) / (supportVec.length() * supportVec.length());
         float res = (float) (pantographVecHoriz.dot(supportVecHoriz) / supportVecHoriz.lengthSqr());
 
-          if(res > 1.0) {
-            DebugDrawUtil.clearAllDebugElements();
+        if(res > 1.0) {
+            if (clientSide && debugging) {
+              DebugDrawUtil.clearAllDebugElements();
+            }
 
             cache.setCurrSupportPos(nextSupportPos);
             cache.setCurrPointPos(nextPointPos);
@@ -217,8 +240,10 @@ public class PantographMovementBehaviour implements MovementBehaviour {
             context.blockEntityData.put("overhead_line_support_cache", data);
 
             return true;
-        } else if (res < 0.0){
-            DebugDrawUtil.clearAllDebugElements();
+        } else if (res < 0.0) {
+            if (clientSide && debugging) {
+                DebugDrawUtil.clearAllDebugElements();
+            }
             cache.clearAll();
             be.setCache(null);
                 if (context.world.isClientSide) {
@@ -409,6 +434,12 @@ public class PantographMovementBehaviour implements MovementBehaviour {
         CompoundTag data = context.blockEntityData.getCompound("overhead_line_support_cache");
         CurrOverheadLineCache cache = Objects.requireNonNullElse(be.getCache(), new CurrOverheadLineCache());
         cache.read(data);
+        boolean clientSide = context.world.isClientSide();
+        boolean debugging = false;
+        if (clientSide) {
+            debugging = Minecraft.getInstance().options.renderDebug;
+        }
+
 
         int searchRadius = 5;
         double threshold = Math.cos(Math.toRadians(10));
@@ -518,14 +549,16 @@ public class PantographMovementBehaviour implements MovementBehaviour {
                 // if size > 1, do nothing for next tick to filter again
                 //DEBUG render: blue boxes are candidates
                 else {
-                    DebugDrawUtil.clearAllDebugElements();
-                    for(OverheadLineSupportBlockEntity.Connection connection : connectionList) {
-                        DebugDrawUtil.addDebugBox("pantograph_support_curr",
-                                connection.absolutePos(),
-                                0.0f,
-                                0.0f,
-                                1.0f,
-                                0.7f);
+                    if (clientSide && debugging) {
+                        DebugDrawUtil.clearAllDebugElements();
+                        for(OverheadLineSupportBlockEntity.Connection connection : connectionList) {
+                            DebugDrawUtil.addDebugBox("pantograph_support_curr",
+                                    connection.absolutePos(),
+                                    0.0f,
+                                    0.0f,
+                                    1.0f,
+                                    0.7f);
+                        }
                     }
                 }
             }
