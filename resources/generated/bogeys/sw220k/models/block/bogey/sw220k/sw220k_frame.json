@@ -2,5 +2,5 @@
   "parent": "block/block",
   "loader": "forge:obj",
   "flip_v": true,
-  "model": "kuayue:models/block/bogey/sw220k/sw220k.obj"
+  "model": "kuayue:models/block/bogey/sw220k/sw220k_frame.obj"
 }
