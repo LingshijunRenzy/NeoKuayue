@@ -463,7 +463,7 @@ public class I5Panel {
                                     TrainPanelShapes.rotateShape(Direction.EAST,
                                             state.getValue(TrainPanelBlock.FACING),
                                             TrainPanelShapes.DF5_COWCATCHER_LADDER_EAST)))
-                    .materialAndColor(Material.METAL,MaterialColor.COLOR_BLUE)
+                    .materialAndColor(MapColor.COLOR_BLUE)
                     .tab(AllElements.neoKuayueLocoTab)
                     .noOcclusion().strengthAndTool(1.5f,3f)
                     .submit(AllElements.testRegistry);
