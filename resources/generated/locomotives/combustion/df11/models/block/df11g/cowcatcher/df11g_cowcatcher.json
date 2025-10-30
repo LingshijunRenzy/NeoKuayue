@@ -1,5 +1,8 @@
 {
   "loader": "forge:obj",
   "model": "kuayue:models/block/df11g/cowcatcher/df11g_cowcatcher.obj",
-  "flip_v": true
+  "flip_v": true,
+  "textures": {
+    "particle": "kuayue:block/df11g/df11g_cowcatcher"
+  }
 }
