@@ -67,13 +67,13 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
         xOffsetSlider = addRenderableWidget(new OverheadLineSupportSlider(
             startX, startY, SLIDER_WIDTH, SLIDER_HEIGHT,
             (tempXOffset + 1.0f) / 2.0f,
-            Component.literal("X Offset"),
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.x_offset"),
             OffsetType.X
         ));
         
         xOffsetEditBox = addRenderableWidget(new EditBox(font, 
             startX + SLIDER_WIDTH + EDITBOX_MARGIN, startY, EDITBOX_WIDTH, EDITBOX_HEIGHT, 
-            Component.literal("X Offset")));
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.x_offset")));
         xOffsetEditBox.setValue(String.format("%.2f", tempXOffset));
         xOffsetEditBox.setResponder(value -> onEditBoxChanged(OffsetType.X, value));
         xOffsetEditBox.setMaxLength(10);
@@ -82,13 +82,13 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
         yOffsetSlider = addRenderableWidget(new OverheadLineSupportSlider(
             startX, startY + SLIDER_SPACING, SLIDER_WIDTH, SLIDER_HEIGHT,
             (tempYOffset + 1.0f) / 2.0f,
-            Component.literal("Y Offset"),
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.y_offset"),
             OffsetType.Y
         ));
         
         yOffsetEditBox = addRenderableWidget(new EditBox(font, 
             startX + SLIDER_WIDTH + EDITBOX_MARGIN, startY + SLIDER_SPACING, EDITBOX_WIDTH, EDITBOX_HEIGHT, 
-            Component.literal("Y Offset")));
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.y_offset")));
         yOffsetEditBox.setValue(String.format("%.2f", tempYOffset));
         yOffsetEditBox.setResponder(value -> onEditBoxChanged(OffsetType.Y, value));
         yOffsetEditBox.setMaxLength(10);
@@ -97,13 +97,13 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
         zOffsetSlider = addRenderableWidget(new OverheadLineSupportSlider(
             startX, startY + SLIDER_SPACING * 2, SLIDER_WIDTH, SLIDER_HEIGHT,
             (tempZOffset + 1.0f) / 2.0f,
-            Component.literal("Z Offset"),
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.z_offset"),
             OffsetType.Z
         ));
         
         zOffsetEditBox = addRenderableWidget(new EditBox(font, 
             startX + SLIDER_WIDTH + EDITBOX_MARGIN, startY + SLIDER_SPACING * 2, EDITBOX_WIDTH, EDITBOX_HEIGHT, 
-            Component.literal("Z Offset")));
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.z_offset")));
         zOffsetEditBox.setValue(String.format("%.2f", tempZOffset));
         zOffsetEditBox.setResponder(value -> onEditBoxChanged(OffsetType.Z, value));
         zOffsetEditBox.setMaxLength(10);
@@ -114,13 +114,13 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
             rotationSlider = addRenderableWidget(new OverheadLineSupportSlider(
                 startX, startY + SLIDER_SPACING * 3, SLIDER_WIDTH, SLIDER_HEIGHT,
                 (tempRotation + 45.0f) / 90.0f,
-                Component.literal("Rotation"),
+                Component.translatable("gui.kuayue.overhead_line_support_adjust.rotation"),
                 OffsetType.ROTATION
             ));
             
             rotationEditBox = addRenderableWidget(new EditBox(font, 
                 startX + SLIDER_WIDTH + EDITBOX_MARGIN, startY + SLIDER_SPACING * 3, EDITBOX_WIDTH, EDITBOX_HEIGHT, 
-                Component.literal("Rotation")));
+                Component.translatable("gui.kuayue.overhead_line_support_adjust.rotation")));
             rotationEditBox.setValue(String.format("%.2f", tempRotation));
             rotationEditBox.setResponder(value -> onEditBoxChanged(OffsetType.ROTATION, value));
             rotationEditBox.setMaxLength(10);
@@ -132,19 +132,19 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
         int buttonY = startY + buttonYOffset + 10;
         confirmButton = addRenderableWidget(new Button(
             startX, buttonY, 70, 20,
-            Component.literal("Confirm"), 
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.confirm"),
             this::onConfirm
         ));
         
         addRenderableWidget(new Button(
             startX + 75, buttonY, 70, 20,
-            Component.literal("Reset"), 
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.reset"),
             this::onReset
         ));
         
         cancelButton = addRenderableWidget(new Button(
             startX + 150, buttonY, 70, 20,
-            Component.literal("Cancel"), 
+            Component.translatable("gui.kuayue.overhead_line_support_adjust.cancel"),
             this::onCancel
         ));
     }
@@ -262,11 +262,15 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
 
-        drawString(pPoseStack, font, "Overhead Line Support Adjustment", 
-                  leftPos, topPos - 15, 0xFFFFFF);
+        drawString(
+                pPoseStack,
+                font,
+                Component.translatable("gui.kuayue.overhead_line_support_adjust.title"),
+                leftPos,
+                topPos - 15,
+                0xFFFFFF);
 
         int labelX = leftPos + SLIDER_WIDTH + EDITBOX_MARGIN + EDITBOX_WIDTH + 5;
-        drawString(pPoseStack, font, "Value", labelX, topPos + 5, 0xAAAAA);
     }
 
     @Override
@@ -383,7 +387,7 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
         protected void updateMessage() {
             if (offsetType == OffsetType.ROTATION) {
                 float rotationValue = (float) ((value - 0.5) * 90.0);
-                this.setMessage(Component.literal("Rotation = " + String.format("%.1f°", rotationValue)));
+                this.setMessage(Component.translatable("gui.kuayue.overhead_line_support_adjust.rotation").append(" = " + String.format("%.1f°", rotationValue)));
             } else {
                 float offsetValue = (float) ((value - 0.5) * 2.0);
                 this.setMessage(label.copy().append(Component.literal(" = " + String.format("%.2f", offsetValue))));
@@ -452,5 +456,10 @@ public class OverheadLineSupportAdjustScreen extends AbstractContainerScreen<Ove
         public boolean isBeingDragged() {
             return onClicked;
         }
+    }
+
+    @Override
+    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+        // do nothing
     }
 }
