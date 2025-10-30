@@ -11,8 +11,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.panels.block_entity.SingleArmPantographBlockEntity;
@@ -123,5 +126,16 @@ public class SingleArmPantographBlock extends Block implements IBE<SingleArmPant
 
     public float getRisePullRodAngle() {
         return risePullRodAngle;
+    }
+
+    @Override
+    public @NotNull BlockState rotate(BlockState pState, Rotation pRotation) {
+        Rotation opposite = Rotation.NONE;
+        switch (pRotation) {
+            case CLOCKWISE_90 ->  opposite = Rotation.COUNTERCLOCKWISE_90;
+            case COUNTERCLOCKWISE_90 ->   opposite = Rotation.CLOCKWISE_90;
+            case CLOCKWISE_180 -> opposite = Rotation.CLOCKWISE_180;
+        }
+        return pState.setValue(FACING, opposite.rotate(pState.getValue(FACING)));
     }
 }
