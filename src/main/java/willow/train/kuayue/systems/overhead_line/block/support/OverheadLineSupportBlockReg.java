@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -67,6 +69,8 @@ public class OverheadLineSupportBlockReg<T extends OverheadLineSupportBlock<V>, 
 
     @Override
     public OverheadLineSupportBlockReg<T, V> submit(SimpleRegistry simpleRegistry) {
+        super.material(Material.METAL);
+        super.materialColor(MaterialColor.METAL);
         super.submit(simpleRegistry);
         if(this.renderer != null) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT,

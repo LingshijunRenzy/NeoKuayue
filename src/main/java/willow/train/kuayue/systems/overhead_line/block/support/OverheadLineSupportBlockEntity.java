@@ -623,7 +623,7 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("gui.kuayue.overhead_line_support_adjust");
+        return Component.empty();
     }
 
     @Override
