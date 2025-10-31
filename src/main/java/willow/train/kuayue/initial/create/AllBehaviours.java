@@ -1,5 +1,6 @@
 package willow.train.kuayue.initial.create;
 
+import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
 import com.simibubi.create.foundation.block.IBE;
 import kasuga.lib.registrations.create.InteractionReg;
 import kasuga.lib.registrations.create.MovementReg;
@@ -55,6 +56,12 @@ public class AllBehaviours {
             new InteractionReg<SeatClickBehaviour>("seat_click_behaviour")
                     .behaviour(new SeatClickBehaviour())
                     .statePredicate(state -> (state.getBlock() instanceof YZSeatBlock && state.is(AllTags.MULTI_SEAT_BLOCK.tag())))
+                    .submit(AllElements.testRegistry);
+
+    public static final MovementReg<BogeyOverweightBehavior> BOGEY_OVERWEIGHT_BEHAVIOUR =
+            new MovementReg<BogeyOverweightBehavior>("bogey_overweight_behaviour")
+                    .behaviour(new BogeyOverweightBehavior())
+                    .statePredicate(blockState ->  blockState.getBlock() instanceof AbstractBogeyBlock<?>)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}

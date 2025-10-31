@@ -1,0 +1,18 @@
+{
+  "create:standard": {
+    "create:small": {
+      "axle_count": 2,
+      "max_weight_per_axle": 50
+    },
+    "create:large": {
+      "axle_count": 1,
+      "max_weight_per_axle": 200
+    }
+  },
+  "kuayue:carriage": {
+    "kuayue:pk209p": {
+      "axle_count": 2,
+      "max_weight_per_axle": 40
+    }
+  }
+}
