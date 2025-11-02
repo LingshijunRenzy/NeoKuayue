@@ -40,6 +40,10 @@ public abstract class Conductable {
     @Getter
     private int distanceToAnchor = 0;
 
+    @Setter
+    @Getter
+    private int priority = 0;
+
     public Conductable(ConductorType type, @NotNull Train train,
                        Carriage carriage, boolean isLeading) {
         this.type = type;
@@ -53,6 +57,9 @@ public abstract class Conductable {
         this.train = selfLoc.getTrainId();
         this.carriage = selfLoc.getCarriageIndex();
         this.isLeading = selfLoc.isLeading();
+        this.offset = nbt.getInt("offset");
+        this.distanceToAnchor = nbt.getInt("distanceToAnchor");
+        this.priority = nbt.getInt("priority");
     }
 
 
@@ -102,6 +109,9 @@ public abstract class Conductable {
         CompoundTag locTag = new CompoundTag();
         getLoc().write(locTag);
         nbt.put("self", locTag);
+        nbt.putFloat("offset", offset);
+        nbt.putFloat("distanceToAnchor", distanceToAnchor);
+        nbt.putInt("priority", priority);
         if (connected != null) {
             CompoundTag connectedTag = new CompoundTag();
             connected.getLoc().write(connectedTag);

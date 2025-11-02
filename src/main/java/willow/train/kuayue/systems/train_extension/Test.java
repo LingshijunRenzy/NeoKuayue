@@ -317,14 +317,14 @@ public class Test {
     public static @NotNull Pair<Train, Pair<Byte, Byte>> getConductableTrain(
             Train train, boolean isClientSide
     ) {
-        GlobalRailwayManager manager = isClientSide ? CreateClient.RAILWAYS : Create.RAILWAYS;
-        for (Map.Entry<UUID, Train> entry : manager.trains.entrySet()) {
-            Train t = entry.getValue();
-            if (t.equals(train)) continue;
-            Pair<Byte, Byte> collideResult = ConductorHelper.isTwoTrainConductorCollide(train, t, .125f);
-            if (!ConductorHelper.isValidCollide(collideResult)) continue;
-            return Pair.of(t, collideResult);
-        }
+//        GlobalRailwayManager manager = isClientSide ? CreateClient.RAILWAYS : Create.RAILWAYS;
+//        for (Map.Entry<UUID, Train> entry : manager.trains.entrySet()) {
+//            Train t = entry.getValue();
+//            if (t.equals(train)) continue;
+//            Pair<Byte, Byte> collideResult = ConductorHelper.isTwoTrainConductorCollide(train, t, .125f);
+//            if (!ConductorHelper.isValidCollide(collideResult)) continue;
+//            return Pair.of(t, collideResult);
+//        }
         return Pair.of(null, null);
     }
 }

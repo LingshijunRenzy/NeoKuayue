@@ -16,6 +16,7 @@ import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.TrainExtensionSyncPacket;
 import willow.train.kuayue.systems.train_extension.bogey_weight.BogeyExtensionSystem;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorType;
 
 import java.util.HashMap;
@@ -39,12 +40,17 @@ public class TrainExtensionSystem extends SavedData {
 
     public final HashSet<UUID> trainsToRemove;
 
+    public final HashSet<ConductorHelper.TrainMergeRequest> trainsToMerge;
+    public final HashSet<Train> newlyMerged;
+
     public TrainExtensionSystem() {
         this.data = new HashMap<>();
         this.types = new HashMap<>();
         types.put(ConductorType.DUMMY.id(), ConductorType.DUMMY);
         BOGEY_EXTENSION = new BogeyExtensionSystem();
         trainsToRemove = new HashSet<>();
+        trainsToMerge = new HashSet<>();
+        newlyMerged = new HashSet<>();
     }
 
     public void broadcastToClients(ServerLevel level, BlockPos pos) {
