@@ -8,14 +8,20 @@ import com.simibubi.create.content.trains.graph.TrackGraph;
 import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import kasuga.lib.core.util.data_type.Pair;
+import lombok.extern.slf4j.Slf4j;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.initial.AllPackets;
+import willow.train.kuayue.network.s2c.TrainMergePacket;
 import willow.train.kuayue.systems.train_extension.Test;
+import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
 
 import java.lang.ref.WeakReference;
@@ -23,15 +29,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 public class TrainCouplerTickEvents {
 
     private static final HashSet<UUID> removed = new HashSet<>();
-
-    public static HashSet<UUID> trackingTrains = new HashSet<>();
+    private static final HashSet<Train> removeFromNewlyMerged = new HashSet<>();
+    private static final HashSet<Train> trainMerging = new HashSet<>();
 
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event) {
         if (event.phase != TickEvent.Phase.START) return;
+        for (Train t : Kuayue.TRAIN_EXTENSION.newlyMerged) {
+            if (!t.derailed) continue;
+            t.derailed = false;
+            removeFromNewlyMerged.add(t);
+        }
+        Kuayue.TRAIN_EXTENSION.newlyMerged.clear();
         for (UUID id : Kuayue.TRAIN_EXTENSION.trainsToRemove) {
             Train train = Create.RAILWAYS.trains.get(id);
             if (train == null) {
@@ -58,18 +71,60 @@ public class TrainCouplerTickEvents {
 
         for (Map.Entry<UUID, Train> entry : Create.RAILWAYS.trains.entrySet()) {
             Train train = entry.getValue();
+            if (trainMerging.contains(train)) continue;
             for (Map.Entry<UUID, Train> e2 : Create.RAILWAYS.trains.entrySet()) {
                 Train t2 = e2.getValue();
                 if (t2 == train) continue;
-                Pair<Byte, Byte> collide = ConductorHelper
-                        .isTwoTrainConductorCollide(train, t2, .125f);
-                if (ConductorHelper.isValidCollide(collide)) {
-                    System.out.println("conductor1: " + collide.getFirst() +
-                            ", conductor2: " + collide.getSecond());
-                }
-            }
+                if (trainMerging.contains(t2)) continue;
+                ConductorHelper.CollidedConnectors conductorPair =
+                        ConductorHelper.getCollidedConnector(train, t2, .125f);
+                if (!ConductorHelper.isValidCollide2(conductorPair)) continue;
+                System.out.println("conductor1: " + conductorPair.conductorA() +
+                        ", conductor2: " + conductorPair.conductorB());
 
+                Conductable conductorA = conductorPair.conductorA();
+                Conductable conductorB = conductorPair.conductorB();
+                boolean isAHead = conductorPair.isAHead();
+                boolean isBHead = conductorPair.isBHead();
+
+                ConductorHelper.TrainSortResult sorted =
+                        ConductorHelper.sortTrains(
+                                conductorA, isAHead,
+                                conductorB, isBHead,
+                                false
+                        );
+                if (sorted == null) continue;
+
+                Kuayue.TRAIN_EXTENSION.trainsToMerge.add(
+                        new ConductorHelper.TrainMergeRequest(sorted.loco(),
+                                sorted.carriages(), sorted.shouldReverseCarriages(),
+                                sorted.isLocoHead(), conductorPair.spacing(),
+                                false)
+                );
+                trainMerging.add(train);
+                trainMerging.add(t2);
+            }
         }
+
+        for (ConductorHelper.TrainMergeRequest request : Kuayue.TRAIN_EXTENSION.trainsToMerge) {
+            ConductorHelper.mergeTrains(
+                    request.loco(),
+                    request.carriages(),
+                    request.shouldReverseCarriages(),
+                    request.isLocoHead(),
+                    request.spacing(),
+                    request.clientSide()
+            );
+            AllPackets.CHANNEL.boardcastToClients(
+                    new TrainMergePacket(request), event.getServer().getLevel(Level.OVERWORLD), BlockPos.ZERO
+            );
+            Kuayue.TRAIN_EXTENSION.newlyMerged.add(request.loco());
+        }
+
+        Kuayue.TRAIN_EXTENSION.trainsToMerge.clear();
+        Kuayue.TRAIN_EXTENSION.newlyMerged.removeAll(removeFromNewlyMerged);
+        removeFromNewlyMerged.clear();
+        trainMerging.clear();
         // NOTICE: 列车速度自带方向属性
         // NOTICE: 列车的bogey的TravellingPoint也自带方向属性, 可以用于单转向架列车方向的判定
 

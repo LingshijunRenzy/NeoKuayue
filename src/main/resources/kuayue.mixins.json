@@ -6,6 +6,7 @@
   "refmap": "kuayue.refmap.json",
   "mixins": [
     "AccessorCarriageBogey",
+    "AccessorCarriageContraption",
     "AccessorExternalRemainderBlockItem",
     "AccessorPlayerAdvancement",
     "AccessorTrain",

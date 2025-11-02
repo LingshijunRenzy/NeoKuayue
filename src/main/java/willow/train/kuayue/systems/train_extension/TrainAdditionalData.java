@@ -1,8 +1,6 @@
 package willow.train.kuayue.systems.train_extension;
 
 import com.simibubi.create.Create;
-import com.simibubi.create.content.trains.GlobalRailwayManager;
-import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 import kasuga.lib.core.base.NbtSerializable;
 import kasuga.lib.core.util.data_type.Pair;
@@ -10,6 +8,7 @@ import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorLocation;
 
@@ -128,5 +127,12 @@ public class TrainAdditionalData implements NbtSerializable {
             i++;
         }
         return result;
+    }
+
+    public @Nullable Conductable getConductor(byte index) {
+        if (index == 0 || carriages.isEmpty()) return null;
+        return index > 0 ?
+                carriages.get(0).getFirstConductor() :
+                carriages.get(carriages.size() - 1).getSecondConductor();
     }
 }
