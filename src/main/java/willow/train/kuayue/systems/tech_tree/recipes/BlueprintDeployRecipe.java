@@ -23,6 +23,7 @@ import willow.train.kuayue.systems.tech_tree.NodeLocation;
 public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
 
     private NodeLocation node;
+    private boolean pasteNodeToResult;
 
     public BlueprintDeployRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
         super(params);
@@ -44,7 +45,13 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
 
     @Override
     public ItemStack assemble(RecipeWrapper inv, RegistryAccess registryAccess) {
-        return super.assemble(inv, registryAccess);
+        ItemStack result = super.assemble(inv, registryAccess);
+        if (!pasteNodeToResult) {
+            return result;
+        }
+        CompoundTag nbt = result.getOrCreateTag();
+        nbt.putString("node", node.toString());
+        return result;
     }
 
     @Override
@@ -56,24 +63,29 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
     public void readAdditional(JsonObject json) {
         super.readAdditional(json);
         this.node = new NodeLocation(json.get("node").getAsString());
+        this.pasteNodeToResult = json.has("paste_node_to_result") &&
+                json.get("paste_node_to_result").getAsBoolean();
     }
 
     @Override
     public void writeAdditional(JsonObject json) {
         super.writeAdditional(json);
         json.addProperty("node", this.node.toString());
+        json.addProperty("paste_node_to_result", this.pasteNodeToResult);
     }
 
     @Override
     public void readAdditional(FriendlyByteBuf buffer) {
         super.readAdditional(buffer);
         this.node = NodeLocation.readFromByteBuf(buffer);
+        this.pasteNodeToResult = buffer.readBoolean();
     }
 
     @Override
     public void writeAdditional(FriendlyByteBuf buffer) {
         super.writeAdditional(buffer);
         node.writeToByteBuf(buffer);
+        buffer.writeBoolean(this.pasteNodeToResult);
     }
 
     @Override

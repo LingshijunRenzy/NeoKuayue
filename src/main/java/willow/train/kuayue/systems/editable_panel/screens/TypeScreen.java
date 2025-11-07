@@ -292,7 +292,7 @@ public class TypeScreen extends CustomScreen<EditablePanelEditMenu, EditablePane
             if (listener instanceof GetShareTemplateScreen screen && !screen.isVisible()) continue;
             if (listener instanceof TransparentEditBox box) {
                 editBar.setPosition(box.getX() + ((int) ((float) box.getWidth() * box.getScaleX()) - 200) / 2,
-                        box.getY() + (int) ((float) box.getHeight() * box.getScaleY()) + 2);
+                        box.getY() + (int) ((float) box.getHeight() * box.getScaleY()) + 40);
                 editBar.setText(box.getValue());
                 editBar.onAcceptClick(
                         (w, x, y) -> {
