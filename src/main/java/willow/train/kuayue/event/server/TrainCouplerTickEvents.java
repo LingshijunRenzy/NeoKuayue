@@ -1,36 +1,33 @@
 package willow.train.kuayue.event.server;
 
 import com.simibubi.create.Create;
-import com.simibubi.create.content.trains.entity.Carriage;
-import com.simibubi.create.content.trains.entity.CarriageBogey;
 import com.simibubi.create.content.trains.entity.Train;
-import com.simibubi.create.content.trains.graph.TrackGraph;
 import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
-import kasuga.lib.core.util.data_type.Pair;
 import lombok.extern.slf4j.Slf4j;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.TrainMergePacket;
-import willow.train.kuayue.systems.train_extension.Test;
+import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
+import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
 
 import java.lang.ref.WeakReference;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 public class TrainCouplerTickEvents {
+
+    private static int tickCounter = 0;
+    private static final int TICK_INTERVAL = 40;
 
     private static final HashSet<UUID> removed = new HashSet<>();
     private static final HashSet<Train> removeFromNewlyMerged = new HashSet<>();
@@ -38,6 +35,25 @@ public class TrainCouplerTickEvents {
 
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event) {
+        //需要节流的逻辑
+        tickCounter++;
+        if(tickCounter >= TICK_INTERVAL) {
+            for(Map.Entry<UUID, TrainAdditionalData> entry : Kuayue.TRAIN_EXTENSION.getData().entrySet()) {
+                List<CarriageAdditionalData> carriages = entry.getValue().getCarriages();
+                for(int i = 0; i < carriages.size(); i++) {
+                    CarriageAdditionalData carriageData = carriages.get(i);
+                    if(carriageData.shouldRemap){
+                        carriageData.shouldRemap = !ConductorHelper.remapCarriageContraption(
+                                Create.RAILWAYS.trains.get(entry.getKey()).carriages.get(i),
+                                false
+                        );
+                    }
+                }
+            }
+
+            tickCounter = 0;
+        }
+
         if (event.phase != TickEvent.Phase.START) return;
         for (Train t : Kuayue.TRAIN_EXTENSION.newlyMerged) {
             if (!t.derailed) continue;
@@ -77,7 +93,7 @@ public class TrainCouplerTickEvents {
                 if (t2 == train) continue;
                 if (trainMerging.contains(t2)) continue;
                 ConductorHelper.CollidedConnectors conductorPair =
-                        ConductorHelper.getCollidedConnector(train, t2, .125f);
+                        ConductorHelper.getCollidedConnector(train, t2, .15f);
                 if (!ConductorHelper.isValidCollide2(conductorPair)) continue;
                 System.out.println("conductor1: " + conductorPair.conductorA() +
                         ", conductor2: " + conductorPair.conductorB());

@@ -1,31 +1,51 @@
 package willow.train.kuayue.systems.train_extension.conductor;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.simibubi.create.AllPackets;
 import com.simibubi.create.Create;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.minecart.TrainCargoManager;
+import com.simibubi.create.content.contraptions.ContraptionBlockChangedPacket;
+import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
+import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.contraptions.behaviour.MovementContext;
+import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
 import com.simibubi.create.content.trains.GlobalRailwayManager;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
 import com.simibubi.create.content.trains.entity.*;
-import com.simibubi.create.content.trains.graph.TrackNode;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Couple;
+import com.simibubi.create.foundation.utility.Iterate;
+import com.sk89q.worldedit.math.transform.Transform;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.network.PacketDistributor;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.mixins.mixin.AccessorCarriageBogey;
 import willow.train.kuayue.mixins.mixin.AccessorCarriageContraption;
+import willow.train.kuayue.mixins.mixin.AccessorContraption;
 import willow.train.kuayue.mixins.mixin.AccessorTrain;
 import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
+import willow.train.kuayue.utils.StructureTransformUtil;
 
 import java.util.*;
 
@@ -149,17 +169,19 @@ public class ConductorHelper {
                         leadingAConductor.getTotalOffset() + trailingBConductor.getTotalOffset()
                 );
         }
-        if (leadingB != null && trailingA.distanceToSqr(leadingB) < distance) {
-            return new TrainCollideResult(
-                    (byte) -1, (byte) 1,
-                    trailingAConductor.getTotalOffset() + leadingBConductor.getTotalOffset()
-            );
-        }
-        if (trailingB != null && trailingA.distanceToSqr(trailingB) < distance) {
-            return new TrainCollideResult(
-                    (byte) -1, (byte) -1,
-                    trailingAConductor.getTotalOffset() + trailingBConductor.getTotalOffset()
-            );
+        if (trailingA != null) {
+            if (leadingB != null && trailingA.distanceToSqr(leadingB) < distance) {
+                return new TrainCollideResult(
+                        (byte) -1, (byte) 1,
+                        trailingAConductor.getTotalOffset() + leadingBConductor.getTotalOffset()
+                );
+            }
+            if (trailingB != null && trailingA.distanceToSqr(trailingB) < distance) {
+                return new TrainCollideResult(
+                        (byte) -1, (byte) -1,
+                        trailingAConductor.getTotalOffset() + trailingBConductor.getTotalOffset()
+                );
+            }
         }
         return TrainCollideResult.invalid();
     }
@@ -297,7 +319,7 @@ public class ConductorHelper {
 
     public static void mergeTrains(
             Train loco, Train carriages,
-            boolean shouldReverseCarriages,
+            boolean isCarriageTail,
             boolean isLocoHead, int spacing,
             boolean clientSide
     ) {
@@ -305,40 +327,33 @@ public class ConductorHelper {
         List<Carriage> locoCarriages = loco.carriages;
         List<Integer> locoSpacing = loco.carriageSpacing;
         double[] locoStress = ((AccessorTrain) loco).getStress();
+        float locoSpeed = (float) loco.speed;
 
         List<Carriage> carriageCarts = carriages.carriages;
         List<Integer> cartSpacing = carriages.carriageSpacing;
         double[] cartStress = ((AccessorTrain) carriages).getStress();
 
-        // 把 carriages 反过来
-        if (shouldReverseCarriages) {
-            Carriage c;
-            List<Carriage> cartCache = new ArrayList<>(carriageCarts.size());
-            for (int i = carriageCarts.size() - 1; i > -1; i--) {
-                c = carriageCarts.get(i);
-                cartCache.add(c);
-                reverseBogeys(c);
-            }
-            carriageCarts = cartCache;
-
-            List<Integer> spacingCache = new ArrayList<>(cartSpacing.size());
-            for (int i = cartSpacing.size() - 1; i > -1; i--) {
-                spacingCache.add(cartSpacing.get(i));
-            }
-            cartSpacing = spacingCache;
-
-            double[] stressCache = new double[cartStress.length];
-            for (int i = cartStress.length - 1; i > -1; i--) {
-                stressCache[i] = cartStress[cartStress.length - i - 1];
-            }
-            cartStress = stressCache;
-        }
-
         double[] neoStress = new double[locoStress.length + cartStress.length + 1];
+        //头-头或尾-尾情况需要反转
+        if(isLocoHead ^ isCarriageTail) {
+            carriageCarts.forEach(c -> {
+                ConductorHelper.reverseBogeys(c);
+                boolean success = ConductorHelper.remapCarriageContraption(c, clientSide);
+                if(!clientSide && !success){
+                    TrainAdditionalData trainAdditionalData = Kuayue.TRAIN_EXTENSION.get(carriages.id);
+                    if(trainAdditionalData != null){
+                        int index = carriageCarts.indexOf(c);
+                        if(index >= 0 && index < trainAdditionalData.getCarriages().size()){
+                            CarriageAdditionalData carriageAdditionalData = trainAdditionalData.getCarriages().get(index);
+                            carriageAdditionalData.shouldRemap = true;
+                        }
+                    }
+                }
+            });
+            Collections.reverse(carriageCarts);
+            Collections.reverse(cartSpacing);
+        }
         if (isLocoHead) {
-            if (!shouldReverseCarriages) {
-                carriageCarts.forEach(ConductorHelper::reverseBogeys);
-            }
             locoCarriages.addAll(0, carriageCarts);
             locoSpacing.addAll(0, cartSpacing);
             locoSpacing.add(cartSpacing.size(), spacing);
@@ -349,6 +364,7 @@ public class ConductorHelper {
             locoSpacing.addAll(cartSpacing);
             copyStress(locoStress, cartStress, neoStress);
         }
+        loco.doubleEnded = loco.doubleEnded || carriages.doubleEnded;
 
         ((AccessorTrain) loco).setStress(neoStress);
 
@@ -366,12 +382,74 @@ public class ConductorHelper {
             c.presentConductors = Couple.create(i > 0, i < locoCarriages.size() - 1);
         }
 
+        // 处理列车连接后的速度
+        Pair<Float, Float> newSpeed = momentumExchange(loco, carriages, 0f);
+        loco.speed = newSpeed != null ? newSpeed.getFirst() : locoSpeed;
+
+        mergeTrainExtensionData(loco, carriages, isCarriageTail, isLocoHead);
+
         if (clientSide) {
             CreateClient.RAILWAYS.removeTrain(carriages.id);
         } else {
             Create.RAILWAYS.removeTrain(carriages.id);
         }
-        mergeTrainExtensionData(loco, carriages, shouldReverseCarriages, isLocoHead);
+    }
+
+    public static void divideTrains(
+            Train loco,
+            int carriageIndex,
+            boolean clientSide
+    ) {
+        if(loco == null) return;
+        if(carriageIndex < 0 || carriageIndex >= loco.carriages.size() - 1) return;
+        //规定：主车在前，从车在后，从index车厢后方分开
+        List<Carriage> locoCarts = loco.carriages;
+        List<Integer> locoSpacing = loco.carriageSpacing;
+        double[] locoStress = ((AccessorTrain) loco).getStress();
+
+        List<Carriage> newLocoCarts = new ArrayList<>(locoCarts.subList(0, carriageIndex + 1));
+        List<Carriage> newCarriageCarts = new ArrayList<>(locoCarts.subList(carriageIndex + 1, locoCarts.size()));
+
+        List<Integer> newLocoSpacing = new ArrayList<>(locoSpacing.subList(0, carriageIndex));
+        List<Integer> newCarriageSpacing = new ArrayList<>(locoSpacing.subList(carriageIndex + 1, locoSpacing.size()));
+
+        double[] newLocoStress = new double[carriageIndex];
+        double[] newCarriageStress = new double[locoStress.length - carriageIndex - 1];
+        for(int i = 0; i < locoStress.length; i++){
+            if(i < carriageIndex){
+                newLocoStress[i] = locoStress[i];
+            } else if(i > carriageIndex){
+                newCarriageStress[i - carriageIndex - 1] = locoStress[i];
+            }
+        }
+
+        loco.doubleEnded = isDoubleEnded(newLocoCarts);
+        loco.carriages = newLocoCarts;
+        loco.carriageSpacing = newLocoSpacing;
+        ((AccessorTrain) loco).setStress(newLocoStress);
+
+        Train carriage = new Train(
+                UUID.randomUUID(),
+                loco.owner,
+                loco.graph,
+                newCarriageCarts,
+                newCarriageSpacing,
+                isDoubleEnded(newCarriageCarts)
+        );
+        ((AccessorTrain) carriage).setStress(newCarriageStress);
+
+        Carriage c;
+        for(int i = 0; i < newCarriageCarts.size(); i++){
+            c = newCarriageCarts.get(i);
+            c.setTrain(null);
+            CarriageContraptionEntity entity = c.anyAvailableEntity();
+            if(entity != null){
+                entity.trainId = carriage.id;
+                entity.carriageIndex = i;
+                entity.setCarriage(c);
+            }
+        }
+        carriage.speed = loco.speed;
     }
 
     private static void copyStress(double[] locoStress, double[] cartStress, double[] neoStress) {
@@ -384,18 +462,23 @@ public class ConductorHelper {
 
     public static void mergeTrainExtensionData(
             Train loco, Train carriages,
-            boolean shouldReverseCarriages, boolean isLocoHead) {
+            boolean isCarriageTail, boolean isLocoHead) {
         TrainAdditionalData locoData = Kuayue.TRAIN_EXTENSION.get(loco.id);
         TrainAdditionalData carriageData = Kuayue.TRAIN_EXTENSION.get(carriages.id);
         if (locoData == null || carriageData == null) return;
 
         List<CarriageAdditionalData> carriageAdditional = carriageData.getCarriages();
-        if (shouldReverseCarriages) {
-            ArrayList<CarriageAdditionalData> cache = new ArrayList<>(carriageAdditional.size());
-            for (int i = locoData.getCarriages().size() - 1; i > -1; i--) {
-                cache.add(carriageAdditional.get(i));
-            }
-            carriageAdditional = cache;
+        if(isLocoHead ^ isCarriageTail) {
+            Collections.reverse(carriageAdditional);
+            //for each carriageAdditional, reverse itself
+            carriageAdditional.forEach(c -> {
+                Carriage carriage = carriages.carriages.get(carriageAdditional.indexOf(c));
+                Contraption contraption = carriage.anyAvailableEntity().getContraption();
+                if(contraption instanceof CarriageContraption cc) {
+                    c.secondBogeyPos = carriage.isOnTwoBogeys() ?
+                            BlockPos.ZERO.relative(cc.getAssemblyDirection(), carriage.bogeySpacing) : BlockPos.ZERO;
+                }
+            });
         }
         if (isLocoHead) {
             locoData.getCarriages().addAll(0, carriageAdditional);
@@ -406,11 +489,49 @@ public class ConductorHelper {
         locoData.updateInternalConnections();
     }
 
-    public static void reverseBogeys(Carriage carriage) {
-        if (!carriage.isOnTwoBogeys()) return;
-        Couple<CarriageBogey> bogeys = carriage.bogeys;
+    public static void divideTrainExtensionData(Train loco, Train carriages, int carriageIndex) {
+        TrainAdditionalData locoData = Kuayue.TRAIN_EXTENSION.get(loco.id);
 
-        carriage.bogeys = Couple.create(bogeys.getSecond(), bogeys.getFirst());
+    }
+
+    public static void reverseBogeys(Carriage carriage) {
+
+        if (!carriage.isOnTwoBogeys()) {
+            CarriageBogey bogey =  carriage.bogeys.getFirst();
+            Couple<TravellingPoint> points = ((AccessorCarriageBogey) bogey).getPoints();
+
+            //翻转Point内的属性
+            for(boolean originalFirstPoint : Iterate.trueAndFalse) {
+                points.get(originalFirstPoint).reverse(carriage.train.graph);
+            }
+            //交换bogey的points
+            ((AccessorCarriageBogey) bogey).setPoints(Couple.create(points.getSecond(), points.getFirst()));
+
+            carriage.bogeys.setFirst(bogey);
+            return;
+        }
+
+        Couple<CarriageBogey> newBogeys = carriage.bogeys;
+
+        for(boolean originalFirstBogey : Iterate.trueAndFalse) {
+            CarriageBogey bogey = carriage.bogeys.get(originalFirstBogey);
+            Couple<TravellingPoint> points = ((AccessorCarriageBogey) bogey).getPoints();
+
+            for(boolean originalFirstPoint : Iterate.trueAndFalse) {
+                points.get(originalFirstPoint).reverse(carriage.train.graph);
+            }
+
+            boolean isLeading = ((AccessorCarriageBogey) bogey).isLeading();
+            ((AccessorCarriageBogey) bogey).setLeading(!isLeading);
+
+            //交换bogey的points
+            ((AccessorCarriageBogey) bogey).setPoints(Couple.create(points.getSecond(), points.getFirst()));
+        }
+
+        carriage.bogeys = Couple.create(
+                carriage.bogeys.getSecond(),
+                carriage.bogeys.getFirst()
+        );
 
         CarriageContraptionEntity cce = carriage.anyAvailableEntity();
         if (cce == null) return;
@@ -437,5 +558,164 @@ public class ConductorHelper {
                 return posCache;
         }
         return null;
+    }
+
+    //对反转转向架的车厢重新映射车厢Contraption
+    public static boolean remapCarriageContraption(Carriage carriage, boolean isClientSide) {
+        if(carriage == null) return false;
+
+        CarriageContraptionEntity cce = carriage.anyAvailableEntity();
+        if (cce == null) return false;
+
+        Contraption contraption = cce.getContraption();
+        if(!(contraption instanceof CarriageContraption cc)) return false;
+
+        Direction assemblyDirection = cc.getAssemblyDirection();
+        int bogeySpacing = carriage.bogeySpacing;
+        StructureTransform transform = new StructureTransform(
+                BlockPos.ZERO.relative(assemblyDirection, bogeySpacing),
+                Direction.Axis.Y, Rotation.CLOCKWISE_180, Mirror.NONE
+        );
+
+        //blocks
+        HashMap<BlockPos, StructureTemplate.StructureBlockInfo> newBlocks = new HashMap<>();
+        cc.getBlocks().forEach((k,v) -> {
+            BlockPos newPos = transform.apply(k);
+            newBlocks.put(newPos, StructureTransformUtil.getTransformedStructureBlockInfo(v, transform));
+        });
+        ((AccessorContraption) cc).setBlocks(newBlocks);
+
+        //actors
+        List<MutablePair<StructureTemplate.StructureBlockInfo, MovementContext>> actors = cc.getActors();
+        for(int i = 0; i < actors.size(); i++) {
+
+            MutablePair<StructureTemplate.StructureBlockInfo, MovementContext> actor = actors.get(i);
+            StructureTemplate.StructureBlockInfo newInfo = StructureTransformUtil.getTransformedStructureBlockInfo(actor.getLeft(), transform);
+
+            MovementContext movementContext = actor.getRight();
+            movementContext.localPos = transform.apply(movementContext.localPos);
+            movementContext.state.rotate(Rotation.CLOCKWISE_180);
+            StructureTransformUtil.getTransformedBlockEntityNbt(movementContext.blockEntityData, transform);
+
+            actors.set(i, MutablePair.of(newInfo, movementContext));
+        }
+
+        //interactors
+        Map<BlockPos, MovingInteractionBehaviour> interactors = new HashMap<>();
+        cc.getInteractors().forEach((k,v) -> {
+            interactors.put(transform.apply(k), v);
+        });
+        ((AccessorContraption) cc).setInteractors(interactors);
+
+        //superglue
+        List<AABB> superglues = ((AccessorContraption) cc).getSuperglue();
+        for(int i = 0; i < superglues.size(); i++) {
+            AABB superglue = superglues.get(i);
+            BlockPos start = new BlockPos(- (int) superglue.minX + 1, (int) superglue.minY, - (int) superglue.minZ + 1)
+                    .relative(assemblyDirection, bogeySpacing);
+            BlockPos end = new BlockPos(- (int) superglue.maxX + 1, (int) superglue.maxY, - (int) superglue.maxZ + 1)
+                    .relative(assemblyDirection, bogeySpacing);
+            superglues.set(i, new AABB(start, end));
+        }
+
+        //seats
+        cc.getSeats().replaceAll(transform::apply);
+
+        //stabilizedSubContraptions
+        Map<UUID, BlockFace> stabilizedSubContraptions = new HashMap<>();
+        ((AccessorContraption) cc).getStabilizedSubContraptions().forEach((k,v) -> {
+            BlockPos newPos = transform.apply(v.getPos());
+            Direction newDirection = v.getOppositeFace();
+
+            stabilizedSubContraptions.put(k, new BlockFace(newPos, newDirection));
+        });
+        ((AccessorContraption) cc).setStabilizedSubContraptions(stabilizedSubContraptions);
+
+        //capturedMultiblocks
+        Multimap<BlockPos, StructureTemplate.StructureBlockInfo> capturedMultiblocks = ArrayListMultimap.create();
+        ((AccessorContraption) cc).getCapturedMultiblocks().forEach((k,v) -> {
+            if(k == null || v == null) return;
+
+            BlockPos newPos = transform.apply(k);
+            StructureTemplate.StructureBlockInfo newInfo = StructureTransformUtil.getTransformedStructureBlockInfo(v, transform);
+
+            capturedMultiblocks.put(newPos, newInfo);
+        });
+        ((AccessorContraption) cc).setCapturedMultiblocks(capturedMultiblocks);
+
+        //initialPassengers
+        Map<BlockPos, Entity> initialPassengers = new HashMap<>();
+        ((AccessorContraption) cc).getInitialPassengers().forEach((k,v) -> {
+            BlockPos newPos = transform.apply(k);
+            initialPassengers.put(newPos, v);
+        });
+        ((AccessorContraption) cc).setInitialPassengers(initialPassengers);
+
+        //client
+        if(isClientSide) {
+            //modelData
+            Map<BlockPos, ModelData> newModelData = new HashMap<>();
+            cc.modelData.forEach((k,v) -> {
+                newModelData.put(transform.apply(k), v);
+            });
+            cc.modelData = newModelData;
+
+            //presentBlockEntites
+            Map<BlockPos, BlockEntity> newEntityData = new HashMap<>();
+            Map<BlockEntity, BlockEntity> oldToNewEntityData =  new HashMap<>();
+            cc.presentBlockEntities.forEach((k,v) -> {
+                BlockPos newPos = transform.apply(k);
+
+                BlockEntity newBE = StructureTransformUtil.getTransformedBlockEntity(v, transform);
+                if (newBE != null) {
+                    newBE.setChanged();
+                    if(newBE instanceof SmartBlockEntity sbe) {
+                        sbe.requestModelDataUpdate();
+                        sbe.notifyUpdate();
+                    }
+                    newEntityData.put(newPos, newBE);
+                    oldToNewEntityData.put(v, newBE);
+                }
+            });
+            cc.presentBlockEntities.clear();
+            cc.presentBlockEntities.putAll(newEntityData);
+
+            //maybeInstancedBlockEntities
+            for(int i = 0; i < cc.maybeInstancedBlockEntities.size(); i++) {
+                BlockEntity oldEntity = cc.maybeInstancedBlockEntities.get(i);
+                BlockEntity newEntity = oldToNewEntityData.get(oldEntity);
+                if(newEntity != null) {
+                    cc.maybeInstancedBlockEntities.set(i, newEntity);
+                } else {
+                    newEntity = StructureTransformUtil.getTransformedBlockEntity(oldEntity, transform);
+                    if (newEntity != null) {
+                        newEntity.setChanged();
+                        cc.maybeInstancedBlockEntities.set(i, newEntity);
+                    }
+                }
+            }
+
+            //specialRenderedBlockEntitie
+            cc.specialRenderedBlockEntities.replaceAll(oldToNewEntityData::get);
+        }
+
+        //assemblyDirection
+        ((AccessorCarriageContraption) cc).setAssemblyDirection(assemblyDirection.getOpposite());
+
+        //update collision
+        cc.invalidateColliders();
+
+        return true;
+    }
+
+    public static boolean isDoubleEnded(List<Carriage> carriages) {
+        for(Carriage carriage : carriages) {
+            CarriageContraptionEntity cce = carriage.anyAvailableEntity();
+            if(cce == null) continue;
+            Contraption contraption = cce.getContraption();
+            if(!(contraption instanceof CarriageContraption cc)) continue;
+            if(cc.hasBackwardControls()) return true;
+        }
+        return false;
     }
 }
