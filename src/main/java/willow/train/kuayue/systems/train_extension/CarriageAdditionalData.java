@@ -19,6 +19,8 @@ public class CarriageAdditionalData {
 
     public BlockPos secondBogeyPos;
 
+    public boolean shouldRemap = false;
+
     @NonNull
     public Pair<Conductable, Conductable> conductors;
 
@@ -85,6 +87,7 @@ public class CarriageAdditionalData {
             }
         }
         this.conductors = Pair.of(first, second);
+        this.shouldRemap = nbt.getBoolean("shouldRemapping");
     }
 
     public void write(CompoundTag nbt) {
@@ -105,5 +108,6 @@ public class CarriageAdditionalData {
             conductors.getSecond().write(conductorTag);
             nbt.put("conductor2", conductorTag);
         }
+        nbt.putBoolean("shouldRemapping", shouldRemap);
     }
 }
