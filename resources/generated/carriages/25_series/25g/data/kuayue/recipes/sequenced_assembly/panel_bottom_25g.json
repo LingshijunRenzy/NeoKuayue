@@ -10,25 +10,7 @@
     }
   ],
   "sequence": [
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item": "kuayue:floor_25k"
-        },
-        {
-          "item": "kuayue:carriage_25k_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
-      "results": [
-        {
-          "item": "kuayue:floor_25k"
-        }
-      ]
-    },
+
     {
       "type": "kuayue:blueprint_deploy",
       "node": "kuayue:test.node",

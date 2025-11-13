@@ -11,6 +11,24 @@
     }
   ],
   "sequence": [
+
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "kuayue:panel_bottom_25k"
+        },
+        {
+          "item": "kuayue:color_masterbatch"
+        }
+      ],
+      "results": [
+        {
+          "item": "kuayue:panel_bottom_25k"
+        }
+      ]
+    },
+
     {
       "type": "create:deploying",
       "ingredients": [
