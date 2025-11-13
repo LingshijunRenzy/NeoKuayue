@@ -2,12 +2,9 @@ package willow.train.kuayue.systems.train_extension.conductor;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.simibubi.create.AllPackets;
 import com.simibubi.create.Create;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.ContraptionBlockChangedPacket;
-import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
@@ -18,23 +15,18 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Iterate;
-import com.sk89q.worldedit.math.transform.Transform;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,6 +80,12 @@ public class ConductorHelper {
             boolean shouldReverseCarriages,
             boolean isLocoHead, int spacing,
             boolean clientSide
+    ) {}
+
+    public record TrainDivideRequest(
+            Train loco,
+            UUID newTrainUUID,
+            int carriageIndex
     ) {}
 
     // ------------------------------- functions ---------------------------------
@@ -397,7 +395,7 @@ public class ConductorHelper {
 
     // here carriageIndex represents the carriage that coupler is on
     // assume that this carriage has a coupler
-    public static boolean canTrainDivide(@NonNull Train train, int carriageIndex, boolean isLeading) {
+    public static boolean canDivideTrain(@NonNull Train train, int carriageIndex, boolean isLeading) {
         if(carriageIndex < 0 || carriageIndex > train.carriages.size() - 1) return false;
 
         TrainAdditionalData trainData = Kuayue.TRAIN_EXTENSION.get(train.id);
@@ -418,6 +416,7 @@ public class ConductorHelper {
 
     public static void divideTrains(
             Train loco,
+            UUID newTrainUUID,
             int carriageIndex,
             boolean clientSide
     ) {
@@ -450,7 +449,7 @@ public class ConductorHelper {
         ((AccessorTrain) loco).setStress(newLocoStress);
 
         Train carriage = new Train(
-                UUID.randomUUID(),
+                newTrainUUID,
                 loco.owner,
                 loco.graph,
                 newCarriageCarts,
@@ -462,7 +461,7 @@ public class ConductorHelper {
         Carriage c;
         for(int i = 0; i < newCarriageCarts.size(); i++){
             c = newCarriageCarts.get(i);
-            c.setTrain(null);
+            c.setTrain(carriage);
             CarriageContraptionEntity entity = c.anyAvailableEntity();
             if(entity != null){
                 entity.trainId = carriage.id;
@@ -476,8 +475,8 @@ public class ConductorHelper {
             CreateClient.RAILWAYS.addTrain(carriage);
         } else {
             Create.RAILWAYS.addTrain(carriage);
+            divideTrainExtensionData(loco, carriage, carriageIndex);
         }
-        divideTrainExtensionData(loco, carriage, carriageIndex);
     }
 
     private static void copyStress(double[] locoStress, double[] cartStress, double[] neoStress) {
