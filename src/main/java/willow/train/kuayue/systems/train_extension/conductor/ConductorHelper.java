@@ -395,6 +395,27 @@ public class ConductorHelper {
         }
     }
 
+    // here carriageIndex represents the carriage that coupler is on
+    // assume that this carriage has a coupler
+    public static boolean canTrainDivide(@NonNull Train train, int carriageIndex, boolean isLeading) {
+        if(carriageIndex < 0 || carriageIndex > train.carriages.size() - 1) return false;
+
+        TrainAdditionalData trainData = Kuayue.TRAIN_EXTENSION.get(train.id);
+        if(trainData == null) return false;
+
+        if(isLeading) {
+            int frontCarriageIndex = carriageIndex - 1;
+            if(frontCarriageIndex < 0) return false; // no front carriage
+            CarriageAdditionalData carriageData = trainData.getCarriages().get(frontCarriageIndex);
+            return carriageData.getSecondConductor() != null; //front has second, this has first
+        } else {
+            int backCarriageIndex = carriageIndex + 1;
+            if(backCarriageIndex >= train.carriages.size()) return false; // no back carriage
+            CarriageAdditionalData carriageData = trainData.getCarriages().get(backCarriageIndex);
+            return carriageData.getFirstConductor() != null; //this has first, back has second
+        }
+    }
+
     public static void divideTrains(
             Train loco,
             int carriageIndex,
