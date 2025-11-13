@@ -2,7 +2,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "kuayue:train_moulds"
+    "item": "kuayue:weathering_resistant_steel_pole"
   },
   "loops": 1,
   "results": [
@@ -11,6 +11,26 @@
     }
   ],
   "sequence": [
+
+    {
+      "type": "kuayue:blueprint_deploy",
+      "node": "kuayue:test.node",
+      "paste_node_to_result": false,
+      "ingredients": [
+        {
+          "item": "kuayue:floor_25g"
+        },
+        {
+          "item": "kuayue:carriage_25g_blueprint"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "kuayue:floor_25g"
+        }
+      ]
+    },
     {
       "type": "create:deploying",
       "ingredients": [
@@ -35,35 +55,17 @@
           "item": "kuayue:floor_25g"
         },
         {
-          "item": "kuayue:weathering_resistant_steel_pole"
+          "item": "kuayue:train_moulds"
         }
       ],
-      "results": [
-        {
-          "item": "kuayue:floor_25g"
-        }
-      ]
-    },
-
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item": "kuayue:floor_25g"
-        },
-        {
-          "item": "kuayue:carriage_25g_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
       "results": [
         {
           "item": "kuayue:floor_25g"
         }
       ]
     }
+
+
 
 
   ],

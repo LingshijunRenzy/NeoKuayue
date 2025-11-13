@@ -9,7 +9,26 @@
       "item": "kuayue:panel_bottom_25b"
     }
   ],
-  "sequence": [
+  "sequence":[
+{
+  "type": "kuayue:blueprint_deploy",
+  "node": "kuayue:test.node",
+  "paste_node_to_result": false,
+  "ingredients": [
+    {
+      "item": "kuayue:panel_bottom_25b"
+    },
+    {
+      "item": "kuayue:carriage_25b_blueprint"
+    }
+  ],
+  "keepHeldItem": true,
+  "results": [
+    {
+      "item": "kuayue:panel_bottom_25b"
+    }
+  ]
+},
     {
       "type": "create:deploying",
       "ingredients": [
@@ -20,25 +39,6 @@
           "item": "kuayue:color_masterbatch"
         }
       ],
-      "results": [
-        {
-          "item": "kuayue:panel_bottom_25b"
-        }
-      ]
-    },
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item": "kuayue:panel_bottom_25b"
-        },
-        {
-          "item": "kuayue:carriage_25b_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
       "results": [
         {
           "item": "kuayue:panel_bottom_25b"

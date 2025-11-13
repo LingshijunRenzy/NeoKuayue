@@ -11,7 +11,25 @@
     }
   ],
   "sequence": [
-
+    {
+      "type": "kuayue:blueprint_deploy",
+      "node": "kuayue:test.node",
+      "paste_node_to_result": false,
+      "ingredients": [
+        {
+          "item": "kuayue:ss8_panel_bottom"
+        },
+        {
+          "item": "kuayue:head_ss8_blueprint"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "kuayue:ss8_panel_bottom"
+        }
+      ]
+    },
 
     {
       "type": "create:deploying",
@@ -40,26 +58,6 @@
           "item": "kuayue:train_moulds"
         }
       ],
-      "results": [
-        {
-          "item": "kuayue:ss8_panel_bottom"
-        }
-      ]
-    },
-
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item": "kuayue:ss8_panel_bottom"
-        },
-        {
-          "item": "kuayue:head_ss8_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
       "results": [
         {
           "item": "kuayue:ss8_panel_bottom"

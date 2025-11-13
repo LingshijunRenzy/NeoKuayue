@@ -10,7 +10,25 @@
     }
   ],
   "sequence": [
-
+    {
+      "type": "kuayue:blueprint_deploy",
+      "node": "kuayue:test.node",
+      "paste_node_to_result": false,
+      "ingredients": [
+        {
+          "item":  "kuayue:df5_panel_bottom"
+        },
+        {
+          "item": "kuayue:head_df5_blueprint"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "kuayue:df5_panel_bottom"
+        }
+      ]
+    },
 
     {
       "type": "create:deploying",
@@ -42,26 +60,6 @@
       "results": [
         {
           "item":  "kuayue:df5_panel_bottom"
-        }
-      ]
-    },
-
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item":  "kuayue:df5_panel_bottom"
-        },
-        {
-          "item": "kuayue:head_df5_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
-      "results": [
-        {
-          "item": "kuayue:df5_panel_bottom"
         }
       ]
     }

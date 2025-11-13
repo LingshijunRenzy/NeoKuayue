@@ -12,6 +12,25 @@
   ],
   "sequence": [
 
+    {
+      "type": "kuayue:blueprint_deploy",
+      "node": "kuayue:test.node",
+      "paste_node_to_result": false,
+      "ingredients": [
+        {
+          "item": "kuayue:ss3_panel_bottom"
+        },
+        {
+          "item": "kuayue:head_ss3_blueprint"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "kuayue:ss3_panel_bottom"
+        }
+      ]
+    },
 
     {
       "type": "create:deploying",
@@ -45,27 +64,8 @@
           "item": "kuayue:ss3_panel_bottom"
         }
       ]
-    },
-
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item": "kuayue:ss3_panel_bottom"
-        },
-        {
-          "item": "kuayue:head_ss3_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
-      "results": [
-        {
-          "item": "kuayue:ss3_panel_bottom"
-        }
-      ]
     }
+
 
 
   ],

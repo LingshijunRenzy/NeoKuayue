@@ -2,7 +2,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "kuayue:train_moulds"
+    "item":"kuayue:weathering_resistant_steel_board"
   },
   "loops": 1,
   "results": [
@@ -11,6 +11,26 @@
     }
   ],
   "sequence": [
+
+    {
+      "type": "kuayue:blueprint_deploy",
+      "node": "kuayue:test.node",
+      "paste_node_to_result": false,
+      "ingredients": [
+        {
+          "item":  "kuayue:df11_carport_general"
+        },
+        {
+          "item": "kuayue:head_df11_blueprint"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item":  "kuayue:df11_carport_general"
+        }
+      ]
+    },
     {
       "type": "create:deploying",
       "ingredients": [
@@ -35,29 +55,9 @@
           "item":  "kuayue:df11_carport_general"
         },
         {
-          "item": "kuayue:weathering_resistant_steel_board"
+          "item":  "kuayue:train_moulds"
         }
       ],
-      "results": [
-        {
-          "item":  "kuayue:df11_carport_general"
-        }
-      ]
-    },
-
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item":  "kuayue:df11_carport_general"
-        },
-        {
-          "item": "kuayue:head_df11_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
       "results": [
         {
           "item":  "kuayue:df11_carport_general"

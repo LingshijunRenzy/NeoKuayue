@@ -11,6 +11,25 @@
     }
   ],
   "sequence": [
+    {
+      "type": "kuayue:blueprint_deploy",
+      "node": "kuayue:test.node",
+      "paste_node_to_result": false,
+      "ingredients": [
+        {
+          "item": "kuayue:jy290_panel"
+        },
+        {
+          "item": "kuayue:head_jy290_blueprint"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "kuayue:jy290_panel"
+        }
+      ]
+    },
 
 
     {
@@ -45,28 +64,7 @@
           "item": "kuayue:jy290_panel"
         }
       ]
-    },
-
-    {
-      "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
-      "paste_node_to_result": false,
-      "ingredients": [
-        {
-          "item": "kuayue:jy290_panel"
-        },
-        {
-          "item": "kuayue:head_jy290_blueprint"
-        }
-      ],
-      "keepHeldItem": true,
-      "results": [
-        {
-          "item": "kuayue:jy290_panel"
-        }
-      ]
     }
-
 
   ],
   "transitionalItem": {

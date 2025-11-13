@@ -10,22 +10,7 @@
     }
   ],
   "sequence": [
-    {
-      "type": "create:deploying",
-      "ingredients": [
-        {
-          "item":"kuayue:panel_bottom_marshalled_cr200j"
-        },
-        {
-          "item": "kuayue:color_masterbatch"
-        }
-      ],
-      "results": [
-        {
-          "item": "kuayue:panel_bottom_marshalled_cr200j"
-        }
-      ]
-    },
+
     {
       "type": "kuayue:blueprint_deploy",
       "node": "kuayue:test.node",
@@ -39,6 +24,22 @@
         }
       ],
       "keepHeldItem": true,
+      "results": [
+        {
+          "item": "kuayue:panel_bottom_marshalled_cr200j"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item":"kuayue:panel_bottom_marshalled_cr200j"
+        },
+        {
+          "item": "kuayue:color_masterbatch"
+        }
+      ],
       "results": [
         {
           "item": "kuayue:panel_bottom_marshalled_cr200j"
