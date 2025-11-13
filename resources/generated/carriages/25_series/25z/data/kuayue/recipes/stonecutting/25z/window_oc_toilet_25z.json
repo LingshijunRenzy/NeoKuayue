@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 3,
+  "count": 1,
   "ingredient": {
-    "item": "kuayue:end_face_25z_2"
+    "item": "kuayue:window_oc_25z"
   },
   "result": "kuayue:window_oc_toilet_25z"
 }

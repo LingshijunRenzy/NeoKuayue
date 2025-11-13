@@ -1,0 +1,74 @@
+
+
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "kuayue:train_moulds"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "kuayue:df11_floor"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "kuayue:df11_floor"
+        },
+        {
+          "item": "kuayue:color_masterbatch"
+        }
+      ],
+      "results": [
+        {
+          "item": "kuayue:df11_floor"
+        }
+      ]
+    },
+
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "kuayue:df11_floor"
+        },
+        {
+          "item": "kuayue:weathering_resistant_steel_pole"
+        }
+      ],
+      "results": [
+        {
+          "item": "kuayue:df11_floor"
+        }
+      ]
+    },
+
+    {
+      "type": "kuayue:blueprint_deploy",
+      "node": "kuayue:test.node",
+      "paste_node_to_result": false,
+      "ingredients": [
+        {
+          "item": "kuayue:df11_floor"
+        },
+        {
+          "item": "kuayue:head_df11_blueprint"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "kuayue:df11_floor"
+        }
+      ]
+    }
+
+
+  ],
+  "transitionalItem": {
+    "item": "kuayue:df11_floor"
+  }
+}

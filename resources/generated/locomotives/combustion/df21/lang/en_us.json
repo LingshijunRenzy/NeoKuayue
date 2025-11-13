@@ -20,8 +20,8 @@
   "item.kuayue.head_df21_circuit_constructing": "DF21 Loco Head Circuit (Assembling)",
   "item.kuayue.head_df21_mould": "DF21 Loco Head Mould",
   "item.kuayue.head_df21_mould_constructing": "DF21 Loco Head Mould (Assembling)",
-  "tech_tree.kuayue.group.head_df21_blueprint.name": "Head DF21 Blueprint",
-  "tech_tree.kuayue.group.head_df21_blueprint.description": "Design and prototype Head DF21. Be able to obtain the design drawings of Head DF21.",
-  "tech_tree.kuayue.group.head_df21_circuit_blueprint.name": "Head DF21 Circuit Blueprint",
-  "tech_tree.kuayue.group.head_df21_circuit_blueprint.description": "Develop the circuit board for the Head DF21"
+  "tech_tree.kuayue.group.head_df21_blueprint.name": "DF21 Blueprint",
+  "tech_tree.kuayue.group.head_df21_blueprint.description": "Design and prototype DF21. Be able to obtain the design drawings of DF21.",
+  "tech_tree.kuayue.group.head_df21_circuit_blueprint.name": "DF21 Circuit Blueprint",
+  "tech_tree.kuayue.group.head_df21_circuit_blueprint.description": "Develop the circuit board for the DF21"
 }

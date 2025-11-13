@@ -54,6 +54,6 @@
   "tech_tree.kuayue.group.head_cr200j_blueprint.description": "Design and prototype Head CR200J. Be able to obtain the design drawings of Head CR200J",
   "tech_tree.kuayue.group.carriage_cr200j_circuit_blueprint.name": "Carriage CR200J Circuit Blueprint",
   "tech_tree.kuayue.group.carriage_cr200j_circuit_blueprint.description": "Develop the circuit board for the Carriage CR200J",
-  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.name": "Head CR200J Circuit Blueprint",
-  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.description": "Develop the circuit board for the Head CR200J"
+  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.name": "CR200J Circuit Blueprint",
+  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.description": "Develop the circuit board for the CR200J"
 }

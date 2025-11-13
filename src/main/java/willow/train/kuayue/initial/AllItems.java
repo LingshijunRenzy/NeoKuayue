@@ -85,6 +85,12 @@ public class AllItems {
                     .tab(AllElements.neoKuayueMaterialTab)
                     .submit(AllElements.testRegistry);
 
+    public static final ItemReg<Item> TRAIN_MOULDS =
+            new ItemReg<Item>("train_moulds")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueMaterialTab)
+                    .submit(AllElements.testRegistry);
+
     public static final ItemReg<Item> LUNCH_BOX =
             new ItemReg<Item>("lunch_box")
                     .itemType(Item::new)
@@ -180,6 +186,17 @@ public class AllItems {
                     .tab(AllElements.neoKuayueMaterialTab)
                     .submit(AllElements.testRegistry);
 
+    public static final ItemReg<Item> CIRCUIT_BOARD =
+            new ItemReg<>("circuit_board")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueMaterialTab)
+                    .submit(AllElements.testRegistry);
+
+    public static final ItemReg<Item> CIRCUIT_BOARD_CONSTRUCTING =
+            new ItemReg<>("circuit_board_constructing")
+                    .itemType(Item::new)
+                    .tab(AllElements.neoKuayueMaterialTab)
+                    .submit(AllElements.testRegistry);
     public static final BundledReg<ItemReg<Item>> INCOMPLETE_TRACKS =
             new BundledReg<ItemReg<Item>>("incomplete_tracks")
                     .factory(ItemReg::new)
@@ -192,24 +209,6 @@ public class AllItems {
                     .element("incomplete_guard_track")
                     .submit(AllElements.testRegistry);
 
-    public static final BundledReg<ItemReg<Item>> CIRCUIT_BLUEPRINTS =
-            new BundledReg<ItemReg<Item>>("circuit_blueprint")
-                    .factory(ItemReg::new)
-                    .action(reg -> reg.itemType(Item::new))
-                    .action(reg -> reg.tab(AllElements.neoKuayueMaterialTab))
-                    .element("head_df11g_circuit_blueprint")
-                    .element("head_df21_circuit_blueprint")
-                    .element("head_hxd3d_circuit_blueprint")
-                    .element("head_cr200j_circuit_blueprint")
-                    .element("carriage_25b_circuit_blueprint")
-                    .element("carriage_25g_circuit_blueprint")
-                    .element("carriage_25k_circuit_blueprint")
-                    .element("carriage_25z_circuit_blueprint")
-                    .element("carriage_25t_circuit_blueprint")
-                    .element("carriage_22_circuit_blueprint")
-                    .element("carriage_cr200j_circuit_blueprint")
-                    .element("head_ss8_circuit_blueprint")
-                    .submit(AllElements.testRegistry);
 
 
     public static final BundledReg<ItemReg<Item>> BLUEPRINTS =
@@ -219,8 +218,10 @@ public class AllItems {
                     .action(reg -> reg.tab(AllElements.neoKuayueMaterialTab))
                     .element("head_df11g_blueprint")
                     .element("head_df21_blueprint")
+                    .element("head_df5_blueprint")
+                    .element("head_df11_blueprint")
+                    .element("head_jy290_blueprint")
                     .element("head_hxd3d_blueprint")
-                    .element("head_cr200j_blueprint")
                     .element("carriage_25b_blueprint")
                     .element("carriage_25g_blueprint")
                     .element("carriage_25k_blueprint")
@@ -233,29 +234,12 @@ public class AllItems {
                     .element("freight_c70_blueprint")
                     .element("freight_nx70_blueprint")
                     .element("head_ss8_blueprint")
+                    .element("head_ss3_blueprint")
                     .submit(AllElements.testRegistry);
 
 
-    public static final BundledReg<ItemReg<Item>> CIRCUITS =
-            new BundledReg<ItemReg<Item>>("circuit")
-                    .factory(ItemReg::new)
-                    .action(reg -> reg.itemType(Item::new))
-                    .action(reg -> reg.tab(AllElements.neoKuayueMaterialTab))
-                    .element("head_df11g_circuit")
-                    .element("head_df21_circuit")
-                    .element("head_hxd3d_circuit")
-                    .element("head_cr200j_circuit")
-                    .element("carriage_25b_circuit")
-                    .element("carriage_25g_circuit")
-                    .element("carriage_25k_circuit")
-                    .element("carriage_25z_circuit")
-                    .element("carriage_25t_circuit")
-                    .element("carriage_22_circuit")
-                    .element("carriage_cr200j_circuit")
-                    .element("head_ss8_circuit")
-                    .submit(AllElements.testRegistry);
 
-    public static final BundledReg<ItemReg<Item>> CIRCUITS_CONSTRUCTING =
+ /*   public static final BundledReg<ItemReg<Item>> CIRCUITS_CONSTRUCTING =
             new BundledReg<ItemReg<Item>>("circuit_constructing")
                     .factory(ItemReg::new)
                     .action(reg -> reg.itemType(Item::new))
@@ -275,7 +259,7 @@ public class AllItems {
                     .submit(AllElements.testRegistry);
 
 
-    public static final BundledReg<ItemReg<Item>> MOULDS =
+   public static final BundledReg<ItemReg<Item>> MOULDS =
             new BundledReg<ItemReg<Item>>("mould")
                     .factory(ItemReg::new)
                     .action(reg -> reg.itemType(Item::new))
@@ -319,7 +303,7 @@ public class AllItems {
                     .element("freight_c70_mould_constructing")
                     .element("freight_nx70_mould_constructing")
                     .element("head_ss8_mould_constructing")
-                    .submit(AllElements.testRegistry);
+                    .submit(AllElements.testRegistry);*/
 
     public static void invoke() {
         AllDeviceItems.invoke();

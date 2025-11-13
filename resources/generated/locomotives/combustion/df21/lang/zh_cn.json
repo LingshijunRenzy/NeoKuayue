@@ -20,8 +20,8 @@
   "item.kuayue.head_df21_circuit_constructing": "DF21 车头电路板 (装配中)",
   "item.kuayue.head_df21_mould": "DF21 车头模具",
   "item.kuayue.head_df21_mould_constructing": "DF21 车头模具(装配中)",
-  "tech_tree.kuayue.group.head_df21_blueprint.name": "DF21车头总体设计图",
-  "tech_tree.kuayue.group.head_df21_blueprint.description": "设计并试制DF21车头以获取DF21车头总体设计图",
+  "tech_tree.kuayue.group.head_df21_blueprint.name": "DF21总体设计图",
+  "tech_tree.kuayue.group.head_df21_blueprint.description": "设计并试制DF21以获取DF21总体设计图",
   "tech_tree.kuayue.group.head_df21_circuit_blueprint.name": "DF21车头电路板设计图",
   "tech_tree.kuayue.group.head_df21_circuit_blueprint.description": "研发DF21车头电路板"
 }

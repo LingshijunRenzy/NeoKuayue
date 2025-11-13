@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 2,
+  "count": 1,
   "ingredient": {
-    "item": "kuayue:end_face_25t_1"
+    "item": "kuayue:carport_25t"
   },
   "result": "kuayue:carport_center_bsp25t"
 }

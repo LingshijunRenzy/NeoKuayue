@@ -3,21 +3,22 @@
   "acceptMirrored": false,
   "key": {
     "A": {
-      "item": "create:fluid_pipe"
+      "item": "create:andesite_bars"
     },
     "B": {
-      "item": "kuayue:df11g_carport_center"
+      "item": "kuayue:df11g_carport"
     },
-    "C": {
+    "E": {
       "item": "kuayue:weathering_resistant_steel_board"
     },
-    "D": {
+    "F": {
       "item": "kuayue:weathering_resistant_steel_pole"
     }
   },
   "pattern": [
-    "AACCC",
-    "BBDDD"
+    "AAA",
+    "FFF",
+    "EBE"
   ],
   "result": {
     "count": 1,

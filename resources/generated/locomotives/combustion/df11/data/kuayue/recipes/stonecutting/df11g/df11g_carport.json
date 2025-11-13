@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 2,
-  "ingredient": {
-    "item": "kuayue:df11g_carport_kua"
-  },
-  "result": "kuayue:df11g_carport"
-}

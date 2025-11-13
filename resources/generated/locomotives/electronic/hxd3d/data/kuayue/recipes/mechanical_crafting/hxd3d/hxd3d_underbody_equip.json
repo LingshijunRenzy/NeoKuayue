@@ -1,27 +1,30 @@
+
 {
   "type": "create:mechanical_crafting",
   "acceptMirrored": false,
   "key": {
-    "A": {
-      "item": "kuayue:weathering_resistant_steel_board"
-    },
+
     "B": {
       "item": "kuayue:floor_hxd3d"
     },
-    "C": {
+    "E": {
+      "item": "kuayue:weathering_resistant_steel_board"
+    },
+    "F": {
       "item": "kuayue:weathering_resistant_steel_pole"
     },
-    "D": {
-      "item": "create:nixie_tube"
+    "G": {
+      "item": "kuayue:circuit_board"
     }
   },
   "pattern": [
-    "  B  ",
-    "AAACD",
-    "AAACC"
+    "EBE",
+    "GFG",
+    "EFE"
   ],
   "result": {
     "count": 1,
     "item": "kuayue:hxd3d_underbody_equip"
   }
+}
 }

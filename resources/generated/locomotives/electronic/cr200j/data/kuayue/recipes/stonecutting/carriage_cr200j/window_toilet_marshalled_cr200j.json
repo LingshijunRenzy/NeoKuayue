@@ -2,7 +2,7 @@
   "type": "minecraft:stonecutting",
   "count": 2,
   "ingredient": {
-    "item": "kuayue:end_face_marshalled_cr200j"
+    "item": "kuayue:window_sealed_marshalled_cr200j"
   },
   "result": "kuayue:window_toilet_marshalled_cr200j"
 }

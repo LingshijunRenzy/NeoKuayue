@@ -3,22 +3,21 @@
   "acceptMirrored": false,
   "key": {
     "A": {
-      "item": "kuayue:ss8_carport"
+      "item": "create:andesite_bars"
     },
     "B": {
-      "item": "kuayue:weathering_resistant_steel_pole"
+      "item": "kuayue:ss8_carport"
     },
     "C": {
       "item": "create:propeller"
     },
-    "D": {
+    "E": {
       "item": "kuayue:weathering_resistant_steel_board"
     }
   },
   "pattern": [
-    "DDDD",
-    "BCCB",
-    " AA "
+    "ECE",
+    "ABA"
   ],
   "result": {
     "count": 1,

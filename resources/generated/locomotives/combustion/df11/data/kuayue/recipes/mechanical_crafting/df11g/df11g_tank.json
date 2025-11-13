@@ -1,24 +1,18 @@
+
+
 {
   "type": "create:mechanical_crafting",
   "acceptMirrored": false,
   "key": {
-    "A": {
-      "item": "kuayue:weathering_resistant_steel_board"
-    },
-    "B": {
-      "item": "kuayue:weathering_resistant_steel_pole"
-    },
-    "C": {
-      "item": "kuayue:floor_df11g"
-    }
+    "X": { "item": "kuayue:floor_df11g" },
+    "Y": { "item": "kuayue:weathering_resistant_steel_board" }
   },
   "pattern": [
-    "  C  ",
-    "AAABB",
-    "AAAAA"
+    "YXY",
+    "Y Y",
+    "YYY"
   ],
   "result": {
-    "count": 1,
     "item": "kuayue:df11g_tank"
   }
 }
