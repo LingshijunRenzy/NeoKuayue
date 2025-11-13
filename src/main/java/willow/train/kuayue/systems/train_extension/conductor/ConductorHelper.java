@@ -450,6 +450,13 @@ public class ConductorHelper {
             }
         }
         carriage.speed = loco.speed;
+
+        if(clientSide) {
+            CreateClient.RAILWAYS.addTrain(carriage);
+        } else {
+            Create.RAILWAYS.addTrain(carriage);
+        }
+        divideTrainExtensionData(loco, carriage, carriageIndex);
     }
 
     private static void copyStress(double[] locoStress, double[] cartStress, double[] neoStress) {
@@ -467,31 +474,41 @@ public class ConductorHelper {
         TrainAdditionalData carriageData = Kuayue.TRAIN_EXTENSION.get(carriages.id);
         if (locoData == null || carriageData == null) return;
 
-        List<CarriageAdditionalData> carriageAdditional = carriageData.getCarriages();
         if(isLocoHead ^ isCarriageTail) {
-            Collections.reverse(carriageAdditional);
-            //for each carriageAdditional, reverse itself
-            carriageAdditional.forEach(c -> {
-                Carriage carriage = carriages.carriages.get(carriageAdditional.indexOf(c));
-                Contraption contraption = carriage.anyAvailableEntity().getContraption();
-                if(contraption instanceof CarriageContraption cc) {
-                    c.secondBogeyPos = carriage.isOnTwoBogeys() ?
-                            BlockPos.ZERO.relative(cc.getAssemblyDirection(), carriage.bogeySpacing) : BlockPos.ZERO;
-                }
-            });
+            carriageData.reverse(carriages);
         }
         if (isLocoHead) {
-            locoData.getCarriages().addAll(0, carriageAdditional);
+            locoData.getCarriages().addAll(0, carriageData.getCarriages());
         } else {
-            locoData.getCarriages().addAll(carriageAdditional);
+            locoData.getCarriages().addAll(carriageData.getCarriages());
         }
-        Kuayue.TRAIN_EXTENSION.remove(carriages.id);
+        locoData.reIndexAll(loco);
         locoData.updateInternalConnections();
+        locoData.updateConductorMap();
+        Kuayue.TRAIN_EXTENSION.remove(carriages.id);
     }
 
     public static void divideTrainExtensionData(Train loco, Train carriages, int carriageIndex) {
         TrainAdditionalData locoData = Kuayue.TRAIN_EXTENSION.get(loco.id);
+        if(locoData == null) return;
+        List<CarriageAdditionalData> allCarriages = locoData.getCarriages();
+        if(carriageIndex < 0 || carriageIndex >= allCarriages.size() - 1) return;
 
+        List<CarriageAdditionalData> newLocoCarriages = new ArrayList<>(allCarriages.subList(0, carriageIndex + 1));
+        List<CarriageAdditionalData> newCarriageCarriages = new ArrayList<>(allCarriages.subList(carriageIndex + 1, allCarriages.size()));
+
+        locoData.getCarriages().clear();
+        locoData.getCarriages().addAll(newLocoCarriages);
+        locoData.reIndexAll(loco);
+        locoData.updateInternalConnections();
+        locoData.updateConductorMap();
+
+        TrainAdditionalData carriageData = new TrainAdditionalData(carriages);
+        carriageData.getCarriages().addAll(newCarriageCarriages);
+        carriageData.reIndexAll(carriages);
+        carriageData.updateInternalConnections();
+        carriageData.updateConductorMap();
+        Kuayue.TRAIN_EXTENSION.add(carriageData);
     }
 
     public static void reverseBogeys(Carriage carriage) {

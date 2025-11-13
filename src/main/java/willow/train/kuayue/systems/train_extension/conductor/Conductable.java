@@ -23,10 +23,13 @@ public abstract class Conductable {
     @NonNull
     private UUID train;
 
-    private final int carriage;
+    @Getter
+    @Setter
+    private int carriage;
 
     @Getter
-    private final boolean isLeading;
+    @Setter
+    private boolean isLeading;
 
     @Setter
     @Nullable
