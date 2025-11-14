@@ -3,44 +3,32 @@
   "acceptMirrored": false,
   "key": {
     "A": {
-      "item": "kuayue:weathering_resistant_steel_block_0"
+      "item": "kuayue:general_bottom_slab_df21"
     },
-	"B": {
-      "item": "create:rose_quartz_lamp"
+    "B": {
+      "item": "kuayue:general_slab_df21"
     },
-	"C": {
+    "C": {
       "item": "kuayue:weathering_resistant_steel_board"
     },
-	"D": {
+    "D": {
       "item": "kuayue:weathering_resistant_steel_pole"
     },
-	"E": {
-      "item": "create:framed_glass"
-    },
-	"F": {
+    "E": {
       "item": "kuayue:weathering_resistant_steel_ingot"
     },
-	"G": {
-      "item": "kuayue:color_masterbatch"
-    },
-	"H": {
-      "item": "kuayue:head_df21_circuit"
+    "F": {
+      "item": "create:framed_glass"
     },
     "I": {
-      "item": "create:nixie_tube"
-    },
-    "J": {
-      "item": "kuayue:head_df21_mould"
+      "item": "kuayue:circuit_board"
     }
   },
   "pattern": [
-    "AAABAAA",
-    "AACCCAA",
-    "ADDDDDA",
-    "GEEFEEG",
-	"GEEHEEG",
-	"AIIJIIA",
-    "AAAAAAA"
+    "AEAEA",
+    "AFAFA",
+    "CIDIC",
+    "BEBEB"
   ],
   "result": {
     "count": 1,

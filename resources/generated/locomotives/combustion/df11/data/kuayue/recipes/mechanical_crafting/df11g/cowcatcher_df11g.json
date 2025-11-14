@@ -2,23 +2,24 @@
   "type": "create:mechanical_crafting",
   "acceptMirrored": false,
   "key": {
-    "A": {
-      "item": "kuayue:weathering_resistant_steel_block_0"
+
+    "B": {
+      "item":  "kuayue:floor_df11g"
     },
-	"B": {
+    "E": {
       "item": "kuayue:weathering_resistant_steel_board"
     },
-	"C": {
-      "item": "create:minecart_coupling"
+    "F": {
+      "item": "kuayue:weathering_resistant_steel_pole"
     },
-    "I": {
-      "item": "create:nixie_tube"
+    "G": {
+      "item": "kuayue:weathering_resistant_steel_ingot"
     }
   },
   "pattern": [
-    "AABBBAA",
-    "AIICIIA",
-    "AAAAAAA"
+    "GGG",
+    "BBB",
+    "EFE"
   ],
   "result": {
     "count": 1,

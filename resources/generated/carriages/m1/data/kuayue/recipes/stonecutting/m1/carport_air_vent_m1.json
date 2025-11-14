@@ -2,7 +2,7 @@
   "type": "minecraft:stonecutting",
   "count": 2,
   "ingredient": {
-    "item": "kuayue:end_face_m1"
+    "item": "kuayue:carport_middle_m1"
   },
   "result": "kuayue:carport_air_vent_m1"
 }

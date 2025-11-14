@@ -50,10 +50,10 @@
   "item.kuayue.carriage_cr200j_mould_constructing": "CR200J车厢 模具 (装配中)",
   "tech_tree.kuayue.group.carriage_cr200j_blueprint.name": "CR200J车厢总体设计图",
   "tech_tree.kuayue.group.carriage_cr200j_blueprint.description": "设计并试制CR200J车厢以获取CR200J车厢总体设计图",
-  "tech_tree.kuayue.group.head_cr200j_blueprint.name": "CR200J车头总体设计图",
-  "tech_tree.kuayue.group.head_cr200j_blueprint.description": "设计并试制CR200J车头以获取CR200J车头总体设计图",
+  "tech_tree.kuayue.group.head_cr200j_blueprint.name": "CR200J总体设计图",
+  "tech_tree.kuayue.group.head_cr200j_blueprint.description": "设计并试制CR200J以获取CR200J总体设计图",
   "tech_tree.kuayue.group.carriage_cr200j_circuit_blueprint.name": "CR200J车厢电路板",
   "tech_tree.kuayue.group.carriage_cr200j_circuit_blueprint.description": "研发CR200J车厢电路板",
-  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.name": "CR200J车头电路板设计图",
-  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.description": "研发CR200J车头电路板"
+  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.name": "CR200J电路板设计图",
+  "tech_tree.kuayue.group.head_cr200j_circuit_blueprint.description": "研发CR200J电路板"
 }

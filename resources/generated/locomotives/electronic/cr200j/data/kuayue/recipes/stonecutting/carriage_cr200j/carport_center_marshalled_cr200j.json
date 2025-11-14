@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 3,
+  "count": 1,
   "ingredient": {
-    "item": "kuayue:end_face_marshalled_cr200j"
+    "item": "kuayue:carport_marshalled_cr200j"
   },
   "result": "kuayue:carport_center_marshalled_cr200j"
 }

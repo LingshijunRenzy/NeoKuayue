@@ -11,5 +11,8 @@
   "block.kuayue.jy290_ac": "金鹰290空调",
   "block.kuayue.jy290_panel_logo": "金鹰290厢板(Logo)",
   "block.kuayue.jy290_vent": "金鹰290通风口",
-  "block.kuayue.jy290_door": "金鹰290车门"
+  "block.kuayue.jy290_door": "金鹰290车门",
+  "item.kuayue.head_jy290_blueprint": "金鹰290总体设计图",
+  "tech_tree.kuayue.group.head_jy290_blueprint.name": "JY290总体设计图",
+  "tech_tree.kuayue.group.head_jy290_blueprint.description": "设计并试制JY290以获取JY290总体设计图"
 }

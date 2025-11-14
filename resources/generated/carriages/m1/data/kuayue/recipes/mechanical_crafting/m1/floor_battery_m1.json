@@ -22,9 +22,9 @@
     }
   },
   "pattern": [
-    "  A  ",
-    "FCDEF",
-    "BBBBB"
+    " A ",
+    "CDE",
+    "BFB"
   ],
   "result": {
     "count": 1,

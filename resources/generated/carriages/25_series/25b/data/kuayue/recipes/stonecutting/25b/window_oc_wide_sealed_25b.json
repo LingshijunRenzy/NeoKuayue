@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 3,
+  "count": 1,
   "ingredient": {
-    "item": "kuayue:end_face_25b_1"
+    "item": "kuayue:window_oc_wide_25b"
   },
   "result": "kuayue:window_oc_wide_sealed_25b"
 }

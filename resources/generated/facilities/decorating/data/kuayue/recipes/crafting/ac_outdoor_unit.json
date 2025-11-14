@@ -9,12 +9,15 @@
     },
     "B": {
       "item": "create:propeller"
+    },
+    "C":{
+      "item": "kuayue:circuit_board"
     }
   },
   "pattern": [
     "###",
     "ABA",
-    "###"
+    "#C#"
   ],
   "result": {
     "count": 1,

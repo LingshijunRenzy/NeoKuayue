@@ -1,27 +1,28 @@
+
 {
   "type": "create:mechanical_crafting",
   "acceptMirrored": false,
   "key": {
-    "A": {
+
+    "B": {
       "item": "kuayue:ss8_floor"
     },
-    "B": {
-      "item": "minecraft:redstone"
-    },
-    "C": {
+    "E": {
       "item": "kuayue:weathering_resistant_steel_board"
     },
-    "D": {
-      "item": "minecraft:iron_ingot"
+    "F": {
+      "item": "kuayue:weathering_resistant_steel_pole"
+    },
+    "G": {
+      "item": "kuayue:circuit_board"
     }
   },
   "pattern": [
-    "   A   ",
-    "CBDBDBC",
-    "CBDBDBC"
+    "EBE",
+    "GFG",
+    "EFE"
   ],
   "result": {
     "count": 1,
-    "item": "kuayue:ss8_transformer"
-  }
+    "item": "kuayue:ss8_transformer"}
 }
