@@ -1,23 +1,26 @@
+
 {
   "type": "create:mechanical_crafting",
   "acceptMirrored": false,
   "key": {
-    "A": {
-      "item": "kuayue:weathering_resistant_steel_block_0"
-    },
+
     "B": {
+      "item": "kuayue:floor_hxd3d"
+    },
+    "E": {
       "item": "kuayue:weathering_resistant_steel_board"
     },
-    "C": {
+    "F": {
       "item": "kuayue:weathering_resistant_steel_pole"
     },
-    "D": {
-      "item": "kuayue:color_masterbatch"
+    "G": {
+      "item": "kuayue:weathering_resistant_steel_ingot"
     }
   },
   "pattern": [
-    "BBAAABB",
-    "BDCACDB"
+    "GGG",
+    "BBB",
+    "EFE"
   ],
   "result": {
     "count": 1,

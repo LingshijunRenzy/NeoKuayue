@@ -2,7 +2,7 @@
   "type": "minecraft:stonecutting",
   "count": 2,
   "ingredient": {
-    "item": "kuayue:22_end_face"
+    "item":"kuayue:22_carport_panel_top"
   },
   "result": "kuayue:22_carport_top_cap"
 }

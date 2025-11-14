@@ -1,24 +1,25 @@
+
 {
   "type": "create:mechanical_crafting",
   "acceptMirrored": false,
   "key": {
     "A": {
-      "item": "kuayue:df11g_carport_center"
+      "item": "create:andesite_bars"
     },
     "B": {
-      "item": "kuayue:weathering_resistant_steel_board"
+      "item": "kuayue:df11g_carport"
     },
     "C": {
       "item": "create:propeller"
     },
-    "D": {
-      "item": "kuayue:weathering_resistant_steel_pole"
+    "E": {
+      "item": "kuayue:weathering_resistant_steel_board"
     }
   },
   "pattern": [
-    "BDDB",
-    "BCCB",
-    " AA "
+    "AAA",
+    "ECE",
+    "EBE"
   ],
   "result": {
     "count": 1,
