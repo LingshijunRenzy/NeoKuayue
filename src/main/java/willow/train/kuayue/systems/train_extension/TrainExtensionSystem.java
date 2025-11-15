@@ -2,6 +2,7 @@ package willow.train.kuayue.systems.train_extension;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.entity.Train;
+import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.core.base.Saved;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
@@ -16,13 +17,16 @@ import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.TrainExtensionSyncPacket;
 import willow.train.kuayue.systems.train_extension.bogey_weight.BogeyExtensionSystem;
+import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorLocation;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorType;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TrainExtensionSystem extends SavedData {
 
@@ -43,6 +47,20 @@ public class TrainExtensionSystem extends SavedData {
     public final HashSet<ConductorHelper.TrainMergeRequest> trainsToMerge;
     public final HashSet<Train> newlyMerged;
 
+    public static class ConductorCDInfo {
+        public final Conductable conductorA;
+        public final Conductable conductorB;
+        public int checkInterval;
+
+        public ConductorCDInfo(Conductable conductorA, Conductable conductorB) {
+            this.conductorA = conductorA;
+            this.conductorB = conductorB;
+            this.checkInterval = 0;
+        }
+    }
+
+    public final ConcurrentHashMap<Couple<ConductorLocation>, ConductorCDInfo> conductorsCoolingDown;
+
     public TrainExtensionSystem() {
         this.data = new HashMap<>();
         this.types = new HashMap<>();
@@ -51,6 +69,7 @@ public class TrainExtensionSystem extends SavedData {
         trainsToRemove = new HashSet<>();
         trainsToMerge = new HashSet<>();
         newlyMerged = new HashSet<>();
+        conductorsCoolingDown = new ConcurrentHashMap<>();
     }
 
     public void broadcastToClients(ServerLevel level, BlockPos pos) {
