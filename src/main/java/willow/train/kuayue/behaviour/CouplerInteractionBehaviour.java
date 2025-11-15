@@ -1,5 +1,6 @@
 package willow.train.kuayue.behaviour;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
@@ -20,8 +21,7 @@ import java.util.UUID;
 public class CouplerInteractionBehaviour extends MovingInteractionBehaviour {
     @Override
     public boolean handlePlayerInteraction(Player player, InteractionHand activeHand, BlockPos localPos, AbstractContraptionEntity contraptionEntity) {
-        ComponentTranslationTool.showSuccess(player, "coupler_interaction_handling", true);
-        //if(!AllItems.WRENCH.isIn(player.getItemInHand(activeHand))) return false;
+        if(!AllItems.WRENCH.isIn(player.getItemInHand(activeHand))) return false;
         if(!(contraptionEntity instanceof CarriageContraptionEntity cce) ||
                 !(contraptionEntity.getContraption() instanceof CarriageContraption cc)) return false;
 

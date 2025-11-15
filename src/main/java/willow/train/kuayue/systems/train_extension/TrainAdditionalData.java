@@ -56,6 +56,10 @@ public class TrainAdditionalData implements NbtSerializable {
         });
     }
 
+    public @Nullable Conductable getConductorAt(@NotNull ConductorLocation loc) {
+        return conductorMap.get(loc);
+    }
+
     // notice: 获取当前车上两端的可用车钩
     public @NotNull Pair<Conductable, Conductable> getSidedConductors() {
         if (carriages.isEmpty()) return Pair.of(null, null);

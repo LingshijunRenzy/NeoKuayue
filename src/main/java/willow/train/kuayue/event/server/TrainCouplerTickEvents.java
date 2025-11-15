@@ -4,6 +4,7 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
+import com.simibubi.create.foundation.utility.Couple;
 import lombok.extern.slf4j.Slf4j;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -19,9 +20,12 @@ import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorLocation;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
+
+import static willow.train.kuayue.utils.CarriageUtil.remapCarriageContraption;
 
 @Slf4j
 public class TrainCouplerTickEvents {
@@ -43,7 +47,7 @@ public class TrainCouplerTickEvents {
                 for(int i = 0; i < carriages.size(); i++) {
                     CarriageAdditionalData carriageData = carriages.get(i);
                     if(carriageData.shouldRemap){
-                        carriageData.shouldRemap = !ConductorHelper.remapCarriageContraption(
+                        carriageData.shouldRemap = !remapCarriageContraption(
                                 Create.RAILWAYS.trains.get(entry.getKey()).carriages.get(i),
                                 false
                         );
@@ -84,6 +88,23 @@ public class TrainCouplerTickEvents {
         }
         Kuayue.TRAIN_EXTENSION.trainsToRemove.removeAll(removed);
         removed.clear();
+
+        HashSet<Couple<ConductorLocation>> coolingDownToRemove = new HashSet<>();
+        Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.forEach((pair, info) -> {
+            info.checkInterval++;
+            if (info.checkInterval < 10) {
+                return;
+            }
+            info.checkInterval = 0;
+
+            float distanceToSqr = ConductorHelper.getConductorDistanceToSqr(pair, info);
+            if(distanceToSqr > .2f || distanceToSqr == -1) {
+                coolingDownToRemove.add(pair);
+            }
+        });
+        if(!coolingDownToRemove.isEmpty()) {
+            coolingDownToRemove.forEach(Kuayue.TRAIN_EXTENSION.conductorsCoolingDown::remove);
+        }
 
         for (Map.Entry<UUID, Train> entry : Create.RAILWAYS.trains.entrySet()) {
             Train train = entry.getValue();
