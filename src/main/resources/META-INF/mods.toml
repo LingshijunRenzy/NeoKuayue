@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[43,)"
-license="All rights reserved"
+license="MIT,CC-BY-SA4.0"
 [[mods]]
 modId="kuayue"
 version="${file.jarVersion}"
@@ -8,7 +8,7 @@ displayName="KuaYue"
 displayURL="http://fairingstudio.com/KuaYue"
 logoFile="kuayue.jpg"
 credits="苟利国家生死以，岂因祸福避趋之。"
-authors="柳树怪,Carole,可爱金发小耗子,HTony03,radekemia,shazimingjiang,荒漠,梧桐土豆,露米娅在线吃人" #optional
+authors="柳树怪（创始人，暂时退出）,Carole,可爱金发小耗子,HTony03,radekemia(暂时退出）,shazimingjiang,荒漠,梧桐土豆,露米娅在线吃人,TimeBather,Desert_walker,Aurora4123,LingshijunRenzy,mr.k,HappyKanda,一只6K-062" #optional
 # Display Test controls the display for your mod in the server connection screen
 # MATCH_VERSION means that your mod will cause a red X if the versions on client and server differ. This is the default behaviour and should be what you choose if you have server and client elements to your mod.
 # IGNORE_SERVER_VERSION means that your mod will not cause a red X if it's present on the server but not on the client. This is what you should use if you're a server only mod.
@@ -18,32 +18,38 @@ authors="柳树怪,Carole,可爱金发小耗子,HTony03,radekemia,shazimingjiang
 #displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 
 description='''
-原色经典，直特风范——
+原色经典，直特风范———
 我们似乎还可以听到京沪十三猪连发时，震耳欲聋的柴油机轰鸣声响彻夜空。
+百年滇越，焕发新生——
+我们仿佛看到了昆明北站还在使用时，法式站房旁的米轨铁路繁忙的场景。
+驰骋三十载，再无升弓时——
+我们似乎还可以看到1998年京广铁路冲高实验时，许昌城外飞驰的蓝色身影。
+彝路通达，畅行成昆——
+我们似乎还可以听到韶山3启机时，牵引风机与劈相机独特的声响。
 这是一个为机械动力mod而制作的装饰类方块mod（暂定） 因为本人是java初学者，不怎么会编程,还请谅解(^^;;;
 '''
 
 [[dependencies.kuayue]]
-    modId="forge"
-    mandatory=true
-    versionRange="[43,)"
-    ordering="NONE"
-    side="BOTH"
+modId="forge"
+mandatory=true
+versionRange="[43,)"
+ordering="NONE"
+side="BOTH"
 [[dependencies.kuayue]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.19.2,1.20)"
-    ordering="NONE"
-    side="BOTH"
+modId="minecraft"
+mandatory=true
+versionRange="[1.19.2,1.20)"
+ordering="NONE"
+side="BOTH"
 [[dependencies.kuayue]]
-    modId="create"
-    mandatory=true
-    versionRange="[0.5.1.e,)"
-    ordering="NONE"
-    side="BOTH"
+modId="create"
+mandatory=true
+versionRange="[0.5.1.e,)"
+ordering="NONE"
+side="BOTH"
 [[dependencies.kuayue]]
-    modId="kasuga_lib"
-    mandatory=true
-    versionRange="[0.19,)"
-    ordering="NONE"
-    side="BOTH"
+modId="kasuga_lib"
+mandatory=true
+versionRange="[0.19,)"
+ordering="NONE"
+side="BOTH"
