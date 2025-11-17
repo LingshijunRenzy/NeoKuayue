@@ -345,6 +345,16 @@ public class ConductorHelper {
         double[] cartStress = ((AccessorTrain) carriages).getStress();
 
         double[] neoStress = new double[locoStress.length + cartStress.length + 1];
+
+        // 计算特效位置
+        Vec3 effectPos;
+        Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> conductorPos = getConductorPosition(loco);
+        if (isLocoHead) {
+            effectPos = conductorPos.getFirst().getSecond();
+        } else {
+            effectPos = conductorPos.getSecond().getSecond();
+        }
+
         //头-头或尾-尾情况需要反转
         if(isLocoHead ^ isCarriageTail) {
             carriageCarts.forEach(c -> {
@@ -407,14 +417,7 @@ public class ConductorHelper {
 
         // effects
         if(!clientSide) {
-            Vec3 effectPos;
             SoundEvent sound = new SoundEvent(new ResourceLocation(Kuayue.MODID, "coupler"));
-            Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> conductorPos = getConductorPosition(loco);
-            if (isLocoHead) {
-                effectPos = conductorPos.getFirst().getSecond();
-            } else {
-                effectPos = conductorPos.getSecond().getSecond();
-            }
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
             if(entity != null) {
                 entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 1.0f, 1.0f);
@@ -431,6 +434,7 @@ public class ConductorHelper {
 
         TrainAdditionalData trainData = Kuayue.TRAIN_EXTENSION.get(train.id);
         if(trainData == null) return false;
+        if(trainData.getCarriages().size() != train.carriages.size()) return false;
 
         if(isLeading) {
             int frontCarriageIndex = carriageIndex - 1;

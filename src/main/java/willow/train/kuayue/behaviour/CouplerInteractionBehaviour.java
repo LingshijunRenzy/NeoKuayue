@@ -28,6 +28,8 @@ import java.util.UUID;
 public class CouplerInteractionBehaviour extends MovingInteractionBehaviour {
     @Override
     public boolean handlePlayerInteraction(Player player, InteractionHand activeHand, BlockPos localPos, AbstractContraptionEntity contraptionEntity) {
+        if(player.level.isClientSide) return true;
+
         if(!AllItems.WRENCH.isIn(player.getItemInHand(activeHand))) return false;
         if(!(contraptionEntity instanceof CarriageContraptionEntity cce) ||
                 !(contraptionEntity.getContraption() instanceof CarriageContraption cc)) return false;
@@ -41,29 +43,26 @@ public class CouplerInteractionBehaviour extends MovingInteractionBehaviour {
         if(train == null) return false;
 
         boolean canDivide = ConductorHelper.canDivideTrain(train, carriageIndex, isLeading);
-        boolean isClientSide = player.level.isClientSide;
         carriageIndex = isLeading ? carriageIndex - 1 : carriageIndex;
 
-        if(!isClientSide) {
-            if (canDivide) {
-                UUID newTrainId = UUID.randomUUID();
-                ConductorHelper.divideTrains(train, newTrainId, carriageIndex, false);
-                ConductorHelper.TrainDivideRequest request = new ConductorHelper.TrainDivideRequest(train, newTrainId, carriageIndex);
-                AllPackets.CHANNEL.boardcastToClients(
-                        new TrainDividePacket(request), (ServerLevel) player.level, player.blockPosition()
-                );
+        if (canDivide) {
+            UUID newTrainId = UUID.randomUUID();
+            ConductorHelper.divideTrains(train, newTrainId, carriageIndex, false);
+            ConductorHelper.TrainDivideRequest request = new ConductorHelper.TrainDivideRequest(train, newTrainId, carriageIndex);
+            AllPackets.CHANNEL.boardcastToClients(
+                    new TrainDividePacket(request), (ServerLevel) player.level, player.blockPosition()
+            );
 
-                Vec3 effectPos = cce.toGlobalVector(VecHelper.getCenterOf(localPos), 1);
-                SoundEvent sound = new SoundEvent(new ResourceLocation(Kuayue.MODID, "coupler"));
-                BlockPos soundPos = new BlockPos(effectPos);
-                cce.level.playSound(null, soundPos, sound, cce.getSoundSource(), 1.0F, 1.0F);
-                ((ServerLevel) cce.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
-                        20, 0.2, 0.2, 0.2, 0.8);
+            Vec3 effectPos = cce.toGlobalVector(VecHelper.getCenterOf(localPos), 1);
+            SoundEvent sound = new SoundEvent(new ResourceLocation(Kuayue.MODID, "coupler"));
+            BlockPos soundPos = new BlockPos(effectPos);
+            cce.level.playSound(null, soundPos, sound, cce.getSoundSource(), 1.0F, 1.0F);
+            ((ServerLevel) cce.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
+                    20, 0.2, 0.2, 0.2, 0.8);
 
-                ComponentTranslationTool.showSuccess(player, "coupler.divide_success", true);
-            } else {
-                ComponentTranslationTool.showError(player, "coupler.cannot_divide", true);
-            }
+            ComponentTranslationTool.showSuccess(player, "coupler.divide_success", true);
+        } else {
+            ComponentTranslationTool.showError(player, "coupler.cannot_divide", true);
         }
 
         return true;
