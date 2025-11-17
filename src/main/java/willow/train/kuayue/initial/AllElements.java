@@ -100,6 +100,7 @@ public class AllElements {
             // MinecraftForge.EVENT_BUS.addListener(RenderPrePosedBlockEvent::renderBlock);
             MinecraftForge.EVENT_BUS.register(new CarriageInventoryEvents());
             MinecraftForge.EVENT_BUS.addListener(ClientSyncManager::clientTick);
+            MinecraftForge.EVENT_BUS.addListener(TrainCouplerClientTickEvents::clientTick);
         }
         Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);

@@ -8,8 +8,14 @@ import com.simibubi.create.content.trains.entity.*;
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.NonNull;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -397,6 +403,24 @@ public class ConductorHelper {
             CreateClient.RAILWAYS.removeTrain(carriages.id);
         } else {
             Create.RAILWAYS.removeTrain(carriages.id);
+        }
+
+        // effects
+        if(!clientSide) {
+            Vec3 effectPos;
+            SoundEvent sound = new SoundEvent(new ResourceLocation(Kuayue.MODID, "coupler"));
+            Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> conductorPos = getConductorPosition(loco);
+            if (isLocoHead) {
+                effectPos = conductorPos.getFirst().getSecond();
+            } else {
+                effectPos = conductorPos.getSecond().getSecond();
+            }
+            Entity entity = loco.carriages.get(0).anyAvailableEntity();
+            if(entity != null) {
+                entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 1.0f, 1.0f);
+                ((ServerLevel) entity.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
+                        20, 0.2, 0.2, 0.2,0.8);
+            }
         }
     }
 
