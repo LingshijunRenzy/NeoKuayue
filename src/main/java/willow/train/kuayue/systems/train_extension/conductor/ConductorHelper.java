@@ -8,7 +8,6 @@ import com.simibubi.create.content.trains.entity.*;
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.NonNull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,10 +16,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.Kuayue;
+import willow.train.kuayue.event.server.TrainCouplerPostDivideEvent;
+import willow.train.kuayue.event.server.TrainCouplerPostMergeEvent;
+import willow.train.kuayue.event.server.TrainCouplerPreDivideEvent;
+import willow.train.kuayue.event.server.TrainCouplerPreMergeEvent;
 import willow.train.kuayue.mixins.mixin.AccessorTrain;
 import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
@@ -77,24 +82,43 @@ public class ConductorHelper {
             int carriageIndex
     ) {}
 
+    public record TrainMergeContext(
+        UUID locoId,
+        UUID carriageId,
+        boolean isLocoHead,
+        boolean isCarriageTail,
+        int spacing
+    ) {}
+
     // ------------------------------- functions ---------------------------------
 
-    public static @Nullable Pair<ConductorProvider, Integer> getConductorBlock(
+    public static @Nullable Pair<ConductorProvider, Vec2> getConductorBlock(
             @NonNull BlockPos bogeyPos,
             @NonNull Map<BlockPos, StructureTemplate.StructureBlockInfo> blocks,
             @NonNull Direction assembleDirection,
             boolean isLeading) {
         BlockPos posCache = bogeyPos;
-        Pair<ConductorProvider, Integer> provider = null;
+        Pair<ConductorProvider, Vec2> provider = null;
         int distance = 0;
         while (true) {
             posCache = posCache.relative(
                     isLeading ? assembleDirection.getOpposite() : assembleDirection
             );
             distance++;
-            if (!blocks.containsKey(posCache)) break;
-            StructureTemplate.StructureBlockInfo info = blocks.get(posCache);
-            if (info.state.getBlock() instanceof ConductorProvider p) provider = Pair.of(p, distance);
+            if (!blocks.containsKey(posCache) && !blocks.containsKey(posCache.above())) {
+                break;
+            };
+            StructureTemplate.StructureBlockInfo below = blocks.get(posCache);
+            StructureTemplate.StructureBlockInfo above = blocks.get(posCache.above());
+            if( below == null && above == null) continue;
+
+            if (above != null && above.state.getBlock() instanceof ConductorProvider p) provider = Pair.of(
+                    p,
+                    new Vec2(distance, posCache.getY())
+            );
+            if (below != null && below.state.getBlock() instanceof ConductorProvider p) provider = Pair.of(
+                    p,
+                    new Vec2(distance, posCache.getY()));
         }
         return provider;
     }
@@ -133,6 +157,8 @@ public class ConductorHelper {
         }
         //A head - B head
         if (leadingA != null && leadingB != null) {
+            leadingA = leadingA.subtract(0, leadingA.y(), 0);
+            leadingB = leadingB.subtract(0, leadingB.y(), 0);
             if (leadingA.distanceToSqr(leadingB) < distance)
                 return new TrainCollideResult(
                         (byte) 1, (byte) 1,
@@ -142,6 +168,8 @@ public class ConductorHelper {
 
         //A head - B tail
         if(leadingA != null && trailingB != null) {
+            leadingA = leadingA.subtract(0, leadingA.y(), 0);
+            trailingB = trailingB.subtract(0, trailingB.y(), 0);
             if (leadingA.distanceToSqr(trailingB) < distance) {
                 if(Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.containsKey(Couple.create(trailingBConductor.getLoc(), leadingAConductor.getLoc()))) {
                     return TrainCollideResult.invalid();
@@ -155,6 +183,8 @@ public class ConductorHelper {
 
         //A tail - B head
         if (trailingA != null && leadingB != null) {
+            trailingA = trailingA.subtract(0, trailingA.y(), 0);
+            leadingB = leadingB.subtract(0, leadingB.y(), 0);
             if (trailingA.distanceToSqr(leadingB) < distance) {
                 if(Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.containsKey(Couple.create(trailingAConductor.getLoc(), leadingBConductor.getLoc()))) {
                     return TrainCollideResult.invalid();
@@ -168,6 +198,8 @@ public class ConductorHelper {
 
         //A tail - B tail
         if(trailingA != null && trailingB != null) {
+            trailingA = trailingA.subtract(0, trailingA.y(), 0);
+            trailingB = trailingB.subtract(0, trailingB.y(), 0);
             if (trailingA.distanceToSqr(trailingB) < distance) {
                 return new TrainCollideResult(
                         (byte) -1, (byte) -1,
@@ -229,7 +261,7 @@ public class ConductorHelper {
         );
     }
 
-    public static float getConductorDistanceToSqr(Couple<ConductorLocation> couple, TrainExtensionSystem.ConductorCDInfo info) {
+    public static float getConductorFlatDistToSqr(Couple<ConductorLocation> couple, TrainExtensionSystem.ConductorCDInfo info) {
         Train trainA = Create.RAILWAYS.trains.get(couple.getFirst().getTrainId());
         Train trainB = Create.RAILWAYS.trains.get(couple.getSecond().getTrainId());
         if(trainA == null || trainB == null) return -1;
@@ -243,6 +275,9 @@ public class ConductorHelper {
         Vec3 firstPos = getConductorPosition(firstCarriage, first, couple.getFirst().isLeading());
         Vec3 secondPos = getConductorPosition(secondCarriage, second, couple.getSecond().isLeading());
         if (firstPos == null || secondPos == null) return -1;
+
+        firstPos = firstPos.subtract(0, firstPos.y(), 0);
+        secondPos = secondPos.subtract(0, secondPos.y(), 0);
 
         return (float) firstPos.distanceToSqr(secondPos);
     }
@@ -328,17 +363,35 @@ public class ConductorHelper {
         return !flag;
     }
 
-    public static void mergeTrains(
+    public static boolean mergeTrains(
             Train loco, Train carriages,
             boolean isCarriageTail,
             boolean isLocoHead, int spacing,
             boolean clientSide
     ) {
+        Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> locoConductors = getConductorPosition(loco);
+        Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> carriageConductors = getConductorPosition(carriages);
+
+        float oldLocoSpeed = (float) loco.speed;
+        float oldCarriageSpeed = (float) carriages.speed;
+
+        if(!clientSide) {
+            TrainCouplerPreMergeEvent preEvent = new TrainCouplerPreMergeEvent(
+                    new TrainMergeContext(loco.id, carriages.id, isLocoHead, isCarriageTail, spacing),
+                    Pair.of(isLocoHead ? locoConductors.getFirst() : locoConductors.getSecond(),
+                            isCarriageTail ? carriageConductors.getSecond() : carriageConductors.getFirst()),
+                    oldLocoSpeed,
+                    oldCarriageSpeed);
+            MinecraftForge.EVENT_BUS.post(preEvent);
+            if(preEvent.isCanceled()) {
+                return false;
+            }
+        }
+
         // 获取参数
         List<Carriage> locoCarriages = loco.carriages;
         List<Integer> locoSpacing = loco.carriageSpacing;
         double[] locoStress = ((AccessorTrain) loco).getStress();
-        float locoSpeed = (float) loco.speed;
 
         List<Carriage> carriageCarts = carriages.carriages;
         List<Integer> cartSpacing = carriages.carriageSpacing;
@@ -405,7 +458,7 @@ public class ConductorHelper {
 
         // 处理列车连接后的速度
         Pair<Float, Float> newSpeed = momentumExchange(loco, carriages, 0f);
-        loco.speed = newSpeed != null ? newSpeed.getFirst() : locoSpeed;
+        loco.speed = newSpeed != null ? newSpeed.getFirst() : oldLocoSpeed;
 
         mergeTrainExtensionData(loco, carriages, isCarriageTail, isLocoHead);
 
@@ -415,16 +468,29 @@ public class ConductorHelper {
             Create.RAILWAYS.removeTrain(carriages.id);
         }
 
-        // effects
         if(!clientSide) {
+            // effects
             SoundEvent sound = new SoundEvent(new ResourceLocation(Kuayue.MODID, "coupler"));
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
             if(entity != null) {
-                entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 1.0f, 1.0f);
+                entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.8f, 1.0f);
                 ((ServerLevel) entity.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
                         20, 0.2, 0.2, 0.2,0.8);
             }
+
+            //post event
+            MinecraftForge.EVENT_BUS.post(new TrainCouplerPostMergeEvent(
+                    new TrainMergeContext(loco.id, carriages.id, isLocoHead, isCarriageTail, spacing),
+                    Pair.of(isLocoHead ? locoConductors.getFirst() : locoConductors.getSecond(),
+                            isCarriageTail ? carriageConductors.getSecond() : carriageConductors.getFirst()
+                    ),
+                    oldLocoSpeed,
+                    oldCarriageSpeed,
+                    (float) loco.speed
+            ));
         }
+
+        return true;
     }
 
     // here carriageIndex represents the carriage that coupler is on
@@ -457,6 +523,42 @@ public class ConductorHelper {
     ) {
         if(loco == null) return;
         if(carriageIndex < 0 || carriageIndex >= loco.carriages.size() - 1) return;
+
+        TrainAdditionalData locoData = Kuayue.TRAIN_EXTENSION.get(loco.id);
+        if(locoData == null) return;
+        Conductable locoTail = null;
+        Conductable carriageHead = null;
+        Vec3 locoTailPos = null;
+        Vec3 carriageHeadPos = null;
+
+        //pre event
+        if(!clientSide) {
+            locoTail = locoData.getConductorAt(
+                    new ConductorLocation(loco.id, carriageIndex, false)
+            );
+            carriageHead = locoData.getConductorAt(
+                    new ConductorLocation(loco.id, carriageIndex + 1, true)
+            );
+            locoTailPos = getConductorPosition(
+                    loco.carriages.get(carriageIndex), locoTail, false);
+            carriageHeadPos = getConductorPosition(
+                    loco.carriages.get(carriageIndex + 1), carriageHead, true);
+            if(locoTailPos == null || carriageHeadPos == null) return;
+
+            TrainCouplerPreDivideEvent event = new TrainCouplerPreDivideEvent(
+                    loco.id,
+                    carriageIndex,
+                    (float) loco.speed,
+                    Pair.of(
+                            Pair.of(locoTail, locoTailPos),
+                            Pair.of(carriageHead, carriageHeadPos)
+                    )
+            );
+            MinecraftForge.EVENT_BUS.post(event);
+            if(event.isCanceled()) return;
+        }
+
+
         //规定：主车在前，从车在后，从index车厢后方分开
         List<Carriage> locoCarts = loco.carriages;
         List<Integer> locoSpacing = loco.carriageSpacing;
@@ -512,18 +614,23 @@ public class ConductorHelper {
             Create.RAILWAYS.addTrain(carriage);
             divideTrainExtensionData(loco, carriage, carriageIndex);
 
-            TrainAdditionalData locoData = Kuayue.TRAIN_EXTENSION.get(loco.id);
-            TrainAdditionalData carriageData = Kuayue.TRAIN_EXTENSION.get(carriage.id);
-            if(locoData != null || carriageData != null) {
-                Conductable locoTail = locoData.getConductor((byte) -1);
-                Conductable carriageHead = carriageData.getConductor((byte) 1);
-                if(locoTail != null && carriageHead != null) {
-                    TrainExtensionSystem.ConductorCDInfo info = new TrainExtensionSystem.ConductorCDInfo(locoTail, carriageHead);
-                    Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.put(
-                            Couple.create(locoTail.getLoc(), carriageHead.getLoc()), info
-                    );
-                }
-            }
+            TrainExtensionSystem.ConductorCDInfo info = new TrainExtensionSystem.ConductorCDInfo(locoTail, carriageHead);
+            Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.put(
+                    Couple.create(locoTail.getLoc(), carriageHead.getLoc()), info
+            );
+
+            //post event
+            TrainCouplerPostDivideEvent event = new TrainCouplerPostDivideEvent(
+                    loco.id,
+                    newTrainUUID,
+                    carriageIndex,
+                    (float) loco.speed,
+                    Pair.of(
+                            Pair.of(locoTail, locoTailPos),
+                            Pair.of(carriageHead, carriageHeadPos)
+                    )
+            );
+            MinecraftForge.EVENT_BUS.post(event);
         }
     }
 

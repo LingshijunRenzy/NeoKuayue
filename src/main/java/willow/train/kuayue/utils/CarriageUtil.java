@@ -79,8 +79,8 @@ public class CarriageUtil {
 
             MovementContext movementContext = actor.getRight();
             movementContext.localPos = transform.apply(movementContext.localPos);
-            movementContext.state.rotate(Rotation.CLOCKWISE_180);
-            StructureTransformUtil.getTransformedBlockEntityNbt(movementContext.blockEntityData, transform);
+            movementContext.state = movementContext.state.rotate(Rotation.CLOCKWISE_180);
+            movementContext.blockEntityData =  StructureTransformUtil.getTransformedBlockEntityNbt(movementContext.blockEntityData, transform);
 
             actors.set(i, MutablePair.of(newInfo, movementContext));
         }

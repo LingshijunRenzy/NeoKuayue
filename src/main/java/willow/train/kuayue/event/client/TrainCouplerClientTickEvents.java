@@ -2,6 +2,7 @@ package willow.train.kuayue.event.client;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
 import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import com.simibubi.create.content.trains.entity.Train;
@@ -44,7 +45,13 @@ public class TrainCouplerClientTickEvents {
             return;
         }
 
-        Train train = cce.getCarriage().train;
+        Carriage carriage = cce.getCarriage();
+        if(carriage == null) {
+            CouplerOverlayRenderer.canDivide = null;
+            return;
+        }
+
+        Train train = carriage.train;
         if(train == null) {
             CouplerOverlayRenderer.canDivide = null;
             return;

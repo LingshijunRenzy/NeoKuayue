@@ -97,7 +97,7 @@ public class TrainCouplerTickEvents {
             }
             info.checkInterval = 0;
 
-            float distanceToSqr = ConductorHelper.getConductorDistanceToSqr(pair, info);
+            float distanceToSqr = ConductorHelper.getConductorFlatDistToSqr(pair, info);
             if(distanceToSqr > .2f || distanceToSqr == -1) {
                 coolingDownToRemove.add(pair);
             }
@@ -144,7 +144,7 @@ public class TrainCouplerTickEvents {
         }
 
         for (ConductorHelper.TrainMergeRequest request : Kuayue.TRAIN_EXTENSION.trainsToMerge) {
-            ConductorHelper.mergeTrains(
+            boolean b = ConductorHelper.mergeTrains(
                     request.loco(),
                     request.carriages(),
                     request.shouldReverseCarriages(),
@@ -152,10 +152,12 @@ public class TrainCouplerTickEvents {
                     request.spacing(),
                     request.clientSide()
             );
-            AllPackets.CHANNEL.boardcastToClients(
-                    new TrainMergePacket(request), event.getServer().getLevel(Level.OVERWORLD), BlockPos.ZERO
-            );
-            Kuayue.TRAIN_EXTENSION.newlyMerged.add(request.loco());
+            if(b) {
+                AllPackets.CHANNEL.boardcastToClients(
+                        new TrainMergePacket(request), event.getServer().getLevel(Level.OVERWORLD), BlockPos.ZERO
+                );
+                Kuayue.TRAIN_EXTENSION.newlyMerged.add(request.loco());
+            }
         }
 
         Kuayue.TRAIN_EXTENSION.trainsToMerge.clear();
