@@ -20,6 +20,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -154,8 +155,8 @@ public abstract class MixinStationBlockEntity {
             remap = false)
     public void onSetContraption(Carriage instance, Level level, CarriageContraption contraption) {
         boolean singleBogey = contraption.getSecondBogeyPos() == null;
-        @Nullable Pair<ConductorProvider, Integer> firstConductor = null;
-        @Nullable Pair<ConductorProvider, Integer> secondConductor = null;
+        @Nullable Pair<ConductorProvider, Vec2> firstConductor = null;
+        @Nullable Pair<ConductorProvider, Vec2> secondConductor = null;
         firstConductor = ConductorHelper.getConductorBlock(
                 BlockPos.ZERO,
                 contraption.getBlocks(),

@@ -1,36 +1,37 @@
 package willow.train.kuayue.event.server;
 
 import com.simibubi.create.Create;
-import com.simibubi.create.content.trains.entity.Carriage;
-import com.simibubi.create.content.trains.entity.CarriageBogey;
 import com.simibubi.create.content.trains.entity.Train;
-import com.simibubi.create.content.trains.graph.TrackGraph;
 import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
-import kasuga.lib.core.util.data_type.Pair;
+import com.simibubi.create.foundation.utility.Couple;
 import lombok.extern.slf4j.Slf4j;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.TrainMergePacket;
-import willow.train.kuayue.systems.train_extension.Test;
+import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
+import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorLocation;
 
 import java.lang.ref.WeakReference;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static willow.train.kuayue.utils.CarriageUtil.remapCarriageContraption;
 
 @Slf4j
 public class TrainCouplerTickEvents {
+
+    private static int tickCounter = 0;
+    private static final int TICK_INTERVAL = 40;
 
     private static final HashSet<UUID> removed = new HashSet<>();
     private static final HashSet<Train> removeFromNewlyMerged = new HashSet<>();
@@ -38,6 +39,25 @@ public class TrainCouplerTickEvents {
 
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event) {
+        //需要节流的逻辑
+        tickCounter++;
+        if(tickCounter >= TICK_INTERVAL) {
+            for(Map.Entry<UUID, TrainAdditionalData> entry : Kuayue.TRAIN_EXTENSION.getData().entrySet()) {
+                List<CarriageAdditionalData> carriages = entry.getValue().getCarriages();
+                for(int i = 0; i < carriages.size(); i++) {
+                    CarriageAdditionalData carriageData = carriages.get(i);
+                    if(carriageData.shouldRemap){
+                        carriageData.shouldRemap = !remapCarriageContraption(
+                                Create.RAILWAYS.trains.get(entry.getKey()).carriages.get(i),
+                                false
+                        );
+                    }
+                }
+            }
+
+            tickCounter = 0;
+        }
+
         if (event.phase != TickEvent.Phase.START) return;
         for (Train t : Kuayue.TRAIN_EXTENSION.newlyMerged) {
             if (!t.derailed) continue;
@@ -69,6 +89,23 @@ public class TrainCouplerTickEvents {
         Kuayue.TRAIN_EXTENSION.trainsToRemove.removeAll(removed);
         removed.clear();
 
+        HashSet<Couple<ConductorLocation>> coolingDownToRemove = new HashSet<>();
+        Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.forEach((pair, info) -> {
+            info.checkInterval++;
+            if (info.checkInterval < 10) {
+                return;
+            }
+            info.checkInterval = 0;
+
+            float distanceToSqr = ConductorHelper.getConductorFlatDistToSqr(pair, info);
+            if(distanceToSqr > .2f || distanceToSqr == -1) {
+                coolingDownToRemove.add(pair);
+            }
+        });
+        if(!coolingDownToRemove.isEmpty()) {
+            coolingDownToRemove.forEach(Kuayue.TRAIN_EXTENSION.conductorsCoolingDown::remove);
+        }
+
         for (Map.Entry<UUID, Train> entry : Create.RAILWAYS.trains.entrySet()) {
             Train train = entry.getValue();
             if (trainMerging.contains(train)) continue;
@@ -77,7 +114,7 @@ public class TrainCouplerTickEvents {
                 if (t2 == train) continue;
                 if (trainMerging.contains(t2)) continue;
                 ConductorHelper.CollidedConnectors conductorPair =
-                        ConductorHelper.getCollidedConnector(train, t2, .125f);
+                        ConductorHelper.getCollidedConnector(train, t2, .1f);
                 if (!ConductorHelper.isValidCollide2(conductorPair)) continue;
                 System.out.println("conductor1: " + conductorPair.conductorA() +
                         ", conductor2: " + conductorPair.conductorB());
@@ -107,7 +144,7 @@ public class TrainCouplerTickEvents {
         }
 
         for (ConductorHelper.TrainMergeRequest request : Kuayue.TRAIN_EXTENSION.trainsToMerge) {
-            ConductorHelper.mergeTrains(
+            boolean b = ConductorHelper.mergeTrains(
                     request.loco(),
                     request.carriages(),
                     request.shouldReverseCarriages(),
@@ -115,10 +152,12 @@ public class TrainCouplerTickEvents {
                     request.spacing(),
                     request.clientSide()
             );
-            AllPackets.CHANNEL.boardcastToClients(
-                    new TrainMergePacket(request), event.getServer().getLevel(Level.OVERWORLD), BlockPos.ZERO
-            );
-            Kuayue.TRAIN_EXTENSION.newlyMerged.add(request.loco());
+            if(b) {
+                AllPackets.CHANNEL.boardcastToClients(
+                        new TrainMergePacket(request), event.getServer().getLevel(Level.OVERWORLD), BlockPos.ZERO
+                );
+                Kuayue.TRAIN_EXTENSION.newlyMerged.add(request.loco());
+            }
         }
 
         Kuayue.TRAIN_EXTENSION.trainsToMerge.clear();

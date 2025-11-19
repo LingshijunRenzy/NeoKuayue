@@ -15,6 +15,7 @@ import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelShapes;
 import willow.train.kuayue.block.panels.carport.DF11GChimneyBlock;
 import willow.train.kuayue.block.panels.carport.DF5ChimneyBlock;
+import willow.train.kuayue.block.panels.conductor.DF5CowCatcherBlock;
 import willow.train.kuayue.block.panels.door.TrainDoorBlock;
 import willow.train.kuayue.block.panels.slab.*;
 import willow.train.kuayue.initial.AllElements;
@@ -45,9 +46,9 @@ public class I5Panel {
                     .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<FullShapeDirectionalBlock> DF5_COWCATCHER =
-            new BlockReg<FullShapeDirectionalBlock>("df5_cowcatcher")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<DF5CowCatcherBlock> DF5_COWCATCHER =
+            new BlockReg<DF5CowCatcherBlock>("df5_cowcatcher")
+                    .blockType(DF5CowCatcherBlock::new)
                     .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .addProperty(properties -> properties.strength(1.5f, 3f))

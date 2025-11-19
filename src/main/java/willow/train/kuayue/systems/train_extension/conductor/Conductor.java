@@ -30,7 +30,7 @@ public class Conductor extends Conductable {
                                 Train otherTrain,
                                 Carriage otherCarriage,
                                 Conductable other) {
-        return false;
+        return true;
     }
 
     @Override

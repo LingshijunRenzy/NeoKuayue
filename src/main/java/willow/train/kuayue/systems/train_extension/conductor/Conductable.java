@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
@@ -23,10 +24,13 @@ public abstract class Conductable {
     @NonNull
     private UUID train;
 
-    private final int carriage;
+    @Getter
+    @Setter
+    private int carriage;
 
     @Getter
-    private final boolean isLeading;
+    @Setter
+    private boolean isLeading;
 
     @Setter
     @Nullable
@@ -38,7 +42,7 @@ public abstract class Conductable {
 
     @Setter
     @Getter
-    private int distanceToAnchor = 0;
+    private Vec2 distanceToAnchor = new Vec2(0, 0);
 
     @Setter
     @Getter
@@ -58,7 +62,12 @@ public abstract class Conductable {
         this.carriage = selfLoc.getCarriageIndex();
         this.isLeading = selfLoc.isLeading();
         this.offset = nbt.getInt("offset");
-        this.distanceToAnchor = nbt.getInt("distanceToAnchor");
+        //this.distanceToAnchor = nbt.getInt("distanceToAnchor");
+        CompoundTag distanceTag = nbt.getCompound("distanceToAnchor");
+        this.distanceToAnchor = new Vec2(
+                distanceTag.getFloat("x"),
+                distanceTag.getFloat("y")
+        );
         this.priority = nbt.getInt("priority");
     }
 
@@ -110,7 +119,11 @@ public abstract class Conductable {
         getLoc().write(locTag);
         nbt.put("self", locTag);
         nbt.putFloat("offset", offset);
-        nbt.putFloat("distanceToAnchor", distanceToAnchor);
+        //nbt.putFloat("distanceToAnchor", distanceToAnchor);
+        CompoundTag distanceTag = new CompoundTag();
+        distanceTag.putFloat("x", distanceToAnchor.x);
+        distanceTag.putFloat("y", distanceToAnchor.y);
+        nbt.put("distanceToAnchor", distanceTag);
         nbt.putInt("priority", priority);
         if (connected != null) {
             CompoundTag connectedTag = new CompoundTag();
@@ -127,6 +140,6 @@ public abstract class Conductable {
     }
 
     public int getTotalOffset() {
-        return offset + distanceToAnchor;
+        return offset + (int) distanceToAnchor.x;
     }
 }

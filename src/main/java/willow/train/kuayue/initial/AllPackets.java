@@ -27,6 +27,7 @@ public class AllPackets {
             .loadPacket(BogeyExtensionSyncPacket.class, BogeyExtensionSyncPacket::new)
             .loadPacket(TrainExtensionSyncPacket.class, TrainExtensionSyncPacket::new)
             .loadPacket(TrainMergePacket.class, TrainMergePacket::new)
+            .loadPacket(TrainDividePacket.class, TrainDividePacket::new)
             .submit(AllElements.testRegistry);
 
     public static final ChannelReg TECH_TREE_CHANNEL = new ChannelReg("kuayue_tech_tree_channel")

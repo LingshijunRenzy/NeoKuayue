@@ -1,6 +1,10 @@
 package willow.train.kuayue.systems.train_extension;
 
 import com.simibubi.create.Create;
+import com.simibubi.create.content.contraptions.Contraption;
+import com.simibubi.create.content.trains.GlobalRailwayManager;
+import com.simibubi.create.content.trains.entity.Carriage;
+import com.simibubi.create.content.trains.entity.CarriageContraption;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
@@ -11,6 +15,8 @@ import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorType;
 
+import java.util.UUID;
+
 public class CarriageAdditionalData {
 
     public int bogeyCount;
@@ -18,6 +24,8 @@ public class CarriageAdditionalData {
     public int blockCount;
 
     public BlockPos secondBogeyPos;
+
+    public boolean shouldRemap = false;
 
     @NonNull
     public Pair<Conductable, Conductable> conductors;
@@ -85,6 +93,7 @@ public class CarriageAdditionalData {
             }
         }
         this.conductors = Pair.of(first, second);
+        shouldRemap = nbt.getBoolean("shouldRemap");
     }
 
     public void write(CompoundTag nbt) {
@@ -104,6 +113,47 @@ public class CarriageAdditionalData {
             conductorTag.putString("type", conductors.getSecond().type().id().toString());
             conductors.getSecond().write(conductorTag);
             nbt.put("conductor2", conductorTag);
+        }
+        nbt.putBoolean("shouldRemap", shouldRemap);
+    }
+
+    public void reverse(Carriage carriage) {
+        Contraption contraption = carriage.anyAvailableEntity().getContraption();
+        if(!(contraption instanceof CarriageContraption cc)) return;
+
+        if (this.shouldRemap){
+            this.secondBogeyPos = bogeyCount > 1 ?
+                    BlockPos.ZERO.relative(cc.getAssemblyDirection().getOpposite(), carriage.bogeySpacing) :
+                    BlockPos.ZERO;
+        } else {
+            this.secondBogeyPos = bogeyCount > 1 ?
+                    BlockPos.ZERO.relative(cc.getAssemblyDirection(), carriage.bogeySpacing) :
+                    BlockPos.ZERO;
+        }
+
+        Conductable first = conductors.getFirst();
+        Conductable second = conductors.getSecond();
+
+        conductors = Pair.of(second, first);
+
+        if(first != null) {
+            first.setLeading(false);
+        }
+        if(second != null) {
+            second.setLeading(true);
+        }
+    }
+
+    public void setTrainInfo(UUID trainId, int carriageIndex) {
+        Conductable first = conductors.getFirst();
+        Conductable second = conductors.getSecond();
+        if (first != null) {
+            first.setTrain(trainId);
+            first.setCarriage(carriageIndex);
+        }
+        if (second != null) {
+            second.setTrain(trainId);
+            second.setCarriage(carriageIndex);
         }
     }
 }

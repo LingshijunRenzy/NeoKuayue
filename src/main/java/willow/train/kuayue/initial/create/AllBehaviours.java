@@ -12,6 +12,7 @@ import willow.train.kuayue.block.seat.YZSeatBlock;
 import willow.train.kuayue.initial.AllBlocks;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.AllTags;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
 
 public class AllBehaviours {
 
@@ -62,6 +63,12 @@ public class AllBehaviours {
             new MovementReg<BogeyOverweightBehavior>("bogey_overweight_behaviour")
                     .behaviour(new BogeyOverweightBehavior())
                     .statePredicate(blockState ->  blockState.getBlock() instanceof AbstractBogeyBlock<?>)
+                    .submit(AllElements.testRegistry);
+
+    public static final InteractionReg<CouplerInteractionBehaviour> COUPLER_INTERACTION_BEHAVIOUR =
+            new InteractionReg<CouplerInteractionBehaviour>("coupler_interaction_behaviour")
+                    .behaviour(new CouplerInteractionBehaviour())
+                    .statePredicate(blockState -> blockState.getBlock() instanceof ConductorProvider)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}
