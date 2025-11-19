@@ -114,7 +114,7 @@ public class TrainCouplerTickEvents {
                 if (t2 == train) continue;
                 if (trainMerging.contains(t2)) continue;
                 ConductorHelper.CollidedConnectors conductorPair =
-                        ConductorHelper.getCollidedConnector(train, t2, .15f);
+                        ConductorHelper.getCollidedConnector(train, t2, .1f);
                 if (!ConductorHelper.isValidCollide2(conductorPair)) continue;
                 System.out.println("conductor1: " + conductorPair.conductorA() +
                         ", conductor2: " + conductorPair.conductorB());
