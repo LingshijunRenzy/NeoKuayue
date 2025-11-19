@@ -10,6 +10,8 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
+import willow.train.kuayue.block.panels.conductor.DF21HeadBlock;
+import willow.train.kuayue.block.panels.conductor.DF21HeadEarlyBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.slab.CarportHingeSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
@@ -20,18 +22,18 @@ import willow.train.kuayue.initial.registration.SlabRegistration;
 
 public class I21Panel {
 
-    public static final BlockReg<FullShapeDirectionalBlock> HEAD_DF21 =
-            new BlockReg<FullShapeDirectionalBlock>("head_df21")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<DF21HeadBlock> HEAD_DF21 =
+            new BlockReg<DF21HeadBlock>("head_df21")
+                    .blockType(DF21HeadBlock::new)
                     .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .defaultBlockItem()
                     .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<FullShapeDirectionalBlock> HEAD_EARLY_DF21 =
-            new BlockReg<FullShapeDirectionalBlock>("head_early_df21")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<DF21HeadEarlyBlock> HEAD_EARLY_DF21 =
+            new BlockReg<DF21HeadEarlyBlock>("head_early_df21")
+                    .blockType(DF21HeadEarlyBlock::new)
                     .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(BlockBehaviour.Properties::noOcclusion)
                     .defaultBlockItem()

@@ -5,12 +5,18 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "kuayue.refmap.json",
   "mixins": [
+    "AccessorCarriageBogey",
+    "AccessorCarriageContraption",
+    "AccessorContraption",
     "AccessorExternalRemainderBlockItem",
     "AccessorPlayerAdvancement",
+    "AccessorTrain",
     "MixinAbstractContraptionEntity",
+    "MixinGlobalRailwayManager",
     "MixinSimpleBlockMovingInteraction",
     "MixinStationBlockEntity",
     "MixinTrackTargetingBlockItem",
+    "MixinTrain",
     "SnrCompatibilityMixinStationBlockEntity",
     "client.MixinBlockReg"
   ],

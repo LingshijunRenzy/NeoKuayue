@@ -3,7 +3,6 @@ package willow.train.kuayue.event.server;
 import kasuga.lib.core.util.Envs;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import willow.train.kuayue.initial.ClientInit;
 import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 
 public class ColorTemplateEvents {
