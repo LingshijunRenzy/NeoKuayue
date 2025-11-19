@@ -38,7 +38,7 @@ public class ConductorLocation implements NbtSerializable {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ConductorLocation cl)) return false;
-        return trainId ==  cl.trainId &&
+        return trainId.equals(cl.trainId) &&
                 carriageIndex == cl.carriageIndex &&
                 (isLeading == cl.isLeading);
     }

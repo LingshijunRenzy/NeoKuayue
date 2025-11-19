@@ -8,12 +8,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import willow.train.kuayue.event.server.TrainCrashEvent;
 import willow.train.kuayue.systems.train_extension.ExtensionHelper;
 import willow.train.kuayue.systems.train_extension.TrainExtensionConstants;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
@@ -86,6 +88,8 @@ public abstract class MixinTrain {
         Train other = TrainExtensionConstants.colliedTrains.remove(train);
         if (other == null) return;
 
+        float trainSpeed = (float) train.speed;
+        float otherSpeed = (float) other.speed;
         float deltaSpeed = (float) Math.abs(train.speed - other.speed);
         float reverseCoefficient = Math.max(Math.min(
                 0.1f / deltaSpeed, 1f), 0f);
@@ -100,6 +104,16 @@ public abstract class MixinTrain {
         }
         ExtensionHelper.gentlyCrash(train, speedAfterCrash.getSecond());
         ExtensionHelper.gentlyCrash(other, speedAfterCrash.getFirst());
+
+        MinecraftForge.EVENT_BUS.post(new TrainCrashEvent(
+                train.id,
+                other.id,
+                deltaSpeed,
+                reverseCoefficient,
+                kasuga.lib.core.util.data_type.Pair.of(trainSpeed, otherSpeed),
+                speedAfterCrash
+        ));
+
         ci.cancel();
     }
 }

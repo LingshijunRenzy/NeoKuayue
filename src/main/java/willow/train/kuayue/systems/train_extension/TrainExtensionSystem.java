@@ -1,12 +1,13 @@
 package willow.train.kuayue.systems.train_extension;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.core.base.Saved;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -140,6 +141,25 @@ public class TrainExtensionSystem extends SavedData {
             tag.put("data" + i, nbt);
             i++;
         }
+
+        ListTag cooldownList = new ListTag();
+        for (ConductorCDInfo info : this.conductorsCoolingDown.values()) {
+            CompoundTag cdTag = new CompoundTag();
+
+            CompoundTag locATag = new CompoundTag();
+            info.conductorA.getLoc().write(locATag);
+            cdTag.put("locA", locATag);
+
+            CompoundTag locBTag = new CompoundTag();
+            info.conductorB.getLoc().write(locBTag);
+            cdTag.put("locB", locBTag);
+
+            cdTag.putInt("checkInterval", info.checkInterval);
+
+            cooldownList.add(cdTag);
+        }
+        tag.put("cooldowns", cooldownList);
+
         return tag;
     }
 
@@ -157,6 +177,33 @@ public class TrainExtensionSystem extends SavedData {
             TrainAdditionalData data = new TrainAdditionalData(tag);
             sys.data.put(data.getTrain(), data);
         }
+
+        sys.conductorsCoolingDown.clear();
+        if (nbt.contains("cooldowns")) {
+            ListTag cooldownList = nbt.getList("cooldowns", Tag.TAG_COMPOUND);
+            for (Tag t : cooldownList) {
+                CompoundTag cdTag = (CompoundTag) t;
+
+                ConductorLocation locA = new ConductorLocation(cdTag.getCompound("locA"));
+                ConductorLocation locB = new ConductorLocation(cdTag.getCompound("locB"));
+                int checkInterval = cdTag.getInt("checkInterval");
+
+                TrainAdditionalData dataA = sys.get(locA.getTrainId());
+                TrainAdditionalData dataB = sys.get(locB.getTrainId());
+
+                if (dataA != null && dataB != null) {
+                    Conductable condA = dataA.getConductorAt(locA);
+                    Conductable condB = dataB.getConductorAt(locB);
+
+                    if (condA != null && condB != null) {
+                        ConductorCDInfo info = new ConductorCDInfo(condA, condB);
+                        info.checkInterval = checkInterval;
+                        sys.conductorsCoolingDown.put(Couple.create(locA, locB), info);
+                    }
+                }
+            }
+        }
+
         return sys;
     }
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
+import willow.train.kuayue.initial.AllSounds;
 import willow.train.kuayue.network.s2c.TrainDividePacket;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
 import willow.train.kuayue.utils.client.ComponentTranslationTool;
@@ -54,7 +55,7 @@ public class CouplerInteractionBehaviour extends MovingInteractionBehaviour {
             );
 
             Vec3 effectPos = cce.toGlobalVector(VecHelper.getCenterOf(localPos), 1);
-            SoundEvent sound = new SoundEvent(new ResourceLocation(Kuayue.MODID, "coupler"));
+            SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
             BlockPos soundPos = new BlockPos(effectPos);
             cce.level.playSound(null, soundPos, sound, cce.getSoundSource(), 0.8F, 1.0F);
             ((ServerLevel) cce.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,

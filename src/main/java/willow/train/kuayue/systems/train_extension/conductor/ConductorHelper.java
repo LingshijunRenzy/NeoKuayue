@@ -26,6 +26,7 @@ import willow.train.kuayue.event.server.TrainCouplerPostDivideEvent;
 import willow.train.kuayue.event.server.TrainCouplerPostMergeEvent;
 import willow.train.kuayue.event.server.TrainCouplerPreDivideEvent;
 import willow.train.kuayue.event.server.TrainCouplerPreMergeEvent;
+import willow.train.kuayue.initial.AllSounds;
 import willow.train.kuayue.mixins.mixin.AccessorTrain;
 import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
@@ -470,7 +471,7 @@ public class ConductorHelper {
 
         if(!clientSide) {
             // effects
-            SoundEvent sound = new SoundEvent(new ResourceLocation(Kuayue.MODID, "coupler"));
+            SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
             if(entity != null) {
                 entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.8f, 1.0f);

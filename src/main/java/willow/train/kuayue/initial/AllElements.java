@@ -80,6 +80,7 @@ public class AllElements {
         AllRecipes.invoke();
         AllEntities.invoke();
         AllOres.invoke();
+        AllSounds.invoke();
         OverheadLineSystem.invoke();
 //        FluidsInit.register(testRegistry.eventBus);
 //        FluidTypesInit.register(testRegistry.eventBus);
