@@ -10,6 +10,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
+import willow.train.kuayue.block.panels.conductor.JY290CowCatcherBlock;
 import willow.train.kuayue.block.panels.deco.JY290ACBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.door.JY290DoorBlock;
@@ -42,9 +43,9 @@ public class IJY290Panel {
                     .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<FullShapeDirectionalBlock> JY290_COWCATCHER =
-            new BlockReg<FullShapeDirectionalBlock>("jy290_cowcatcher")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<JY290CowCatcherBlock> JY290_COWCATCHER =
+            new BlockReg<JY290CowCatcherBlock>("jy290_cowcatcher")
+                    .blockType(JY290CowCatcherBlock::new)
                     .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(properties -> properties.strength(1.5f, 3f))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)
