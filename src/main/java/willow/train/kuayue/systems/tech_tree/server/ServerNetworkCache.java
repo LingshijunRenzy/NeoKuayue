@@ -67,6 +67,8 @@ public class ServerNetworkCache implements Runnable {
 
     @Override
     public void run() {
+        Kuayue.LOGGER.debug("[SERVER] TechTree transmission thread for player {} started.",
+                player.getDisplayName().getString());
         final int waitingMillis = KuayueConfig.CONFIG.
                 getIntValue("TECH_TREE_TRANSMISSION_TIMEOUT");
         final int retryTimes = KuayueConfig.CONFIG.
@@ -80,28 +82,30 @@ public class ServerNetworkCache implements Runnable {
                         return;
                     }
                     startBatch(UUID.randomUUID());
+                    Kuayue.LOGGER.debug("[SERVER] TechTree transmission batch started, batch: {}", batch);
                     compileTree(waitingForSend.poll());
                 }
                 case HANDSHAKE -> {
-                    sendAndRetry(o -> sendHandShakePacket(),
-                                 o -> forceStop(true, retryTimes),
-                             waitingMillis, retryTimes,
-                                        TransmitStage.TRANSMITTING);
+                    send(o -> sendHandShakePacket(), TransmitStage.TRANSMITTING);
+                    Kuayue.LOGGER.debug("[SERVER] TechTree HANDSHAKE packet sent, batch: {}", batch);
                 }
                 case TRANSMITTING -> {
-                    sendAndRetry(o -> sendPayloads(),
-                            o -> forceStop(true, retryTimes),
-                            waitingMillis, retryTimes,
-                            TransmitStage.EOF);
+                    send(o -> sendPayloads(), TransmitStage.EOF);
+                    Kuayue.LOGGER.debug("[SERVER] TechTree transmission all payloads sent, batch: {}", batch);
                 }
                 case EOF -> {
-                    sendAndRetry(o -> sendEOFPacket(),
-                            o -> forceStop(true, retryTimes),
-                            waitingMillis, retryTimes,
-                            TransmitStage.STANDING_BY);
+                    send(o -> sendEOFPacket(), TransmitStage.STANDING_BY);
+                    Kuayue.LOGGER.debug("[SERVER] EOF packet sent, batch: {}", batch);
+                    clear();
+                    Kuayue.LOGGER.debug("[SERVER] TechTree ServerNetworkCache cleared");
                 }
             }
         }
+    }
+
+    public void send(Consumer<Object> consumer, TransmitStage nextStage) {
+        consumer.accept(null);
+        this.transmitStage = nextStage;
     }
 
     public void sendAndRetry(Consumer<Object> consumer,
