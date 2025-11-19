@@ -33,6 +33,7 @@ public class PlayerDataEvent {
         if(serverLevel.dimension().equals(ServerLevel.OVERWORLD)) {
             Kuayue.OVERHEAD.savedData.load(serverLevel);
             Kuayue.RAILWAY.savedData.loadFromDisk(serverLevel);
+            Kuayue.TRAIN_EXTENSION.distSaving.loadFromDisk(serverLevel);
         }
     }
 
@@ -44,6 +45,7 @@ public class PlayerDataEvent {
         if(serverLevel.dimension().equals(ServerLevel.OVERWORLD)) {
             Kuayue.OVERHEAD.savedData.save(serverLevel);
             Kuayue.RAILWAY.savedData.saveToDisk(serverLevel);
+            Kuayue.TRAIN_EXTENSION.distSaving.saveToDisk(serverLevel);
         }
     }
 
@@ -67,6 +69,8 @@ public class PlayerDataEvent {
         ServerNetworkCache cache = NetworkCacheManager.MANAGER.addCacheFor((ServerPlayer) player);
         TechTreeManager.MANAGER.trees().forEach((s, tree) -> cache.enqueueTree(tree));
         TechTreeManager.MANAGER.notifyCycleDetected(player);
+        Kuayue.TRAIN_EXTENSION.BOGEY_EXTENSION.serverSync((ServerPlayer) event.getEntity());
+        Kuayue.TRAIN_EXTENSION.serverSync((ServerPlayer) event.getEntity());
 
         if (PlayerDataManager.MANAGER.containsPlayerData(player)) return;
         PlayerDataManager.MANAGER.createPlayerData(player);

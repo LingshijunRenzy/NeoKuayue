@@ -12,6 +12,7 @@ import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.HeadBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
+import willow.train.kuayue.block.panels.conductor.SS8CowCatcherBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.slab.HingeSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
@@ -30,9 +31,9 @@ public class ISS8Panel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<FullShapeDirectionalBlock> SS8_COWCATCHER =
-            new BlockReg<FullShapeDirectionalBlock>("ss8_cowcatcher")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<SS8CowCatcherBlock> SS8_COWCATCHER =
+            new BlockReg<SS8CowCatcherBlock>("ss8_cowcatcher")
+                    .blockType(SS8CowCatcherBlock::new)
                     .material(Material.METAL).materialColor(MaterialColor.COLOR_BLACK)
                     .addProperty(properties -> properties.strength(1.5f, 3f))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)

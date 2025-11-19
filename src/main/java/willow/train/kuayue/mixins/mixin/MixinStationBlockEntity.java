@@ -1,34 +1,78 @@
 package willow.train.kuayue.mixins.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import com.simibubi.create.AllPackets;
+import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
+import com.simibubi.create.content.trains.entity.*;
+import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import com.simibubi.create.content.trains.track.ITrackBlock;
+import com.simibubi.create.content.trains.track.TrackTargetingBehaviour;
+import com.simibubi.create.foundation.utility.Lang;
+import kasuga.lib.core.util.ComponentHelper;
+import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.block.bogey.ISingleSideBogey;
+import willow.train.kuayue.systems.train_extension.ExtensionHelper;
+import willow.train.kuayue.systems.train_extension.conductor.Conductable;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
+import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
 import willow.train.kuayue.utils.StationMixinCache;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.UUID;
 
 @Mixin(StationBlockEntity.class)
-public class MixinStationBlockEntity {
+public abstract class MixinStationBlockEntity {
 
     @Shadow(remap = false)
     AbstractBogeyBlock<?>[] bogeyTypes;
 
     @Shadow(remap = false)
     int[] bogeyLocations;
+
+    @Shadow
+    private int bogeyCount;
+
+    @Shadow
+    abstract protected void exception(AssemblyException exception, int carriageIndex);
+
+    @Shadow
+    protected AssemblyException lastException;
+
+    @Shadow
+    @javax.annotation.Nullable
+    public abstract GlobalStation getStation();
+
+    @Shadow
+    public TrackTargetingBehaviour<GlobalStation> edgePoint;
+
+    @Shadow
+    public abstract Direction getAssemblyDirection();
+
+    @Shadow
+    public abstract boolean tryDisassembleTrain(@Nullable ServerPlayer sender);
 
     @Redirect(method = "assemble", at = @At(value = "INVOKE",
             target = "Ljava/util/List;add(Ljava/lang/Object;)Z"),
@@ -101,6 +145,86 @@ public class MixinStationBlockEntity {
             player.displayClientMessage(
                     Component.translatable("msg.bogey.style.changed." +
                             descriptionId), true);
+        }
+    }
+
+    @Redirect(method = "assemble",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lcom/simibubi/create/content/trains/entity/Carriage;setContraption(Lnet/minecraft/world/level/Level;Lcom/simibubi/create/content/trains/entity/CarriageContraption;)V"),
+            remap = false)
+    public void onSetContraption(Carriage instance, Level level, CarriageContraption contraption) {
+        boolean singleBogey = contraption.getSecondBogeyPos() == null;
+        @Nullable Pair<ConductorProvider, Vec2> firstConductor = null;
+        @Nullable Pair<ConductorProvider, Vec2> secondConductor = null;
+        firstConductor = ConductorHelper.getConductorBlock(
+                BlockPos.ZERO,
+                contraption.getBlocks(),
+                contraption.getAssemblyDirection(),
+                true
+        );
+        if (singleBogey) {
+            secondConductor =  ConductorHelper.getConductorBlock(
+                    BlockPos.ZERO,
+                    contraption.getBlocks(),
+                    contraption.getAssemblyDirection(),
+                    false
+            );
+        } else {
+            secondConductor =  ConductorHelper.getConductorBlock(
+                    BlockPos.ZERO.relative(contraption.getAssemblyDirection(),
+                            instance.bogeySpacing),
+                    contraption.getBlocks(),
+                    contraption.getAssemblyDirection(),
+                    false
+            );
+        }
+        Conductable leading = firstConductor != null ? firstConductor.getFirst().
+                getType().build(instance.train, instance, true) : null;
+        Conductable trailing = secondConductor != null ? secondConductor.getFirst().
+                getType().build(instance.train, instance, false) : null;
+        if (leading != null) {
+            leading = firstConductor.getFirst().modifyConductor(leading);
+            leading.setDistanceToAnchor(firstConductor.getSecond());
+        }
+        if (trailing != null) {
+            trailing = secondConductor.getFirst().modifyConductor(trailing);
+            trailing.setDistanceToAnchor(secondConductor.getSecond());
+        }
+        Pair<Conductable, Conductable> conductorPair = Pair.of(leading, trailing);
+        TrainAdditionalData data = Kuayue.TRAIN_EXTENSION.getOrCreate(instance.train);
+        data.addConductorPair(
+                contraption.getBlocks().size(),
+                singleBogey ? 1 : 2,
+                singleBogey ? BlockPos.ZERO :
+                        BlockPos.ZERO.relative(contraption.getAssemblyDirection(),
+                        instance.bogeySpacing), conductorPair
+        );
+        instance.setContraption(level, contraption);
+    }
+
+    @Inject(method = "assemble", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/station/StationBlockEntity;clearException()V"),
+        remap = false, cancellable = true)
+    public void onGetStation(UUID playerUUID, CallbackInfo ci) {
+        StationBlockEntity sbe = (StationBlockEntity) (Object) this;
+        if (sbe.getLevel() == null) return;
+        GlobalStation station = getStation();
+        if (station == null) return;
+        Train train = station.getPresentTrain();
+        if (train == null) return;
+        int i = 0;
+        for (Carriage carriage : train.carriages) {
+            if (ExtensionHelper.isCarriageOverweighted(
+                    train, carriage, i, carriage.isOnTwoBogeys()
+            )) {
+                exception(new AssemblyException(
+                        ComponentHelper.translatable("msg.train_extension.crash.assemble", train.name)
+                ), i + 1);
+                station.nearestTrain = new WeakReference<>(null);
+                Kuayue.TRAIN_EXTENSION.removeTrain(train.id);
+                ci.cancel();
+            }
+            i++;
         }
     }
 }

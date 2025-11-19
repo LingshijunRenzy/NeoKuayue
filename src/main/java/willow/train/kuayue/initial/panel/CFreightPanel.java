@@ -6,6 +6,8 @@ import net.minecraft.world.phys.Vec2;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
+import willow.train.kuayue.block.panels.conductor.FreightC70EndFaceBlock;
+import willow.train.kuayue.block.panels.conductor.FreightNX70EndFaceBlock;
 import willow.train.kuayue.block.panels.door.DoubleRotateDoorBlock;
 import willow.train.kuayue.block.panels.end_face.CustomRenderedEndfaceBlock;
 import willow.train.kuayue.block.panels.end_face.FreightEndFaceBlock;
@@ -18,9 +20,9 @@ import willow.train.kuayue.initial.registration.SlabRegistration;
 
 public class CFreightPanel {
 
-    public static final PanelRegistration<FreightEndFaceBlock> FREIGHT_C70_END_FACE =
-            new PanelRegistration<FreightEndFaceBlock>("freight_c70_end_face")
-                    .block((properties) -> new FreightEndFaceBlock(properties,
+    public static final PanelRegistration<FreightC70EndFaceBlock> FREIGHT_C70_END_FACE =
+            new PanelRegistration<FreightC70EndFaceBlock>("freight_c70_end_face")
+                    .block((properties) -> new FreightC70EndFaceBlock(properties,
                             FreightEndFaceBlock.FreightType.C70))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueCarriageTab)
@@ -105,9 +107,9 @@ public class CFreightPanel {
                     .noOcclusion().strengthAndTool(1.5f, 3f)
                     .submit(AllElements.testRegistry);
 
-    public static final PanelRegistration<FreightEndFaceBlock> FREIGHT_NX70_END_FACE =
-            new PanelRegistration<FreightEndFaceBlock>("freight_nx70_end_face")
-                    .block((properties) -> new FreightEndFaceBlock(properties,
+    public static final PanelRegistration<FreightNX70EndFaceBlock> FREIGHT_NX70_END_FACE =
+            new PanelRegistration<FreightNX70EndFaceBlock>("freight_nx70_end_face")
+                    .block((properties) -> new FreightNX70EndFaceBlock(properties,
                             FreightEndFaceBlock.FreightType.NX70))
                     .materialAndColor(Material.METAL, MaterialColor.COLOR_GREEN)
                     .tab(AllElements.neoKuayueCarriageTab)
