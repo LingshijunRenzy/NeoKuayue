@@ -3,6 +3,7 @@ package willow.train.kuayue.network.s2c.tech_tree;
 import kasuga.lib.core.network.S2CPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.c2s.tech_tree.TechTreeHandShakeC2SPacket;
 import willow.train.kuayue.systems.tech_tree.NetworkState;
@@ -24,11 +25,13 @@ public class TechTreeHandShakeS2CPacket extends S2CPacket {
     }
     @Override
     public void handle(Minecraft minecraft) {
+        Kuayue.LOGGER.debug("[CLIENT] TechTree HandshakePacket called, batchId: {}", batchId);
         NetworkState state = ClientNetworkCache.INSTANCE.queryState(batchId);
         if (state == NetworkState.STANDING_BY) {
+            Kuayue.LOGGER.debug("[CLIENT] TechTree ClientNetworkCache Starting batch: " + batchId);
             ClientNetworkCache.INSTANCE.startBatch(batchId);
         }
-        AllPackets.TECH_TREE_CHANNEL.sendToServer(new TechTreeHandShakeC2SPacket(state));
+        //AllPackets.TECH_TREE_CHANNEL.sendToServer(new TechTreeHandShakeC2SPacket(state));
     }
 
     @Override
