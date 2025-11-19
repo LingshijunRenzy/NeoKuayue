@@ -1,8 +1,6 @@
 package willow.train.kuayue.systems.tech_tree.client;
 
 import lombok.Getter;
-import lombok.Setter;
-import net.minecraft.network.FriendlyByteBuf;
 import willow.train.kuayue.systems.tech_tree.NetworkState;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 
@@ -34,18 +32,16 @@ public class ClientNetworkCache {
         state = NetworkState.BUSY;
     }
 
-    public void addNode(FriendlyByteBuf buf) {
-        ClientTechTreeNode node = new ClientTechTreeNode(buf);
+    public void addNode(ClientTechTreeNode node) {
         cachedNodes.put(node.location, node);
     }
 
-    public void addGroup(FriendlyByteBuf buf) {
-        ClientTechTreeGroup group = new ClientTechTreeGroup(buf);
+    public void addGroup(ClientTechTreeGroup group) {
         cachedGroups.put(group.getId().getPath(), group);
     }
 
-    public void setTree(FriendlyByteBuf buf) {
-        cachedTree = new ClientTechTree(buf);
+    public void setTree(ClientTechTree tree) {
+        cachedTree = tree;
     }
 
     public NetworkState queryState(UUID batchId) {
