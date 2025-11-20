@@ -64,7 +64,7 @@ public class TrainCouplerClientTickEvents {
 
         BlockPos localPos = hitResultPair.getSecond().getBlockPos();
 
-        if(cc.getBlocks().get(localPos).state.getBlock() instanceof ConductorProvider) {
+        if(cc.getBlocks().get(localPos).state().getBlock() instanceof ConductorProvider) {
             Direction assemblyDirection = cc.getAssemblyDirection();
             int coord = assemblyDirection.getAxis() == Direction.Axis.X ? localPos.getX() : localPos.getZ();
             boolean isLeading = coord * assemblyDirection.getAxisDirection().getStep() < 0;

@@ -11,7 +11,6 @@ import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -113,11 +112,11 @@ public class ConductorHelper {
             StructureTemplate.StructureBlockInfo above = blocks.get(posCache.above());
             if( below == null && above == null) continue;
 
-            if (above != null && above.state.getBlock() instanceof ConductorProvider p) provider = Pair.of(
+            if (above != null && above.state().getBlock() instanceof ConductorProvider p) provider = Pair.of(
                     p,
                     new Vec2(distance, posCache.getY())
             );
-            if (below != null && below.state.getBlock() instanceof ConductorProvider p) provider = Pair.of(
+            if (below != null && below.state().getBlock() instanceof ConductorProvider p) provider = Pair.of(
                     p,
                     new Vec2(distance, posCache.getY()));
         }
@@ -474,8 +473,8 @@ public class ConductorHelper {
             SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
             if(entity != null) {
-                entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.2f, 1.0f);
-                ((ServerLevel) entity.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
+                entity.level().playSound(null, BlockPos.containing(effectPos), sound, entity.getSoundSource(), 0.2f, 1.0f);
+                ((ServerLevel) entity.level()).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
                         20, 0.2, 0.2, 0.2,0.8);
             }
 
@@ -695,7 +694,7 @@ public class ConductorHelper {
             posCache = posCache.relative(contraption.getAssemblyDirection());
             if (!infos.containsKey(posCache)) break;
             StructureTemplate.StructureBlockInfo info = infos.get(posCache);
-            if (info.state.getBlock() instanceof AbstractBogeyBlock)
+            if (info.state().getBlock() instanceof AbstractBogeyBlock)
                 return posCache;
         }
         return null;

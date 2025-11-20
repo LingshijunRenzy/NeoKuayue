@@ -58,18 +58,18 @@ public class Test {
         for (Carriage carriage : trainA.carriages) {
             if (notFirst) {
                 if (carriage.anyAvailableEntity() != null) {
-                    if (carriage.anyAvailableEntity().level != level) return false;
+                    if (carriage.anyAvailableEntity().level() != level) return false;
                 } else if (level != null) return false;
             } else {
                 level = carriage.anyAvailableEntity() != null ?
-                        carriage.anyAvailableEntity().level : null;
+                        carriage.anyAvailableEntity().level() : null;
                 notFirst = true;
             }
         }
 
         for (Carriage carriage : trainB.carriages) {
             if (carriage.anyAvailableEntity() != null) {
-                if (carriage.anyAvailableEntity().level != level) return false;
+                if (carriage.anyAvailableEntity().level() != level) return false;
             } else if (level != null) return false;
         }
 

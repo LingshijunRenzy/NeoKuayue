@@ -2,10 +2,12 @@ package willow.train.kuayue.initial.create;
 
 import com.jozufozu.flywheel.core.PartialModel;
 import kasuga.lib.core.create.SimpleTrackBlock;
+import kasuga.lib.registrations.common.SoundReg;
 import kasuga.lib.registrations.create.TrackMaterialReg;
 import kasuga.lib.registrations.registry.CreateRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
+import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllElements;
 
 import static willow.train.kuayue.initial.create.AllLocoBogeys.testRegistry;

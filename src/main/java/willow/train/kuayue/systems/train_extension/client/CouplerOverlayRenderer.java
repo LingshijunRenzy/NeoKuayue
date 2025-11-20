@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.utility.Color;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CClient;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -26,12 +27,14 @@ public class CouplerOverlayRenderer {
 
     public static IGuiOverlay OVERLAY = CouplerOverlayRenderer::render;
 
-    public static void render(ForgeGui gui, PoseStack poseStack, float partialTicks, int width, int height) {
+    public static void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTicks, int width, int height) {
         if(canDivide == null) {
             lastCanDivide = null;
             hoverTicks = 0;
             return;
         }
+
+        PoseStack poseStack = guiGraphics.pose();
 
 
         Minecraft mc = Minecraft.getInstance();
@@ -83,12 +86,12 @@ public class CouplerOverlayRenderer {
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(component);
 
-        RemovedGuiUtils.drawHoveringText(poseStack, tooltip, posX, posY, width, height, -1, colorBackground.getRGB(),
+        RemovedGuiUtils.drawHoveringText(guiGraphics, tooltip, posX, posY, width, height, -1, colorBackground.getRGB(),
                 colorBorderTop.getRGB(), colorBorderBot.getRGB(), mc.font);
 
         GuiGameElement.of(item)
                 .at(posX + 10, posY - 16, 450)
-                .render(poseStack);
+                .render(guiGraphics);
 
         poseStack.popPose();
     }

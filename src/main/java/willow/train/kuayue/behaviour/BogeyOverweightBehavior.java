@@ -9,6 +9,7 @@ import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.core.BlockPos;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.TrainCrashSyncPacket;
@@ -55,8 +56,8 @@ public class BogeyOverweightBehavior implements MovementBehaviour {
         train.crash();
         AllPackets.CHANNEL.boardcastToClients(
                 new TrainCrashSyncPacket("msg.train_extension.crash.overweight", trainId),
-                (ServerLevel) cce.level,
-                new BlockPos(context.position)
+                (ServerLevel) cce.level(),
+                BlockPos.containing(context.position)
         );
     }
 }

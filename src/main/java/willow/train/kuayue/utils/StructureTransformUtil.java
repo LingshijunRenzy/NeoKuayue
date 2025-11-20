@@ -32,9 +32,9 @@ public class StructureTransformUtil {
     public static StructureTemplate.StructureBlockInfo getTransformedStructureBlockInfo(StructureTemplate.StructureBlockInfo blockInfo, StructureTransform transform) {
         if(blockInfo == null || transform == null) return null;
         return new StructureTemplate.StructureBlockInfo(
-                getTransformedBlockPos(blockInfo.pos, transform),
-                blockInfo.state.rotate(transform.rotation),
-                blockInfo.nbt
+                getTransformedBlockPos(blockInfo.pos(), transform),
+                blockInfo.state().rotate(transform.rotation),
+                blockInfo.nbt()
         );
     }
 
