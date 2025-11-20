@@ -11,6 +11,7 @@ import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
 import willow.train.kuayue.block.panels.carport.DF11ChimneyBlock;
+import willow.train.kuayue.block.panels.conductor.DF11CowCatcherBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.slab.HingeSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
@@ -20,9 +21,9 @@ import willow.train.kuayue.initial.registration.SlabRegistration;
 
 public class I11Panel {
 
-    public static final BlockReg<FullShapeDirectionalBlock> DF11_COWCATCHER =
-            new BlockReg<FullShapeDirectionalBlock>("df11_cowcatcher")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<DF11CowCatcherBlock> DF11_COWCATCHER =
+            new BlockReg<DF11CowCatcherBlock>("df11_cowcatcher")
+                    .blockType(DF11CowCatcherBlock::new)
                     .materialColor(MapColor.COLOR_BLACK)
                     .addProperty(properties -> properties.strength(1.5f, 3f))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)

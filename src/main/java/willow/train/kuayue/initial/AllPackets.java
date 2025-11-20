@@ -22,6 +22,12 @@ public class AllPackets {
             .loadPacket(C2STrainStationInfoUpdatePacket.class, C2STrainStationInfoUpdatePacket::new)
             .loadPacket(C2SOverheadLineSupportAdjustPacket.class, C2SOverheadLineSupportAdjustPacket::new)
             .loadPacket(PantographSyncPacket.class, PantographSyncPacket::new)
+            .loadPacket(TrainMigrationSyncPacket.class,  TrainMigrationSyncPacket::new)
+            .loadPacket(TrainCrashSyncPacket.class, TrainCrashSyncPacket::new)
+            .loadPacket(BogeyExtensionSyncPacket.class, BogeyExtensionSyncPacket::new)
+            .loadPacket(TrainExtensionSyncPacket.class, TrainExtensionSyncPacket::new)
+            .loadPacket(TrainMergePacket.class, TrainMergePacket::new)
+            .loadPacket(TrainDividePacket.class, TrainDividePacket::new)
             .submit(AllElements.testRegistry);
 
     public static final ChannelReg TECH_TREE_CHANNEL = new ChannelReg("kuayue_tech_tree_channel")

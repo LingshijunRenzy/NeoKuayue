@@ -1,5 +1,6 @@
 package willow.train.kuayue.initial.create;
 
+import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
 import com.simibubi.create.foundation.block.IBE;
 import kasuga.lib.registrations.create.InteractionReg;
 import kasuga.lib.registrations.create.MovementReg;
@@ -11,6 +12,7 @@ import willow.train.kuayue.block.seat.YZSeatBlock;
 import willow.train.kuayue.initial.AllBlocks;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.AllTags;
+import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
 
 public class AllBehaviours {
 
@@ -55,6 +57,18 @@ public class AllBehaviours {
             new InteractionReg<SeatClickBehaviour>("seat_click_behaviour")
                     .behaviour(new SeatClickBehaviour())
                     .statePredicate(state -> (state.getBlock() instanceof YZSeatBlock && state.is(AllTags.MULTI_SEAT_BLOCK.tag())))
+                    .submit(AllElements.testRegistry);
+
+    public static final MovementReg<BogeyOverweightBehavior> BOGEY_OVERWEIGHT_BEHAVIOUR =
+            new MovementReg<BogeyOverweightBehavior>("bogey_overweight_behaviour")
+                    .behaviour(new BogeyOverweightBehavior())
+                    .statePredicate(blockState ->  blockState.getBlock() instanceof AbstractBogeyBlock<?>)
+                    .submit(AllElements.testRegistry);
+
+    public static final InteractionReg<CouplerInteractionBehaviour> COUPLER_INTERACTION_BEHAVIOUR =
+            new InteractionReg<CouplerInteractionBehaviour>("coupler_interaction_behaviour")
+                    .behaviour(new CouplerInteractionBehaviour())
+                    .statePredicate(blockState -> blockState.getBlock() instanceof ConductorProvider)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}

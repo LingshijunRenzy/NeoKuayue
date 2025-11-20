@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
 import willow.train.kuayue.block.panels.TrainPanelBlock;
+import willow.train.kuayue.block.panels.conductor.HXD3DCowCatcherBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.pantograph.PantographMovementBehaviour;
 import willow.train.kuayue.block.panels.pantograph.PantographProps;
@@ -94,9 +95,9 @@ public class I3DPanel {
                     .tabTo(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<FullShapeDirectionalBlock> HXD3D_COWCATCHER =
-            new BlockReg<FullShapeDirectionalBlock>("hxd3d_cowcatcher")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<HXD3DCowCatcherBlock> HXD3D_COWCATCHER =
+            new BlockReg<HXD3DCowCatcherBlock>("hxd3d_cowcatcher")
+                    .blockType(HXD3DCowCatcherBlock::new)
                     .materialColor(MapColor.COLOR_BLACK)
                     .addProperty(properties -> properties.strength(1.5f, 3f))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)

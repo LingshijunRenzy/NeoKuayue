@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.block.panels.HeadBlock;
 import willow.train.kuayue.block.panels.TrainHingePanelBlock;
+import willow.train.kuayue.block.panels.conductor.SS3CowCatcherBlock;
 import willow.train.kuayue.block.panels.door.CustomRenderedDoorBlock;
 import willow.train.kuayue.block.panels.slab.HingeSlabBlock;
 import willow.train.kuayue.block.panels.slab.TrainSlabBlock;
@@ -158,9 +159,9 @@ public class ISS3Panel {
                     .tab(AllElements.neoKuayueLocoTab)
                     .submit(AllElements.testRegistry);
 
-    public static final BlockReg<FullShapeDirectionalBlock> SS3_COWCATCHER =
-            new BlockReg<FullShapeDirectionalBlock>("ss3_cowcatcher")
-                    .blockType(FullShapeDirectionalBlock::new)
+    public static final BlockReg<SS3CowCatcherBlock> SS3_COWCATCHER =
+            new BlockReg<SS3CowCatcherBlock>("ss3_cowcatcher")
+                    .blockType(SS3CowCatcherBlock::new)
                     .materialColor(MapColor.COLOR_BLACK)
                     .addProperty(properties -> properties.strength(1.5f, 3f))
                     .addProperty(BlockBehaviour.Properties::requiresCorrectToolForDrops)

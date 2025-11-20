@@ -242,5 +242,8 @@
   "msg.bogey.style.changed.block.kuayue.ss8_bogey_a": "current bogey: SS8",
   "msg.bogey.style.changed.block.kuayue.ss8_backward_bogey_a": "current bogey: SS8(Backward)",
   "msg.bogey.style.changed.block.kuayue.dfh21_bogey_a": "current bogey: DFH21",
-  "msg.bogey.style.changed.block.kuayue.dfh21_backward_bogey_a": "current bogey: DFH21(Backward)"
+  "msg.bogey.style.changed.block.kuayue.dfh21_backward_bogey_a": "current bogey: DFH21(Backward)",
+
+  "msg.train_extension.crash.overweight": "train %s is broken because of bogey overweight.",
+  "msg.train_extension.crash.assemble": "Could not assemble train %s because of bogey overweight"
 }
