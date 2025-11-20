@@ -57,7 +57,7 @@ public class CouplerInteractionBehaviour extends MovingInteractionBehaviour {
             Vec3 effectPos = cce.toGlobalVector(VecHelper.getCenterOf(localPos), 1);
             SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
             BlockPos soundPos = new BlockPos(effectPos);
-            cce.level.playSound(null, soundPos, sound, cce.getSoundSource(), 0.3F, 1.0F);
+            cce.level.playSound(null, soundPos, sound, cce.getSoundSource(), 0.2F, 1.0F);
             ((ServerLevel) cce.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
                     20, 0.2, 0.2, 0.2, 0.8);
 

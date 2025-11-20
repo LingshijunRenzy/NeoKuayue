@@ -474,7 +474,7 @@ public class ConductorHelper {
             SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
             if(entity != null) {
-                entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.3f, 1.0f);
+                entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.2f, 1.0f);
                 ((ServerLevel) entity.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
                         20, 0.2, 0.2, 0.2,0.8);
             }
