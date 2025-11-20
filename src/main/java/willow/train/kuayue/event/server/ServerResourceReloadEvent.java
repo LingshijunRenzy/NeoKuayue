@@ -5,6 +5,7 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.systems.tech_tree.player.PlayerDataManager;
 import willow.train.kuayue.systems.tech_tree.server.TechTreeManager;
+import willow.train.kuayue.systems.train_extension.bogey_weight.BogeyExtensionSystem;
 
 public class ServerResourceReloadEvent {
 
@@ -13,5 +14,6 @@ public class ServerResourceReloadEvent {
         ResourceManager manager = event.getServer().getServerResources().resourceManager();
         TechTreeManager.MANAGER.loadData(manager);
         PlayerDataManager.MANAGER.loadAdvancements(event.getServer().getAdvancements().getAllAdvancements());
+        BogeyExtensionSystem.getInstance().loadData(manager);
     }
 }

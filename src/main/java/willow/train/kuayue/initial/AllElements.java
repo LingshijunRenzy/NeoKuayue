@@ -14,6 +14,7 @@ import willow.train.kuayue.event.client.*;
 import willow.train.kuayue.event.server.ColorTemplateEvents;
 import willow.train.kuayue.event.server.PlayerJumpEvents;
 import willow.train.kuayue.event.server.ServerResourceReloadEvent;
+import willow.train.kuayue.event.server.TrainCouplerTickEvents;
 import willow.train.kuayue.initial.create.*;
 import willow.train.kuayue.initial.fluid.AllFluids;
 import willow.train.kuayue.initial.food.AllFoods;
@@ -27,6 +28,7 @@ import willow.train.kuayue.systems.device.EntityTrackingListener;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 import willow.train.kuayue.systems.overhead_line.block.line.OverheadLineRendererSystem;
 import willow.train.kuayue.systems.overhead_line.block.support.AllOverheadLineSupportBlocks;
+import willow.train.kuayue.systems.train_extension.TrainExtensionConstants;
 
 public class AllElements {
 
@@ -78,6 +80,7 @@ public class AllElements {
         AllRecipes.invoke();
         AllEntities.invoke();
         AllOres.invoke();
+        AllSounds.invoke();
         OverheadLineSystem.invoke();
 //        FluidsInit.register(testRegistry.eventBus);
 //        FluidTypesInit.register(testRegistry.eventBus);
@@ -98,6 +101,7 @@ public class AllElements {
             // MinecraftForge.EVENT_BUS.addListener(RenderPrePosedBlockEvent::renderBlock);
             MinecraftForge.EVENT_BUS.register(new CarriageInventoryEvents());
             MinecraftForge.EVENT_BUS.addListener(ClientSyncManager::clientTick);
+            MinecraftForge.EVENT_BUS.addListener(TrainCouplerClientTickEvents::clientTick);
         }
         Kuayue.BUS.addListener(OnFinalizeSetup::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(PlayerJumpEvents::playerJumpEvent);
@@ -110,6 +114,8 @@ public class AllElements {
         MinecraftForge.EVENT_BUS.addListener(EntityTrackingListener::onEntityUnload);
         MinecraftForge.EVENT_BUS.addListener(ServerSyncManager::serverTick);
         MinecraftForge.EVENT_BUS.addListener(ServerSyncManager::onLevelUnload);
+        MinecraftForge.EVENT_BUS.addListener(TrainCouplerTickEvents::serverTick);
+        MinecraftForge.EVENT_BUS.addListener(TrainExtensionConstants::onLevelUnloaded);
         testRegistry.submit();
         createRegistry.submit();
     }

@@ -1,0 +1,15 @@
+{
+  "coupler": {
+    "subtitle": "sounds.kuayue.coupler",
+    "sounds": [
+      "kuayue:coupler/coupler_1",
+      "kuayue:coupler/coupler_2",
+      "kuayue:coupler/coupler_3",
+      "kuayue:coupler/coupler_4",
+      "kuayue:coupler/coupler_5",
+      "kuayue:coupler/coupler_6",
+      "kuayue:coupler/coupler_7",
+      "kuayue:coupler/coupler_8"
+    ]
+  }
+}
