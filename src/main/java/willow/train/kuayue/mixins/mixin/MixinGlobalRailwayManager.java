@@ -3,13 +3,11 @@ package willow.train.kuayue.mixins.mixin;
 import com.simibubi.create.content.trains.GlobalRailwayManager;
 import com.simibubi.create.content.trains.entity.Train;
 import kasuga.lib.core.util.Envs;
-import net.minecraftforge.fml.LogicalSide;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import willow.train.kuayue.Kuayue;
-import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.systems.train_extension.TrainExtensionSystem;
 
 import java.util.UUID;
@@ -22,11 +20,17 @@ public class MixinGlobalRailwayManager {
         TrainExtensionSystem sys = Kuayue.TRAIN_EXTENSION;
         if (sys.contains(train.id)) {
             sys.get(train.id).updateInternalConnections();
+            if(!Envs.isClient()) {
+                sys.syncChange(sys.get(train.id));
+            }
         }
     }
 
     @Inject(method = "removeTrain", at = @At(value = "HEAD"), remap = false)
     public void removeTrain(UUID id, CallbackInfo ci) {
         Kuayue.TRAIN_EXTENSION.remove(id);
+        if (!Envs.isClient()) {
+            Kuayue.TRAIN_EXTENSION.syncRemove(id);
+        }
     }
 }
