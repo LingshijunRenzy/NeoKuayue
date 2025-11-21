@@ -11,7 +11,6 @@ import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -461,11 +460,10 @@ public class ConductorHelper {
         Pair<Float, Float> newSpeed = momentumExchange(loco, carriages, 0f);
         loco.speed = newSpeed != null ? newSpeed.getFirst() : oldLocoSpeed;
 
-        mergeTrainExtensionData(loco, carriages, isCarriageTail, isLocoHead);
-
         if (clientSide) {
             CreateClient.RAILWAYS.removeTrain(carriages.id);
         } else {
+            mergeTrainExtensionData(loco, carriages, isCarriageTail, isLocoHead);
             Create.RAILWAYS.removeTrain(carriages.id);
         }
 
@@ -525,8 +523,6 @@ public class ConductorHelper {
         if(loco == null) return;
         if(carriageIndex < 0 || carriageIndex >= loco.carriages.size() - 1) return;
 
-        TrainAdditionalData locoData = Kuayue.TRAIN_EXTENSION.get(loco.id);
-        if(locoData == null) return;
         Conductable locoTail = null;
         Conductable carriageHead = null;
         Vec3 locoTailPos = null;
@@ -534,6 +530,8 @@ public class ConductorHelper {
 
         //pre event
         if(!clientSide) {
+            TrainAdditionalData locoData = Kuayue.TRAIN_EXTENSION.get(loco.id);
+            if(locoData == null) return;
             locoTail = locoData.getConductorAt(
                     new ConductorLocation(loco.id, carriageIndex, false)
             );
@@ -661,7 +659,9 @@ public class ConductorHelper {
         locoData.reIndexAll(loco);
         locoData.updateInternalConnections();
         locoData.updateConductorMap();
+        Kuayue.TRAIN_EXTENSION.syncChange(locoData);
         Kuayue.TRAIN_EXTENSION.remove(carriages.id);
+        Kuayue.TRAIN_EXTENSION.syncRemove(carriages.id);
     }
 
     public static void divideTrainExtensionData(Train loco, Train carriages, int carriageIndex) {
@@ -685,6 +685,9 @@ public class ConductorHelper {
         carriageData.updateInternalConnections();
         carriageData.updateConductorMap();
         Kuayue.TRAIN_EXTENSION.add(carriageData);
+
+        Kuayue.TRAIN_EXTENSION.syncChange(locoData);
+        Kuayue.TRAIN_EXTENSION.syncChange(carriageData);
     }
 
 
