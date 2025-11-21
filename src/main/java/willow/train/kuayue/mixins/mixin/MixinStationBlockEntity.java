@@ -200,6 +200,7 @@ public abstract class MixinStationBlockEntity {
                         BlockPos.ZERO.relative(contraption.getAssemblyDirection(),
                         instance.bogeySpacing), conductorPair
         );
+        Kuayue.TRAIN_EXTENSION.syncChange(data);
         instance.setContraption(level, contraption);
     }
 
@@ -222,6 +223,7 @@ public abstract class MixinStationBlockEntity {
                 ), i + 1);
                 station.nearestTrain = new WeakReference<>(null);
                 Kuayue.TRAIN_EXTENSION.removeTrain(train.id);
+                Kuayue.TRAIN_EXTENSION.syncRemove(train.id);
                 ci.cancel();
             }
             i++;

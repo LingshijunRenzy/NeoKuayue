@@ -11,11 +11,15 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
+import willow.train.kuayue.network.s2c.TrainExtensionChangePacket;
+import willow.train.kuayue.network.s2c.TrainExtensionRemovePacket;
 import willow.train.kuayue.network.s2c.TrainExtensionSyncPacket;
 import willow.train.kuayue.systems.train_extension.bogey_weight.BogeyExtensionSystem;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
@@ -123,8 +127,18 @@ public class TrainExtensionSystem extends SavedData {
         this.data.put(data.getTrain(), data);
     }
 
+    public void syncChange(TrainAdditionalData data) {
+        TrainExtensionChangePacket packet = new TrainExtensionChangePacket(data);
+        AllPackets.CHANNEL.getChannel().send(PacketDistributor.ALL.noArg(), packet);
+    }
+
     public void remove(UUID trainId) {
         this.data.remove(trainId);
+    }
+
+    public void syncRemove(UUID trainId) {
+        TrainExtensionRemovePacket packet = new TrainExtensionRemovePacket(trainId);
+        AllPackets.CHANNEL.getChannel().send(PacketDistributor.ALL.noArg(), packet);
     }
 
     public boolean contains(UUID trainId) {
