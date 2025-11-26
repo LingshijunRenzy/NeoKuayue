@@ -238,16 +238,6 @@ repositories {
         name = "KuaYue Maven"
         url = uri("https://maven.kycraft.cn/${kasuga_lib_channel}")
     }
-
-    if(project.findProperty("nightly")){
-        flatDir {dir 'libs'}
-    } else {
-        maven {
-            // GradleCI maven
-            name = "GradleCIMaven"
-            url = uri("https://git.gradle.ci/api/packages/KuaYueTeam/maven")
-        }
-    }
 }
 
 dependencies {
