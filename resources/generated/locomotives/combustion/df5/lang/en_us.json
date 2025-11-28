@@ -31,6 +31,7 @@
   "block.kuayue.df5_panel_top": "DF5 Top Panel",
   "block.kuayue.df5_radiator_grid": "DF5 Radiator Grid",
   "block.kuayue.df5_transit_floor": "DF5 Transit Floor",
+  "item.kuayue.head_df5_blueprint": "DF5 Blueprint",
   "tech_tree.kuayue.group.head_df5_blueprint.name": "DF5 Blueprint",
   "tech_tree.kuayue.group.head_df5_blueprint.description": "Design and prototype DF5. Be able to obtain the design drawings of DF5."
 }
