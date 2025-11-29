@@ -38,7 +38,7 @@ public abstract class Conductable {
 
     @Setter
     @Getter
-    private int offset = 0;
+    private float offset = 0;
 
     @Setter
     @Getter
@@ -61,7 +61,7 @@ public abstract class Conductable {
         this.train = selfLoc.getTrainId();
         this.carriage = selfLoc.getCarriageIndex();
         this.isLeading = selfLoc.isLeading();
-        this.offset = nbt.getInt("offset");
+        this.offset = nbt.getFloat("offset");
         //this.distanceToAnchor = nbt.getInt("distanceToAnchor");
         CompoundTag distanceTag = nbt.getCompound("distanceToAnchor");
         this.distanceToAnchor = new Vec2(
@@ -119,7 +119,6 @@ public abstract class Conductable {
         getLoc().write(locTag);
         nbt.put("self", locTag);
         nbt.putFloat("offset", offset);
-        //nbt.putFloat("distanceToAnchor", distanceToAnchor);
         CompoundTag distanceTag = new CompoundTag();
         distanceTag.putFloat("x", distanceToAnchor.x);
         distanceTag.putFloat("y", distanceToAnchor.y);
@@ -139,7 +138,7 @@ public abstract class Conductable {
         this.connected = data.getConductorMap().get(connectedLoc);
     }
 
-    public int getTotalOffset() {
+    public float getTotalOffset() {
         return offset + (int) distanceToAnchor.x;
     }
 }

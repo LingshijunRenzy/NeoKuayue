@@ -21,6 +21,10 @@ public class ConductorCandidateRegistry {
     }
 
     public static @Nullable ConductorProvider getProvider(BlockState state) {
+        if(state.getBlock() instanceof ConductorProvider) {
+            return (ConductorProvider) state.getBlock();
+        }
+
         for(ConductorCandidateMatcher matcher : matchers) {
             ConductorProvider provider = matcher.match(state);
             if (provider != null) {
@@ -40,6 +44,10 @@ public class ConductorCandidateRegistry {
 
     public static void registerBlock(Class<? extends Block> blockClass, ConductorProvider provider) {
         register(state -> blockClass.isInstance(state.getBlock()) ? provider : null);
+    }
+
+    public static void registerInterface(Class<?> interfaceClass, ConductorProvider provider) {
+        register(state -> interfaceClass.isInstance(state.getBlock()) ? provider : null);
     }
 
     public static void registerBlockState(Predicate<BlockState> predicate, ConductorProvider provider) {
