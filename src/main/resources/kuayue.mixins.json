@@ -4,6 +4,7 @@
   "package": "willow.train.kuayue.mixins.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "kuayue.refmap.json",
+  "plugin": "willow.train.kuayue.mixins.mixin.KuayueMixinPlugin",
   "mixins": [
     "AccessorCarriageBogey",
     "AccessorCarriageContraption",
@@ -18,7 +19,8 @@
     "MixinTrackTargetingBlockItem",
     "MixinTrain",
     "SnrCompatibilityMixinStationBlockEntity",
-    "client.MixinBlockReg"
+    "client.MixinBlockReg",
+    "compat.railways.MixinRailwaysTrainUtils"
   ],
   "client": [
     "LevelRendererAccessor",
