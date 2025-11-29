@@ -23,7 +23,7 @@ public class HXD3DCowCatcherBlock extends FullShapeDirectionalBlock implements C
 
     @Override
     public @NonNull Conductable modifyConductor(@NonNull Conductable rawConductor) {
-        rawConductor.setOffset(2);
+        rawConductor.setOffset(1.5f);
         return rawConductor;
     }
 }

@@ -23,7 +23,7 @@ public class DF5CowCatcherBlock extends FullShapeDirectionalBlock implements Con
 
     @Override
     public @NonNull Conductable modifyConductor(@NonNull Conductable rawConductor) {
-        rawConductor.setOffset(1);
+        rawConductor.setOffset(0.5f);
         return rawConductor;
     }
 }

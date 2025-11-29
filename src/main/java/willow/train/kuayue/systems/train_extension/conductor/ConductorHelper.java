@@ -41,7 +41,7 @@ public class ConductorHelper {
 
     // ------------------------------- records ---------------------------------
 
-    public record TrainCollideResult(byte aFlag, byte bFlag, int spacing) {
+    public record TrainCollideResult(byte aFlag, byte bFlag, float spacing) {
         public static TrainCollideResult invalid() {
             return new TrainCollideResult((byte) 0, (byte) 0, -1);
         }
@@ -50,7 +50,7 @@ public class ConductorHelper {
     public record CollidedConnectors(
             byte aFlag, Conductable conductorA,
             byte bFlag, Conductable conductorB,
-            int spacing
+            float spacing
     ) {
         public static CollidedConnectors invalid() {
             return new CollidedConnectors((byte) 0, null, (byte) 0, null, -1);
@@ -74,7 +74,7 @@ public class ConductorHelper {
     public record TrainMergeRequest(
             Train loco, Train carriages,
             boolean shouldReverseCarriages,
-            boolean isLocoHead, int spacing,
+            boolean isLocoHead, float spacing,
             boolean clientSide
     ) {}
 
@@ -89,7 +89,7 @@ public class ConductorHelper {
         UUID carriageId,
         boolean isLocoHead,
         boolean isCarriageTail,
-        int spacing
+        float spacing
     ) {}
 
     // ------------------------------- functions ---------------------------------
@@ -259,7 +259,7 @@ public class ConductorHelper {
         Vec3 position = bogey.getAnchorPosition();
         if (position == null) return null;
         return position.add(getCarriageDirection(carriage).scale(
-                ((float) conductor.getTotalOffset()) * (isLeading ? 1f : -1f))
+                (conductor.getTotalOffset()) * (isLeading ? 1f : -1f))
         );
     }
 
@@ -368,7 +368,7 @@ public class ConductorHelper {
     public static boolean mergeTrains(
             Train loco, Train carriages,
             boolean isCarriageTail,
-            boolean isLocoHead, int spacing,
+            boolean isLocoHead, float spacing,
             boolean clientSide
     ) {
         Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> locoConductors = getConductorPosition(loco);
@@ -431,11 +431,11 @@ public class ConductorHelper {
         if (isLocoHead) {
             locoCarriages.addAll(0, carriageCarts);
             locoSpacing.addAll(0, cartSpacing);
-            locoSpacing.add(cartSpacing.size(), spacing);
+            locoSpacing.add(cartSpacing.size(), (int) Math.floor(spacing));
             copyStress(cartStress, locoStress, neoStress);
         } else {
             locoCarriages.addAll(carriageCarts);
-            locoSpacing.add(spacing);
+            locoSpacing.add((int) Math.floor(spacing));
             locoSpacing.addAll(cartSpacing);
             copyStress(locoStress, cartStress, neoStress);
         }

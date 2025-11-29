@@ -98,7 +98,7 @@ public class TrainCouplerTickEvents {
             info.checkInterval = 0;
 
             float distanceToSqr = ConductorHelper.getConductorFlatDistToSqr(pair, info);
-            if(distanceToSqr > .2f || distanceToSqr == -1) {
+            if(distanceToSqr > .5f || distanceToSqr == -1) {
                 coolingDownToRemove.add(pair);
             }
         });
