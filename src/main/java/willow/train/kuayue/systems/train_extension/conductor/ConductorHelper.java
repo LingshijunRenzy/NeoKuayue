@@ -14,6 +14,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -30,6 +31,7 @@ import willow.train.kuayue.mixins.mixin.AccessorTrain;
 import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainExtensionSystem;
+import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
 
 import java.util.*;
 
@@ -111,14 +113,14 @@ public class ConductorHelper {
             StructureTemplate.StructureBlockInfo below = blocks.get(posCache);
             StructureTemplate.StructureBlockInfo above = blocks.get(posCache.above());
             if( below == null && above == null) continue;
-
-            if (above != null && above.state.getBlock() instanceof ConductorProvider p) provider = Pair.of(
-                    p,
-                    new Vec2(distance, posCache.getY())
-            );
-            if (below != null && below.state.getBlock() instanceof ConductorProvider p) provider = Pair.of(
-                    p,
-                    new Vec2(distance, posCache.getY()));
+            if(above != null) {
+                ConductorProvider p = ConductorCandidateRegistry.getProvider(above.state);
+                if(p != null) provider = Pair.of(p, new Vec2(distance, posCache.getY()));
+            }
+            if(below != null) {
+                ConductorProvider p = ConductorCandidateRegistry.getProvider(below.state);
+                if(p != null) provider = Pair.of(p, new Vec2(distance, posCache.getY()));
+            }
         }
         return provider;
     }
@@ -371,6 +373,7 @@ public class ConductorHelper {
     ) {
         Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> locoConductors = getConductorPosition(loco);
         Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> carriageConductors = getConductorPosition(carriages);
+        Vec3 effectPos = Vec3.ZERO;
 
         float oldLocoSpeed = (float) loco.speed;
         float oldCarriageSpeed = (float) carriages.speed;
@@ -386,6 +389,13 @@ public class ConductorHelper {
             if(preEvent.isCanceled()) {
                 return false;
             }
+
+            Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> conductorPos = getConductorPosition(loco);
+            if (isLocoHead) {
+                effectPos = conductorPos.getFirst().getSecond();
+            } else {
+                effectPos = conductorPos.getSecond().getSecond();
+            }
         }
 
         // 获取参数
@@ -398,15 +408,6 @@ public class ConductorHelper {
         double[] cartStress = ((AccessorTrain) carriages).getStress();
 
         double[] neoStress = new double[locoStress.length + cartStress.length + 1];
-
-        // 计算特效位置
-        Vec3 effectPos;
-        Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> conductorPos = getConductorPosition(loco);
-        if (isLocoHead) {
-            effectPos = conductorPos.getFirst().getSecond();
-        } else {
-            effectPos = conductorPos.getSecond().getSecond();
-        }
 
         //头-头或尾-尾情况需要反转
         if(isLocoHead ^ isCarriageTail) {
@@ -467,11 +468,14 @@ public class ConductorHelper {
             Create.RAILWAYS.removeTrain(carriages.id);
         }
 
+        loco.collectInitiallyOccupiedSignalBlocks();
+        carriages.collectInitiallyOccupiedSignalBlocks();
+
         if(!clientSide) {
             // effects
             SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
-            if(entity != null) {
+            if(entity != null && effectPos != Vec3.ZERO) {
                 entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.2f, 1.0f);
                 ((ServerLevel) entity.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
                         20, 0.2, 0.2, 0.2,0.8);
@@ -606,6 +610,9 @@ public class ConductorHelper {
             }
         }
         carriage.speed = loco.speed;
+
+        loco.collectInitiallyOccupiedSignalBlocks();
+        carriage.collectInitiallyOccupiedSignalBlocks();
 
         if(clientSide) {
             CreateClient.RAILWAYS.addTrain(carriage);

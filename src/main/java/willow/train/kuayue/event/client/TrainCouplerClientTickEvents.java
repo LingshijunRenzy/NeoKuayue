@@ -16,7 +16,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import willow.train.kuayue.systems.train_extension.client.CouplerOverlayRenderer;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
-import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
+import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
 import willow.train.kuayue.utils.client.ContraptionAimUtil;
 
 public class TrainCouplerClientTickEvents {
@@ -64,7 +64,7 @@ public class TrainCouplerClientTickEvents {
 
         BlockPos localPos = hitResultPair.getSecond().getBlockPos();
 
-        if(cc.getBlocks().get(localPos).state.getBlock() instanceof ConductorProvider) {
+        if(ConductorCandidateRegistry.getProvider(cc.getBlocks().get(localPos).state) != null) {
             Direction assemblyDirection = cc.getAssemblyDirection();
             int coord = assemblyDirection.getAxis() == Direction.Axis.X ? localPos.getX() : localPos.getZ();
             boolean isLeading = coord * assemblyDirection.getAxisDirection().getStep() < 0;
