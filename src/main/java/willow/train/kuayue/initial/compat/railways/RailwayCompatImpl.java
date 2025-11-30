@@ -4,8 +4,9 @@ import com.railwayteam.railways.content.buffer.headstock.CopycatHeadstockBlock;
 import com.railwayteam.railways.content.buffer.headstock.HeadstockBlock;
 import com.railwayteam.railways.content.buffer.headstock.HeadstockStyle;
 import com.railwayteam.railways.content.buffer.single_deco.LinkPinBlock;
+import net.minecraft.world.level.block.Block;
+import willow.train.kuayue.systems.train_extension.conductor.providers.*;
 import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
-import willow.train.kuayue.systems.train_extension.conductor.registry.SimpleConductorProvider;
 
 public class RailwayCompatImpl implements RailwayCompat{
     public RailwayCompatImpl(){
@@ -14,22 +15,61 @@ public class RailwayCompatImpl implements RailwayCompat{
 
     @Override
     public void registerConductors() {
-        ConductorCandidateRegistry.registerBlock(LinkPinBlock.class, SimpleConductorProvider.INSTANCE);
+        //link
         ConductorCandidateRegistry.registerBlockState(
                 state -> {
-                    return state.getBlock() instanceof HeadstockBlock
-                            && !state.getValue(HeadstockBlock.STYLE).equals(HeadstockStyle.PLAIN)
-                            && !state.getValue(HeadstockBlock.STYLE).equals(HeadstockStyle.BUFFER);
+                    Block block = state.getBlock();
+                    if(block instanceof LinkPinBlock && state.getValue(LinkPinBlock.STYLE).equals(LinkPinBlock.Style.LINK)) return true;
+                    if(block instanceof HeadstockBlock && state.getValue(HeadstockBlock.STYLE).equals(HeadstockStyle.LINK)) return true;
+                    if(block instanceof CopycatHeadstockBlock && state.getValue(CopycatHeadstockBlock.STYLE).equals(HeadstockStyle.LINK)) return true;
+                    return false;
                 },
-                SimpleConductorProvider.INSTANCE
+                LinkConductorProvider.INSTANCE
         );
+
+        //linkless
         ConductorCandidateRegistry.registerBlockState(
                 state -> {
-                    return state.getBlock() instanceof CopycatHeadstockBlock
-                            && !state.getValue(CopycatHeadstockBlock.STYLE).equals(HeadstockStyle.PLAIN)
-                            && !state.getValue(CopycatHeadstockBlock.STYLE).equals(HeadstockStyle.BUFFER);
+                    Block block = state.getBlock();
+                    if(block instanceof LinkPinBlock && state.getValue(LinkPinBlock.STYLE).equals(LinkPinBlock.Style.LINKLESS)) return true;
+                    if(block instanceof HeadstockBlock && state.getValue(HeadstockBlock.STYLE).equals(HeadstockStyle.LINKLESS)) return true;
+                    if(block instanceof CopycatHeadstockBlock && state.getValue(CopycatHeadstockBlock.STYLE).equals(HeadstockStyle.LINKLESS)) return true;
+                    return false;
                 },
-                SimpleConductorProvider.INSTANCE
+                LinklessConductorProvider.INSTANCE
+        );
+
+        //jan
+        ConductorCandidateRegistry.registerBlockState(
+                state -> {
+                    Block block = state.getBlock();
+                    if(block instanceof LinkPinBlock && (
+                            state.getValue(LinkPinBlock.STYLE).equals(LinkPinBlock.Style.KNUCKLE) ||
+                            state.getValue(LinkPinBlock.STYLE).equals(LinkPinBlock.Style.KNUCKLE_SPLIT)
+                            )) return true;
+                    if(block instanceof HeadstockBlock && (
+                            state.getValue(HeadstockBlock.STYLE).equals(HeadstockStyle.KNUCKLE) ||
+                            state.getValue(HeadstockBlock.STYLE).equals(HeadstockStyle.KNUCKLE_SPLIT)
+                            )) return true;
+                    if(block instanceof CopycatHeadstockBlock && (
+                            state.getValue(CopycatHeadstockBlock.STYLE).equals(HeadstockStyle.KNUCKLE) ||
+                            state.getValue(CopycatHeadstockBlock.STYLE).equals(HeadstockStyle.KNUCKLE_SPLIT)
+                    )) return true;
+                    return false;
+                },
+                JanConductorProvider.INSTANCE
+        );
+
+        //screw link
+        ConductorCandidateRegistry.registerBlockState(
+                state -> {
+                    Block block = state.getBlock();
+                    if(block instanceof LinkPinBlock && state.getValue(LinkPinBlock.STYLE).equals(LinkPinBlock.Style.SCREWLINK)) return true;
+                    if(block instanceof HeadstockBlock && state.getValue(HeadstockBlock.STYLE).equals(HeadstockStyle.SCREWLINK)) return true;
+                    if(block instanceof CopycatHeadstockBlock && state.getValue(CopycatHeadstockBlock.STYLE).equals(HeadstockStyle.SCREWLINK)) return true;
+                    return false;
+                },
+                ScrewLinkConductorProvider.INSTANCE
         );
     }
 }
