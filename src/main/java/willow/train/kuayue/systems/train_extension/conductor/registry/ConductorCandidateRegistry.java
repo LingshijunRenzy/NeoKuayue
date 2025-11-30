@@ -8,6 +8,7 @@ import willow.train.kuayue.initial.AllCompats;
 import willow.train.kuayue.initial.AllTags;
 import willow.train.kuayue.initial.compat.railways.RailwayCompat;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
+import willow.train.kuayue.systems.train_extension.conductor.providers.SimpleConductorProvider;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,6 +5,7 @@ import lombok.NonNull;
 import net.minecraft.resources.ResourceLocation;
 import willow.train.kuayue.block.panels.base.TrainPanelProperties;
 import willow.train.kuayue.block.panels.end_face.CustomRenderedEndfaceBlock;
+import willow.train.kuayue.initial.AllConductorTypes;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorType;
@@ -24,7 +25,7 @@ public class DF11GEndFaceBlock extends CustomRenderedEndfaceBlock implements Con
 
     @Override
     public @NonNull ConductorType getType() {
-        return ConductorType.DUMMY;
+        return AllConductorTypes.DUMMY;
     }
 
     @Override

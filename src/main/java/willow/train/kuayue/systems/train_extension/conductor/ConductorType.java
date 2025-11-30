@@ -8,17 +8,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ConductorType {
+    public static final Map<ResourceLocation, ConductorType> REGISTRY = new HashMap<>();
 
     private final ResourceLocation id;
     private final PropertyDispatch.QuadFunction<ConductorType, Train, Carriage, Boolean, Conductable> constructor;
     private final TriFunction<ConductorType, GlobalRailwayManager, CompoundTag, Conductable> deserializer;
 
-    public static final ConductorType DUMMY = new ConductorType(
-            new ResourceLocation("dummy"),
-            Conductor::new,
-            Conductor::new
-    );
 
     public ConductorType(ResourceLocation id,
                          PropertyDispatch.QuadFunction<ConductorType, Train, Carriage, Boolean, Conductable> constructor,
@@ -38,5 +37,9 @@ public class ConductorType {
 
     public ResourceLocation id() {
         return id;
+    }
+
+    public static void register(ConductorType type) {
+        REGISTRY.put(type.id(), type);
     }
 }
