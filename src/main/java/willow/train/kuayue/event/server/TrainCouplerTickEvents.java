@@ -1,6 +1,7 @@
 package willow.train.kuayue.event.server;
 
 import com.simibubi.create.Create;
+import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
@@ -98,7 +99,7 @@ public class TrainCouplerTickEvents {
             info.checkInterval = 0;
 
             float distanceToSqr = ConductorHelper.getConductorFlatDistToSqr(pair, info);
-            if(distanceToSqr > .2f || distanceToSqr == -1) {
+            if(distanceToSqr > .5f || distanceToSqr == -1) {
                 coolingDownToRemove.add(pair);
             }
         });
@@ -123,6 +124,20 @@ public class TrainCouplerTickEvents {
                 Conductable conductorB = conductorPair.conductorB();
                 boolean isAHead = conductorPair.isAHead();
                 boolean isBHead = conductorPair.isBHead();
+
+                Carriage carriageA = train.carriages.get(conductorA.carriage());
+                Carriage carriageB = t2.carriages.get(conductorB.carriage());
+
+                Level level = null;
+                if (carriageA.anyAvailableEntity() != null) {
+                    level = carriageA.anyAvailableEntity().level;
+                } else if (carriageB.anyAvailableEntity() != null) {
+                    level = carriageB.anyAvailableEntity().level;
+                }
+                if( level == null) continue;
+
+                if(!conductorA.canConnectTo(level, t2, carriageB, conductorB)) continue;
+                if(!conductorB.canConnectTo(level, train, carriageA, conductorA)) continue;
 
                 ConductorHelper.TrainSortResult sorted =
                         ConductorHelper.sortTrains(

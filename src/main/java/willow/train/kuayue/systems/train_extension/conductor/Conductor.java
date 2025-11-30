@@ -5,6 +5,7 @@ import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import willow.train.kuayue.initial.AllConductorTypes;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
 
 public class Conductor extends Conductable {
@@ -30,7 +31,8 @@ public class Conductor extends Conductable {
                                 Train otherTrain,
                                 Carriage otherCarriage,
                                 Conductable other) {
-        return true;
+        if(this.type().equals(AllConductorTypes.DUMMY)) return true;
+        return other.type().equals(this.type());
     }
 
     @Override

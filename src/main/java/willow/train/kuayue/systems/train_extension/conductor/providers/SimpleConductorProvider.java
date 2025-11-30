@@ -1,22 +1,14 @@
-package willow.train.kuayue.block.panels.conductor;
+package willow.train.kuayue.systems.train_extension.conductor.providers;
 
 import lombok.NonNull;
-import net.minecraft.world.phys.Vec2;
-import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
 import willow.train.kuayue.initial.AllConductorTypes;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorType;
 
-public class DF21HeadBlock extends FullShapeDirectionalBlock implements ConductorProvider {
+public class SimpleConductorProvider implements ConductorProvider {
+    public static final SimpleConductorProvider INSTANCE = new SimpleConductorProvider();
 
-    public DF21HeadBlock(Properties pProperties, Vec2 beginPos, Vec2 endPos) {
-        super(pProperties, beginPos, endPos);
-    }
-
-    public DF21HeadBlock(Properties properties) {
-        super(properties);
-    }
 
     @Override
     public @NonNull ConductorType getType() {
@@ -25,7 +17,7 @@ public class DF21HeadBlock extends FullShapeDirectionalBlock implements Conducto
 
     @Override
     public @NonNull Conductable modifyConductor(@NonNull Conductable rawConductor) {
-        rawConductor.setOffset(2);
+        rawConductor.setOffset(0.5f);
         return rawConductor;
     }
 }

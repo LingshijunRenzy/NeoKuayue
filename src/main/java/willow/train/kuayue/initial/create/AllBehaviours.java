@@ -12,7 +12,7 @@ import willow.train.kuayue.block.seat.YZSeatBlock;
 import willow.train.kuayue.initial.AllBlocks;
 import willow.train.kuayue.initial.AllElements;
 import willow.train.kuayue.initial.AllTags;
-import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
+import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
 
 public class AllBehaviours {
 
@@ -68,7 +68,7 @@ public class AllBehaviours {
     public static final InteractionReg<CouplerInteractionBehaviour> COUPLER_INTERACTION_BEHAVIOUR =
             new InteractionReg<CouplerInteractionBehaviour>("coupler_interaction_behaviour")
                     .behaviour(new CouplerInteractionBehaviour())
-                    .statePredicate(blockState -> blockState.getBlock() instanceof ConductorProvider)
+                    .statePredicate(blockState -> ConductorCandidateRegistry.getProvider(blockState) != null)
                     .submit(AllElements.testRegistry);
 
     public static void invoke(){}

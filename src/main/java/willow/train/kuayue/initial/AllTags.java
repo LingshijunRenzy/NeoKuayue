@@ -109,6 +109,9 @@ public class AllTags {
     public static final BlockTagReg PANTOGRAPH_TAG = new BlockTagReg("pantographs",  "pantographs")
             .submit(AllElements.testRegistry);
 
+    public static final BlockTagReg SIMPLE_CONDUCTOR = new BlockTagReg("simple_conductor", "conductor/simple_conductor")
+            .submit(AllElements.testRegistry);
+
     public static void invoke() {}
 
     @FunctionalInterface

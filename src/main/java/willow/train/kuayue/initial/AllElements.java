@@ -81,6 +81,7 @@ public class AllElements {
         AllEntities.invoke();
         AllOres.invoke();
         AllSounds.invoke();
+        AllConductorTypes.invoke();
         OverheadLineSystem.invoke();
 //        FluidsInit.register(testRegistry.eventBus);
 //        FluidTypesInit.register(testRegistry.eventBus);
