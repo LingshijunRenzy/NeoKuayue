@@ -130,9 +130,9 @@ public class TrainCouplerTickEvents {
 
                 Level level = null;
                 if (carriageA.anyAvailableEntity() != null) {
-                    level = carriageA.anyAvailableEntity().level;
+                    level = carriageA.anyAvailableEntity().level();
                 } else if (carriageB.anyAvailableEntity() != null) {
-                    level = carriageB.anyAvailableEntity().level;
+                    level = carriageB.anyAvailableEntity().level();
                 }
                 if( level == null) continue;
 
