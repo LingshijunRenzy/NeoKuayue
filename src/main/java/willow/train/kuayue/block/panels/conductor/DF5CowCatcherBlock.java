@@ -3,6 +3,7 @@ package willow.train.kuayue.block.panels.conductor;
 import lombok.NonNull;
 import net.minecraft.world.phys.Vec2;
 import willow.train.kuayue.block.panels.FullShapeDirectionalBlock;
+import willow.train.kuayue.initial.AllConductorTypes;
 import willow.train.kuayue.systems.train_extension.conductor.Conductable;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorProvider;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorType;
@@ -18,12 +19,12 @@ public class DF5CowCatcherBlock extends FullShapeDirectionalBlock implements Con
 
     @Override
     public @NonNull ConductorType getType() {
-        return ConductorType.DUMMY;
+        return AllConductorTypes.DUMMY;
     }
 
     @Override
     public @NonNull Conductable modifyConductor(@NonNull Conductable rawConductor) {
-        rawConductor.setOffset(1);
+        rawConductor.setOffset(0.5f);
         return rawConductor;
     }
 }

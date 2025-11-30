@@ -21,7 +21,7 @@ public class TrainMergePacket extends S2CPacket {
                 CreateClient.RAILWAYS.trains.get(buf.readUUID()),
                 buf.readBoolean(),
                 buf.readBoolean(),
-                buf.readInt(),
+                buf.readFloat(),
                 true
         );
     }
@@ -40,6 +40,6 @@ public class TrainMergePacket extends S2CPacket {
         buf.writeUUID(request.carriages().id);
         buf.writeBoolean(request.shouldReverseCarriages());
         buf.writeBoolean(request.isLocoHead());
-        buf.writeInt(request.spacing());
+        buf.writeFloat(request.spacing());
     }
 }
