@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 3,
-  "ingredient": {
-    "item": "kuayue:freight_c70_end_face"
-  },
-  "result": "kuayue:freight_c70_slab_bottom"
-}

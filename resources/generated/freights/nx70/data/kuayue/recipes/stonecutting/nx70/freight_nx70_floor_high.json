@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
-  "count": 3,
+  "count": 1,
   "ingredient": {
-    "item": "kuayue:freight_nx70_end_face"
+    "item": "kuayue:freight_nx70_floor_center"
   },
   "result": "kuayue:freight_nx70_floor_high"
 }

@@ -69,7 +69,6 @@ public class TrainExtensionSystem extends SavedData {
     public TrainExtensionSystem() {
         this.data = new HashMap<>();
         this.types = new HashMap<>();
-        types.put(ConductorType.DUMMY.id(), ConductorType.DUMMY);
         BOGEY_EXTENSION = new BogeyExtensionSystem();
         trainsToRemove = new HashSet<>();
         trainsToMerge = new HashSet<>();
