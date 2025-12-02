@@ -84,7 +84,7 @@ public class PlayerDataEvent {
         NetworkCacheManager.MANAGER.removeCache((ServerPlayer) player);
         if (PlayerDataManager.MANAGER.containsPlayerData(player)) {
             PlayerDataDist.DIST.saveToDisk(((ServerPlayer) player).getLevel());
-            PlayerDataManager.MANAGER.removePlayerData(player);
+            //PlayerDataManager.MANAGER.removePlayerData(player);
         }
     }
 
