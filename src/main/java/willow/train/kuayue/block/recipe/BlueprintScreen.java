@@ -1158,6 +1158,7 @@ public class BlueprintScreen extends AbstractContainerScreen<BlueprintMenu> {
         }
         boolean flag = super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
         for (Map.Entry<ClientTechTreeGroup, TechTreePanel> entry : panels.entrySet()) {
+            if(!entry.getValue().visible) continue;
             flag |= entry.getValue().mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
         }
         return flag;
