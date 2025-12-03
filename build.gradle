@@ -232,11 +232,6 @@ repositories {
         }
     }
 
-    maven {
-        name "devOSSnapshots"
-        url "https://mvn.devos.one/snapshots"
-    }
-
     mavenLocal()
 
     maven {
@@ -255,11 +250,7 @@ dependencies {
     // implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
     // implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-
-    //steam-n-rails dependency
-    //if you want to run game in dev environment, use maven local and switch comment/uncomment below
-    implementation fg.deobf("com.railwayteam.railways:Steam_Rails-forge-1.19.2:1.6.6+forge-mc1.19.2-build.1483")
-    //implementation fg.deobf("com.railwayteam.railways:Steam_Rails-forge-1.19.2:1.6.6+forge-mc1.19.2-local")
+    implementation fg.deobf("com.railwayteam.railways:Steam_Rails-forge-1.19.2:1.6.6+forge-mc1.19.2-local")
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
