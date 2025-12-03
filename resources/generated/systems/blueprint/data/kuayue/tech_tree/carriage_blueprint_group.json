@@ -36,7 +36,7 @@
 
     "node_weathering_resistant_steel_board": {
       "next_nodes": [
-        "node_carriage_m22_blueprint",
+        "node_carriage_22_blueprint",
         "node_head_df5_blueprint",
         "node_head_ss3_blueprint"
       ],
@@ -73,9 +73,8 @@
         "kuayue:weathering_resistant_steel_pole": 1
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:weathering_resistant_steel_block_0": 1},
       "item": {
-        "kuayue:weathering_resistant_steel_block_0": 1,
         "create:experience_nugget": 32
       }
     },
@@ -96,9 +95,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {"kuayue:freight_c70_blueprint": 1},
       "item": {
-        "kuayue:freight_c70_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -119,9 +117,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:freight_nx70_blueprint": 1},
       "item": {
-        "kuayue:freight_nx70_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -146,9 +143,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {"kuayue:carriage_25b_blueprint": 1},
       "item": {
-        "kuayue:carriage_25b_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -174,9 +170,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {"kuayue:head_df5_blueprint": 1},
       "item": {
-        "kuayue:head_df5_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -199,9 +194,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:head_jy290_blueprint": 1},
       "item": {
-        "kuayue:head_jy290_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -224,9 +218,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {  "kuayue:head_df11_blueprint": 1},
       "item": {
-        "kuayue:head_df11_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -249,9 +242,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {  "kuayue:head_ss3_blueprint": 1},
       "item": {
-        "kuayue:head_ss3_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -274,9 +266,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:carriage_25g_blueprint": 1},
       "item": {
-        "kuayue:carriage_25g_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -297,9 +288,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {  "kuayue:head_df21_blueprint": 1},
       "item": {
-        "kuayue:head_df21_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -322,14 +312,13 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:carriage_m1_blueprint": 1},
       "item": {
-        "kuayue:carriage_m1_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
 
-    "node_carriage_m22_blueprint": {
+    "node_carriage_22_blueprint": {
       "next_nodes": [
         "node_carriage_25b_blueprint"
       ],
@@ -347,9 +336,8 @@
         "create:precision_mechanism": 2
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {"kuayue:carriage_22_blueprint": 1},
       "item": {
-        "kuayue:carriage_22_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -372,9 +360,8 @@
         "create:precision_mechanism": 4
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:head_ss8_blueprint": 1},
       "item": {
-        "kuayue:head_ss8_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -397,9 +384,8 @@
         "create:precision_mechanism": 4
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {"kuayue:carriage_25z_blueprint": 1},
       "item": {
-        "kuayue:carriage_25z_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -422,9 +408,8 @@
         "create:precision_mechanism": 4
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:carriage_25k_blueprint": 1},
       "item": {
-        "kuayue:carriage_25k_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -447,9 +432,8 @@
         "create:precision_mechanism": 8
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:head_df11g_blueprint": 1},
       "item": {
-        "kuayue:head_df11g_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -473,9 +457,8 @@
         "create:precision_mechanism": 8
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {"kuayue:carriage_25t_blueprint": 1},
       "item": {
-        "kuayue:carriage_25t_blueprint": 1,
         "create:experience_nugget": 64
       }
     },
@@ -493,9 +476,8 @@
         "minecraft:green_dye": 128
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": {"kuayue:carriage_marshalled_blueprint": 1},
       "item": {
-        "kuayue:carriage_marshalled_blueprint": 1,
         "create:experience_nugget": 32
       }
     },
@@ -518,9 +500,8 @@
         "create:precision_mechanism": 16
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:head_hxd3d_blueprint": 1},
       "item": {
-        "kuayue:head_hxd3d_blueprint": 1,
         "create:experience_nugget": 128
       }
     },
@@ -541,9 +522,8 @@
         "create:precision_mechanism": 32
       },
       "advancements": [],
-      "blueprint": {},
+      "blueprint": { "kuayue:carriage_cr200j_blueprint": 1},
       "item": {
-        "kuayue:carriage_cr200j_blueprint": 1,
         "create:experience_nugget": 128
       }
     }

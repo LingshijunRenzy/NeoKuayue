@@ -12,7 +12,7 @@
   "sequence": [
     {
       "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
+      "node": "kuayue:carriage_blueprint_group.node_carriage_m1_blueprint",
       "paste_node_to_result": false,
       "ingredients": [
         {
@@ -69,6 +69,6 @@
 
   ],
   "transitionalItem": {
-    "item": "kuayue:slab_bottom_m1"
+    "item": "kuayue:train_moulds"
   }
 }

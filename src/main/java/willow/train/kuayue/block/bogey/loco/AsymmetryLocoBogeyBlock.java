@@ -1,3 +1,4 @@
+/*
 package willow.train.kuayue.block.bogey.loco;
 
 import com.google.common.collect.ImmutableList;
@@ -140,4 +141,4 @@ public class AsymmetryLocoBogeyBlock extends AbstractBogeyBlock<AsymmetryLocoBog
             return false;
         return !getValidPathfindingTypes(bogey.getStyle()).contains(currentEdge.getTrackMaterial().trackType);
     }
-}
+}*/
