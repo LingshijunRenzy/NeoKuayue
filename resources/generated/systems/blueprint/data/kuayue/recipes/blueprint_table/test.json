@@ -1,18 +1,19 @@
 {
   "type": "kuayue:blueprint_deploy",
-  "node": "kuayue:test.node",
+  "node": "kuayue:[.*].[.*]",
   "ingredients": [
     {
-      "item": "minecraft:stick"
+      "item": "create:empty_schematic"
     },
     {
-      "item": "kuayue:research_report"
+      "item": "create:empty_schematic"
     }
   ],
   "keepHeldItem": true,
+  "paste_node_to_result": true,
   "results": [
     {
-      "item": "minecraft:dirt"
+      "item": "create:empty_schematic"
     }
   ]
 }

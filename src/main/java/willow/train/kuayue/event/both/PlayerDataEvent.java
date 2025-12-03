@@ -53,6 +53,7 @@ public class PlayerDataEvent {
     public static void onLevelUnload(LevelEvent.Unload event) {
         if (event.getLevel().isClientSide()) return;
         NetworkCacheManager.MANAGER.stopAll();
+        PlayerDataManager.MANAGER.getPlayerData().clear();
     }
 
     @SubscribeEvent
