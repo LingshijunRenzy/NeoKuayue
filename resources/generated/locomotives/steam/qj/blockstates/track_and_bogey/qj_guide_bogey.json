@@ -1,20 +1,20 @@
 {
   "variants": {
     "axis=z,waterlogged=false": {
-      "model": "create:block/track/bogey/top",
+      "model": "kuayue:block/bogey/qj/mistakeblock",
       "y": 0
     },
     "axis=x,waterlogged=false": {
-      "model": "create:block/track/bogey/top",
+      "model": "kuayue:block/bogey/qj/mistakeblock",
       "y": 90
     },
     "axis=z,waterlogged=true": {
-      "model": "create:block/track/bogey/top",
+      "model": "kuayue:block/bogey/qj/mistakeblock",
       "y": 0
 
     },
     "axis=x,waterlogged=true": {
-      "model": "create:block/track/bogey/top",
+      "model": "kuayue:block/bogey/qj/mistakeblock",
       "y": 90
     }
   }
