@@ -53,10 +53,10 @@ public class QJGuideRenderer extends BogeyRenderer {
 
         boolean inInstancedContraption = vb == null;
 
-        BogeyModelData frame = getTransform(QJ_GUIDE_FRAME, ms, inInstancedContraption);
-        BogeyModelData[] wheels = getTransform(QJ_GUIDE_WHEEL, ms, inInstancedContraption, 1);
+      /*  BogeyModelData frame = getTransform(QJ_GUIDE_FRAME, ms, inInstancedContraption);
+        BogeyModelData[] wheels = getTransform(QJ_GUIDE_WHEEL, ms, inInstancedContraption, 1);*/
 
-        if (direction == Direction.SOUTH || direction == Direction.EAST) {
+       /* if (direction == Direction.SOUTH || direction == Direction.EAST) {
             if (inContraption) {
                 frame.translate(0, 0, 0.3).render(ms, light, vb);
 
@@ -91,7 +91,7 @@ public class QJGuideRenderer extends BogeyRenderer {
                         .render(ms, light, vb);
                 if (!inInstancedContraption) ms.popPose();
             }
-        }
+        }*/
     }
 
 
