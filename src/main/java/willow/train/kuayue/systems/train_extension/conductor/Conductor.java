@@ -32,6 +32,7 @@ public class Conductor extends Conductable {
                                 Carriage otherCarriage,
                                 Conductable other) {
         if(this.type().equals(AllConductorTypes.DUMMY)) return true;
+        if(other.type().equals(AllConductorTypes.DUMMY)) return true;
         return other.type().equals(this.type());
     }
 

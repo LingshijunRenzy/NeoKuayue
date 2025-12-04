@@ -103,9 +103,11 @@ public class AllLocoBogeys {
             .size(0.915F / 2F)
             .submit(testRegistry);
 
+
     public static final BogeySizeReg qjGuideAndesite = new BogeySizeReg("qj_guide_bogey_a")
             .size(0.915F / 2F)
             .submit(testRegistry);
+
 
     public static final BogeySizeReg qjGuide = new BogeySizeReg("qj_guide")
             .size(0.915F / 2F)
@@ -366,7 +368,7 @@ public class AllLocoBogeys {
                     .addBlock(() -> df5BackwardBogey.getEntry().get())
                     .withRenderer(() -> BogeyBlockEntityRenderer::new)
                     .submit(testRegistry);
-    public static final BogeyBlockReg<AsymmetryLocoBogeyBlock> qjGuideBogey =
+      public static final BogeyBlockReg<AsymmetryLocoBogeyBlock> qjGuideBogey =
             new BogeyBlockReg<AsymmetryLocoBogeyBlock>("qj_guide_bogey")
                     .block(AsymmetryLocoBogeyBlock::new)
                     .materialColor(MapColor.PODZOL)
