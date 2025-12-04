@@ -13,7 +13,7 @@
   "sequence": [
     {
       "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
+      "node": "kuayue:carriage_blueprint_group.node_head_df5_blueprint",
       "paste_node_to_result": false,
       "ingredients": [
         {
@@ -70,6 +70,6 @@
 
   ],
   "transitionalItem": {
-    "item":  "kuayue:df5_carport_1"
+    "item":  "kuayue:weathering_resistant_steel_board"
   }
 }
