@@ -185,7 +185,7 @@ public class CarriageUtil {
         }
 
         //assemblyDirection
-        ((AccessorCarriageContraption) cc).setAssemblyDirection(assemblyDirection.getOpposite());
+        //((AccessorCarriageContraption) cc).setAssemblyDirection(assemblyDirection.getOpposite());
 
         //update collision
         cc.invalidateColliders();

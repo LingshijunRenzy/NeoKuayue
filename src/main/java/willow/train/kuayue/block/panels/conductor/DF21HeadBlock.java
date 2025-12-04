@@ -20,7 +20,7 @@ public class DF21HeadBlock extends FullShapeDirectionalBlock implements Conducto
 
     @Override
     public @NonNull ConductorType getType() {
-        return AllConductorTypes.DUMMY;
+        return AllConductorTypes.JAN;
     }
 
     @Override

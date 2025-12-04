@@ -21,7 +21,7 @@ public class DF11CowCatcherBlock extends FullShapeDirectionalBlock implements Co
 
     @Override
     public @NotNull ConductorType getType() {
-        return AllConductorTypes.DUMMY;
+        return AllConductorTypes.JAN;
     }
 
     @Override
