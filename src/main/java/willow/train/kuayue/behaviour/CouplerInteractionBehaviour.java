@@ -12,11 +12,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.initial.AllSounds;
@@ -50,9 +52,17 @@ public class CouplerInteractionBehaviour extends MovingInteractionBehaviour {
             UUID newTrainId = UUID.randomUUID();
             ConductorHelper.divideTrains(train, newTrainId, carriageIndex, false);
             ConductorHelper.TrainDivideRequest request = new ConductorHelper.TrainDivideRequest(train, newTrainId, carriageIndex);
-            AllPackets.CHANNEL.boardcastToClients(
-                    new TrainDividePacket(request), (ServerLevel) player.level, player.blockPosition()
-            );
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            if(server != null) {
+                server.getPlayerList().getPlayers().forEach(p -> {
+                    AllPackets.CHANNEL.sendToClient(
+                            new TrainDividePacket(request),
+                            p
+                    );
+                });
+            } else {
+                Kuayue.LOGGER.error("Failed to send TrainDividePacket: MinecraftServer is null");
+            }
 
             Vec3 effectPos = cce.toGlobalVector(VecHelper.getCenterOf(localPos), 1);
             SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
