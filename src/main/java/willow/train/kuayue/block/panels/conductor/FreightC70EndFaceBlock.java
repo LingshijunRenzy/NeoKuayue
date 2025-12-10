@@ -14,7 +14,7 @@ public class FreightC70EndFaceBlock extends FreightEndFaceBlock implements Condu
 
     @Override
     public @NonNull ConductorType getType() {
-        return AllConductorTypes.DUMMY;
+        return AllConductorTypes.JAN;
     }
 
     @Override

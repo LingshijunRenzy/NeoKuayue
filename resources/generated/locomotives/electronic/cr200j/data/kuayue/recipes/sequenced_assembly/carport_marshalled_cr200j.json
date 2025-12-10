@@ -15,7 +15,7 @@
 
     {
       "type": "kuayue:blueprint_deploy",
-      "node": "kuayue:test.node",
+      "node":  "kuayue:carriage_blueprint_group.node_carriage_cr200j_blueprint",
       "paste_node_to_result": false,
       "ingredients": [
         {
@@ -69,6 +69,6 @@
 
   ],
   "transitionalItem": {
-    "item": "kuayue:carport_marshalled_cr200j"
+    "item": "kuayue:weathering_resistant_steel_board"
   }
 }

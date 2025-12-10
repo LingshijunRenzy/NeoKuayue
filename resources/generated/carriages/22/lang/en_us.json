@@ -17,5 +17,9 @@
   "block.kuayue.22_window": "22 Carriage Window",
   "block.kuayue.22_panel_bottom": "22 Carriage Bottom Panel",
   "block.kuayue.22_panel_middle": "22 Carriage Middle Panel",
-  "item.kuayue.carriage_22_blueprint": "Carriage 22 Blueprint"
+  "item.kuayue.carriage_22_blueprint": "Carriage 22 Blueprint",
+  "tech_tree.kuayue.group.carriage_22_blueprint.name": "Carriage 22 Blueprint",
+  "tech_tree.kuayue.group.carriage_22_blueprint.description": "Design and prototype Carriage 22. Be able to obtain the design drawings of Carriage 22.",
+  "tech_tree.kuayue.group.carriage_22_circuit_blueprint.name": "Carriage 22 Circuit Blueprint",
+  "tech_tree.kuayue.group.carriage_22_circuit_blueprint.description": "Develop the circuit board for the Carriage 22"
 }

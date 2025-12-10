@@ -25,7 +25,7 @@ public class DF11GEndFaceBlock extends CustomRenderedEndfaceBlock implements Con
 
     @Override
     public @NonNull ConductorType getType() {
-        return AllConductorTypes.DUMMY;
+        return AllConductorTypes.JAN;
     }
 
     @Override
