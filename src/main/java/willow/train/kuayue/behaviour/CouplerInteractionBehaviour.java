@@ -61,7 +61,7 @@ public class CouplerInteractionBehaviour extends MovingInteractionBehaviour {
                     );
                 });
             } else {
-                Kuayue.LOGGER.error("Failed to send TrainDividePacket: MinecraftServer is null");
+                Kuayue.LOGGER.debug("Failed to send TrainDividePacket: MinecraftServer is null");
             }
 
             Vec3 effectPos = cce.toGlobalVector(VecHelper.getCenterOf(localPos), 1);
