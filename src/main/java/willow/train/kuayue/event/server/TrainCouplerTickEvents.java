@@ -7,13 +7,14 @@ import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import com.simibubi.create.foundation.utility.Couple;
 import lombok.extern.slf4j.Slf4j;
-import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import willow.train.kuayue.Kuayue;
 import willow.train.kuayue.initial.AllPackets;
 import willow.train.kuayue.network.s2c.TrainMergePacket;
@@ -159,6 +160,7 @@ public class TrainCouplerTickEvents {
         }
 
         for (ConductorHelper.TrainMergeRequest request : Kuayue.TRAIN_EXTENSION.trainsToMerge) {
+            Kuayue.LOGGER.debug("[SERVER] Before MergeTrain method call");
             boolean b = ConductorHelper.mergeTrains(
                     request.loco(),
                     request.carriages(),
@@ -168,10 +170,20 @@ public class TrainCouplerTickEvents {
                     request.clientSide()
             );
             if(b) {
-                AllPackets.CHANNEL.boardcastToClients(
-                        new TrainMergePacket(request), event.getServer().getLevel(Level.OVERWORLD), BlockPos.ZERO
-                );
+                MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+                if(server != null) {
+                    server.getPlayerList().getPlayers().forEach(p -> {
+                        AllPackets.CHANNEL.sendToClient(
+                                new TrainMergePacket(request),
+                                p
+                        );
+                    });
+                } else {
+                    Kuayue.LOGGER.debug("Failed to send TrainMergePacket: MinecraftServer is null");
+                }
                 Kuayue.TRAIN_EXTENSION.newlyMerged.add(request.loco());
+            } else {
+                Kuayue.LOGGER.debug("[SERVER] MergeTrain failed!");
             }
         }
 
