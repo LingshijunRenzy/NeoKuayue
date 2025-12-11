@@ -1,0 +1,23 @@
+{
+  "values": [
+    "kuayue:head_df11g_blueprint",
+    "kuayue:head_df21_blueprint",
+    "kuayue:head_df5_blueprint",
+    "kuayue:head_df11_blueprint",
+    "kuayue:head_jy290_blueprint",
+    "kuayue:head_hxd3d_blueprint",
+    "kuayue:head_ss3_blueprint",
+    "kuayue:head_ss8_blueprint",
+    "kuayue:carriage_25b_blueprint",
+    "kuayue:carriage_25g_blueprint",
+    "kuayue:carriage_25k_blueprint",
+    "kuayue:carriage_25z_blueprint",
+    "kuayue:carriage_25t_blueprint",
+    "kuayue:carriage_22_blueprint",
+    "kuayue:carriage_cr200j_blueprint",
+    "kuayue:carriage_m1_blueprint",
+    "kuayue:carriage_marshalled_blueprint",
+    "kuayue:freight_c70_blueprint",
+    "kuayue:freight_nx70_blueprint"
+  ]
+}

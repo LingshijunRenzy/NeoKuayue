@@ -19,6 +19,7 @@
     "MixinTrackTargetingBlockItem",
     "MixinTrain",
     "SnrCompatibilityMixinStationBlockEntity",
+    "MixinBeltDeployerCallbacks",
     "client.MixinBlockReg",
     "compat.railways.MixinRailwaysTrainUtils"
   ],

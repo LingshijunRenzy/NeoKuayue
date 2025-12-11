@@ -2,34 +2,26 @@ package willow.train.kuayue.systems.tech_tree.recipes;
 
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
  import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.initial.recipe.AllRecipes;
 import willow.train.kuayue.systems.tech_tree.NodeLocation;
 
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
 
-    private NodeLocation node;
     private String nodePatternSource;
     private Predicate<NodeLocation> matcher;
     private boolean pasteNodeToResult;
+    private boolean copyFromHeldItem;
 
     public BlueprintDeployRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
         super(params);
@@ -72,30 +64,19 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
         return result;
     }
 
-    @Override
-    public @NotNull List<ItemStack> rollResults() {
-        return rollResults(this.getRollableResults());
-    }
-
-    @Override
-    public @NotNull List<ItemStack> rollResults(@NotNull List<ProcessingOutput> rollableResults) {
-        List<ItemStack> results = super.rollResults(rollableResults);
-        if (!pasteNodeToResult) {
-            return results;
+    public ItemStack replaceResults(ItemStack result, ItemStack held) {
+        if (copyFromHeldItem) {
+            return held.copy();
         }
-
-        ItemStack held = this.ingredients.get(1).getItems()[0];
-        if(!held.hasTag() || !held.getTag().contains("node")) {
-            return results;
+        if(!pasteNodeToResult) {
+            return result;
         }
-        String nodeStr = held.getTag().getString("node");
-
-        for(ProcessingOutput output : rollableResults) {
-            ItemStack stack = output.getStack();
-            CompoundTag nbt = stack.getOrCreateTag();
+        if(held.hasTag() && held.getTag().contains("node")) {
+            String nodeStr = held.getTag().getString("node");
+            CompoundTag nbt = result.getOrCreateTag();
             nbt.putString("node", nodeStr);
         }
-        return results;
+        return result;
     }
 
     @Override
@@ -109,6 +90,8 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
         this.nodePatternSource = json.get("node").getAsString();
         this.pasteNodeToResult = json.has("paste_node_to_result") &&
                 json.get("paste_node_to_result").getAsBoolean();
+        this.copyFromHeldItem = json.has("copy_from_held_item") &&
+                json.get("copy_from_held_item").getAsBoolean();
         compileMatcher();
     }
 
@@ -117,6 +100,7 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
         super.writeAdditional(json);
         json.addProperty("node", this.nodePatternSource);
         json.addProperty("paste_node_to_result", this.pasteNodeToResult);
+        json.addProperty("copy_from_held_item", this.copyFromHeldItem);
     }
 
     @Override
@@ -124,6 +108,7 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
         super.readAdditional(buffer);
         this.nodePatternSource = buffer.readUtf();
         this.pasteNodeToResult = buffer.readBoolean();
+        this.copyFromHeldItem = buffer.readBoolean();
         compileMatcher();
     }
 
@@ -132,6 +117,7 @@ public class BlueprintDeployRecipe extends DeployerApplicationRecipe {
         super.writeAdditional(buffer);
         buffer.writeUtf(this.nodePatternSource);
         buffer.writeBoolean(this.pasteNodeToResult);
+        buffer.writeBoolean(this.copyFromHeldItem);
     }
 
     @Override
