@@ -1,21 +1,19 @@
-
 {
   "type": "kuayue:blueprint_deploy",
   "node": "kuayue:[.*].[.*]",
   "paste_node_to_result": true,
-  "copy_from_held_item": true,
   "ingredients": [
     {
       "item": "create:empty_schematic"
     },
     {
-      "tag": "kuayue:blueprint"
+      "item": "kuayue:carriage_25z_blueprint"
     }
   ],
   "keepHeldItem": true,
   "results": [
     {
-      "item": "kuayue:freight_nx70_blueprint"
+      "item": "kuayue:carriage_25z_blueprint"
     }
   ]
 }
