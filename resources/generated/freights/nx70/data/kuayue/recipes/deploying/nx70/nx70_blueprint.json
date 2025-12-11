@@ -1,8 +1,7 @@
-
 {
   "type": "kuayue:blueprint_deploy",
-  "node": "kuayue:test.node",
-  "paste_node_to_result": false,
+  "node": "kuayue:[.*].[.*]",
+  "paste_node_to_result": true,
   "ingredients": [
     {
       "item": "create:empty_schematic"

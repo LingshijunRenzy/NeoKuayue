@@ -7,13 +7,13 @@
       "item": "create:empty_schematic"
     },
     {
-      "item": "kuayue:head_df21_blueprint"
+      "item": "kuayue:carriage_25t_blueprint"
     }
   ],
   "keepHeldItem": true,
   "results": [
     {
-      "item": "kuayue:head_df21_blueprint"
+      "item": "kuayue:carriage_25t_blueprint"
     }
   ]
 }
