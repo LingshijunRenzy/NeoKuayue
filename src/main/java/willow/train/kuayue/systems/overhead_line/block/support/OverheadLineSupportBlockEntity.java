@@ -682,6 +682,10 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
             return false;
         }
 
+        if(simulate) {
+            return true;
+        }
+
         this.x_offset = tag.getFloat("x_offset");
         this.y_offset = tag.getFloat("y_offset");
         this.z_offset = tag.getFloat("z_offset");
