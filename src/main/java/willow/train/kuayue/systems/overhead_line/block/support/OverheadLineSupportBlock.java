@@ -1,6 +1,8 @@
 package willow.train.kuayue.systems.overhead_line.block.support;
 
 import com.simibubi.create.AllItems;
+import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
@@ -16,7 +18,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -27,7 +31,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import willow.train.kuayue.systems.overhead_line.OverheadLineSystem;
 
-public abstract class OverheadLineSupportBlock<T extends OverheadLineSupportBlockEntity> extends Block implements IBE<T>, IWrenchable {
+public abstract class OverheadLineSupportBlock<T extends OverheadLineSupportBlockEntity> extends Block implements IBE<T>, IWrenchable, ITransformableBlock {
     public OverheadLineSupportBlock(Properties pProperties) {
         super(pProperties.noOcclusion());
         this.registerDefaultState(getDefaultState());
@@ -97,5 +101,36 @@ public abstract class OverheadLineSupportBlock<T extends OverheadLineSupportBloc
         }
         
         return InteractionResult.PASS;
+    }
+
+    @Override
+    public BlockState transform(BlockState state, StructureTransform transform) {
+        if (transform.mirror != null) {
+            state = state.mirror(transform.mirror);
+        }
+
+        if (state.hasProperty(FACING)) {
+            Direction facing = state.getValue(FACING);
+            Direction f = transform.rotateFacing(facing);
+            state = state.setValue(FACING, f);
+        }
+
+        return state;
+    }
+
+    @Override
+    public BlockState rotate(BlockState pState, Rotation pRotation) {
+        if (pState.hasProperty(FACING)) {
+            return pState.setValue(FACING, pRotation.rotate(pState.getValue(FACING)));
+        }
+        return pState;
+    }
+
+    @Override
+    public BlockState mirror(BlockState pState, Mirror pMirror) {
+        if (pState.hasProperty(FACING)) {
+            return pState.setValue(FACING, pMirror.mirror(pState.getValue(FACING)));
+        }
+        return pState;
     }
 }
