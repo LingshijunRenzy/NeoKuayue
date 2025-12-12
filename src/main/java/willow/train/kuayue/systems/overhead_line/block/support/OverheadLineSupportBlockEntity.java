@@ -6,6 +6,7 @@ import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
+import com.simibubi.create.content.equipment.clipboard.ClipboardCloneable;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import kasuga.lib.core.create.boundary.ResourcePattle;
@@ -49,7 +50,7 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements MenuProvider {
+public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements MenuProvider, ClipboardCloneable {
 
     public record Connection(
             BlockPos absolutePos,
@@ -457,6 +458,15 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
     }
 
     @Override
+    public void writeSafe(CompoundTag tag) {
+        super.writeSafe(tag);
+        tag.putFloat("x_offset", x_offset);
+        tag.putFloat("y_offset", y_offset);
+        tag.putFloat("z_offset", z_offset);
+        tag.putFloat("rotation", rotation);
+    }
+
+    @Override
     public void destroy() {
         super.destroy();
         removeAllConnections();
@@ -648,5 +658,37 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
 
     public boolean isWireTypeAllowed(OverheadLineType type){
         return configuration.typePredictor().test(type);
+    }
+
+
+    @Override
+    public String getClipboardKey() {
+        return "overhead_line_support";
+    }
+
+    @Override
+    public boolean writeToClipboard(CompoundTag tag, Direction side) {
+        tag.putFloat("x_offset", x_offset);
+        tag.putFloat("y_offset", y_offset);
+        tag.putFloat("z_offset", z_offset);
+        tag.putFloat("rotation", rotation);
+
+        return true;
+    }
+
+    @Override
+    public boolean readFromClipboard(CompoundTag tag, Player player, Direction side, boolean simulate) {
+        if (!(tag.contains("x_offset") && tag.contains("y_offset") && tag.contains("z_offset") && tag.contains("rotation"))) {
+            return false;
+        }
+
+        this.x_offset = tag.getFloat("x_offset");
+        this.y_offset = tag.getFloat("y_offset");
+        this.z_offset = tag.getFloat("z_offset");
+        this.rotation = tag.getFloat("rotation");
+
+        this.notifyUpdate();
+        this.onConnectionModification();
+        return true;
     }
 }
