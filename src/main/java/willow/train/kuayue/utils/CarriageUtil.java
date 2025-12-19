@@ -2,18 +2,23 @@ package willow.train.kuayue.utils;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.StructureTransform;
+import com.simibubi.create.content.contraptions.*;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
+import com.simibubi.create.content.contraptions.minecart.TrainCargoManager;
+import com.simibubi.create.content.contraptions.render.ContraptionRenderDispatcher;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.trains.entity.*;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Iterate;
+import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,9 +27,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
 import org.apache.commons.lang3.tuple.MutablePair;
-import willow.train.kuayue.mixins.mixin.AccessorCarriageBogey;
-import willow.train.kuayue.mixins.mixin.AccessorCarriageContraption;
-import willow.train.kuayue.mixins.mixin.AccessorContraption;
+import willow.train.kuayue.mixins.mixin.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,8 +49,17 @@ public class CarriageUtil {
     }
 
     //对反转转向架的车厢重新映射车厢Contraption
-    public static boolean remapCarriageContraption(Carriage carriage, boolean isClientSide) {
+    public static boolean remapCarriage(Carriage carriage, boolean isClientSide) {
         if(carriage == null) return false;
+
+        boolean remapped = remapCarriageContraption(carriage, isClientSide);
+        boolean storageRemapped = remapCarriageStorage(carriage, isClientSide);
+
+        return remapped || storageRemapped;
+    }
+
+
+    public static boolean remapCarriageContraption(@NonNull Carriage carriage, boolean isClientSide) {
 
         CarriageContraptionEntity cce = carriage.anyAvailableEntity();
         if (cce == null) return false;
@@ -66,7 +78,19 @@ public class CarriageUtil {
         HashMap<BlockPos, StructureTemplate.StructureBlockInfo> newBlocks = new HashMap<>();
         cc.getBlocks().forEach((k,v) -> {
             BlockPos newPos = transform.apply(k);
-            newBlocks.put(newPos, StructureTransformUtil.getTransformedStructureBlockInfo(v, transform));
+            StructureTemplate.StructureBlockInfo newInfo = StructureTransformUtil.getTransformedStructureBlockInfo(v, transform);
+
+            if(newInfo.nbt != null && newInfo.nbt.contains("Controller")) {
+                CompoundTag tag = newInfo.nbt.getCompound("Controller");
+                BlockPos oldController = new BlockPos(tag.getInt("X"), tag.getInt("Y"), tag.getInt("Z"));
+                BlockPos newController = transform.apply(oldController);
+                tag.putInt("X", newController.getX());
+                tag.putInt("Y", newController.getY());
+                tag.putInt("Z", newController.getZ());
+                newInfo.nbt.put("Controller", tag);
+            }
+
+            newBlocks.put(newPos, newInfo);
         });
         ((AccessorContraption) cc).setBlocks(newBlocks);
 
@@ -122,7 +146,9 @@ public class CarriageUtil {
             if(k == null || v == null) return;
 
             BlockPos newPos = transform.apply(k);
-            StructureTemplate.StructureBlockInfo newInfo = StructureTransformUtil.getTransformedStructureBlockInfo(v, transform);
+            // multiblocks.info are referencing the same info in blocks
+            BlockPos newInfoPos = transform.apply(v.pos);
+            StructureTemplate.StructureBlockInfo newInfo = cc.getBlocks().get(newInfoPos);
 
             capturedMultiblocks.put(newPos, newInfo);
         });
@@ -138,50 +164,27 @@ public class CarriageUtil {
 
         //client
         if(isClientSide) {
-            //modelData
-            Map<BlockPos, ModelData> newModelData = new HashMap<>();
-            cc.modelData.forEach((k,v) -> {
-                newModelData.put(transform.apply(k), v);
-            });
-            cc.modelData = newModelData;
+            cc.presentBlockEntities.forEach((k, v) -> {
+                if(v instanceof FluidTankBlockEntity ft && ft.isController()) {
+                    CompoundTag tag = new CompoundTag();
+                    ft.write(tag, false);
+                    CompoundTag tankContent = tag.getCompound("TankContent");
 
-            //presentBlockEntites
-            Map<BlockPos, BlockEntity> newEntityData = new HashMap<>();
-            Map<BlockEntity, BlockEntity> oldToNewEntityData =  new HashMap<>();
-            cc.presentBlockEntities.forEach((k,v) -> {
-                BlockPos newPos = transform.apply(k);
+                    BlockPos newPos = transform.apply(k);
 
-                BlockEntity newBE = StructureTransformUtil.getTransformedBlockEntity(v, transform);
-                if (newBE != null) {
-                    newBE.setChanged();
-                    if(newBE instanceof SmartBlockEntity sbe) {
-                        sbe.requestModelDataUpdate();
-                        sbe.notifyUpdate();
-                    }
-                    newEntityData.put(newPos, newBE);
-                    oldToNewEntityData.put(v, newBE);
+                    cc.getBlocks().get(newPos).nbt.put("TankContent", tankContent);
                 }
             });
+
+            CompoundTag tag = cc.writeNBT(true);
+            cc.modelData.clear();
             cc.presentBlockEntities.clear();
-            cc.presentBlockEntities.putAll(newEntityData);
+            cc.maybeInstancedBlockEntities.clear();
+            cc.specialRenderedBlockEntities.clear();
 
-            //maybeInstancedBlockEntities
-            for(int i = 0; i < cc.maybeInstancedBlockEntities.size(); i++) {
-                BlockEntity oldEntity = cc.maybeInstancedBlockEntities.get(i);
-                BlockEntity newEntity = oldToNewEntityData.get(oldEntity);
-                if(newEntity != null) {
-                    cc.maybeInstancedBlockEntities.set(i, newEntity);
-                } else {
-                    newEntity = StructureTransformUtil.getTransformedBlockEntity(oldEntity, transform);
-                    if (newEntity != null) {
-                        newEntity.setChanged();
-                        cc.maybeInstancedBlockEntities.set(i, newEntity);
-                    }
-                }
-            }
+            cc.readNBT(cc.getContraptionWorld(), tag, true);
 
-            //specialRenderedBlockEntitie
-            cc.specialRenderedBlockEntities.replaceAll(oldToNewEntityData::get);
+            ContraptionRenderDispatcher.invalidate(cc);
         }
 
         //assemblyDirection
@@ -189,6 +192,48 @@ public class CarriageUtil {
 
         //update collision
         cc.invalidateColliders();
+
+        return true;
+    }
+
+    public static boolean remapCarriageStorage(@NonNull Carriage carriage, boolean isClientSide) {
+        if(isClientSide) return true;
+
+        TrainCargoManager manager = carriage.storage;
+        if (manager == null) return false;
+
+        CarriageContraptionEntity cce = carriage.anyAvailableEntity();
+        if (cce == null) return false;
+
+        Contraption contraption = cce.getContraption();
+        if (!(contraption instanceof CarriageContraption cc)) return false;
+
+        Direction assemblyDirection = cc.getAssemblyDirection();
+        int bogeySpacing = carriage.bogeySpacing;
+        StructureTransform transform = new StructureTransform(
+                BlockPos.ZERO.relative(assemblyDirection, bogeySpacing),
+                Direction.Axis.Y, Rotation.CLOCKWISE_180, Mirror.NONE
+        );
+
+        Map<BlockPos, MountedStorage> newStorage = new HashMap<>();
+        ((AccessorMountedStorageManager) manager).getStorage().forEach((k, v) -> {
+            BlockPos newPos = transform.apply(k);
+            newStorage.put(newPos, v);
+        });
+        ((AccessorMountedStorageManager) manager).setStorage(newStorage);
+
+        Map<BlockPos, MountedFluidStorage> newFluidStorage = new HashMap<>();
+        ((AccessorMountedStorageManager) manager).getFluidStorage().forEach((k, v) -> {
+            BlockPos newPos = transform.apply(k);
+            newFluidStorage.put(newPos, v);
+        });
+        ((AccessorMountedStorageManager) manager).setFluidStorage(newFluidStorage);
+
+        manager.createHandlers();
+        ((AccessorTrainCargoManager) manager).invokeChangeDetected();
+        manager.resetIdleCargoTracker();
+
+        cce.syncCarriage();
 
         return true;
     }

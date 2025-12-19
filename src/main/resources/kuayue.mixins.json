@@ -12,6 +12,8 @@
     "AccessorExternalRemainderBlockItem",
     "AccessorPlayerAdvancement",
     "AccessorTrain",
+    "AccessorMountedStorageManager",
+    "AccessorTrainCargoManager",
     "MixinAbstractContraptionEntity",
     "MixinGlobalRailwayManager",
     "MixinSimpleBlockMovingInteraction",

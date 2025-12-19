@@ -413,7 +413,7 @@ public class ConductorHelper {
         if(isLocoHead ^ isCarriageTail) {
             carriageCarts.forEach(c -> {
                 reverseBogeys(c);
-                boolean success = remapCarriageContraption(c, clientSide);
+                boolean success = remapCarriage(c, clientSide);
                 if(!clientSide && !success){
                     TrainAdditionalData trainAdditionalData = Kuayue.TRAIN_EXTENSION.get(carriages.id);
                     if(trainAdditionalData != null){
