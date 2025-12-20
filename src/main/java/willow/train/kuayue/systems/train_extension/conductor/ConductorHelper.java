@@ -469,7 +469,6 @@ public class ConductorHelper {
         }
 
         loco.collectInitiallyOccupiedSignalBlocks();
-        carriages.collectInitiallyOccupiedSignalBlocks();
 
         if(!clientSide) {
             // effects
