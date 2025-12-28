@@ -3,7 +3,9 @@ package willow.train.kuayue.mixins.mixin;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -59,7 +61,9 @@ public class MixinSequencedAssemblyRecipe {
 
     @Unique
     public int kuayue$hashProcessingOutput(ProcessingOutput output) {
-        return Objects.hash(output.getStack().getItem(), output.getChance());
+        ResourceLocation rl = ForgeRegistries.ITEMS.getKey(output.getStack().getItem());
+        if (rl == null) return 0;
+        return Objects.hash(rl.toString(), output.getChance());
     }
 
     @Unique
