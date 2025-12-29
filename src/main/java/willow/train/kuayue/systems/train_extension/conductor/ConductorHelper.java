@@ -412,6 +412,10 @@ public class ConductorHelper {
         //头-头或尾-尾情况需要反转
         if(isLocoHead ^ isCarriageTail) {
             carriageCarts.forEach(c -> {
+                if(clientSide) {
+                    CarriageContraptionEntity cce = c.anyAvailableEntity();
+                    if(cce == null) return; // carriage is out of view
+                }
                 reverseBogeys(c);
                 boolean success = remapCarriage(c, clientSide);
                 if(!clientSide && !success){
@@ -637,6 +641,9 @@ public class ConductorHelper {
             );
             MinecraftForge.EVENT_BUS.post(event);
         }
+
+        loco.collectInitiallyOccupiedSignalBlocks();
+        carriage.collectInitiallyOccupiedSignalBlocks();
     }
 
     private static void copyStress(double[] locoStress, double[] cartStress, double[] neoStress) {

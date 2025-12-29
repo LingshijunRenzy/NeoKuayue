@@ -265,6 +265,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:lan-server-properties-387365:3900754")
 
+    implementation 'com.google.code.gson:gson:2.13.2'
+
     implementation "org.spongepowered:mixin:${mixin_version}"
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
     testAnnotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
