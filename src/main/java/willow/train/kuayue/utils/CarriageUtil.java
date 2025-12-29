@@ -118,15 +118,15 @@ public class CarriageUtil {
 
     private static void calculateItemVaultControllerMap(CarriageContraption cc, RemapContext context) {
         cc.getBlocks().forEach((k,v) -> {
-            if (v.nbt != null && v.nbt.contains("Controller")) {
-                CompoundTag tag = v.nbt.getCompound("Controller");
+            if (v.nbt() != null && v.nbt().contains("Controller")) {
+                CompoundTag tag = v.nbt().getCompound("Controller");
                 BlockPos oldController = new BlockPos(tag.getInt("X"), tag.getInt("Y"), tag.getInt("Z"));
-                if(!oldController.equals(k) || !ItemVaultBlock.isVault(v.state)) return;
+                if(!oldController.equals(k) || !ItemVaultBlock.isVault(v.state())) return;
 
-                Direction.Axis axis = v.state.getValue(ItemVaultBlock.HORIZONTAL_AXIS);
+                Direction.Axis axis = v.state().getValue(ItemVaultBlock.HORIZONTAL_AXIS);
 
-                int width = v.nbt.getInt("Size") - 1;
-                int length = v.nbt.getInt("Length") - 1;
+                int width = v.nbt().getInt("Size") - 1;
+                int length = v.nbt().getInt("Length") - 1;
                 BlockPos newController;
 
                 if(axis == Direction.Axis.X) {
@@ -141,12 +141,12 @@ public class CarriageUtil {
 
     private static void calculateFluidTankControllerMap(CarriageContraption cc, RemapContext context) {
         cc.getBlocks().forEach((k,v) -> {
-            if (v.nbt != null && v.nbt.contains("Controller")) {
-                CompoundTag tag = v.nbt.getCompound("Controller");
+            if (v.nbt() != null && v.nbt().contains("Controller")) {
+                CompoundTag tag = v.nbt().getCompound("Controller");
                 BlockPos oldController = new BlockPos(tag.getInt("X"), tag.getInt("Y"), tag.getInt("Z"));
-                if(!oldController.equals(k) || !FluidTankBlock.isTank(v.state)) return;
+                if(!oldController.equals(k) || !FluidTankBlock.isTank(v.state())) return;
 
-                int width = v.nbt.getInt("Size") - 1;
+                int width = v.nbt().getInt("Size") - 1;
                 BlockPos newController = context.apply(oldController).offset(-width, 0, -width);
                 context.fluidTankControllerTransform.put(oldController, newController);
             }
@@ -222,7 +222,7 @@ public class CarriageUtil {
             BlockPos newPos = context.apply(k);
             StructureTemplate.StructureBlockInfo newInfo = StructureTransformUtil.getTransformedStructureBlockInfo(v, context.transform);
 
-            if(newInfo.nbt != null && newInfo.nbt.contains("Controller")) {
+            if(newInfo.nbt() != null && newInfo.nbt().contains("Controller")) {
                 handleStorageBlockNBT(newBlocks, k, newPos, newInfo, context);
             } else {
                 newBlocks.put(newPos, newInfo);
@@ -236,14 +236,14 @@ public class CarriageUtil {
                                               BlockPos newPos,
                                               StructureTemplate.StructureBlockInfo info,
                                               RemapContext context) {
-        if(info.nbt == null || !info.nbt.contains("Controller")) return;
-        CompoundTag tag = info.nbt.getCompound("Controller").copy();
+        if(info.nbt() == null || !info.nbt().contains("Controller")) return;
+        CompoundTag tag = info.nbt().getCompound("Controller").copy();
         BlockPos oldController = new BlockPos(tag.getInt("X"), tag.getInt("Y"), tag.getInt("Z"));
 
         BlockPos newController;
-        if(ItemVaultBlock.isVault(info.state)) {
+        if(ItemVaultBlock.isVault(info.state())) {
             newController = context.itemVaultControllerTransform.get(oldController);
-        } else if(FluidTankBlock.isTank(info.state)) {
+        } else if(FluidTankBlock.isTank(info.state())) {
             newController = context.fluidTankControllerTransform.get(oldController);
         } else {
             return;
@@ -257,21 +257,21 @@ public class CarriageUtil {
         tag.putInt("Y", newController.getY());
         tag.putInt("Z", newController.getZ());
 
-        info.nbt.put("Controller", tag);
+        info.nbt().put("Controller", tag);
         if(oldPos.equals(oldController)) {  //controller block itself
             //move it to new controller's transformed position
             StructureTemplate.StructureBlockInfo tankInfo = new StructureTemplate.StructureBlockInfo(
                     newController,
-                    info.state.rotate(Rotation.CLOCKWISE_180),
-                    info.nbt
+                    info.state().rotate(Rotation.CLOCKWISE_180),
+                    info.nbt()
             );
             newBlocks.put(newController, tankInfo);
         } else if (newPos.equals(newController)) {  //the tank in new controller position
             //move it to old controller's transformed position
             StructureTemplate.StructureBlockInfo tankInfo = new StructureTemplate.StructureBlockInfo(
                     context.apply(oldController),
-                    info.state.rotate(Rotation.CLOCKWISE_180),
-                    info.nbt
+                    info.state().rotate(Rotation.CLOCKWISE_180),
+                    info.nbt()
             );
             newBlocks.put(context.apply(oldController), tankInfo);
         } else {
@@ -341,7 +341,7 @@ public class CarriageUtil {
         accessor.getCapturedMultiblocks().forEach((k,v) -> {
             BlockPos newPos = context.apply(k);
             // multiblocks.info are referencing the same info in blocks
-            BlockPos newInfoPos = context.apply(v.pos);
+            BlockPos newInfoPos = context.apply(v.pos());
             StructureTemplate.StructureBlockInfo newInfo = newBlocks.get(newInfoPos);
 
             newCapturedMultiblocks.put(newPos, newInfo);
@@ -403,8 +403,8 @@ public class CarriageUtil {
         BlockPos newPos = context.apply(pos).offset(-width, 0, -width);
 
         StructureTemplate.StructureBlockInfo info = cc.getBlocks().get(newPos);
-        if(info == null || info.nbt == null) return;
-        info.nbt.put("TankContent", tankContent);
+        if(info == null || info.nbt() == null) return;
+        info.nbt().put("TankContent", tankContent);
     }
 
     private static void reloadContraptionRender(CarriageContraption cc, CarriageContraptionEntity cce) {
@@ -414,7 +414,7 @@ public class CarriageUtil {
         cc.maybeInstancedBlockEntities.clear();
         cc.specialRenderedBlockEntities.clear();
 
-        cc.readNBT(cce.level, tag, false);
+        cc.readNBT(cce.level(), tag, false);
         ContraptionRenderDispatcher.invalidate(cc);
 
         ((AccessorContraption) cc).getStorage().bindTanks(cc.presentBlockEntities);

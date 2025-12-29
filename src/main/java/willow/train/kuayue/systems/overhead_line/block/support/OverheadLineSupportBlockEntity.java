@@ -247,13 +247,13 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
         float manualDeg = getRotation();
 
         Matrix4f matrix = new Matrix4f();
-        matrix.setIdentity();
-        matrix.multiplyWithTranslation(
+        matrix.identity();
+        matrix.translate(
                 pPos.getX(),
                 pPos.getY(),
                 pPos.getZ()
         );
-        matrix.multiplyWithTranslation(
+        matrix.translate(
                 (float) BASIC_OFFSET.x,
                 (float) BASIC_OFFSET.y,
                 (float) BASIC_OFFSET.z
@@ -264,19 +264,22 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
 
         if (getBlockState().hasProperty(OverheadLineSupportBlock.FACING)) {
             Direction facing = getBlockState().getValue(OverheadLineSupportBlock.FACING);
-            matrix.multiply(facing.getRotation());
-            matrix.multiply(new Quaternion(-90, -90, 0, true));
+            matrix.rotate(facing.getRotation());
+            matrix.rotate(new Quaternionf().rotationXYZ(
+                    (float)Math.toRadians(-90),
+                    (float)Math.toRadians(-90),
+                    0f));
 //            pose.mulPose(facing.getRotation());
 //            pose.mulPose(new Quaternion(-90, -90, 0, true));
         }
 
-        matrix.multiply(Vector3f.YP.rotationDegrees(manualDeg * 1.03f));
+        matrix.rotate(Axis.YP.rotationDegrees(manualDeg * 1.03f));
 //        pose.mulPose(Vector3f.YP.rotationDegrees(manualDeg * 1.03f));
         float xOff = this.x_offset;
         float yOff = this.y_offset;
         float zOff = this.z_offset;
 
-        matrix.multiplyWithTranslation(
+        matrix.translate(
                 -xOff * 1.3f,
                 yOff * 1.3f,
                 -zOff * 1.3f
@@ -290,12 +293,12 @@ public class OverheadLineSupportBlockEntity extends SmartBlockEntity implements 
         for (Vec3 lp : localPoints) {
 //             pose.pushPose();
             // pose.translate(-lp.x, lp.y, -lp.z);
-            Matrix4f m = matrix.copy();
-            m.multiplyWithTranslation((float) -lp.x, (float) lp.y, (float) -lp.z);
+            Matrix4f m = new Matrix4f(matrix);
+            m.translate((float) -lp.x, (float) lp.y, (float) -lp.z);
             // Matrix4f tm = pose.last().pose();
             Vector4f origin = new Vector4f(0f, 0f, 0f, 1f);
             // origin.transform(tm);
-            origin.transform(m);
+            m.transform(origin);
             Vec3 worldPoint = new Vec3(origin.x(), origin.y(), origin.z());
             worldPoints.add(worldPoint);
 //            pose.popPose();
