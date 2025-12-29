@@ -27,7 +27,7 @@ import willow.train.kuayue.systems.train_extension.conductor.ConductorLocation;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-import static willow.train.kuayue.utils.CarriageUtil.remapCarriageContraption;
+import static willow.train.kuayue.utils.CarriageUtil.remapCarriage;
 
 @Slf4j
 public class TrainCouplerTickEvents {
@@ -49,7 +49,7 @@ public class TrainCouplerTickEvents {
                 for(int i = 0; i < carriages.size(); i++) {
                     CarriageAdditionalData carriageData = carriages.get(i);
                     if(carriageData.shouldRemap){
-                        carriageData.shouldRemap = !remapCarriageContraption(
+                        carriageData.shouldRemap = !remapCarriage(
                                 Create.RAILWAYS.trains.get(entry.getKey()).carriages.get(i),
                                 false
                         );
