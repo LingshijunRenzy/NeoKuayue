@@ -19,6 +19,7 @@
     "MixinAbstractContraptionEntity",
     "MixinBeltDeployerCallbacks",
     "MixinGlobalRailwayManager",
+    "MixinSequencedAssemblyRecipe",
     "MixinSimpleBlockMovingInteraction",
     "MixinStationBlockEntity",
     "MixinTrackTargetingBlockItem",
