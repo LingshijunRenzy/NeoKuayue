@@ -17,15 +17,16 @@ public class StructureTransformUtil {
     public static CompoundTag getTransformedBlockEntityNbt(CompoundTag nbt, StructureTransform transform) {
         if(nbt == null || transform == null) return nbt;
         if(!nbt.contains("x")) return nbt;
+        CompoundTag newNbt = nbt.copy();
         BlockPos pos = new BlockPos(
                 nbt.getInt("x"),
                 nbt.getInt("y"),
                 nbt.getInt("z")
         );
         BlockPos newPos = transform.apply(pos);
-        nbt.putInt("x", newPos.getX());
-        nbt.putInt("y", newPos.getY());
-        nbt.putInt("z", newPos.getZ());
+        newNbt.putInt("x", newPos.getX());
+        newNbt.putInt("y", newPos.getY());
+        newNbt.putInt("z", newPos.getZ());
         return nbt;
     }
 

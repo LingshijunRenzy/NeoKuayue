@@ -107,7 +107,7 @@ public abstract class OverheadLineSupportBlock<T extends OverheadLineSupportBloc
     public BlockState transform(BlockState state, StructureTransform transform) {
         if (transform.mirror != null) {
             state = state.mirror(transform.mirror);
-        }
+        } 
 
         if (state.hasProperty(FACING)) {
             Direction facing = state.getValue(FACING);
