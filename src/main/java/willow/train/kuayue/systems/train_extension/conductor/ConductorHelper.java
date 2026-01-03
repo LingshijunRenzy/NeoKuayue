@@ -6,6 +6,7 @@ import com.simibubi.create.content.trains.GlobalRailwayManager;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
 import com.simibubi.create.content.trains.entity.*;
 import com.simibubi.create.foundation.utility.Couple;
+import kasuga.lib.core.util.Envs;
 import kasuga.lib.core.util.data_type.Pair;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
@@ -14,7 +15,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -84,13 +84,62 @@ public class ConductorHelper {
             int carriageIndex
     ) {}
 
-    public record TrainMergeContext(
+    public record MergeEventContext(
         UUID locoId,
         UUID carriageId,
         boolean isLocoHead,
         boolean isCarriageTail,
         float spacing
     ) {}
+
+    private static class MergeContext {
+        final Train loco;
+        final Train carriages;
+        final boolean isLocoHead;
+        final boolean isCarriageTail;
+        final boolean isClientSide;
+        final float spacing;
+        final Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> locoConductors;
+        final Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> carriageConductors;
+
+        final Vec3 effectPos;
+        final float oldLocoSpeed;
+        final float oldCarriageSpeed;
+
+        MergeContext(
+                Train loco,
+                Train carriages,
+                boolean isLocoHead,
+                boolean isCarriageTail,
+                boolean isClientSide,
+                float spacing,
+                final Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> locoConductors,
+                final Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> carriageConductors
+        ) {
+            this.loco = loco;
+            this.carriages = carriages;
+            this.isLocoHead = isLocoHead;
+            this.isCarriageTail = isCarriageTail;
+            this.isClientSide = isClientSide;
+            this.spacing = spacing;
+            this.locoConductors = locoConductors;
+            this.carriageConductors = carriageConductors;
+
+            this.oldLocoSpeed = (float) loco.speed;
+            this.oldCarriageSpeed = (float) carriages.speed;
+
+            if (isLocoHead) {
+                effectPos = locoConductors.getFirst().getSecond();
+            } else {
+                effectPos = locoConductors.getSecond().getSecond();
+            }
+        }
+    }
+
+    private class RemapResults {
+        List<Carriage> newLocoCarriages;
+        double[] newStress;
+    }
 
     // ------------------------------- functions ---------------------------------
 
@@ -369,34 +418,29 @@ public class ConductorHelper {
             Train loco, Train carriages,
             boolean isCarriageTail,
             boolean isLocoHead, float spacing,
-            boolean clientSide
+            boolean isClientSide
     ) {
-        Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> locoConductors = getConductorPosition(loco);
-        Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> carriageConductors = getConductorPosition(carriages);
-        Vec3 effectPos = Vec3.ZERO;
+        //step1: prepare data
+        MergeContext context = new MergeContext(
+                loco,
+                carriages,
+                isLocoHead,
+                isCarriageTail,
+                isClientSide,
+                spacing,
+                getConductorPosition(loco),
+                getConductorPosition(carriages)
+        );
 
-        float oldLocoSpeed = (float) loco.speed;
-        float oldCarriageSpeed = (float) carriages.speed;
+        MergeEventContext eventContext = new MergeEventContext(loco.id, carriages.id, isLocoHead, isCarriageTail, spacing);
 
-        if(!clientSide) {
-            TrainCouplerPreMergeEvent preEvent = new TrainCouplerPreMergeEvent(
-                    new TrainMergeContext(loco.id, carriages.id, isLocoHead, isCarriageTail, spacing),
-                    Pair.of(isLocoHead ? locoConductors.getFirst() : locoConductors.getSecond(),
-                            isCarriageTail ? carriageConductors.getSecond() : carriageConductors.getFirst()),
-                    oldLocoSpeed,
-                    oldCarriageSpeed);
-            MinecraftForge.EVENT_BUS.post(preEvent);
-            if(preEvent.isCanceled()) {
-                return false;
-            }
-
-            Pair<Pair<Conductable, Vec3>, Pair<Conductable, Vec3>> conductorPos = getConductorPosition(loco);
-            if (isLocoHead) {
-                effectPos = conductorPos.getFirst().getSecond();
-            } else {
-                effectPos = conductorPos.getSecond().getSecond();
-            }
+        //step1.5 broadcast pre event
+        if(!isClientSide) {
+            boolean shouldContinue = broadcastPreMerge(context, eventContext);
+            if(!shouldContinue) return false;
         }
+
+        //step3 calculate
 
         // 获取参数
         List<Carriage> locoCarriages = loco.carriages;
@@ -412,13 +456,13 @@ public class ConductorHelper {
         //头-头或尾-尾情况需要反转
         if(isLocoHead ^ isCarriageTail) {
             carriageCarts.forEach(c -> {
-                if(clientSide) {
+                if(isClientSide) {
                     CarriageContraptionEntity cce = c.anyAvailableEntity();
                     if(cce == null) return; // carriage is out of view
                 }
                 reverseBogeys(c);
-                boolean success = remapCarriage(c, clientSide);
-                if(!clientSide && !success){
+                boolean success = remapCarriage(c, isClientSide);
+                if(!isClientSide && !success){
                     TrainAdditionalData trainAdditionalData = Kuayue.TRAIN_EXTENSION.get(carriages.id);
                     if(trainAdditionalData != null){
                         int index = carriageCarts.indexOf(c);
@@ -463,9 +507,9 @@ public class ConductorHelper {
 
         // 处理列车连接后的速度
         Pair<Float, Float> newSpeed = momentumExchange(loco, carriages, 0f);
-        loco.speed = newSpeed != null ? newSpeed.getFirst() : oldLocoSpeed;
+        loco.speed = newSpeed != null ? newSpeed.getFirst() : context.oldLocoSpeed;
 
-        if (clientSide) {
+        if (isClientSide) {
             CreateClient.RAILWAYS.removeTrain(carriages.id);
         } else {
             mergeTrainExtensionData(loco, carriages, isCarriageTail, isLocoHead);
@@ -474,29 +518,50 @@ public class ConductorHelper {
 
         loco.collectInitiallyOccupiedSignalBlocks();
 
-        if(!clientSide) {
-            // effects
-            SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
+        if(!isClientSide) {
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
-            if(entity != null && effectPos != Vec3.ZERO) {
-                entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.2f, 1.0f);
-                ((ServerLevel) entity.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
-                        20, 0.2, 0.2, 0.2,0.8);
-            }
-
-            //post event
-            MinecraftForge.EVENT_BUS.post(new TrainCouplerPostMergeEvent(
-                    new TrainMergeContext(loco.id, carriages.id, isLocoHead, isCarriageTail, spacing),
-                    Pair.of(isLocoHead ? locoConductors.getFirst() : locoConductors.getSecond(),
-                            isCarriageTail ? carriageConductors.getSecond() : carriageConductors.getFirst()
-                    ),
-                    oldLocoSpeed,
-                    oldCarriageSpeed,
-                    (float) loco.speed
-            ));
+            playEffects(context.effectPos, entity);
+            broadcastPostMerge(context, eventContext);
         }
 
         return true;
+    }
+
+    //boolean: continue
+    private static boolean broadcastPreMerge(MergeContext context, MergeEventContext eventContext) {
+        if(context.isClientSide) return true;
+        TrainCouplerPreMergeEvent preEvent = new TrainCouplerPreMergeEvent(
+                eventContext,
+                Pair.of(context.isLocoHead ? context.locoConductors.getFirst() : context.locoConductors.getSecond(),
+                        context.isCarriageTail ? context.carriageConductors.getSecond() : context.carriageConductors.getFirst()),
+                context.oldLocoSpeed,
+                context.oldCarriageSpeed);
+
+        MinecraftForge.EVENT_BUS.post(preEvent);
+        return !preEvent.isCanceled();
+    }
+
+    private static void broadcastPostMerge(MergeContext context, MergeEventContext eventContext) {
+        if(context.isClientSide) return;
+        MinecraftForge.EVENT_BUS.post(new TrainCouplerPostMergeEvent(
+                eventContext,
+                Pair.of(context.isLocoHead ? context.locoConductors.getFirst() : context.locoConductors.getSecond(),
+                        context.isCarriageTail ? context.carriageConductors.getSecond() : context.carriageConductors.getFirst()),
+                context.oldLocoSpeed,
+                context.oldCarriageSpeed,
+                (float) context.loco.speed
+        ));
+    }
+
+    private static void playEffects(Vec3 effectPos, Entity entity) {
+        if(Envs.isClient()) return;
+        if(entity == null || effectPos == null) return;
+        if(effectPos.equals(Vec3.ZERO)) return;
+
+        SoundEvent sound = AllSounds.TRAIN_COUPLER_SOUND.getSoundEvent();
+        entity.level.playSound(null, new BlockPos(effectPos), sound, entity.getSoundSource(), 0.2f, 1.0f);
+        ((ServerLevel) entity.level).sendParticles(ParticleTypes.CRIT, effectPos.x, effectPos.y, effectPos.z,
+                20, 0.2, 0.2, 0.2,0.8);
     }
 
     // here carriageIndex represents the carriage that coupler is on
