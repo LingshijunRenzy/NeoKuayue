@@ -136,10 +136,13 @@ public class ConductorHelper {
         }
     }
 
-    private class RemapResults {
-        List<Carriage> newLocoCarriages;
-        double[] newStress;
-    }
+    public record MergeResult(
+            List<Carriage> carriages,
+            List<Integer> spacing,
+            double[] stress,
+            boolean doubleEnded,
+            float newSpeed
+    ) {}
 
     // ------------------------------- functions ---------------------------------
 
@@ -420,7 +423,6 @@ public class ConductorHelper {
             boolean isLocoHead, float spacing,
             boolean isClientSide
     ) {
-        //step1: prepare data
         MergeContext context = new MergeContext(
                 loco,
                 carriages,
@@ -431,42 +433,67 @@ public class ConductorHelper {
                 getConductorPosition(loco),
                 getConductorPosition(carriages)
         );
-
         MergeEventContext eventContext = new MergeEventContext(loco.id, carriages.id, isLocoHead, isCarriageTail, spacing);
 
-        //step1.5 broadcast pre event
         if(!isClientSide) {
             boolean shouldContinue = broadcastPreMerge(context, eventContext);
             if(!shouldContinue) return false;
         }
 
-        //step3 calculate
+        try {
+            MergeResult result = calculateMergeResult(context);
 
-        // 获取参数
-        List<Carriage> locoCarriages = loco.carriages;
-        List<Integer> locoSpacing = loco.carriageSpacing;
+            commitMerge(loco, result);
+
+            if (isClientSide) {
+                CreateClient.RAILWAYS.removeTrain(carriages.id);
+            } else {
+                mergeTrainExtensionData(loco, carriages, isCarriageTail, isLocoHead);
+                Create.RAILWAYS.removeTrain(carriages.id);
+            }
+
+            loco.collectInitiallyOccupiedSignalBlocks();
+
+            if(!isClientSide) {
+                Entity entity = loco.carriages.get(0).anyAvailableEntity();
+                playEffects(context.effectPos, entity);
+                broadcastPostMerge(context, eventContext);
+            }
+            return true;
+        } catch (Exception e) {
+            Kuayue.LOGGER.error("Error while merging trains: locoId={}, carriageId={}", loco.id, carriages.id, e);
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static MergeResult calculateMergeResult(MergeContext context) {
+        Train loco = context.loco;
+        Train carriages = context.carriages;
+
+        List<Carriage> locoCarts = new ArrayList<>(loco.carriages);
+        List<Integer> locoSpacing = new ArrayList<>(loco.carriageSpacing);
+        List<Carriage> carriageCarts = new ArrayList<>(carriages.carriages);
+        List<Integer> cartSpacing = new ArrayList<>(carriages.carriageSpacing);
+
         double[] locoStress = ((AccessorTrain) loco).getStress();
-
-        List<Carriage> carriageCarts = carriages.carriages;
-        List<Integer> cartSpacing = carriages.carriageSpacing;
         double[] cartStress = ((AccessorTrain) carriages).getStress();
-
         double[] neoStress = new double[locoStress.length + cartStress.length + 1];
 
         //头-头或尾-尾情况需要反转
-        if(isLocoHead ^ isCarriageTail) {
+        if(context.isLocoHead ^ context.isCarriageTail) {
             carriageCarts.forEach(c -> {
-                if(isClientSide) {
+                if (context.isClientSide) {
                     CarriageContraptionEntity cce = c.anyAvailableEntity();
-                    if(cce == null) return; // carriage is out of view
+                    if (cce == null) return; // carriage is out of view
                 }
                 reverseBogeys(c);
-                boolean success = remapCarriage(c, isClientSide);
-                if(!isClientSide && !success){
+                boolean success = remapCarriage(c, context.isClientSide);
+                if (!context.isClientSide && !success) {
                     TrainAdditionalData trainAdditionalData = Kuayue.TRAIN_EXTENSION.get(carriages.id);
-                    if(trainAdditionalData != null){
+                    if (trainAdditionalData != null) {
                         int index = carriageCarts.indexOf(c);
-                        if(index >= 0 && index < trainAdditionalData.getCarriages().size()){
+                        if (index >= 0 && index < trainAdditionalData.getCarriages().size()) {
                             CarriageAdditionalData carriageAdditionalData = trainAdditionalData.getCarriages().get(index);
                             carriageAdditionalData.shouldRemap = true;
                         }
@@ -476,55 +503,57 @@ public class ConductorHelper {
             Collections.reverse(carriageCarts);
             Collections.reverse(cartSpacing);
         }
-        if (isLocoHead) {
-            locoCarriages.addAll(0, carriageCarts);
+
+        if (context.isLocoHead) {
+            locoCarts.addAll(0, carriageCarts);
             locoSpacing.addAll(0, cartSpacing);
-            locoSpacing.add(cartSpacing.size(), (int) Math.floor(spacing));
+            locoSpacing.add(cartSpacing.size(), (int) Math.floor(context.spacing));
             copyStress(cartStress, locoStress, neoStress);
         } else {
-            locoCarriages.addAll(carriageCarts);
-            locoSpacing.add((int) Math.floor(spacing));
+            locoCarts.addAll(carriageCarts);
+            locoSpacing.add((int) Math.floor(context.spacing));
             locoSpacing.addAll(cartSpacing);
             copyStress(locoStress, cartStress, neoStress);
         }
-        loco.doubleEnded = loco.doubleEnded || carriages.doubleEnded;
-
-        ((AccessorTrain) loco).setStress(neoStress);
-
-        Carriage c;
-        for (int i = 0; i < locoCarriages.size(); i++) {
-            c = locoCarriages.get(i);
-            c.setTrain(loco);
-            CarriageContraptionEntity entity = c.anyAvailableEntity();
-            if (entity != null) {
-                entity.trainId = loco.id;
-                entity.carriageIndex = i;
-                entity.setCarriage(c);
-
-            }
-            c.presentConductors = Couple.create(i > 0, i < locoCarriages.size() - 1);
-        }
 
         // 处理列车连接后的速度
-        Pair<Float, Float> newSpeed = momentumExchange(loco, carriages, 0f);
-        loco.speed = newSpeed != null ? newSpeed.getFirst() : context.oldLocoSpeed;
+        Pair<Float, Float> speedPair = momentumExchange(loco, carriages, 0f);
+        float newSpeed = speedPair != null ? speedPair.getFirst() : context.oldLocoSpeed;
 
-        if (isClientSide) {
-            CreateClient.RAILWAYS.removeTrain(carriages.id);
-        } else {
-            mergeTrainExtensionData(loco, carriages, isCarriageTail, isLocoHead);
-            Create.RAILWAYS.removeTrain(carriages.id);
+        boolean doubleEnded = loco.doubleEnded || carriages.doubleEnded;
+
+        return new MergeResult(
+                locoCarts,
+                locoSpacing,
+                neoStress,
+                doubleEnded,
+                newSpeed
+        );
+    }
+
+    private static void commitMerge(Train loco, MergeResult result) {
+        loco.carriages = result.carriages;
+        loco.carriageSpacing = result.spacing;
+        ((AccessorTrain) loco).setStress(result.stress);
+        loco.doubleEnded = result.doubleEnded;
+        loco.speed = result.newSpeed;
+
+
+        updateCarriageReferences(loco);
+    }
+
+    private static void updateCarriageReferences(Train train) {
+        for (int i = 0; i < train.carriages.size(); i++) {
+            Carriage c = train.carriages.get(i);
+            c.setTrain(train);
+            CarriageContraptionEntity entity = c.anyAvailableEntity();
+            if (entity != null) {
+                entity.trainId = train.id;
+                entity.carriageIndex = i;
+                entity.setCarriage(c);
+            }
+            c.presentConductors = Couple.create(i > 0, i < train.carriages.size() - 1);
         }
-
-        loco.collectInitiallyOccupiedSignalBlocks();
-
-        if(!isClientSide) {
-            Entity entity = loco.carriages.get(0).anyAvailableEntity();
-            playEffects(context.effectPos, entity);
-            broadcastPostMerge(context, eventContext);
-        }
-
-        return true;
     }
 
     //boolean: continue
