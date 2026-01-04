@@ -810,9 +810,8 @@ public class ConductorHelper {
     }
 
     private static void postProcessDivide(DivideContext context, Train loco, Train carriages) {
-        divideTrainExtensionData(loco, carriages, context.carriageIndex);
-
         if(!context.isClientSide) {
+            divideTrainExtensionData(loco, carriages, context.carriageIndex);
             TrainExtensionSystem.ConductorCDInfo info = new TrainExtensionSystem.ConductorCDInfo(context.locoTail, context.carriageHead);
             Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.put(
                     Couple.create(context.locoTail.getLoc(), context.carriageHead.getLoc()), info
@@ -832,7 +831,6 @@ public class ConductorHelper {
     }
 
     public static void playEffects(Vec3 effectPos, Entity entity) {
-        if(Envs.isClient()) return;
         if(entity == null || effectPos == null) return;
         if(effectPos.equals(Vec3.ZERO)) return;
 
