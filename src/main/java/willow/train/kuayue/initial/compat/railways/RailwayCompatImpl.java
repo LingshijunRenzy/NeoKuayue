@@ -112,32 +112,12 @@ public class RailwayCompatImpl implements RailwayCompat{
     }
 
     @Override
-    public boolean shouldTransferSchedule(Train train, int carriageIndex) {
-        return getScheduleOwner(train) == carriageIndex;
-    }
-
-    @Override
     public void transferSchedule(Train from, Train to, int targetCarriageIndex) {
         if(from == null || to == null) return;
 
         to.runtime.read(from.runtime.write());
         attachScheduleToCarriage(to, targetCarriageIndex);
         detachSchedule(from);
-    }
-
-    @Override
-    public void handleMerge(Train loco, Train carriages) {
-        if(loco == null || carriages == null) return;
-
-        int locoOwnerIndex = getScheduleOwner(loco);
-        int carriagesOwnerIndex = getScheduleOwner(carriages);
-
-
-    }
-
-    @Override
-    public void handleDivide(Train loco, Train newTrain, int splitCarriageIndex) {
-
     }
 
     private IIndexedSchedule getIndexedSchedule(Train train) {

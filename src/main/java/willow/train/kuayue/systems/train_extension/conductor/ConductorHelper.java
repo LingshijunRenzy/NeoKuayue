@@ -8,6 +8,7 @@ import com.simibubi.create.content.trains.entity.*;
 import com.simibubi.create.foundation.utility.Couple;
 import kasuga.lib.core.util.Envs;
 import kasuga.lib.core.util.data_type.Pair;
+import lombok.Getter;
 import lombok.NonNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,6 +33,7 @@ import willow.train.kuayue.systems.train_extension.CarriageAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainAdditionalData;
 import willow.train.kuayue.systems.train_extension.TrainExtensionSystem;
 import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
+import willow.train.kuayue.systems.train_extension.conductor.schedule_handle.ScheduleHandlerProvider;
 
 import java.util.*;
 
@@ -92,7 +94,8 @@ public class ConductorHelper {
         float spacing
     ) {}
 
-    private static class MergeContext {
+    @Getter
+    public static class MergeContext {
         final Train loco;
         final Train carriages;
         final boolean isLocoHead;
@@ -145,7 +148,8 @@ public class ConductorHelper {
             Map<Integer, Boolean> carriageRemapStatus
     ) {}
 
-    private static class DivideContext {
+    @Getter
+    public static class DivideContext {
         final Train train;
         final UUID newTrain;
         final int carriageIndex;
@@ -598,6 +602,7 @@ public class ConductorHelper {
         if (context.isClientSide) {
             CreateClient.RAILWAYS.removeTrain(carriages.id);
         } else {
+            ScheduleHandlerProvider.get().handleMerge(context);
             mergeTrainExtensionData(loco, carriages, context.isCarriageTail, context.isLocoHead);
             Create.RAILWAYS.removeTrain(carriages.id);
             Entity entity = loco.carriages.get(0).anyAvailableEntity();
@@ -811,6 +816,7 @@ public class ConductorHelper {
 
     private static void postProcessDivide(DivideContext context, Train loco, Train carriages) {
         if(!context.isClientSide) {
+            ScheduleHandlerProvider.get().handleDivide(context);
             divideTrainExtensionData(loco, carriages, context.carriageIndex);
             TrainExtensionSystem.ConductorCDInfo info = new TrainExtensionSystem.ConductorCDInfo(context.locoTail, context.carriageHead);
             Kuayue.TRAIN_EXTENSION.conductorsCoolingDown.put(
