@@ -810,6 +810,7 @@ public class ConductorHelper {
         ((AccessorTrain) carriages).setStress(result.carriageStress);
 
         carriages.speed = loco.speed;
+        carriages.throttle = loco.throttle;
 
         return carriages;
     }
