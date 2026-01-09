@@ -16,6 +16,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import willow.train.kuayue.mixins.mixin.AccessorMountedStorageManager;
 import willow.train.kuayue.mixins.mixin.AccessorTrainCargoManager;
 import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
+import willow.train.kuayue.utils.TrainUtil;
 
 public interface ScheduleHandler {
 
@@ -40,7 +41,12 @@ public interface ScheduleHandler {
         else {
             if(isScheduleAttached(loco)) {
                 //both have schedule, keep loco's
-                detachAndEjectSchedule(carriages, carriages.carriages.get(0).anyAvailableEntity().level);
+                boolean saved = detachAndEjectSchedule(carriages, carriages.carriages.get(0).anyAvailableEntity().level);
+                if(saved) {
+                    TrainUtil.displayInformation(loco, "msg.kuayue.coupler.schedule_saved", true);
+                } else {
+                    TrainUtil.displayInformation(loco, "msg.kuayue.coupler.schedule_ejected", true);
+                }
             } else {
                 //only carriages have schedule, transfer to loco
                 int targetIndex;
@@ -118,7 +124,6 @@ public interface ScheduleHandler {
             ejectItemToWorld(train, level, remaining, ownerIndex);
             return false;
         }
-
         return true;
     }
 
@@ -168,11 +173,5 @@ public interface ScheduleHandler {
         );
 
         level.addFreshEntity(itemEntity);
-
-        LivingEntity owner = train.getOwner(level);
-        if(owner instanceof Player player) {
-            player.displayClientMessage(Component.literal("列车时刻表被弹出到世界中")
-                    .withStyle(ChatFormatting.GOLD), false);
-        }
     }
 }
