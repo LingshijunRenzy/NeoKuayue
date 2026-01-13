@@ -2,6 +2,7 @@ package willow.train.kuayue.mixins.mixin;
 
 import com.google.common.collect.Multimap;
 import com.simibubi.create.content.contraptions.Contraption;
+import com.simibubi.create.content.contraptions.MountedStorageManager;
 import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
 import com.simibubi.create.foundation.utility.BlockFace;
 import net.minecraft.core.BlockPos;
@@ -50,4 +51,7 @@ public interface AccessorContraption {
 
     @Accessor("initialPassengers")
     public void setInitialPassengers(Map<BlockPos, Entity> initialPassengers);
+
+    @Accessor("storage")
+    public MountedStorageManager getStorage();
 }
