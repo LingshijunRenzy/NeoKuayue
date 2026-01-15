@@ -41,7 +41,7 @@ public interface ScheduleHandler {
         else {
             if(isScheduleAttached(loco)) {
                 //both have schedule, keep loco's
-                boolean saved = detachAndEjectSchedule(carriages, carriages.carriages.get(0).anyAvailableEntity().level);
+                boolean saved = detachAndEjectSchedule(carriages, carriages.carriages.get(0).anyAvailableEntity().level());
                 if(saved) {
                     TrainUtil.displayInformation(loco, "msg.kuayue.coupler.schedule_saved", true);
                 } else {

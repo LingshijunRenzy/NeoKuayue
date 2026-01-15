@@ -23,7 +23,7 @@ public class TrainUtil {
         for(Carriage carriage : train.carriages) {
             Entity entity = carriage.anyAvailableEntity();
             if (entity != null) {
-                level = entity.level;
+                level = entity.level();
                 break;
             }
         }
