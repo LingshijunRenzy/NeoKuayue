@@ -1,4 +1,4 @@
-package willow.train.kuayue.systems.train_extension.client;
+package willow.train.kuayue.utils.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllItems;
@@ -19,12 +19,12 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CouplerOverlayRenderer {
+public class StatusOverlayRenderer {
     public static Boolean canDivide = null;
     public static Boolean lastCanDivide = null;
     public static int hoverTicks = 0;
 
-    public static IGuiOverlay OVERLAY = CouplerOverlayRenderer::render;
+    public static IGuiOverlay OVERLAY = StatusOverlayRenderer::render;
 
     public static void render(ForgeGui gui, PoseStack poseStack, float partialTicks, int width, int height) {
         if(canDivide == null) {
