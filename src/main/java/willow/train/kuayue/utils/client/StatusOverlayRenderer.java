@@ -20,37 +20,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatusOverlayRenderer {
-    public static Boolean canDivide = null;
-    public static Boolean lastCanDivide = null;
-    public static int hoverTicks = 0;
+    private static int hoverTicks = 0;
+    private static boolean stateChanged = false;
 
     public static IGuiOverlay OVERLAY = StatusOverlayRenderer::render;
 
+    public static boolean visible = false;
+    public static ItemStack icon = ItemStack.EMPTY;
+    public static Component message = Component.empty();
+
+    public static void setVisible(boolean visible) {
+        StatusOverlayRenderer.visible = visible;
+    }
+
+    public static void setShowInfo(ItemStack icon, Component message) {
+        if(icon == null || message == null) return;
+
+        StatusOverlayRenderer.icon = icon;
+        StatusOverlayRenderer.message = message;
+    }
+
+    public static void clearShowInfo() {
+        StatusOverlayRenderer.visible = false;
+        StatusOverlayRenderer.icon = ItemStack.EMPTY;
+        StatusOverlayRenderer.message = Component.empty();
+    }
+
     public static void render(ForgeGui gui, PoseStack poseStack, float partialTicks, int width, int height) {
-        if(canDivide == null) {
-            lastCanDivide = null;
+        if (!visible || message.equals(Component.empty())) {
             hoverTicks = 0;
             return;
         }
-
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
             return;
 
-        boolean stateChanged = !canDivide.equals(lastCanDivide);
         if(stateChanged) {
             hoverTicks = 1;
-            lastCanDivide = canDivide;
+            stateChanged = false;
         } else {
             hoverTicks++;
         }
 
-        Component component = canDivide ?
-                Component.literal("    ").append(Component.translatable("gui.kuayue.coupler.can_divide")) :
-                Component.literal("    ").append(Component.translatable("gui.kuayue.coupler.cannot_divide"));
-
-        ItemStack item = AllItems.WRENCH.asStack();
+        Component component = icon.equals(ItemStack.EMPTY) ?
+                message :
+                Component.literal("    ").append(message);
 
         poseStack.pushPose();
 
@@ -86,7 +101,7 @@ public class StatusOverlayRenderer {
         RemovedGuiUtils.drawHoveringText(poseStack, tooltip, posX, posY, width, height, -1, colorBackground.getRGB(),
                 colorBorderTop.getRGB(), colorBorderBot.getRGB(), mc.font);
 
-        GuiGameElement.of(item)
+        GuiGameElement.of(icon)
                 .at(posX + 10, posY - 16, 450)
                 .render(poseStack);
 

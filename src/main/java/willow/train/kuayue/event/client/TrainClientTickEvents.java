@@ -10,6 +10,7 @@ import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.event.TickEvent;
@@ -19,7 +20,7 @@ import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
 import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
 import willow.train.kuayue.utils.client.ContraptionAimUtil;
 
-public class TrainCouplerClientTickEvents {
+public class TrainClientTickEvents {
 
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent event) {
@@ -35,30 +36,30 @@ public class TrainCouplerClientTickEvents {
         }
 
         if(!AllItems.WRENCH.isIn(player.getMainHandItem())) {
-            StatusOverlayRenderer.canDivide = null;
+            StatusOverlayRenderer.setVisible(false);
             return;
         }
 
         Pair<AbstractContraptionEntity, BlockHitResult> hitResultPair = ContraptionAimUtil.getTargetContraptionBlock(player, 5.0D);
         if(hitResultPair == null || !(hitResultPair.getFirst() instanceof CarriageContraptionEntity cce)) {
-            StatusOverlayRenderer.canDivide = null;
+            StatusOverlayRenderer.setVisible(false);
             return;
         }
 
         Carriage carriage = cce.getCarriage();
         if(carriage == null) {
-            StatusOverlayRenderer.canDivide = null;
+            StatusOverlayRenderer.setVisible(false);
             return;
         }
 
         Train train = carriage.train;
         if(train == null) {
-            StatusOverlayRenderer.canDivide = null;
+            StatusOverlayRenderer.setVisible(false);
             return;
         }
 
         if(!(cce.getContraption() instanceof CarriageContraption cc)) {
-            StatusOverlayRenderer.canDivide = null;
+            StatusOverlayRenderer.setVisible(false);
             return;
         }
 
@@ -69,9 +70,15 @@ public class TrainCouplerClientTickEvents {
             int coord = assemblyDirection.getAxis() == Direction.Axis.X ? localPos.getX() : localPos.getZ();
             boolean isLeading = coord * assemblyDirection.getAxisDirection().getStep() < 0;
 
-            StatusOverlayRenderer.canDivide = ConductorHelper.canDivideTrain(train, cce.carriageIndex, isLeading);
+            boolean canDivide = ConductorHelper.canDivideTrain(train, cce.carriageIndex, isLeading);
+            if(canDivide) {
+                StatusOverlayRenderer.setShowInfo(AllItems.WRENCH.asStack(), Component.translatable("gui.kuayue.coupler.can_divide"));
+            } else {
+                StatusOverlayRenderer.setShowInfo(AllItems.WRENCH.asStack(), Component.translatable("gui.kuayue.coupler.cannot_divide"));
+            }
+            StatusOverlayRenderer.setVisible(true);
         } else {
-            StatusOverlayRenderer.canDivide = null;
+            StatusOverlayRenderer.setVisible(false);
         }
     }
 }
