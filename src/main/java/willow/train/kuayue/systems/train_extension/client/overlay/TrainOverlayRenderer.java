@@ -1,7 +1,6 @@
-package willow.train.kuayue.utils.client;
+package willow.train.kuayue.systems.train_extension.client.overlay;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.gui.RemovedGuiUtils;
 import com.simibubi.create.foundation.gui.Theme;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
@@ -19,31 +18,31 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatusOverlayRenderer {
+public class TrainOverlayRenderer {
     private static int hoverTicks = 0;
     private static boolean stateChanged = false;
 
-    public static IGuiOverlay OVERLAY = StatusOverlayRenderer::render;
+    public static IGuiOverlay OVERLAY = TrainOverlayRenderer::render;
 
     public static boolean visible = false;
     public static ItemStack icon = ItemStack.EMPTY;
     public static Component message = Component.empty();
 
     public static void setVisible(boolean visible) {
-        StatusOverlayRenderer.visible = visible;
+        TrainOverlayRenderer.visible = visible;
     }
 
     public static void setShowInfo(ItemStack icon, Component message) {
         if(icon == null || message == null) return;
 
-        StatusOverlayRenderer.icon = icon;
-        StatusOverlayRenderer.message = message;
+        TrainOverlayRenderer.icon = icon;
+        TrainOverlayRenderer.message = message;
     }
 
     public static void clearShowInfo() {
-        StatusOverlayRenderer.visible = false;
-        StatusOverlayRenderer.icon = ItemStack.EMPTY;
-        StatusOverlayRenderer.message = Component.empty();
+        TrainOverlayRenderer.visible = false;
+        TrainOverlayRenderer.icon = ItemStack.EMPTY;
+        TrainOverlayRenderer.message = Component.empty();
     }
 
     public static void render(ForgeGui gui, PoseStack poseStack, float partialTicks, int width, int height) {

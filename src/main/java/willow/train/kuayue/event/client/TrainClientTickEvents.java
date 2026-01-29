@@ -1,6 +1,5 @@
 package willow.train.kuayue.event.client;
 
-import com.simibubi.create.AllItems;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
@@ -9,15 +8,14 @@ import com.simibubi.create.content.trains.entity.Train;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import willow.train.kuayue.utils.client.StatusOverlayRenderer;
-import willow.train.kuayue.systems.train_extension.conductor.ConductorHelper;
-import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
+import willow.train.kuayue.systems.train_extension.client.overlay.TrainOverlayContext;
+import willow.train.kuayue.systems.train_extension.client.overlay.TrainOverlayRegistry;
+import willow.train.kuayue.systems.train_extension.client.overlay.TrainOverlayRenderer;
 import willow.train.kuayue.utils.client.ContraptionAimUtil;
 
 public class TrainClientTickEvents {
@@ -35,50 +33,54 @@ public class TrainClientTickEvents {
             return;
         }
 
-        if(!AllItems.WRENCH.isIn(player.getMainHandItem())) {
-            StatusOverlayRenderer.setVisible(false);
-            return;
-        }
-
         Pair<AbstractContraptionEntity, BlockHitResult> hitResultPair = ContraptionAimUtil.getTargetContraptionBlock(player, 5.0D);
         if(hitResultPair == null || !(hitResultPair.getFirst() instanceof CarriageContraptionEntity cce)) {
-            StatusOverlayRenderer.setVisible(false);
+            TrainOverlayRenderer.setVisible(false);
             return;
         }
 
         Carriage carriage = cce.getCarriage();
         if(carriage == null) {
-            StatusOverlayRenderer.setVisible(false);
+            TrainOverlayRenderer.setVisible(false);
             return;
         }
 
         Train train = carriage.train;
         if(train == null) {
-            StatusOverlayRenderer.setVisible(false);
+            TrainOverlayRenderer.setVisible(false);
             return;
         }
 
         if(!(cce.getContraption() instanceof CarriageContraption cc)) {
-            StatusOverlayRenderer.setVisible(false);
+            TrainOverlayRenderer.setVisible(false);
             return;
         }
 
         BlockPos localPos = hitResultPair.getSecond().getBlockPos();
+        if(cc.getBlocks().get(localPos) == null) {
+            TrainOverlayRenderer.setVisible(false);
+            return;
+        }
 
-        if(ConductorCandidateRegistry.getProvider(cc.getBlocks().get(localPos).state) != null) {
-            Direction assemblyDirection = cc.getAssemblyDirection();
-            int coord = assemblyDirection.getAxis() == Direction.Axis.X ? localPos.getX() : localPos.getZ();
-            boolean isLeading = coord * assemblyDirection.getAxisDirection().getStep() < 0;
+        BlockState blockState = cc.getBlocks().get(localPos).state;
 
-            boolean canDivide = ConductorHelper.canDivideTrain(train, cce.carriageIndex, isLeading);
-            if(canDivide) {
-                StatusOverlayRenderer.setShowInfo(AllItems.WRENCH.asStack(), Component.translatable("gui.kuayue.coupler.can_divide"));
-            } else {
-                StatusOverlayRenderer.setShowInfo(AllItems.WRENCH.asStack(), Component.translatable("gui.kuayue.coupler.cannot_divide"));
-            }
-            StatusOverlayRenderer.setVisible(true);
-        } else {
-            StatusOverlayRenderer.setVisible(false);
+        TrainOverlayContext context = new TrainOverlayContext(
+                player,
+                mc.level,
+                player.getMainHandItem(),
+                train,
+                carriage,
+                cce,
+                cc,
+                localPos,
+                blockState
+        );
+
+        boolean handled = TrainOverlayRegistry.process(context);
+
+        if(!handled) {
+            TrainOverlayRenderer.clearShowInfo();
+            TrainOverlayRenderer.setVisible(false);
         }
     }
 }
