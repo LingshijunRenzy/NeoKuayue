@@ -4,8 +4,10 @@ package willow.train.kuayue.systems.train_extension.client.overlay;
 import kasuga.lib.core.util.data_type.Pair;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import willow.train.kuayue.initial.panel.I3DPanel;
 import willow.train.kuayue.systems.train_extension.client.overlay.handler.CouplerOverlayHandler;
 import willow.train.kuayue.systems.train_extension.client.overlay.handler.IContraptionFocusHandler;
+import willow.train.kuayue.systems.train_extension.client.overlay.handler.PantographOverlayHandler;
 import willow.train.kuayue.systems.train_extension.conductor.registry.ConductorCandidateRegistry;
 
 import java.util.ArrayList;
@@ -43,6 +45,11 @@ public class TrainOverlayRegistry {
         handlers.add(Pair.of(
            context -> ConductorCandidateRegistry.getProvider(context.state()) != null,
                 new CouplerOverlayHandler()
+        ));
+
+        handlers.add(Pair.of(
+                context -> context.state().is(I3DPanel.HXD3D_PANTOGRAPH.getBlock()),
+                new PantographOverlayHandler()
         ));
     }
 }
