@@ -545,7 +545,7 @@ public class ConductorHelper {
                 }
                 reverseBogeys(c);
                 boolean success = remapCarriage(c, context.isClientSide);
-                carriageRemapStatus.put(c.id, success);
+                carriageRemapStatus.put(c.id, !success);
             });
             Collections.reverse(carriageCarts);
             Collections.reverse(cartSpacing);
