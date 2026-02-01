@@ -2,7 +2,6 @@
   "values": [
     "#kuayue:panel/window_openable",
     "#kuayue:panel/ladder",
-    "#kuayue:panel/end_face",
     "#kuayue:pantographs"
   ]
 }
